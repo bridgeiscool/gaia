@@ -1,0 +1,100 @@
+.graybackground {
+  -fx-background-color: #696969;
+}
+
+.hexStyle {
+  -fx-fill: black;
+  -fx-stroke: white;
+  -fx-stroke-type: outside;
+  -fx-stroke-width: 1;
+}
+
+.blackBorder {
+  -fx-stroke:black;
+  -fx-stroke-type: outside;
+  -fx-stroke-width: 1;
+}
+
+.context-menu {
+  -fx-background-color: #757575;
+}
+
+.resourceBar {
+  -fx-spacing: 30;
+  -fx-alignment: center-left;
+  -fx-padding: 0 30 0 30;
+  -fx-background-color: gray;
+}
+
+.yellowRace {
+  -fx-background-color: yellow;
+  -fx-border-width: 2;
+  -fx-border-color: black;	
+}
+
+.menu-bar {
+  -fx-background-color: linear-gradient(#686868 0.0%, #232723 25.0%, #373837 75.0%, #757575 100.0%),
+    linear-gradient(#020b02, #3a3a3a),
+    linear-gradient(#9d9e9d 0.0%, #6b6a6b 20.0%, #343534 80.0%, #242424 100.0%),
+    linear-gradient(#8a8a8a 0.0%, #6b6a6b 20.0%, #343534 80.0%, #262626 100.0%),
+    linear-gradient(#777777 0.0%, #606060 50.0%, #505250 51.0%, #2a2b2a 100.0%);
+  -fx-font-family: "Helvetica";
+  -fx-font-size: 11.0 pt;
+  -fx-text-fill: white;
+}
+
+.menu {
+  -fx-background-color: transparent;
+  -fx-font-family: "Helvetica";
+  -fx-font-size: 11.0 pt;
+  -fx-text-fill: white;
+}
+
+.menu-item {
+  -fx-background-color: #757575;
+  -fx-font-family: "Helvetica";
+  -fx-font-size: 11.0 pt;
+  -fx-text-fill: white;	
+}
+
+.menu-item:focused {
+	-fx-background-color: #656565;
+}
+
+.label {
+  -fx-text-fill: white;
+  -fx-font-size: 14.0pt;
+}
+
+.blackLabel {
+  -fx-text-fill: black;
+  -fx-font-size: 10.0pt;
+}
+
+.label-underlined {
+	-fx-underline: true;
+}
+
+.label-dealer {
+  -fx-font-size: 18.0pt;
+}
+
+.padded-border {
+  -fx-padding: 10.0 10.0 10.0 10.0;
+}
+
+.biglabel {
+  -fx-font-size: 20.0pt;
+  -fx-alignment: center;
+}
+
+.table-results {
+  -fx-alignment: center;
+  -fx-hgap: 10.0;
+  -fx-vgap: 10.0;
+}
+
+.vbox {
+  -fx-alignment: center;
+  -fx-spacing: 10.0;
+}

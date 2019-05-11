@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.input.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.*?>
+
+<fx:root type="javafx.scene.layout.BorderPane" prefHeight="640" prefWidth="1020" xmlns:fx="http://javafx.com/fxml"
+  fx:id="mainPane" styleClass="graybackground">
+  <stylesheets>
+    <URL value="@app.css" />
+  </stylesheets>
+</fx:root>

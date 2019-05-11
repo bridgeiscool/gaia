@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.input.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.*?>
+
+<fx:root type="javafx.scene.layout.BorderPane" xmlns:fx="http://javafx.com/fxml" styleClass="greenbackground">
+  <stylesheets>
+    <URL value="@app.css" />
+  </stylesheets>
+  <center>
+    <VBox alignment="center" spacing="20">
+      <Label styleClass="biglabel" text="Welcome to Mike's Gaia Project Game!" />
+      <BorderPane>
+        <padding>
+          <Insets bottom="20" left="20" right="20" top="20" />
+        </padding>
+        <center>
+          <VBox style="-fx-spacing: 20px; -fx-alignment: center;">
+            <ImageView fitHeight="400" fitWidth="600">
+              <image>
+                <Image url="@cribbage.jpg" />
+              </image>
+            </ImageView>
+          </VBox>
+        </center>
+        <right>
+          <VBox styleClass="vbox" prefWidth="300">
+            <Button styleClass="button-main-menu" text="New Game" onAction="#newGame" prefWidth="500" />
+            <Button styleClass="button-main-menu" text="Exit" onAction="#exitGame" prefWidth="500" />
+          </VBox>
+        </right>
+      </BorderPane>
+    </VBox>
+  </center>
+</fx:root>

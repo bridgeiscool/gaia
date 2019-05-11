@@ -1,0 +1,47 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>gaia-project</groupId>
+    <artifactId>gaia-project</artifactId>
+    <version>0.1</version>
+  </parent>
+
+  <artifactId>gaia-project-game</artifactId>
+
+  <dependencies>
+
+    <!-- For testing -->
+    <dependency>
+      <artifactId>junit</artifactId>
+      <groupId>junit</groupId>
+      <version>4.11</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>com.zenjava</groupId>
+        <artifactId>javafx-maven-plugin</artifactId>
+        <version>8.2.0</version>
+        <configuration>
+          <mainClass>cribbage.game.CribbageGameApp</mainClass>
+          <jfxAppOutputDir>${project.build.directory}/cribbage</jfxAppOutputDir>
+          <jfxMainAppJarName>cribbage.jar</jfxMainAppJarName>
+          <updateExistingJar>true</updateExistingJar>
+        </configuration>
+        <executions>
+          <execution>
+            <id>create-jfxjar</id>
+            <phase>package</phase>
+            <goals>
+              <goal>build-jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>

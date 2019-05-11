@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.input.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.*?>
+
+<fx:root type="javafx.scene.layout.VBox" xmlns:fx="http://javafx.com/fxml" prefHeight="300" prefWidth="600">
+  <stylesheets>
+    <URL value="@app.css" />
+  </stylesheets>
+  
+  <HBox fx:id="resourceBar" prefHeight="32" prefWidth="600" styleClass="resourceBar">
+    <children>
+      <Label text="Current Resources: " />
+    </children>  
+  </HBox>
+  <HBox fx:id="powerCycleBar" prefHeight="88" prefWidth="600">
+    <children>
+      <BorderPane fx:id="powerCycle" />
+      <VBox>
+        <Label fx:id="raceName" styleClass="bigLabel" />
+        <Label fx:id="raceSpecial" />
+        <HBox fx:id="gaiaformers" />
+      </VBox>
+    </children>
+  </HBox>  
+  <HBox fx:id="buildingArea" prefHeight="180" prefWidth="600">
+    <children>
+      <VBox>
+        <HBox fx:id="power3" />
+        <HBox fx:id="power2" />
+        <HBox fx:id="power1" />
+      </VBox>
+    </children>
+  </HBox>
+</fx:root>

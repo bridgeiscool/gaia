@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.input.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.*?>
+
+<fx:root type="javafx.scene.control.MenuBar" xmlns:fx="http://javafx.com/fxml">
+  <menus>
+    <Menu text="File">
+      <items>
+        <MenuItem text="New Game" onAction="#newGame" />
+        <MenuItem text="Exit" onAction="#exitGame" />
+      </items>
+    </Menu>
+    <Menu text="View">
+      <items>
+        <MenuItem text="Game View" onAction="#gameView" />
+      </items>
+    </Menu>
+  </menus>
+</fx:root>

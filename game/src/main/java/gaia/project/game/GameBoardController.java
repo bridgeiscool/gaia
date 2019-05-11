@@ -53,10 +53,10 @@ public class GameBoardController extends VBox {
     getStyleClass().add(player.getRace().getBoardStyle());
 
     // Resource bar
-    ore = new Ore(0);
-    credits = new Credits(0);
-    research = new Research(0);
-    qic = new Qic(0);
+    ore = new Ore(player.getOre());
+    credits = new Credits(player.getCredits());
+    research = new Research(player.getResearch());
+    qic = new Qic(player.getQic());
     resourceBar.getChildren().addAll(ore, credits, research, qic);
 
     raceName.setText(player.getRace().getRaceName());

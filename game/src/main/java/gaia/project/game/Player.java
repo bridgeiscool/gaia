@@ -16,6 +16,8 @@ public class Player {
   private final Property<Number> research;
   private final Property<Number> qic;
 
+  private final Property<Number> score;
+
   public Player(Race race) {
     this.race = race;
     this.gaia = new SimpleIntegerProperty(0);
@@ -26,6 +28,8 @@ public class Player {
     this.credits = new SimpleIntegerProperty(race.getStartingCredits());
     this.research = new SimpleIntegerProperty(race.getStartingResearch());
     this.qic = new SimpleIntegerProperty(race.getStartingQic());
+
+    this.score = new SimpleIntegerProperty(10);
   }
 
   public Race getRace() {
@@ -62,6 +66,10 @@ public class Player {
 
   public Property<Number> getQic() {
     return qic;
+  }
+
+  public Property<Number> getScore() {
+    return score;
   }
 
 }

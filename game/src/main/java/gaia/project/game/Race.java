@@ -3,8 +3,8 @@ package gaia.project.game;
 import javafx.scene.paint.Color;
 
 public enum Race {
-  XENOS("Xenos", "yellowRace", Color.YELLOW, Color.BLACK, 3, 15, 3, 1, 2, 4, 0),
-  GLEENS("Gleens", "yellowRace", Color.YELLOW, Color.BLACK, 3, 15, 3, 1, 2, 4, 0);
+  XENOS("Xenos", "yellowRace", Color.YELLOW, Color.BLACK, 3, 15, 3, 1, 2, 4, 0, 1, 0, 1),
+  GLEENS("Gleens", "yellowRace", Color.YELLOW, Color.BLACK, 3, 15, 3, 1, 2, 4, 0, 1, 0, 1);
 
   private final String raceName;
   private final String boardStyle;
@@ -20,6 +20,11 @@ public enum Race {
   private final int startingBin2;
   private final int startingBin3;
 
+  // Initial income
+  private final int startingOreIncome;
+  private final int startingCreditIncome;
+  private final int startingResearchIncome;
+
   private Race(
       String raceName,
       String boardStyle,
@@ -31,7 +36,10 @@ public enum Race {
       int startingQic,
       int startingBin1,
       int startingBin2,
-      int startingBin3) {
+      int startingBin3,
+      int startingOreIncome,
+      int startingCreditIncome,
+      int startingResearchIncome) {
     this.raceName = raceName;
     this.boardStyle = boardStyle;
     this.color = color;
@@ -43,6 +51,9 @@ public enum Race {
     this.startingBin1 = startingBin1;
     this.startingBin2 = startingBin2;
     this.startingBin3 = startingBin3;
+    this.startingOreIncome = startingOreIncome;
+    this.startingCreditIncome = startingCreditIncome;
+    this.startingResearchIncome = startingResearchIncome;
   }
 
   public String getRaceName() {
@@ -88,4 +99,17 @@ public enum Race {
   public int getStartingBin3() {
     return startingBin3;
   }
+
+  public int getStartingOreIncome() {
+    return startingOreIncome;
+  }
+
+  public int getStartingCreditIncome() {
+    return startingCreditIncome;
+  }
+
+  public int getStartingResearchIncome() {
+    return startingResearchIncome;
+  }
+
 }

@@ -20,15 +20,21 @@ public enum FederationTile implements UpdatePlayer {
   VP_2(Util.VP_BONUS, false),
   VP_3(Util.VP_BONUS, false);
 
-  private UpdatePlayer action;
+  private final UpdatePlayer action;
+  private final boolean flippable;
 
   FederationTile(UpdatePlayer action, boolean flippable) {
     this.action = action;
+    this.flippable = flippable;
   }
 
   @Override
   public void updatePlayer(Player player) {
     action.updatePlayer(player);
+  }
+
+  public boolean isFlippable() {
+    return flippable;
   }
 
   static class Util {

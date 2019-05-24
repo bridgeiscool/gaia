@@ -5,6 +5,7 @@ import java.util.Set;
 
 import com.google.common.base.Preconditions;
 
+import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleIntegerProperty;
 
@@ -27,6 +28,7 @@ public class Player {
 
   private final Set<FederationTile> federationTiles = new HashSet<>();
   private final Set<TechTile> techTiles = new HashSet<>();
+  private IntegerProperty flippableTechTiles = new SimpleIntegerProperty(0);
 
   public Player(Race race) {
     this.race = race;
@@ -49,6 +51,14 @@ public class Player {
   }
 
   // Major functionality methods
+  public void addFederationTile(FederationTile federationTile) {
+    federationTile.updatePlayer(this);
+    federationTiles.add(federationTile);
+    if (federationTile.isFlippable()) {
+      flippableTechTiles.setValue(flippableTechTiles.getValue() + 1);
+    }
+  }
+
   public void chargePower(int toCharge) {
     Preconditions.checkArgument(toCharge > 0);
     int remainingCharge = toCharge;
@@ -108,6 +118,26 @@ public class Player {
 
   public Property<Number> getScore() {
     return score;
+  }
+
+  public IntegerProperty getFlippableTechTiles() {
+    return flippableTechTiles;
+  }
+
+  public void setFlippableTechTiles(IntegerProperty flippableTechTiles) {
+    this.flippableTechTiles = flippableTechTiles;
+  }
+
+  public Income getCurrentIncome() {
+    return currentIncome;
+  }
+
+  public Set<FederationTile> getFederationTiles() {
+    return federationTiles;
+  }
+
+  public Set<TechTile> getTechTiles() {
+    return techTiles;
   }
 
 }

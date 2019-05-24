@@ -21,6 +21,8 @@ public class Player {
   private final Property<Number> research;
   private final Property<Number> qic;
 
+  private final Income currentIncome;
+
   private final Property<Number> score;
 
   private final Set<FederationTile> federationTiles = new HashSet<>();
@@ -37,6 +39,8 @@ public class Player {
     this.research = new SimpleIntegerProperty(race.getStartingResearch());
     this.qic = new SimpleIntegerProperty(race.getStartingQic());
 
+    this.currentIncome = new Income(race);
+
     this.score = new SimpleIntegerProperty(10);
   }
 
@@ -44,6 +48,7 @@ public class Player {
     return race;
   }
 
+  // Major functionality methods
   public void chargePower(int toCharge) {
     Preconditions.checkArgument(toCharge > 0);
     int remainingCharge = toCharge;
@@ -62,6 +67,10 @@ public class Player {
         --remainingCharge;
       } while (bin2.getValue().intValue() > 0 && remainingCharge > 0);
     }
+  }
+
+  public void takeIncome() {
+    currentIncome.updatePlayer(this);
   }
 
   // Getters for properties

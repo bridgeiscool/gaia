@@ -1,5 +1,10 @@
 package gaia.project.game;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import com.google.common.base.Preconditions;
+
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleIntegerProperty;
 
@@ -17,6 +22,9 @@ public class Player {
   private final Property<Number> qic;
 
   private final Property<Number> score;
+
+  private final Set<FederationTile> federationTiles = new HashSet<>();
+  private final Set<TechTile> techTiles = new HashSet<>();
 
   public Player(Race race) {
     this.race = race;
@@ -36,6 +44,27 @@ public class Player {
     return race;
   }
 
+  public void chargePower(int toCharge) {
+    Preconditions.checkArgument(toCharge > 0);
+    int remainingCharge = toCharge;
+    if (bin1.getValue().intValue() > 0) {
+      do {
+        bin1.setValue(bin1.getValue().intValue() - 1);
+        bin2.setValue(bin2.getValue().intValue() + 1);
+        --remainingCharge;
+      } while (bin1.getValue().intValue() > 0 && remainingCharge > 0);
+    }
+
+    if (remainingCharge > 0 && bin2.getValue().intValue() > 0) {
+      do {
+        bin2.setValue(bin2.getValue().intValue() - 1);
+        bin3.setValue(bin3.getValue().intValue() + 1);
+        --remainingCharge;
+      } while (bin2.getValue().intValue() > 0 && remainingCharge > 0);
+    }
+  }
+
+  // Getters for properties
   public Property<Number> getGaia() {
     return gaia;
   }

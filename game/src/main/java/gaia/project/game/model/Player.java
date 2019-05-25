@@ -1,10 +1,11 @@
-package gaia.project.game;
+package gaia.project.game.model;
 
 import java.util.EnumSet;
 import java.util.Set;
 
 import com.google.common.base.Preconditions;
 
+import gaia.project.game.PlanetType;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;

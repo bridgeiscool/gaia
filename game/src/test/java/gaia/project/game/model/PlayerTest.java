@@ -1,8 +1,10 @@
-package gaia.project.game;
+package gaia.project.game.model;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import gaia.project.game.model.Player;
 
 public class PlayerTest {
   private Player player;

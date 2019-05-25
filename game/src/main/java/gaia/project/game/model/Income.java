@@ -1,4 +1,4 @@
-package gaia.project.game;
+package gaia.project.game.model;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;

@@ -1,4 +1,4 @@
-package gaia.project.game;
+package gaia.project.game.model;
 
 public enum TechTile implements UpdatePlayer {
   CHARGE_4(p -> {}), POWER_ORE(p -> {

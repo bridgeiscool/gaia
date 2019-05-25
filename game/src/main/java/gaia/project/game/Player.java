@@ -1,34 +1,39 @@
 package gaia.project.game;
 
-import java.util.HashSet;
+import java.util.EnumSet;
 import java.util.Set;
 
 import com.google.common.base.Preconditions;
 
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.Property;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
 // Backing bean to store player's information
 public class Player {
   private final Race race;
-  private final Property<Number> gaia;
-  private final Property<Number> bin1;
-  private final Property<Number> bin2;
-  private final Property<Number> bin3;
+  private final IntegerProperty gaia;
+  private final IntegerProperty bin1;
+  private final IntegerProperty bin2;
+  private final IntegerProperty bin3;
 
-  private final Property<Number> ore;
-  private final Property<Number> credits;
-  private final Property<Number> research;
-  private final Property<Number> qic;
+  private final IntegerProperty ore;
+  private final IntegerProperty credits;
+  private final IntegerProperty research;
+  private final IntegerProperty qic;
 
   private final Income currentIncome;
 
-  private final Property<Number> score;
+  private final IntegerProperty score;
 
-  private final Set<FederationTile> federationTiles = new HashSet<>();
-  private final Set<TechTile> techTiles = new HashSet<>();
-  private IntegerProperty flippableTechTiles = new SimpleIntegerProperty(0);
+  private final Set<FederationTile> federationTiles = EnumSet.noneOf(FederationTile.class);
+  // Tech tile related
+  private final Set<TechTile> techTiles = EnumSet.noneOf(TechTile.class);
+  private final IntegerProperty flippableTechTiles = new SimpleIntegerProperty(0);
+  private final BooleanProperty gaiaBuildBonus = new SimpleBooleanProperty(false);
+  private final IntegerProperty bigBuildingPower = new SimpleIntegerProperty(3);
+  private final Set<PlanetType> builtOn = EnumSet.noneOf(PlanetType.class);
 
   public Player(Race race) {
     this.race = race;
@@ -84,48 +89,44 @@ public class Player {
   }
 
   // Getters for properties
-  public Property<Number> getGaia() {
+  public IntegerProperty getGaia() {
     return gaia;
   }
 
-  public Property<Number> getBin1() {
+  public IntegerProperty getBin1() {
     return bin1;
   }
 
-  public Property<Number> getBin2() {
+  public IntegerProperty getBin2() {
     return bin2;
   }
 
-  public Property<Number> getBin3() {
+  public IntegerProperty getBin3() {
     return bin3;
   }
 
-  public Property<Number> getOre() {
+  public IntegerProperty getOre() {
     return ore;
   }
 
-  public Property<Number> getCredits() {
+  public IntegerProperty getCredits() {
     return credits;
   }
 
-  public Property<Number> getResearch() {
+  public IntegerProperty getResearch() {
     return research;
   }
 
-  public Property<Number> getQic() {
+  public IntegerProperty getQic() {
     return qic;
   }
 
-  public Property<Number> getScore() {
+  public IntegerProperty getScore() {
     return score;
   }
 
   public IntegerProperty getFlippableTechTiles() {
     return flippableTechTiles;
-  }
-
-  public void setFlippableTechTiles(IntegerProperty flippableTechTiles) {
-    this.flippableTechTiles = flippableTechTiles;
   }
 
   public Income getCurrentIncome() {
@@ -140,4 +141,15 @@ public class Player {
     return techTiles;
   }
 
+  public BooleanProperty getGaiaBuildBonus() {
+    return gaiaBuildBonus;
+  }
+
+  public IntegerProperty getBigBuildingPower() {
+    return bigBuildingPower;
+  }
+
+  public Set<PlanetType> getBuiltOn() {
+    return builtOn;
+  }
 }

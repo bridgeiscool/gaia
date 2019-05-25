@@ -28,6 +28,7 @@ public class Player {
   private final IntegerProperty score;
 
   private final Set<FederationTile> federationTiles = EnumSet.noneOf(FederationTile.class);
+
   // Tech tile related
   private final Set<TechTile> techTiles = EnumSet.noneOf(TechTile.class);
   private final IntegerProperty flippableTechTiles = new SimpleIntegerProperty(0);
@@ -60,7 +61,7 @@ public class Player {
     federationTile.updatePlayer(this);
     federationTiles.add(federationTile);
     if (federationTile.isFlippable()) {
-      flippableTechTiles.setValue(flippableTechTiles.getValue() + 1);
+      Util.plus(flippableTechTiles, 1);
     }
   }
 
@@ -69,16 +70,16 @@ public class Player {
     int remainingCharge = toCharge;
     if (bin1.getValue().intValue() > 0) {
       do {
-        bin1.setValue(bin1.getValue().intValue() - 1);
-        bin2.setValue(bin2.getValue().intValue() + 1);
+        Util.minus(bin1, 1);
+        Util.plus(bin2, 1);
         --remainingCharge;
       } while (bin1.getValue().intValue() > 0 && remainingCharge > 0);
     }
 
     if (remainingCharge > 0 && bin2.getValue().intValue() > 0) {
       do {
-        bin2.setValue(bin2.getValue().intValue() - 1);
-        bin3.setValue(bin3.getValue().intValue() + 1);
+        Util.minus(bin2, 1);
+        Util.plus(bin3, 1);
         --remainingCharge;
       } while (bin2.getValue().intValue() > 0 && remainingCharge > 0);
     }

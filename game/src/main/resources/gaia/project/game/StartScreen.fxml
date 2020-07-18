@@ -30,7 +30,8 @@
         </center>
         <right>
           <VBox styleClass="vbox" prefWidth="300">
-            <Button styleClass="button-main-menu" text="New Game" onAction="#newGame" prefWidth="500" />
+            <Button styleClass="button-main-menu" text="Start Game" onAction="#startGame" prefWidth="500" />
+            <Button styleClass="button-main-menu" text="Join Game" onAction="#joinGame" prefWidth="500" />
             <Button styleClass="button-main-menu" text="Exit" onAction="#exitGame" prefWidth="500" />
           </VBox>
         </right>

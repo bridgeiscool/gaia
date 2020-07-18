@@ -11,7 +11,8 @@ public enum PlanetType {
   ORANGE(Color.ORANGE),
   RED(Color.RED),
   GRAY(Color.GRAY),
-  BROWN(Color.BROWN);
+  BROWN(Color.TAN),
+  NONE(null);
 
   private Color renderAs;
 

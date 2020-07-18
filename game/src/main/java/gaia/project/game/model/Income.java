@@ -4,6 +4,8 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
 public class Income implements UpdatePlayer {
+  private static final long serialVersionUID = 5922169349684403967L;
+
   private final IntegerProperty oreIncome;
   private final IntegerProperty creditIncome;
   private final IntegerProperty researchIncome;

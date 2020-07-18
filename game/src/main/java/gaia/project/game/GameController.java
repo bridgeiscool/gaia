@@ -2,6 +2,8 @@ package gaia.project.game;
 
 import java.io.IOException;
 
+import gaia.project.game.model.Player;
+import gaia.project.game.model.Race;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.BorderPane;
@@ -21,16 +23,17 @@ public class GameController extends BorderPane {
     }
 
     // Init game board
-    Sector sector = new Sector(this, 500, 500, 200, 200);
-    mainPane.setCenter(sector);
-    
+    // Sector sector = new Sector(this, 500, 500, 200, 200);
+    GameBoard gameBoard = new GameBoard();
+    mainPane.centerProperty().set(gameBoard);
+
     // Init player's board
-    GameBoardController gameBoard = new GameBoardController(new Player(Race.XENOS));
-    mainPane.setBottom(gameBoard);
+    PlayerBoardController playerBoard = new PlayerBoardController(new Player(Race.XENOS));
+    mainPane.setBottom(playerBoard);
   }
 
   public void newGame() {
     // TODO Auto-generated method stub
-    
+
   }
 }

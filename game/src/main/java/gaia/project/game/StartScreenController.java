@@ -7,6 +7,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.BorderPane;
 
 public class StartScreenController extends BorderPane {
+  private static final int PORT = 50000;
   private final GaiaProjectController controller;
 
   public StartScreenController(GaiaProjectController controller) {
@@ -24,14 +25,10 @@ public class StartScreenController extends BorderPane {
 
   // Button Handling Methods
   @FXML
-  public void newGame() {
-    controller.newGame();
-  }
+  public void startGame() throws IOException {}
 
   @FXML
-  private void loadGame() {
-    System.out.println("Loading game...");
-  }
+  public void joinGame() throws IOException {}
 
   @FXML
   void exitGame() {

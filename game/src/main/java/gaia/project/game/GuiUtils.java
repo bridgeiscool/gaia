@@ -12,19 +12,19 @@ import javafx.scene.layout.Priority;
 
 final class GuiUtils {
   private GuiUtils() {}
-  
+
   // Hex side length / 2
   static final double HEX_SIZE = 25;
   // Longer non-hypotenuse side
   static final double ROOT_3 = Math.sqrt(3.0);
-  
+
   static final double TWO_ROOT_3 = 2.0 * ROOT_3;
 
   static final double PLANET_RADIUS = 30;
-  
+
   static final double POWERBINX = 40;
   static final double POWERBINY = 25;
-  
+
   static void exceptionDialog(Throwable e) {
     Alert alert = new Alert(AlertType.ERROR);
     alert.setTitle("Exception dialog");

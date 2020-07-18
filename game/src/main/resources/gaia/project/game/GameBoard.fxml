@@ -12,29 +12,26 @@
   <stylesheets>
     <URL value="@app.css" />
   </stylesheets>
-  
-  <HBox fx:id="resourceBar" prefHeight="32" prefWidth="600" styleClass="resourceBar">
-    <children>
+
+  <children>
+    <HBox fx:id="resourceBar" prefHeight="40" prefWidth="600" styleClass="resourceBar">
       <Label text="Current Resources: " />
-    </children>  
-  </HBox>
-  <HBox fx:id="powerCycleBar" prefHeight="88" prefWidth="600">
-    <children>
-      <BorderPane fx:id="powerCycle" />
+    </HBox>
+    <HBox fx:id="powerCycleBar" prefHeight="180" prefWidth="600">
       <VBox>
         <Label fx:id="raceName" styleClass="bigLabel" />
         <Label fx:id="raceSpecial" />
         <HBox fx:id="gaiaformers" />
       </VBox>
-    </children>
-  </HBox>  
-  <HBox fx:id="buildingArea" prefHeight="180" prefWidth="600">
-    <children>
+    </HBox>  
+    <HBox fx:id="buildingArea" prefHeight="180" prefWidth="600">
       <VBox>
-        <HBox fx:id="power3" />
-        <HBox fx:id="power2" />
-        <HBox fx:id="power1" />
+        <children>
+          <HBox fx:id="power3" prefHeight="60.0" prefWidth="300.0" />
+          <HBox fx:id="power2" prefHeight="60.0" prefWidth="300.0" />
+          <HBox fx:id="power1" prefHeight="60.0" prefWidth="300.0" />
+        </children>
       </VBox>
-    </children>
-  </HBox>
+    </HBox>
+  </children>
 </fx:root>

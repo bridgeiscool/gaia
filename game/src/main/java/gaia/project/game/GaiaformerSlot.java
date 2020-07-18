@@ -1,12 +1,11 @@
 package gaia.project.game;
 
-import static gaia.project.game.GuiUtils.ROOT_3;
-
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 
 public class GaiaformerSlot extends Polygon {
   private static final double HEX_SIZE = 10;
+  private static final double ROOT_3 = Math.sqrt(3.0);
 
   private boolean hasGaiaformer;
   private Color raceColor;

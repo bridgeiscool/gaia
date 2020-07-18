@@ -1,8 +1,8 @@
-package gaia.project.game;
+package gaia.project.game.board;
 
-import static gaia.project.game.GuiUtils.HEX_SIZE;
-import static gaia.project.game.GuiUtils.ROOT_3;
-import static gaia.project.game.GuiUtils.TWO_ROOT_3;
+import static gaia.project.game.board.BoardUtils.HEX_SIZE;
+import static gaia.project.game.board.BoardUtils.ROOT_3;
+import static gaia.project.game.board.BoardUtils.TWO_ROOT_3;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -10,6 +10,7 @@ import java.util.List;
 
 import com.google.common.base.Preconditions;
 
+import gaia.project.game.PlanetType;
 import javafx.collections.ObservableList;
 import javafx.scene.Group;
 import javafx.scene.Node;

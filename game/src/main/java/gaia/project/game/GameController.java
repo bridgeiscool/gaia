@@ -2,6 +2,7 @@ package gaia.project.game;
 
 import java.io.IOException;
 
+import gaia.project.game.board.GameBoard;
 import gaia.project.game.model.Player;
 import gaia.project.game.model.Race;
 import javafx.fxml.FXML;

@@ -1,10 +1,11 @@
-package gaia.project.game;
+package gaia.project.game.board;
 
-import static gaia.project.game.GuiUtils.HEX_SIZE;
-import static gaia.project.game.GuiUtils.ROOT_3;
+import static gaia.project.game.board.BoardUtils.HEX_SIZE;
+import static gaia.project.game.board.BoardUtils.ROOT_3;
 
 import java.util.Optional;
 
+import gaia.project.game.PlanetType;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Polygon;
 

@@ -1,30 +1,31 @@
-package gaia.project.game;
+package gaia.project.game.board;
 
 import com.google.common.collect.ImmutableList;
 
+import gaia.project.game.PlanetType;
 import javafx.scene.Parent;
 
-public final class Sector10 {
+public final class Sector9 {
   // Top down and left to right looking at sector right side up
   private static final ImmutableList<PlanetType> PLANETS = ImmutableList.<PlanetType> builder()
       .add(
           PlanetType.NONE,
-          PlanetType.NONE,
+          PlanetType.ORANGE,
           PlanetType.TRANSDIM,
           PlanetType.NONE,
           PlanetType.NONE,
-          PlanetType.TRANSDIM,
-          PlanetType.YELLOW,
+          PlanetType.WHITE,
           PlanetType.NONE,
           PlanetType.NONE,
           PlanetType.NONE,
           PlanetType.NONE,
           PlanetType.NONE,
+          PlanetType.GRAY,
           PlanetType.GAIA,
-          PlanetType.BLUE,
+          PlanetType.BROWN,
           PlanetType.NONE,
           PlanetType.NONE,
-          PlanetType.RED,
+          PlanetType.NONE,
           PlanetType.NONE,
           PlanetType.NONE)
       .build();

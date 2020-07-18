@@ -31,9 +31,9 @@ public final class Sector10 {
       .build();
   private static Sector instance;
 
-  public static Sector getInstance(Parent parent, double centerX, double centerY) {
+  public static Sector getInstance(Parent parent, SectorLocation location) {
     if (instance == null) {
-      instance = new Sector(parent, 500, 500, centerX, centerY, PLANETS);
+      instance = new Sector(parent, location, PLANETS);
     }
 
     return instance;

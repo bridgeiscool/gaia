@@ -1,8 +1,5 @@
 package gaia.project.game.board;
 
-import static gaia.project.game.board.BoardUtils.HEX_SIZE;
-import static gaia.project.game.board.BoardUtils.ROOT_3;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -27,20 +24,20 @@ public class GameBoard extends Group implements Iterable<Sector> {
 
   private void initSectors() {
     // Top row
-    sectors.add(Sector1.getInstance(this, 160, 160));
-    sectors.add(Sector2.getInstance(this, 160 + 15.0 * HEX_SIZE, 160 + ROOT_3 * HEX_SIZE));
-    sectors.add(Sector3.getInstance(this, 160 + 30.0 * HEX_SIZE, 160 + 2.0 * ROOT_3 * HEX_SIZE));
+    sectors.add(Sector1.getInstance(this, SectorLocation.LOC0));
+    sectors.add(Sector2.getInstance(this, SectorLocation.LOC1));
+    sectors.add(Sector3.getInstance(this, SectorLocation.LOC2));
 
     // Middle row
-    sectors.add(Sector4.getInstance(this, 160 - 9.0 * HEX_SIZE, 160 + 7.0 * ROOT_3 * HEX_SIZE));
-    sectors.add(Sector5.getInstance(this, 160 + 6.0 * HEX_SIZE, 160 + 8.0 * ROOT_3 * HEX_SIZE));
-    sectors.add(Sector6.getInstance(this, 160 + 21.0 * HEX_SIZE, 160 + 9.0 * ROOT_3 * HEX_SIZE));
-    sectors.add(Sector7.getInstance(this, 160 + 36.0 * HEX_SIZE, 160 + 10.0 * ROOT_3 * HEX_SIZE));
+    sectors.add(Sector4.getInstance(this, SectorLocation.LOC3));
+    sectors.add(Sector5.getInstance(this, SectorLocation.LOC4));
+    sectors.add(Sector6.getInstance(this, SectorLocation.LOC5));
+    sectors.add(Sector7.getInstance(this, SectorLocation.LOC6));
 
     // Bottom row
-    sectors.add(Sector8.getInstance(this, 160 - 3.0 * HEX_SIZE, 160 + 15.0 * ROOT_3 * HEX_SIZE));
-    sectors.add(Sector9.getInstance(this, 160 + 12.0 * HEX_SIZE, 160 + 16.0 * ROOT_3 * HEX_SIZE));
-    sectors.add(Sector10.getInstance(this, 160 + 27.0 * HEX_SIZE, 160 + 17.0 * ROOT_3 * HEX_SIZE));
+    sectors.add(Sector8.getInstance(this, SectorLocation.LOC7));
+    sectors.add(Sector9.getInstance(this, SectorLocation.LOC8));
+    sectors.add(Sector10.getInstance(this, SectorLocation.LOC9));
   }
 
   @Override

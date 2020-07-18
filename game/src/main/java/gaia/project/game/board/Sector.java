@@ -19,16 +19,10 @@ import javafx.scene.Parent;
 public class Sector extends Group implements Iterable<Hex> {
   public List<Hex> containedHexes;
 
-  public Sector(
-      Parent parent,
-      double sizeX,
-      double sizeY,
-      double centerX,
-      double centerY,
-      List<PlanetType> planetTypes) {
+  public Sector(Parent parent, SectorLocation location, List<PlanetType> planetTypes) {
     containedHexes = new ArrayList<>();
     // Position all the hexes on the screen and populate containedHexes
-    initHexes(centerX, centerY, planetTypes);
+    initHexes(location.getCenterX(), location.getCenterY(), planetTypes);
 
     // Add the hexes
     ObservableList<Node> children = getChildren();

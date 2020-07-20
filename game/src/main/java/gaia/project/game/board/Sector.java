@@ -17,10 +17,15 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 
 public class Sector extends Group implements Iterable<Hex> {
-  public List<Hex> containedHexes;
+  public final List<Hex> containedHexes;
+  public final SectorLocation location;
+  public final int sectorId;
 
-  public Sector(Parent parent, SectorLocation location, List<PlanetType> planetTypes) {
+  public Sector(Parent parent, SectorLocation location, List<PlanetType> planetTypes, int sectorId) {
     containedHexes = new ArrayList<>();
+    this.sectorId = sectorId;
+    this.location = location;
+
     // Position all the hexes on the screen and populate containedHexes
     initHexes(location.getCenterX(), location.getCenterY(), planetTypes);
 
@@ -93,12 +98,17 @@ public class Sector extends Group implements Iterable<Hex> {
 
   private Hex getHex(double centerX, double centerY, PlanetType planetType) {
     return planetType == PlanetType.NONE
-        ? Hex.emptyHex(centerX, centerY)
-        : Hex.withPlanet(centerX, centerY, planetType);
+        ? Hex.emptyHex(centerX, centerY, sectorId)
+        : Hex.withPlanet(centerX, centerY, sectorId, planetType);
   }
 
   @Override
   public Iterator<Hex> iterator() {
     return containedHexes.iterator();
+  }
+
+  @Override
+  public String toString() {
+    return "Sector " + sectorId + "(" + location.getCenterX() + ", " + location.getCenterY() + ")";
   }
 }

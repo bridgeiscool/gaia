@@ -29,13 +29,8 @@ public final class Sector8 {
           PlanetType.NONE,
           PlanetType.NONE)
       .build();
-  private static Sector instance;
 
   public static Sector getInstance(Parent parent, SectorLocation location) {
-    if (instance == null) {
-      instance = new Sector(parent, location, PLANETS);
-    }
-
-    return instance;
+    return new Sector(parent, location, PLANETS, 8);
   }
 }

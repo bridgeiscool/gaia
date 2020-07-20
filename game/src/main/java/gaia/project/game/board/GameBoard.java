@@ -54,6 +54,7 @@ public class GameBoard extends Group implements Iterable<Sector> {
     for (Hex hex : hexes) {
       if (hex.getPlanet().isPresent() && hex.getPlanet().get().getPlanetType() != PlanetType.TRANSDIM) {
         for (Hex adjacent : hex.getHexesWithinRange(hexes, 1)) {
+          // Exclude adjacent planets that aren't purple
           if (hex.getPlanet().get().getPlanetType() == adjacent.getPlanet()
               .map(Planet::getPlanetType)
               .orElse(PlanetType.NONE)) {
@@ -67,7 +68,7 @@ public class GameBoard extends Group implements Iterable<Sector> {
   }
 
   @VisibleForTesting
-  GameBoard(List<SectorLocation> sectorPlacements) {
+  public GameBoard(List<SectorLocation> sectorPlacements) {
     sectors = new ArrayList<>();
 
     // Position all sectors on the screen

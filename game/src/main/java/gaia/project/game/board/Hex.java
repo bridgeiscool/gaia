@@ -2,8 +2,12 @@ package gaia.project.game.board;
 
 import static gaia.project.game.board.BoardUtils.HEX_SIZE;
 import static gaia.project.game.board.BoardUtils.ROOT_3;
+import static gaia.project.game.board.BoardUtils.TWO_ROOT_3;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import gaia.project.game.PlanetType;
 import javafx.scene.layout.StackPane;
@@ -70,5 +74,16 @@ public final class Hex extends StackPane {
       super(points);
       this.getStyleClass().add("hexStyle");
     }
+  }
+
+  public Collection<Hex> getHexesWithinRange(List<Hex> hexes, int i) {
+    return hexes.stream()
+        .filter(h -> distanceTo(h) < TWO_ROOT_3 * HEX_SIZE * i + 1.0)
+        .filter(h -> h != this)
+        .collect(Collectors.toList());
+  }
+
+  private double distanceTo(Hex other) {
+    return Math.sqrt(Math.pow(centerX - other.centerX, 2) + Math.pow(centerY - other.centerY, 2));
   }
 }

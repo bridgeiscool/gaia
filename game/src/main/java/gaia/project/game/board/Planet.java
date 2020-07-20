@@ -11,4 +11,8 @@ public class Planet extends Circle {
     this.planetType = planetType;
     setFill(planetType.getRenderAs());
   }
+
+  public PlanetType getPlanetType() {
+    return planetType;
+  }
 }

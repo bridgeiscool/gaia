@@ -1,6 +1,7 @@
 package gaia.project.game;
 
 import java.io.IOException;
+import java.util.Random;
 
 import gaia.project.game.board.GameBoard;
 import gaia.project.game.model.Player;
@@ -24,8 +25,7 @@ public class GameController extends BorderPane {
     }
 
     // Init game board
-    // Sector sector = new Sector(this, 500, 500, 200, 200);
-    GameBoard gameBoard = new GameBoard();
+    GameBoard gameBoard = GameBoard.random(new Random(System.currentTimeMillis()));
     mainPane.centerProperty().set(gameBoard);
 
     // Init player's board

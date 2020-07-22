@@ -9,6 +9,7 @@ import gaia.project.game.model.Race;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
 
 public class GameController extends BorderPane {
   @FXML
@@ -28,9 +29,11 @@ public class GameController extends BorderPane {
     GameBoard gameBoard = GameBoard.random(new Random(System.currentTimeMillis()));
     mainPane.centerProperty().set(gameBoard);
 
-    // Init player's board
-    PlayerBoardController playerBoard = new PlayerBoardController(new Player(Race.XENOS));
-    mainPane.setBottom(playerBoard);
+    // Init player boards
+    PlayerBoardController xenos = new PlayerBoardController(new Player(Race.XENOS));
+    PlayerBoardController terrans = new PlayerBoardController(new Player(Race.TERRANS));
+    VBox vbox = new VBox(5, xenos, terrans);
+    mainPane.setRight(vbox);
   }
 
   public void newGame() {

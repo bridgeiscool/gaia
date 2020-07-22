@@ -14,24 +14,53 @@
   </stylesheets>
 
   <children>
-    <HBox fx:id="resourceBar" prefHeight="40" prefWidth="600" styleClass="resourceBar">
-      <Label text="Current Resources: " />
+    <HBox prefHeight="25" prefWidth="300" spacing="7">
+      <Label fx:id="raceName" />
+      <Label fx:id="vps" />
     </HBox>
-    <HBox fx:id="powerCycleBar" prefHeight="180" prefWidth="600">
-      <VBox>
-        <Label fx:id="raceName" styleClass="bigLabel" />
-        <Label fx:id="raceSpecial" />
-        <HBox fx:id="gaiaformers" />
-      </VBox>
-    </HBox>  
-    <HBox fx:id="buildingArea" prefHeight="180" prefWidth="600">
-      <VBox>
-        <children>
-          <HBox fx:id="power3" prefHeight="60.0" prefWidth="300.0" />
-          <HBox fx:id="power2" prefHeight="60.0" prefWidth="300.0" />
-          <HBox fx:id="power1" prefHeight="60.0" prefWidth="300.0" />
-        </children>
-      </VBox>
+    <HBox prefHeight="25" prefWidth="300">
+      <Label text="Current Resources" />
+    </HBox>
+    <HBox prefHeight="25" prefWidth="300" spacing="7">
+      <Label fx:id="creditsLabel" />
+      <Label fx:id="oreLabel" />
+      <Label fx:id="knowledgeLabel" />
+      <Label fx:id="qicLabel" />
+      <Label fx:id="gaiaBin" />
+      <Label fx:id="bin1" />
+      <Label fx:id="bin2" />
+      <Label fx:id="bin3" />
+    </HBox>
+    <HBox prefHeight="25" prefWidth="300">
+      <Label text="Income" />
+    </HBox>
+    <HBox prefHeight="25" prefWidth="300" spacing="7">
+      <Label fx:id="creditIncome" />
+      <Label fx:id="oreIncome" />
+      <Label fx:id="knowledgeIncome" />
+      <Label fx:id="qicIncome" />
+      <Label fx:id="ptIncome" />
+      <Label fx:id="pIncome" />
+    </HBox>
+    <HBox prefHeight="25" prefWidth="300" spacing="7">
+      <Label text="PI: " />
+      <Label fx:id="planetaryInstitute" />
+      <Label text="KA:" />
+      <Label fx:id="knowledgeAcademy" />
+      <Label text="QA:" />
+      <Label fx:id="qicAcademy" />
+    </HBox>
+    <HBox prefHeight="25" prefWidth="300" spacing="7">
+      <Label text="Trading Posts: " />
+      <Label fx:id="tradingPosts" />
+      <Label text="Research Labs: " />
+      <Label fx:id="researchLabs" />
+    </HBox>
+    <HBox prefHeight="25" prefWidth="300" spacing="7">
+      <Label text="Mines: " />
+      <Label fx:id="mines" />
+      <Label text="Gaiaformers: " />
+      <Label fx:id="gaiaformers" />
     </HBox>
   </children>
 </fx:root>

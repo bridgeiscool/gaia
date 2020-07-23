@@ -8,7 +8,7 @@
 <?import javafx.scene.image.*?>
 <?import javafx.geometry.*?>
 
-<fx:root type="javafx.scene.layout.VBox" xmlns:fx="http://javafx.com/fxml" prefHeight="300" prefWidth="600">
+<fx:root type="javafx.scene.layout.VBox" xmlns:fx="http://javafx.com/fxml" prefWidth="600">
   <stylesheets>
     <URL value="@app.css" />
   </stylesheets>
@@ -17,9 +17,6 @@
     <HBox prefHeight="25" prefWidth="300" spacing="7">
       <Label fx:id="raceName" />
       <Label fx:id="vps" />
-    </HBox>
-    <HBox prefHeight="25" prefWidth="300">
-      <Label text="Resources" />
     </HBox>
     <HBox prefHeight="25" prefWidth="300" spacing="7">
       <Label fx:id="creditsLabel" />
@@ -58,6 +55,7 @@
       <Label fx:id="mines" />
       <Label text="Gaiaformers: " />
       <Label fx:id="gaiaformers" />
+      <Label fx:id="availableGaiaformers" />
     </HBox>
   </children>
 </fx:root>

@@ -25,6 +25,11 @@ public enum Race {
     public int getStartingBin1() {
       return 4;
     }
+
+    @Override
+    public int getStartingGaiaformers() {
+      return 1;
+    }
   },
   LANTIDS("Lantids", "blueRace", Color.BLUE, Color.WHITE) {
     @Override
@@ -126,4 +131,7 @@ public enum Race {
     return 0;
   }
 
+  public int getStartingGaiaformers() {
+    return 0;
+  }
 }

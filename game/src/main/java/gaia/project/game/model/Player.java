@@ -7,6 +7,7 @@ import java.util.Set;
 import com.google.common.base.Preconditions;
 
 import gaia.project.game.PlanetType;
+import gaia.project.game.board.Gaiaformer;
 import gaia.project.game.board.KnowledgeAcademy;
 import gaia.project.game.board.Mine;
 import gaia.project.game.board.PlanetaryInstitute;
@@ -33,6 +34,8 @@ public class Player {
   private final IntegerProperty research;
   private final IntegerProperty qic;
 
+  private final IntegerProperty availableGaiaformers;
+
   private final Income currentIncome;
 
   private final IntegerProperty score;
@@ -46,12 +49,14 @@ public class Player {
   private final IntegerProperty bigBuildingPower = new SimpleIntegerProperty(3);
   private final Set<PlanetType> builtOn = EnumSet.noneOf(PlanetType.class);
 
+  // Buildings, etc
   private final ObservableSet<Mine> mines = FXCollections.observableSet(new HashSet<>());
   private final ObservableSet<TradingPost> tradingPosts = FXCollections.observableSet(new HashSet<>());
   private final ObservableSet<ResearchLab> researchLabs = FXCollections.observableSet(new HashSet<>());
   private final ObservableSet<PlanetaryInstitute> pi = FXCollections.observableSet(new HashSet<>());
   private final ObservableSet<KnowledgeAcademy> ka = FXCollections.observableSet(new HashSet<>());
   private final ObservableSet<QicAcademy> qa = FXCollections.observableSet(new HashSet<>());
+  private final ObservableSet<Gaiaformer> gaiaformers = FXCollections.observableSet(new HashSet<>());
 
   public Player(Race race) {
     this.race = race;
@@ -63,6 +68,7 @@ public class Player {
     this.credits = new SimpleIntegerProperty(race.getStartingCredits());
     this.research = new SimpleIntegerProperty(race.getStartingKnowledge());
     this.qic = new SimpleIntegerProperty(race.getStartingQic());
+    this.availableGaiaformers = new SimpleIntegerProperty(race.getStartingGaiaformers());
 
     this.currentIncome = new Income(race);
 
@@ -193,6 +199,14 @@ public class Player {
 
   public ObservableSet<QicAcademy> getQa() {
     return qa;
+  }
+
+  public IntegerProperty getAvailableGaiaformers() {
+    return availableGaiaformers;
+  }
+
+  public ObservableSet<Gaiaformer> getGaiaformers() {
+    return gaiaformers;
   }
 
 }

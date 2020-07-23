@@ -2,6 +2,7 @@ package gaia.project.game;
 
 import java.io.IOException;
 
+import gaia.project.game.board.Gaiaformer;
 import gaia.project.game.board.KnowledgeAcademy;
 import gaia.project.game.board.Mine;
 import gaia.project.game.board.PlanetaryInstitute;
@@ -72,6 +73,8 @@ public class PlayerBoardController extends VBox {
   private Label qicAcademy;
   @FXML
   private Label gaiaformers;
+  @FXML
+  private Label availableGaiaformers;
 
   public PlayerBoardController(Player player) {
     FXMLLoader loader = new FXMLLoader(PlayerBoardController.class.getResource("GameBoard.fxml"));
@@ -131,5 +134,12 @@ public class PlayerBoardController extends VBox {
     qicAcademy.setText(player.getQa().size() + " / 1");
     player.getQa()
         .addListener((SetChangeListener<QicAcademy>) change -> qicAcademy.setText(player.getQa().size() + " / 1"));
+
+    gaiaformers.setText(player.getGaiaformers().size() + " / ");
+    player.getGaiaformers()
+        .addListener(
+            (SetChangeListener<Gaiaformer>) change -> gaiaformers.setText(player.getGaiaformers().size() + " /"));
+    availableGaiaformers.textProperty().bindBidirectional(player.getAvailableGaiaformers(), new NumberStringConverter());
+
   }
 }

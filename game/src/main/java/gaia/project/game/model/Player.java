@@ -2,7 +2,6 @@ package gaia.project.game.model;
 
 import java.util.EnumSet;
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
 
 import com.google.common.base.Preconditions;
@@ -50,9 +49,9 @@ public class Player {
   private final ObservableSet<Mine> mines = FXCollections.observableSet(new HashSet<>());
   private final ObservableSet<TradingPost> tradingPosts = FXCollections.observableSet(new HashSet<>());
   private final ObservableSet<ResearchLab> researchLabs = FXCollections.observableSet(new HashSet<>());
-  private Optional<PlanetaryInstitute> pi = Optional.empty();
-  private Optional<KnowledgeAcademy> ka = Optional.empty();
-  private Optional<QicAcademy> qa = Optional.empty();
+  private final ObservableSet<PlanetaryInstitute> pi = FXCollections.observableSet(new HashSet<>());
+  private final ObservableSet<KnowledgeAcademy> ka = FXCollections.observableSet(new HashSet<>());
+  private final ObservableSet<QicAcademy> qa = FXCollections.observableSet(new HashSet<>());
 
   public Player(Race race) {
     this.race = race;
@@ -184,15 +183,15 @@ public class Player {
     return researchLabs;
   }
 
-  public Optional<PlanetaryInstitute> getPi() {
+  public ObservableSet<PlanetaryInstitute> getPi() {
     return pi;
   }
 
-  public Optional<KnowledgeAcademy> getKa() {
+  public ObservableSet<KnowledgeAcademy> getKa() {
     return ka;
   }
 
-  public Optional<QicAcademy> getQa() {
+  public ObservableSet<QicAcademy> getQa() {
     return qa;
   }
 

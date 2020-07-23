@@ -36,6 +36,18 @@ public enum Race {
     public int getStartingBin2() {
       return 2;
     }
+  },
+  HADSCH_HALLAS("Hadsch Hallas", "redRace", Color.RED, Color.WHITE) {
+    @Override
+    public int getStartingCreditIncome() {
+      return 3;
+    }
+  },
+  IVITS("Ivits", "redRace", Color.RED, Color.WHITE) {
+    @Override
+    public int getStartingQicIncome() {
+      return 1;
+    }
   };
 
   private final String raceName;
@@ -107,6 +119,10 @@ public enum Race {
   }
 
   public int getStartingPtIncome() {
+    return 0;
+  }
+
+  public int getStartingQicIncome() {
     return 0;
   }
 

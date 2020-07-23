@@ -19,26 +19,23 @@
       <Label fx:id="vps" />
     </HBox>
     <HBox prefHeight="25" prefWidth="300">
-      <Label text="Current Resources" />
+      <Label text="Resources" />
     </HBox>
     <HBox prefHeight="25" prefWidth="300" spacing="7">
       <Label fx:id="creditsLabel" />
+      <Label fx:id="creditIncome" />
       <Label fx:id="oreLabel" />
+      <Label fx:id="oreIncome" />
       <Label fx:id="knowledgeLabel" />
+      <Label fx:id="knowledgeIncome" />
       <Label fx:id="qicLabel" />
+      <Label fx:id="qicIncome" />
+    </HBox>
+    <HBox prefHeight="25" prefWidth="300" spacing="7">
       <Label fx:id="gaiaBin" />
       <Label fx:id="bin1" />
       <Label fx:id="bin2" />
       <Label fx:id="bin3" />
-    </HBox>
-    <HBox prefHeight="25" prefWidth="300">
-      <Label text="Income" />
-    </HBox>
-    <HBox prefHeight="25" prefWidth="300" spacing="7">
-      <Label fx:id="creditIncome" />
-      <Label fx:id="oreIncome" />
-      <Label fx:id="knowledgeIncome" />
-      <Label fx:id="qicIncome" />
       <Label fx:id="ptIncome" />
       <Label fx:id="pIncome" />
     </HBox>

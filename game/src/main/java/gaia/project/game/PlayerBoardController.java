@@ -2,7 +2,10 @@ package gaia.project.game;
 
 import java.io.IOException;
 
+import gaia.project.game.board.KnowledgeAcademy;
 import gaia.project.game.board.Mine;
+import gaia.project.game.board.PlanetaryInstitute;
+import gaia.project.game.board.QicAcademy;
 import gaia.project.game.board.ResearchLab;
 import gaia.project.game.board.TradingPost;
 import gaia.project.game.model.Player;
@@ -26,11 +29,21 @@ public class PlayerBoardController extends VBox {
   @FXML
   private Label creditsLabel;
   @FXML
+  private Label creditIncome;
+  @FXML
   private Label oreLabel;
+  @FXML
+  private Label oreIncome;
   @FXML
   private Label knowledgeLabel;
   @FXML
+  private Label knowledgeIncome;
+  @FXML
   private Label qicLabel;
+  @FXML
+  private Label qicIncome;
+
+  // Power Cycle bar
   @FXML
   private Label gaiaBin;
   @FXML
@@ -39,16 +52,6 @@ public class PlayerBoardController extends VBox {
   private Label bin2;
   @FXML
   private Label bin3;
-
-  // Income bar
-  @FXML
-  private Label creditIncome;
-  @FXML
-  private Label oreIncome;
-  @FXML
-  private Label knowledgeIncome;
-  @FXML
-  private Label qicIncome;
   @FXML
   private Label ptIncome;
   @FXML
@@ -65,6 +68,8 @@ public class PlayerBoardController extends VBox {
   private Label planetaryInstitute;
   @FXML
   private Label knowledgeAcademy;
+  @FXML
+  private Label qicAcademy;
   @FXML
   private Label gaiaformers;
 
@@ -84,39 +89,47 @@ public class PlayerBoardController extends VBox {
     raceName.setText(player.getRace().getRaceName());
     vps.textProperty().bindBidirectional(player.getScore(), new NumberStringConverter());
 
-    creditsLabel.textProperty().bindBidirectional(player.getCredits(), StringConverters.numberWithPrefix("$: "));
-    oreLabel.textProperty().bindBidirectional(player.getOre(), StringConverters.numberWithPrefix("O: "));
-    knowledgeLabel.textProperty().bindBidirectional(player.getResearch(), StringConverters.numberWithPrefix("K: "));
-    qicLabel.textProperty().bindBidirectional(player.getQic(), StringConverters.numberWithPrefix("Q: "));
+    creditsLabel.textProperty().bindBidirectional(player.getCredits(), StringConverters.numberWithPostfix("c"));
+    creditIncome.textProperty()
+        .bindBidirectional(player.getCurrentIncome().getCreditIncome(), StringConverters.income());
+    oreLabel.textProperty().bindBidirectional(player.getOre(), StringConverters.numberWithPostfix("o"));
+    oreIncome.textProperty().bindBidirectional(player.getCurrentIncome().getOreIncome(), StringConverters.income());
+    knowledgeLabel.textProperty().bindBidirectional(player.getResearch(), StringConverters.numberWithPostfix("k"));
+    knowledgeIncome.textProperty()
+        .bindBidirectional(player.getCurrentIncome().getResearchIncome(), StringConverters.income());
+    qicLabel.textProperty().bindBidirectional(player.getQic(), StringConverters.numberWithPostfix("q"));
+    qicIncome.textProperty().bindBidirectional(player.getCurrentIncome().getQicIncome(), StringConverters.income());
+
     gaiaBin.textProperty().bindBidirectional(player.getGaiaBin(), StringConverters.numberWithPrefix("Gaia Bin: "));
     bin1.textProperty().bindBidirectional(player.getBin1(), StringConverters.numberWithPrefix("I: "));
     bin2.textProperty().bindBidirectional(player.getBin2(), StringConverters.numberWithPrefix("II: "));
     bin3.textProperty().bindBidirectional(player.getBin3(), StringConverters.numberWithPrefix("III: "));
-
-    creditIncome.textProperty()
-        .bindBidirectional(player.getCurrentIncome().getCreditIncome(), StringConverters.numberWithPrefix("$: "));
-    oreIncome.textProperty()
-        .bindBidirectional(player.getCurrentIncome().getOreIncome(), StringConverters.numberWithPrefix("O: "));
-    knowledgeIncome.textProperty()
-        .bindBidirectional(player.getCurrentIncome().getResearchIncome(), StringConverters.numberWithPrefix("K: "));
-    qicIncome.textProperty()
-        .bindBidirectional(player.getCurrentIncome().getQicIncome(), StringConverters.numberWithPrefix("Q: "));
     ptIncome.textProperty()
-        .bindBidirectional(player.getCurrentIncome().getPowerIncome(), StringConverters.numberWithPrefix("PT: "));
+        .bindBidirectional(player.getCurrentIncome().getPowerIncome(), StringConverters.numberWithPrefix("+PT: "));
     pIncome.textProperty()
-        .bindBidirectional(player.getCurrentIncome().getChargeIncome(), StringConverters.numberWithPrefix("P: "));
+        .bindBidirectional(player.getCurrentIncome().getChargeIncome(), StringConverters.numberWithPrefix("+P: "));
 
     mines.setText(player.getMines().size() + " / 8");
-    player.getMines().addListener((SetChangeListener<Mine>) change -> {
-      mines.setText(player.getMines().size() + " / 8");
-    });
+    player.getMines().addListener((SetChangeListener<Mine>) change -> mines.setText(player.getMines().size() + " / 8"));
     tradingPosts.setText(player.getTradingPosts().size() + " / 4");
-    player.getTradingPosts().addListener((SetChangeListener<TradingPost>) change -> {
-      tradingPosts.setText(player.getTradingPosts() + " / 4");
-    });
+    player.getTradingPosts()
+        .addListener(
+            (SetChangeListener<TradingPost>) change -> tradingPosts.setText(player.getTradingPosts() + " / 4"));
     researchLabs.setText(player.getResearchLabs().size() + " / 3");
-    player.getResearchLabs().addListener((SetChangeListener<ResearchLab>) change -> {
-      researchLabs.setText(player.getResearchLabs() + " / 3");
-    });
+    player.getResearchLabs()
+        .addListener(
+            (SetChangeListener<ResearchLab>) change -> researchLabs.setText(player.getResearchLabs() + " / 3"));
+    planetaryInstitute.setText(player.getPi().size() + " / 1");
+    player.getPi()
+        .addListener(
+            (SetChangeListener<PlanetaryInstitute>) change -> planetaryInstitute
+                .setText(player.getPi().size() + " / 1"));
+    knowledgeAcademy.setText(player.getKa().size() + " / 1");
+    player.getKa()
+        .addListener(
+            (SetChangeListener<KnowledgeAcademy>) change -> knowledgeAcademy.setText(player.getKa().size() + " / 1"));
+    qicAcademy.setText(player.getQa().size() + " / 1");
+    player.getQa()
+        .addListener((SetChangeListener<QicAcademy>) change -> qicAcademy.setText(player.getQa().size() + " / 1"));
   }
 }

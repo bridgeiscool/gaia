@@ -33,7 +33,8 @@ public class GameController extends BorderPane {
     PlayerBoardController xenos = new PlayerBoardController(new Player(Race.XENOS));
     PlayerBoardController terrans = new PlayerBoardController(new Player(Race.TERRANS));
     PlayerBoardController hadschHallas = new PlayerBoardController(new Player(Race.HADSCH_HALLAS));
-    VBox vbox = new VBox(5, xenos, terrans, hadschHallas);
+    TechTracks techTracks = new TechTracks();
+    VBox vbox = new VBox(5, xenos, terrans, hadschHallas, techTracks);
     mainPane.setRight(vbox);
   }
 

@@ -23,59 +23,57 @@
   
   <!-- Terraforming column  --> 
   <StackPane GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="terraTrack">
-    <Label fx:id="terra5Label" text="+12VP"/>    
+    <Label fx:id="terra5Label" text="+12VP" style="-fx-text-fill: white"/>    
     <HBox fx:id="terra5" alignment="CENTER_LEFT" prefHeight="40"/>
   </StackPane>
   <HBox fx:id="terraAdvTech" GridPane.rowIndex="1" GridPane.columnIndex="0" />
   <StackPane GridPane.rowIndex="2" GridPane.columnIndex="0" styleClass="terraTrack">
-    <Label text="+2o"/>    
+    <Label text="+2o" style="-fx-text-fill: white"/>    
     <HBox fx:id="terra4" alignment="CENTER_LEFT" prefHeight="40"/>
   </StackPane>
   <StackPane GridPane.rowIndex="3" GridPane.columnIndex="0" styleClass="terraTrack">
-    <Label text="dig=1o" />    
+    <Label text="dig=1o" style="-fx-text-fill: white"/>    
     <HBox fx:id="terra3" alignment="CENTER_LEFT" prefHeight="40"/>
   </StackPane>
   <StackPane GridPane.rowIndex="5" GridPane.columnIndex="0" styleClass="terraTrack">  
-    <Label text="dig=2o" />    
+    <Label text="dig=2o" style="-fx-text-fill: white"/>    
     <HBox fx:id="terra2" alignment="CENTER_LEFT" prefHeight="40"/>
   </StackPane>
     <StackPane GridPane.rowIndex="6" GridPane.columnIndex="0" styleClass="terraTrack">
-    <Label text="+2o" />    
+    <Label text="+2o" style="-fx-text-fill: white"/>    
     <HBox fx:id="terra1" alignment="CENTER_LEFT" prefHeight="40"/>
   </StackPane>
   <StackPane GridPane.rowIndex="7" GridPane.columnIndex="0" styleClass="terraTrack">
-    <Label text="dig=3o" />    
+    <Label text="dig=3o" style="-fx-text-fill: white"/>    
     <HBox fx:id="terra0" alignment="CENTER_LEFT" prefHeight="40"/>
   </StackPane>
-  <HBox GridPane.rowIndex="8" GridPane.columnIndex="0" fx:id="terraTechTile" />
 
   <!-- Nav Column -->
   <StackPane GridPane.rowIndex="0" GridPane.columnIndex="1" styleClass="navTrack">
-    <Label text="nav 4, LP" />    
+    <Label text="nav 4, LP" style="-fx-text-fill: white"/>    
     <HBox fx:id="nav5" alignment="CENTER_LEFT" prefHeight="40"/>
   </StackPane>
   <HBox fx:id="navAdvTech" GridPane.rowIndex="1" GridPane.columnIndex="1" />
   <StackPane GridPane.rowIndex="2" GridPane.columnIndex="1" styleClass="navTrack">
-    <Label text="nav 3" />    
+    <Label text="nav 3" style="-fx-text-fill: white"/>    
     <HBox fx:id="nav4" alignment="CENTER_LEFT" prefHeight="40"/>
   </StackPane>
   <StackPane GridPane.rowIndex="3" GridPane.columnIndex="1" styleClass="navTrack">
-    <Label text="+1q" />    
+    <Label text="+1q" style="-fx-text-fill: white"/>    
     <HBox fx:id="nav3" alignment="CENTER_LEFT" prefHeight="40"/>
   </StackPane>
     <StackPane GridPane.rowIndex="5" GridPane.columnIndex="1" styleClass="navTrack">
-    <Label text="nav 2" />    
+    <Label text="nav 2" style="-fx-text-fill: white"/>    
     <HBox fx:id="nav2" alignment="CENTER_LEFT" prefHeight="40"/>
   </StackPane>
     <StackPane GridPane.rowIndex="6" GridPane.columnIndex="1" styleClass="navTrack">
-    <Label text="+1q" />    
+    <Label text="+1q" style="-fx-text-fill: white"/>    
     <HBox fx:id="nav1" alignment="CENTER_LEFT" prefHeight="40"/>
   </StackPane>
   <StackPane GridPane.rowIndex="7" GridPane.columnIndex="1" styleClass="navTrack">
-    <Label text="nav 1" /> 
+    <Label text="nav 1" style="-fx-text-fill: white"/> 
     <HBox fx:id="nav0" alignment="CENTER_LEFT" prefHeight="40"/>
   </StackPane>
-  <HBox GridPane.rowIndex="8" GridPane.columnIndex="1" fx:id="navTechTile" />
 
   <!-- AI Column -->
   <StackPane GridPane.rowIndex="0" GridPane.columnIndex="2" styleClass="aiTrack">
@@ -102,34 +100,32 @@
   <StackPane GridPane.rowIndex="7" GridPane.columnIndex="2" styleClass="aiTrack">
     <HBox fx:id="ai0" alignment="CENTER_LEFT" prefHeight="40"/>
   </StackPane>
-  <HBox GridPane.rowIndex="8" GridPane.columnIndex="2" fx:id="aiTechTile" />
   
   <!-- Gaiaforming Column -->
   <StackPane GridPane.rowIndex="0" GridPane.columnIndex="3" styleClass="gaiaTrack">
-    <Label text="+4VP, 1/GP" />    
+    <Label text="+4VP, 1/GP" style="-fx-text-fill: white"/>    
     <HBox fx:id="gaia5" alignment="CENTER_LEFT" prefHeight="40"/>
   </StackPane>
   <HBox fx:id="gaiaAdvTech" GridPane.rowIndex="1" GridPane.columnIndex="3" />
   <StackPane GridPane.rowIndex="2" GridPane.columnIndex="3" styleClass="gaiaTrack">
-    <Label text="GF, GF=3" />    
+    <Label text="GF, GF=3" style="-fx-text-fill: white"/>    
     <HBox fx:id="gaia4" alignment="CENTER_LEFT" prefHeight="40"/>
   </StackPane>
   <StackPane GridPane.rowIndex="3" GridPane.columnIndex="3" styleClass="gaiaTrack">
-    <Label text="GF, GF=4" />    
+    <Label text="GF, GF=4" style="-fx-text-fill: white"/>    
     <HBox fx:id="gaia3" alignment="CENTER_LEFT" prefHeight="40"/>
   </StackPane>
     <StackPane GridPane.rowIndex="5" GridPane.columnIndex="3" styleClass="gaiaTrack">
-    <Label text="+3pt" />    
+    <Label text="+3pt" style="-fx-text-fill: white"/>    
     <HBox fx:id="gaia2" alignment="CENTER_LEFT" prefHeight="40"/>
   </StackPane>
     <StackPane GridPane.rowIndex="6" GridPane.columnIndex="3" styleClass="gaiaTrack">
-    <Label text="GF, GF=6" />    
+    <Label text="GF, GF=6" style="-fx-text-fill: white" />    
     <HBox fx:id="gaia1" alignment="CENTER_LEFT" prefHeight="40"/>
   </StackPane>
   <StackPane GridPane.rowIndex="7" GridPane.columnIndex="3" styleClass="gaiaTrack">
     <HBox fx:id="gaia0" alignment="CENTER_LEFT" prefHeight="40"/>
   </StackPane>
-  <HBox GridPane.rowIndex="8" GridPane.columnIndex="3" fx:id="gaiaTechTile" />
 
   <!-- Economy Column -->
   <StackPane GridPane.rowIndex="0" GridPane.columnIndex="4" styleClass="econTrack">
@@ -156,8 +152,7 @@
   <StackPane GridPane.rowIndex="7" GridPane.columnIndex="4" styleClass="econTrack">
     <HBox fx:id="econ0" alignment="CENTER_LEFT" prefHeight="40"/>
   </StackPane>
-  <HBox GridPane.rowIndex="8" GridPane.columnIndex="4" fx:id="econTechTile" />
-
+  
   <!-- Knowledge Column -->
   <StackPane GridPane.rowIndex="0" GridPane.columnIndex="5" styleClass="knowledgeTrack">
     <Label text="+9k" />    
@@ -183,16 +178,13 @@
   <StackPane GridPane.rowIndex="7" GridPane.columnIndex="5" styleClass="knowledgeTrack">
     <HBox fx:id="knowledge0" alignment="CENTER_LEFT" prefHeight="40"/>
   </StackPane>
-  <HBox GridPane.rowIndex="8" GridPane.columnIndex="5" fx:id="knowledgeTechTile" />
   
   
   <!-- Spanning items -->
   <HBox GridPane.rowIndex="4" GridPane.columnIndex="0" GridPane.columnSpan="6" alignment="center">
     <Label text="Charge 3" />
   </HBox>
-  <HBox GridPane.rowIndex="9" GridPane.columnIndex="0" GridPane.columnSpan="2" fx:id="wildTech1" />
-  <HBox GridPane.rowIndex="9" GridPane.columnIndex="2" GridPane.columnSpan="2" fx:id="wildTech2" />
-  <HBox GridPane.rowIndex="9" GridPane.columnIndex="4" GridPane.columnSpan="2" fx:id="wildTech3" />
-
-
+  <HBox GridPane.rowIndex="9" GridPane.columnIndex="0" GridPane.columnSpan="2" fx:id="wildTechTile1" alignment="CENTER" />
+  <HBox GridPane.rowIndex="9" GridPane.columnIndex="2" GridPane.columnSpan="2" fx:id="wildTechTile2" alignment="CENTER" />
+  <HBox GridPane.rowIndex="9" GridPane.columnIndex="4" GridPane.columnSpan="2" fx:id="wildTechTile3" alignment="CENTER" />
 </fx:root>

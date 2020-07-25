@@ -1,7 +1,9 @@
 package gaia.project.game;
 
 import java.io.IOException;
+import java.util.List;
 
+import gaia.project.game.model.TechTile;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
@@ -28,6 +30,8 @@ public class TechTracks extends GridPane {
   private HBox terra0;
   @FXML
   private HBox terraTechTile;
+  @FXML
+  private Label terraTechTileLabel;
 
   // Nav
   @FXML
@@ -44,8 +48,6 @@ public class TechTracks extends GridPane {
   private HBox nav1;
   @FXML
   private HBox nav0;
-  @FXML
-  private HBox navTechTile;
 
   // AI
   @FXML
@@ -62,8 +64,6 @@ public class TechTracks extends GridPane {
   private HBox ai1;
   @FXML
   private HBox ai0;
-  @FXML
-  private HBox aiTechTile;
 
   // Gaiaforming
   @FXML
@@ -80,8 +80,6 @@ public class TechTracks extends GridPane {
   private HBox gaia1;
   @FXML
   private HBox gaia0;
-  @FXML
-  private HBox gaiaTechTile;
 
   // Econ
   @FXML
@@ -98,8 +96,6 @@ public class TechTracks extends GridPane {
   private HBox econ1;
   @FXML
   private HBox econ0;
-  @FXML
-  private HBox econTechTile;
 
   // Knowledge
   @FXML
@@ -117,9 +113,13 @@ public class TechTracks extends GridPane {
   @FXML
   private HBox knowledge0;
   @FXML
-  private HBox knowledgeTechTile;
+  private HBox wildTechTile1;
+  @FXML
+  private HBox wildTechTile2;
+  @FXML
+  private HBox wildTechTile3;
 
-  public TechTracks() {
+  public TechTracks(List<TechTile> techTiles) {
     FXMLLoader loader = new FXMLLoader(TechTracks.class.getResource("TechTracks.fxml"));
     loader.setController(this);
     loader.setRoot(this);
@@ -128,5 +128,17 @@ public class TechTracks extends GridPane {
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
+
+    // Initialize the tech tiles
+    add(new TechTileRectangle(techTiles.get(0)), 0, 8);
+    add(new TechTileRectangle(techTiles.get(1)), 1, 8);
+    add(new TechTileRectangle(techTiles.get(2)), 2, 8);
+    add(new TechTileRectangle(techTiles.get(3)), 3, 8);
+    add(new TechTileRectangle(techTiles.get(4)), 4, 8);
+    add(new TechTileRectangle(techTiles.get(5)), 5, 8);
+    wildTechTile1.getChildren().add(new TechTileRectangle(techTiles.get(6)));
+    wildTechTile2.getChildren().add(new TechTileRectangle(techTiles.get(7)));
+    wildTechTile3.getChildren().add(new TechTileRectangle(techTiles.get(8)));
+
   }
 }

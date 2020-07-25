@@ -83,6 +83,12 @@
 	-fx-border-color: white;
 }
 
+.techTile {
+	-fx-background-color: black;
+	-fx-border-color: white;
+	-fx-border-width: 1;
+}
+
 .menu-bar {
   -fx-background-color: linear-gradient(#686868 0.0%, #232723 25.0%, #373837 75.0%, #757575 100.0%),
     linear-gradient(#020b02, #3a3a3a),
@@ -113,7 +119,6 @@
 }
 
 .label {
-  -fx-text-fill: black;
   -fx-font-size: 14.0pt;
 }
 

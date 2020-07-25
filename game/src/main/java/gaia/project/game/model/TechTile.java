@@ -4,7 +4,7 @@ public enum TechTile implements UpdatePlayer {
   CHARGE_4(p -> {}) {
     @Override
     public String display() {
-      return "+4p";
+      return "ACT: +4p";
     }
   },
   POWER_ORE(p -> {

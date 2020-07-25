@@ -3,6 +3,9 @@ package gaia.project.game;
 import java.io.IOException;
 import java.util.List;
 
+import com.google.common.base.Preconditions;
+
+import gaia.project.game.model.AdvancedTechTile;
 import gaia.project.game.model.TechTile;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -119,7 +122,9 @@ public class TechTracks extends GridPane {
   @FXML
   private HBox wildTechTile3;
 
-  public TechTracks(List<TechTile> techTiles) {
+  public TechTracks(List<TechTile> techTiles, List<AdvancedTechTile> advTechTiles) {
+    Preconditions.checkArgument(advTechTiles.size() == 6);
+
     FXMLLoader loader = new FXMLLoader(TechTracks.class.getResource("TechTracks.fxml"));
     loader.setController(this);
     loader.setRoot(this);
@@ -130,15 +135,23 @@ public class TechTracks extends GridPane {
     }
 
     // Initialize the tech tiles
-    add(new TechTileRectangle(techTiles.get(0)), 0, 8);
-    add(new TechTileRectangle(techTiles.get(1)), 1, 8);
-    add(new TechTileRectangle(techTiles.get(2)), 2, 8);
-    add(new TechTileRectangle(techTiles.get(3)), 3, 8);
-    add(new TechTileRectangle(techTiles.get(4)), 4, 8);
-    add(new TechTileRectangle(techTiles.get(5)), 5, 8);
-    wildTechTile1.getChildren().add(new TechTileRectangle(techTiles.get(6)));
-    wildTechTile2.getChildren().add(new TechTileRectangle(techTiles.get(7)));
-    wildTechTile3.getChildren().add(new TechTileRectangle(techTiles.get(8)));
+    add(new TechTileHBox(techTiles.get(0)), 0, 8);
+    add(new TechTileHBox(techTiles.get(1)), 1, 8);
+    add(new TechTileHBox(techTiles.get(2)), 2, 8);
+    add(new TechTileHBox(techTiles.get(3)), 3, 8);
+    add(new TechTileHBox(techTiles.get(4)), 4, 8);
+    add(new TechTileHBox(techTiles.get(5)), 5, 8);
+    wildTechTile1.getChildren().add(new TechTileHBox(techTiles.get(6)));
+    wildTechTile2.getChildren().add(new TechTileHBox(techTiles.get(7)));
+    wildTechTile3.getChildren().add(new TechTileHBox(techTiles.get(8)));
+
+    // Initialize the adv tech tiles
+    terraAdvTech.getChildren().add(new AdvancedTechTileHBox(advTechTiles.get(0)));
+    navAdvTech.getChildren().add(new AdvancedTechTileHBox(advTechTiles.get(1)));
+    aiAdvTech.getChildren().add(new AdvancedTechTileHBox(advTechTiles.get(2)));
+    gaiaAdvTech.getChildren().add(new AdvancedTechTileHBox(advTechTiles.get(3)));
+    econAdvTech.getChildren().add(new AdvancedTechTileHBox(advTechTiles.get(4)));
+    knowledgeAdvTech.getChildren().add(new AdvancedTechTileHBox(advTechTiles.get(5)));
 
   }
 }

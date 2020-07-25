@@ -54,7 +54,7 @@
 }
 
 .navTrack {
-	-fx-background-color: navy;
+	-fx-background-color: dimgray;
 	-fx-border-width: 1;
 	-fx-border-color: white;
 }
@@ -85,6 +85,12 @@
 
 .techTile {
 	-fx-background-color: black;
+	-fx-border-color: white;
+	-fx-border-width: 1;
+}
+
+.advTechTile {
+	-fx-background-color: navy;
 	-fx-border-color: white;
 	-fx-border-width: 1;
 }

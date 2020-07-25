@@ -6,10 +6,10 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 
-public class TechTileRectangle extends HBox {
+public class TechTileHBox extends HBox {
   private final TechTile techTile;
 
-  public TechTileRectangle(TechTile techTile) {
+  public TechTileHBox(TechTile techTile) {
     this.techTile = techTile;
     Label label = new Label(techTile.display());
     label.setTextFill(Color.WHITE);

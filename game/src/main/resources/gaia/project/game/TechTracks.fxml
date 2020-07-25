@@ -26,7 +26,7 @@
     <Label fx:id="terra5Label" text="+12VP" style="-fx-text-fill: white"/>    
     <HBox fx:id="terra5" alignment="CENTER_LEFT" prefHeight="40"/>
   </StackPane>
-  <HBox fx:id="terraAdvTech" GridPane.rowIndex="1" GridPane.columnIndex="0" />
+  <HBox fx:id="terraAdvTech" GridPane.rowIndex="1" GridPane.columnIndex="0" alignment="CENTER" />
   <StackPane GridPane.rowIndex="2" GridPane.columnIndex="0" styleClass="terraTrack">
     <Label text="+2o" style="-fx-text-fill: white"/>    
     <HBox fx:id="terra4" alignment="CENTER_LEFT" prefHeight="40"/>
@@ -53,7 +53,7 @@
     <Label text="nav 4, LP" style="-fx-text-fill: white"/>    
     <HBox fx:id="nav5" alignment="CENTER_LEFT" prefHeight="40"/>
   </StackPane>
-  <HBox fx:id="navAdvTech" GridPane.rowIndex="1" GridPane.columnIndex="1" />
+  <HBox fx:id="navAdvTech" GridPane.rowIndex="1" GridPane.columnIndex="1" alignment="CENTER" />
   <StackPane GridPane.rowIndex="2" GridPane.columnIndex="1" styleClass="navTrack">
     <Label text="nav 3" style="-fx-text-fill: white"/>    
     <HBox fx:id="nav4" alignment="CENTER_LEFT" prefHeight="40"/>
@@ -80,7 +80,7 @@
     <Label text="+4q" />    
     <HBox fx:id="ai5" alignment="CENTER_LEFT" prefHeight="40"/>
   </StackPane>
-  <HBox fx:id="aiAdvTech" GridPane.rowIndex="1" GridPane.columnIndex="2" />
+  <HBox fx:id="aiAdvTech" GridPane.rowIndex="1" GridPane.columnIndex="2" alignment="CENTER" />
   <StackPane GridPane.rowIndex="2" GridPane.columnIndex="2" styleClass="aiTrack">
     <Label text="+2q" />    
     <HBox fx:id="ai4" alignment="CENTER_LEFT" prefHeight="40"/>
@@ -106,7 +106,7 @@
     <Label text="+4VP, 1/GP" style="-fx-text-fill: white"/>    
     <HBox fx:id="gaia5" alignment="CENTER_LEFT" prefHeight="40"/>
   </StackPane>
-  <HBox fx:id="gaiaAdvTech" GridPane.rowIndex="1" GridPane.columnIndex="3" />
+  <HBox fx:id="gaiaAdvTech" GridPane.rowIndex="1" GridPane.columnIndex="3" alignment="CENTER" />
   <StackPane GridPane.rowIndex="2" GridPane.columnIndex="3" styleClass="gaiaTrack">
     <Label text="GF, GF=3" style="-fx-text-fill: white"/>    
     <HBox fx:id="gaia4" alignment="CENTER_LEFT" prefHeight="40"/>
@@ -132,7 +132,7 @@
     <Label text="+3o6c6p" />    
     <HBox fx:id="econ5" alignment="CENTER_LEFT" prefHeight="40"/>
   </StackPane>
-  <HBox fx:id="econAdvTech" GridPane.rowIndex="1" GridPane.columnIndex="4" />
+  <HBox fx:id="econAdvTech" GridPane.rowIndex="1" GridPane.columnIndex="4" alignment="CENTER" />
   <StackPane GridPane.rowIndex="2" GridPane.columnIndex="4" styleClass="econTrack">
     <Label text="(+2o4c4p)" />    
     <HBox fx:id="econ4" alignment="CENTER_LEFT" prefHeight="40"/>
@@ -158,7 +158,7 @@
     <Label text="+9k" />    
     <HBox fx:id="knowledge5" alignment="CENTER_LEFT" prefHeight="40"/>
   </StackPane>
-  <HBox fx:id="knowledgeAdvTech" GridPane.rowIndex="1" GridPane.columnIndex="5" />
+  <HBox fx:id="knowledgeAdvTech" GridPane.rowIndex="1" GridPane.columnIndex="5" alignment="CENTER" />
   <StackPane GridPane.rowIndex="2" GridPane.columnIndex="5" styleClass="knowledgeTrack">
     <Label text="(+4k)" />    
     <HBox fx:id="knowledge4" alignment="CENTER_LEFT" prefHeight="40"/>

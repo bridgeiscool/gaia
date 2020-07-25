@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Random;
 
 import gaia.project.game.board.GameBoard;
+import gaia.project.game.model.AdvancedTechTile;
 import gaia.project.game.model.Player;
 import gaia.project.game.model.Race;
 import gaia.project.game.model.TechTile;
@@ -43,8 +44,10 @@ public class GameController extends BorderPane {
     // Init tech tracks
     List<TechTile> techTiles = new ArrayList<>(Arrays.asList(TechTile.values()));
     Collections.shuffle(techTiles, random);
+    List<AdvancedTechTile> advTechTiles = new ArrayList<>(Arrays.asList(AdvancedTechTile.values()));
+    Collections.shuffle(advTechTiles, random);
 
-    TechTracks techTracks = new TechTracks(techTiles);
+    TechTracks techTracks = new TechTracks(techTiles, advTechTiles.subList(0, 6));
     VBox vbox = new VBox(5, xenos, terrans, hadschHallas, techTracks);
     mainPane.setRight(vbox);
   }

@@ -36,26 +36,37 @@
       <Label fx:id="ptIncome" />
       <Label fx:id="pIncome" />
     </HBox>
-    <HBox prefHeight="25" prefWidth="300" spacing="7">
-      <Label text="PI: " />
-      <Label fx:id="planetaryInstitute" />
-      <Label text="KA:" />
-      <Label fx:id="knowledgeAcademy" />
-      <Label text="QA:" />
-      <Label fx:id="qicAcademy" />
-    </HBox>
-    <HBox prefHeight="25" prefWidth="300" spacing="7">
-      <Label text="Trading Posts: " />
-      <Label fx:id="tradingPosts" />
-      <Label text="Research Labs: " />
-      <Label fx:id="researchLabs" />
-    </HBox>
-    <HBox prefHeight="25" prefWidth="300" spacing="7">
-      <Label text="Mines: " />
-      <Label fx:id="mines" />
-      <Label text="Gaiaformers: " />
-      <Label fx:id="gaiaformers" />
-      <Label fx:id="availableGaiaformers" />
-    </HBox>
+    <GridPane hgap="10" vgap="1">
+      <columnConstraints>
+        <ColumnConstraints halignment="CENTER"/>
+        <ColumnConstraints halignment="CENTER"/>
+        <ColumnConstraints halignment="CENTER"/>
+        <ColumnConstraints halignment="CENTER"/>
+        <ColumnConstraints halignment="CENTER"/>
+        <ColumnConstraints halignment="CENTER"/>
+        <ColumnConstraints halignment="CENTER"/>
+      </columnConstraints>
+      
+      <!-- Label Row -->
+      <Label text="M" GridPane.rowIndex="0" GridPane.columnIndex="0" />
+      <Label text="TP" GridPane.rowIndex="0" GridPane.columnIndex="1" />
+      <Label text="RL" GridPane.rowIndex="0" GridPane.columnIndex="2" />
+      <Label text="PI" GridPane.rowIndex="0" GridPane.columnIndex="3" />
+      <Label text="KA" GridPane.rowIndex="0" GridPane.columnIndex="4" />
+      <Label text="QA" GridPane.rowIndex="0" GridPane.columnIndex="5" />
+      <Label text="GF" GridPane.rowIndex="0" GridPane.columnIndex="6" />
+      
+      <!-- Value row -->
+      <Label fx:id="mines" GridPane.rowIndex="1" GridPane.columnIndex="0" />
+      <Label fx:id="tradingPosts" GridPane.rowIndex="1" GridPane.columnIndex="1" />
+      <Label fx:id="researchLabs" GridPane.rowIndex="1" GridPane.columnIndex="2" />
+      <Label fx:id="planetaryInstitute" GridPane.rowIndex="1" GridPane.columnIndex="3" />
+      <Label fx:id="knowledgeAcademy" GridPane.rowIndex="1" GridPane.columnIndex="4" />
+      <Label fx:id="qicAcademy" GridPane.rowIndex="1" GridPane.columnIndex="5" />
+      <HBox spacing="0" GridPane.rowIndex="1" GridPane.columnIndex="6">
+        <Label fx:id="gaiaformers" />
+        <Label fx:id="availableGaiaformers" />
+      </HBox>
+    </GridPane>
   </children>
 </fx:root>

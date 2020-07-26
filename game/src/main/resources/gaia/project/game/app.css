@@ -95,6 +95,20 @@
 	-fx-border-width: 1;
 }
 
+.powerAction {
+  -fx-fill: purple;
+  -fx-stroke: black;
+  -fx-stroke-type: outside;
+  -fx-stroke-width: 1;
+}
+
+.qicAction {
+  -fx-fill: green;
+  -fx-stroke: black;
+  -fx-stroke-type: outside;
+  -fx-stroke-width: 1;
+}
+
 .menu-bar {
   -fx-background-color: linear-gradient(#686868 0.0%, #232723 25.0%, #373837 75.0%, #757575 100.0%),
     linear-gradient(#020b02, #3a3a3a),

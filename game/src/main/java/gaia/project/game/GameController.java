@@ -48,7 +48,8 @@ public class GameController extends BorderPane {
     Collections.shuffle(advTechTiles, random);
 
     TechTracks techTracks = new TechTracks(techTiles, advTechTiles.subList(0, 6));
-    VBox vbox = new VBox(5, xenos, terrans, hadschHallas, techTracks);
+    PowerActionsController powerActions = new PowerActionsController();
+    VBox vbox = new VBox(5, xenos, terrans, hadschHallas, techTracks, powerActions);
     mainPane.setRight(vbox);
   }
 

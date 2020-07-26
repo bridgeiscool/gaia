@@ -77,7 +77,7 @@ public class PlayerBoardController extends VBox {
   private Label availableGaiaformers;
 
   public PlayerBoardController(Player player) {
-    FXMLLoader loader = new FXMLLoader(PlayerBoardController.class.getResource("GameBoard.fxml"));
+    FXMLLoader loader = new FXMLLoader(PlayerBoardController.class.getResource("PlayerBoard.fxml"));
     loader.setController(this);
     loader.setRoot(this);
     try {
@@ -139,7 +139,8 @@ public class PlayerBoardController extends VBox {
     player.getGaiaformers()
         .addListener(
             (SetChangeListener<Gaiaformer>) change -> gaiaformers.setText(player.getGaiaformers().size() + " /"));
-    availableGaiaformers.textProperty().bindBidirectional(player.getAvailableGaiaformers(), new NumberStringConverter());
+    availableGaiaformers.textProperty()
+        .bindBidirectional(player.getAvailableGaiaformers(), new NumberStringConverter());
 
   }
 }

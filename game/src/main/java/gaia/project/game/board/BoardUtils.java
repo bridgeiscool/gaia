@@ -4,7 +4,7 @@ public final class BoardUtils {
   private BoardUtils() {}
 
   // Hex side length / 2
-  static final double HEX_SIZE = 20;
+  static final double HEX_SIZE = 18;
   // Longer non-hypotenuse side
   static final double ROOT_3 = Math.sqrt(3.0);
 

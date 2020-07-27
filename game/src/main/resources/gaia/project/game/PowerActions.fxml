@@ -28,33 +28,33 @@
   </columnConstraints>
   
   <Label text="7p" GridPane.rowIndex="0" GridPane.columnIndex="0" />
-  <Action sideLength="20.0" text="+3k" GridPane.rowIndex="1" GridPane.columnIndex="0" octagonStyle="powerAction"/>
+  <Action sideLength="25.0" text="+3k" GridPane.rowIndex="1" GridPane.columnIndex="0" octagonStyle="powerAction"/>
 
   <Label text="5p" GridPane.rowIndex="0" GridPane.columnIndex="1" />
-  <Action sideLength="20.0" text="2xTF" GridPane.rowIndex="1" GridPane.columnIndex="1" octagonStyle="powerAction" />
+  <Action sideLength="25.0" text="2xTF" GridPane.rowIndex="1" GridPane.columnIndex="1" octagonStyle="powerAction" />
 
   <Label text="4p" GridPane.rowIndex="0" GridPane.columnIndex="2" />
-  <Action sideLength="20.0" text="+2o" GridPane.rowIndex="1" GridPane.columnIndex="2" octagonStyle="powerAction" />
+  <Action sideLength="25.0" text="+2o" GridPane.rowIndex="1" GridPane.columnIndex="2" octagonStyle="powerAction" />
 
   <Label text="4p" GridPane.rowIndex="0" GridPane.columnIndex="3" />
-  <Action sideLength="20.0" text="+7c" GridPane.rowIndex="1" GridPane.columnIndex="3" octagonStyle="powerAction" />
+  <Action sideLength="25.0" text="+7c" GridPane.rowIndex="1" GridPane.columnIndex="3" octagonStyle="powerAction" />
 
   <Label text="4p" GridPane.rowIndex="0" GridPane.columnIndex="4" />
-  <Action sideLength="20.0" text="+2k" GridPane.rowIndex="1" GridPane.columnIndex="4" octagonStyle="powerAction" />
+  <Action sideLength="25.0" text="+2k" GridPane.rowIndex="1" GridPane.columnIndex="4" octagonStyle="powerAction" />
 
   <Label text="3p" GridPane.rowIndex="0" GridPane.columnIndex="5" />
-  <Action sideLength="20.0" text="1xTF" GridPane.rowIndex="1" GridPane.columnIndex="5" octagonStyle="powerAction" />
+  <Action sideLength="25.0" text="1xTF" GridPane.rowIndex="1" GridPane.columnIndex="5" octagonStyle="powerAction" />
 
   <Label text="3p" GridPane.rowIndex="0" GridPane.columnIndex="6" />
-  <Action sideLength="20.0" text="+2pt" GridPane.rowIndex="1" GridPane.columnIndex="6" octagonStyle="powerAction" />
+  <Action sideLength="25.0" text="+2pt" GridPane.rowIndex="1" GridPane.columnIndex="6" octagonStyle="powerAction" />
 
   <Label text="4q" GridPane.rowIndex="0" GridPane.columnIndex="7" />
-  <Action sideLength="20.0" text="+TT" GridPane.rowIndex="1" GridPane.columnIndex="7" octagonStyle="qicAction" />
+  <Action sideLength="25.0" text="+TT" GridPane.rowIndex="1" GridPane.columnIndex="7" octagonStyle="qicAction" />
 
   <Label text="3q" GridPane.rowIndex="0" GridPane.columnIndex="8" />
-  <Action sideLength="20.0" text="Refed" GridPane.rowIndex="1" GridPane.columnIndex="8" octagonStyle="qicAction" />
+  <Action sideLength="25.0" text="Refed" GridPane.rowIndex="1" GridPane.columnIndex="8" octagonStyle="qicAction" />
 
   <Label text="2q" GridPane.rowIndex="0" GridPane.columnIndex="9" />
-  <Action sideLength="20.0" text="+VP" GridPane.rowIndex="1" GridPane.columnIndex="9" octagonStyle="qicAction" />
+  <Action sideLength="25.0" text="+VP" GridPane.rowIndex="1" GridPane.columnIndex="9" octagonStyle="qicAction" />
 </fx:root>
  

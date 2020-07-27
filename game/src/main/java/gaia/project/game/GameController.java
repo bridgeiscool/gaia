@@ -15,6 +15,7 @@ import gaia.project.game.model.TechTile;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 public class GameController extends BorderPane {
@@ -49,8 +50,11 @@ public class GameController extends BorderPane {
 
     TechTracks techTracks = new TechTracks(techTiles, advTechTiles.subList(0, 6));
     PowerActionsController powerActions = new PowerActionsController();
-    VBox vbox = new VBox(5, xenos, terrans, hadschHallas, techTracks, powerActions);
+    VBox vbox = new VBox(5, techTracks, powerActions);
     mainPane.setRight(vbox);
+
+    HBox hbox = new HBox(5, xenos, terrans, hadschHallas);
+    mainPane.setBottom(hbox);
   }
 
   public void newGame() {

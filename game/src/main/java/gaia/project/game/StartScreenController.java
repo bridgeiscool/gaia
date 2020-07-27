@@ -7,7 +7,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.BorderPane;
 
 public class StartScreenController extends BorderPane {
-  private static final int PORT = 50000;
   private final GaiaProjectController controller;
 
   public StartScreenController(GaiaProjectController controller) {

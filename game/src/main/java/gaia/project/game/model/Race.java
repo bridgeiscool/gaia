@@ -3,35 +3,35 @@ package gaia.project.game.model;
 import javafx.scene.paint.Color;
 
 public enum Race {
-  XENOS("Xenos", "yellowRace", Color.YELLOW, Color.BLACK) {
+  XENOS("Xenos", "yellowRace", Color.YELLOW) {
     @Override
-    public int getStartingQic() {
-      return 2;
+    public int getStartingAiLevel() {
+      return 1;
     }
   },
-  GLEENS("Gleens", "yellowRace", Color.YELLOW, Color.BLACK) {
+  GLEENS("Gleens", "yellowRace", Color.YELLOW) {
     @Override
     public int getStartingQic() {
       return 0;
     }
 
     @Override
-    public int getStartingOre() {
-      return 5;
+    public int getStartingNavLevel() {
+      return 1;
     }
   },
-  TERRANS("Terrans", "blueRace", Color.BLUE, Color.WHITE) {
+  TERRANS("Terrans", "blueRace", Color.BLUE) {
     @Override
     public int getStartingBin1() {
       return 4;
     }
 
     @Override
-    public int getStartingGaiaformers() {
+    public int getStartingGaiaformingLevel() {
       return 1;
     }
   },
-  LANTIDS("Lantids", "blueRace", Color.BLUE, Color.WHITE) {
+  LANTIDS("Lantids", "blueRace", Color.BLUE) {
     @Override
     public int getStartingCredits() {
       return 13;
@@ -42,13 +42,18 @@ public enum Race {
       return 2;
     }
   },
-  HADSCH_HALLAS("Hadsch Hallas", "redRace", Color.RED, Color.WHITE) {
+  HADSCH_HALLAS("Hadsch Hallas", "redRace", Color.RED) {
     @Override
     public int getStartingCreditIncome() {
       return 3;
     }
+
+    @Override
+    public int getStartingEconLevel() {
+      return 1;
+    }
   },
-  IVITS("Ivits", "redRace", Color.RED, Color.WHITE) {
+  IVITS("Ivits", "redRace", Color.RED) {
     @Override
     public int getStartingQicIncome() {
       return 1;
@@ -58,13 +63,11 @@ public enum Race {
   private final String raceName;
   private final String boardStyle;
   private final Color color;
-  private final Color textColor;
 
-  private Race(String raceName, String boardStyle, Color color, Color textColor) {
+  private Race(String raceName, String boardStyle, Color color) {
     this.raceName = raceName;
     this.boardStyle = boardStyle;
     this.color = color;
-    this.textColor = textColor;
   }
 
   public String getRaceName() {
@@ -77,10 +80,6 @@ public enum Race {
 
   public Color getColor() {
     return color;
-  }
-
-  public Color getTextColor() {
-    return textColor;
   }
 
   public int getStartingOre() {
@@ -131,7 +130,27 @@ public enum Race {
     return 0;
   }
 
-  public int getStartingGaiaformers() {
+  public int getStartingTerraformingLevel() {
+    return 0;
+  }
+
+  public int getStartingNavLevel() {
+    return 0;
+  }
+
+  public int getStartingAiLevel() {
+    return 0;
+  }
+
+  public int getStartingGaiaformingLevel() {
+    return 0;
+  }
+
+  public int getStartingEconLevel() {
+    return 0;
+  }
+
+  public int getStartingKnowledgeLevel() {
     return 0;
   }
 }

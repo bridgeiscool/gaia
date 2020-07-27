@@ -42,6 +42,14 @@ public class Player {
 
   private final Set<FederationTile> federationTiles = EnumSet.noneOf(FederationTile.class);
 
+  // Tech track related
+  private final IntegerProperty terraformingLevel;
+  private final IntegerProperty navLevel;
+  private final IntegerProperty aiLevel;
+  private final IntegerProperty gaiaformingLevel;
+  private final IntegerProperty econLevel;
+  private final IntegerProperty knowledgeLevel;
+
   // Tech tile related
   private final Set<TechTile> techTiles = EnumSet.noneOf(TechTile.class);
   private final IntegerProperty flippableTechTiles = new SimpleIntegerProperty(0);
@@ -68,7 +76,15 @@ public class Player {
     this.credits = new SimpleIntegerProperty(race.getStartingCredits());
     this.research = new SimpleIntegerProperty(race.getStartingKnowledge());
     this.qic = new SimpleIntegerProperty(race.getStartingQic());
-    this.availableGaiaformers = new SimpleIntegerProperty(race.getStartingGaiaformers());
+
+    this.terraformingLevel = new SimpleIntegerProperty(race.getStartingTerraformingLevel());
+    this.navLevel = new SimpleIntegerProperty(race.getStartingNavLevel());
+    this.aiLevel = new SimpleIntegerProperty(race.getStartingAiLevel());
+    this.gaiaformingLevel = new SimpleIntegerProperty(race.getStartingGaiaformingLevel());
+    this.econLevel = new SimpleIntegerProperty(race.getStartingEconLevel());
+    this.knowledgeLevel = new SimpleIntegerProperty(race.getStartingKnowledgeLevel());
+
+    this.availableGaiaformers = new SimpleIntegerProperty(this.gaiaformingLevel.get());
 
     this.currentIncome = new Income(race);
 
@@ -207,6 +223,30 @@ public class Player {
 
   public ObservableSet<Gaiaformer> getGaiaformers() {
     return gaiaformers;
+  }
+
+  public IntegerProperty getTerraformingLevel() {
+    return terraformingLevel;
+  }
+
+  public IntegerProperty getNavLevel() {
+    return navLevel;
+  }
+
+  public IntegerProperty getAiLevel() {
+    return aiLevel;
+  }
+
+  public IntegerProperty getGaiaformingLevel() {
+    return gaiaformingLevel;
+  }
+
+  public IntegerProperty getEconLevel() {
+    return econLevel;
+  }
+
+  public IntegerProperty getKnowledgeLevel() {
+    return knowledgeLevel;
   }
 
 }

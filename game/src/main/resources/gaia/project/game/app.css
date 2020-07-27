@@ -30,20 +30,29 @@
   -fx-background-color: yellow;
   -fx-border-width: 2;
   -fx-border-color: black;
+}
+
+.yellowRace Label {
   -fx-text-fill: black;
 }
 
 .blueRace {
   -fx-background-color: blue;
   -fx-border-width: 2;
-  -fx-border-color: white;
+  -fx-border-color: black;
+}
+
+.blueRace Label {
   -fx-text-fill: white;
 }
 
 .redRace {
   -fx-background-color: red;
   -fx-border-width: 2;
-  -fx-border-color: white;
+  -fx-border-color: black;
+}
+
+.redRace Label {
   -fx-text-fill: white;
 }
 

@@ -6,14 +6,17 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 import gaia.project.game.board.GameBoard;
 import gaia.project.game.model.AdvancedTechTile;
 import gaia.project.game.model.Player;
 import gaia.project.game.model.Race;
+import gaia.project.game.model.RoundBooster;
 import gaia.project.game.model.TechTile;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Separator;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -50,7 +53,12 @@ public class GameController extends BorderPane {
 
     TechTracks techTracks = new TechTracks(techTiles, advTechTiles.subList(0, 6));
     PowerActionsController powerActions = new PowerActionsController();
-    VBox vbox = new VBox(5, techTracks, powerActions);
+    HBox roundBoosters = new HBox(5);
+    List<RoundBooster> allBoosters = new ArrayList<>(Arrays.asList(RoundBooster.values()));
+    Collections.shuffle(allBoosters, random);
+    roundBoosters.getChildren()
+        .addAll(allBoosters.subList(0, 6).stream().map(RoundBoosterTile::new).collect(Collectors.toList()));
+    VBox vbox = new VBox(5, techTracks, powerActions, new Separator(), roundBoosters);
     mainPane.setRight(vbox);
 
     HBox hbox = new HBox(5, xenos, terrans, hadschHallas);

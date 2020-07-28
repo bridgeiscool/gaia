@@ -7,10 +7,10 @@ public enum RoundBooster {
   Q_C("(+1q)", "(+2c)"),
   ORE_PT("(+1o)", "(+2pt)"),
   GAIA_PLANETS("[]: +1/GP", "(+4c)"),
-  MINES("[]: +1/M", "(+1o)"),
-  TPS("[]: +1/TP", "(+1o)"),
-  RLS("[]: +3/RL", "(+1k)"),
-  BIGS("[]: +4/BB", "(+4p)");
+  MINES("[]:M", "(+1o)"),
+  TPS("[]:TP", "(+1o)"),
+  RLS("[]:RL", "(+1k)"),
+  BIGS("[]:BB", "(+4p)");
 
   private final String topText;
   private final String bottomText;

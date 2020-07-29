@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 import gaia.project.game.board.GameBoard;
 import gaia.project.game.model.AdvancedTechTile;
+import gaia.project.game.model.FederationTile;
 import gaia.project.game.model.Player;
 import gaia.project.game.model.Race;
 import gaia.project.game.model.RoundBooster;
@@ -51,13 +52,16 @@ public class GameController extends BorderPane {
     List<AdvancedTechTile> advTechTiles = new ArrayList<>(Arrays.asList(AdvancedTechTile.values()));
     Collections.shuffle(advTechTiles, random);
 
-    TechTracks techTracks = new TechTracks(techTiles, advTechTiles.subList(0, 6));
+    List<FederationTile> federationTiles = new ArrayList<>(Arrays.asList(FederationTile.values()));
+    Collections.shuffle(federationTiles, random);
+    TechTracks techTracks = new TechTracks(techTiles, advTechTiles.subList(0, 6), federationTiles.get(0));
     PowerActionsController powerActions = new PowerActionsController();
     HBox roundBoosters = new HBox(5);
     List<RoundBooster> allBoosters = new ArrayList<>(Arrays.asList(RoundBooster.values()));
     Collections.shuffle(allBoosters, random);
     roundBoosters.getChildren()
         .addAll(allBoosters.subList(0, 6).stream().map(RoundBoosterTile::new).collect(Collectors.toList()));
+    roundBoosters.getChildren().add(new FederationTokens(federationTiles.get(0)));
     VBox vbox = new VBox(5, techTracks, powerActions, new Separator(), roundBoosters);
     mainPane.setRight(vbox);
 

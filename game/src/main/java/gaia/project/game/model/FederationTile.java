@@ -1,31 +1,25 @@
 package gaia.project.game.model;
 
 public enum FederationTile implements UpdatePlayer {
-  RESEARCH_1(EnumUtil.RESEARCH_BONUS, true),
-  RESEARCH_2(EnumUtil.RESEARCH_BONUS, true),
-  RESEARCH_3(EnumUtil.RESEARCH_BONUS, true),
-  CREDITS_1(EnumUtil.CREDIT_BONUS, true),
-  CREDITS_2(EnumUtil.CREDIT_BONUS, true),
-  CREDITS_3(EnumUtil.CREDIT_BONUS, true),
-  ORE_1(EnumUtil.ORE_BONUS, true),
-  ORE_2(EnumUtil.ORE_BONUS, true),
-  ORE_3(EnumUtil.ORE_BONUS, true),
-  QIC_1(EnumUtil.QIC_BONUS, true),
-  QIC_2(EnumUtil.QIC_BONUS, true),
-  QIC_3(EnumUtil.QIC_BONUS, true),
-  POWER_1(EnumUtil.POWER_BONUS, true),
-  POWER_2(EnumUtil.POWER_BONUS, true),
-  POWER_3(EnumUtil.POWER_BONUS, true),
-  VP_1(EnumUtil.VP_BONUS, false),
-  VP_2(EnumUtil.VP_BONUS, false),
-  VP_3(EnumUtil.VP_BONUS, false);
+  RESEARCH(EnumUtil.RESEARCH_BONUS, true, "6VP 2k"),
+  CREDITS(EnumUtil.CREDIT_BONUS, true, "7VP 6c"),
+  ORE(EnumUtil.ORE_BONUS, true, "7VP 2o"),
+  QIC(EnumUtil.QIC_BONUS, true, "8VP 1q"),
+  POWER(EnumUtil.POWER_BONUS, true, "8VP 2pt"),
+  VP(EnumUtil.VP_BONUS, false, "12VP");
 
   private final UpdatePlayer action;
   private final boolean flippable;
+  private final String text;
 
-  FederationTile(UpdatePlayer action, boolean flippable) {
+  FederationTile(UpdatePlayer action, boolean flippable, String text) {
     this.action = action;
     this.flippable = flippable;
+    this.text = text;
+  }
+
+  public String getText() {
+    return text;
   }
 
   @Override

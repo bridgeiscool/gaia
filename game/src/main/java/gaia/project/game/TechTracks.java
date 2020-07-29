@@ -6,17 +6,19 @@ import java.util.List;
 import com.google.common.base.Preconditions;
 
 import gaia.project.game.model.AdvancedTechTile;
+import gaia.project.game.model.FederationTile;
 import gaia.project.game.model.TechTile;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 
 public class TechTracks extends GridPane {
   // Terraforming
   @FXML
-  private Label terra5Label;
+  private StackPane terra5StackPane;
   @FXML
   private HBox terra5;
   @FXML
@@ -122,7 +124,7 @@ public class TechTracks extends GridPane {
   @FXML
   private HBox wildTechTile3;
 
-  public TechTracks(List<TechTile> techTiles, List<AdvancedTechTile> advTechTiles) {
+  public TechTracks(List<TechTile> techTiles, List<AdvancedTechTile> advTechTiles, FederationTile terraBonus) {
     Preconditions.checkArgument(advTechTiles.size() == 6);
 
     FXMLLoader loader = new FXMLLoader(TechTracks.class.getResource("TechTracks.fxml"));
@@ -133,6 +135,9 @@ public class TechTracks extends GridPane {
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
+
+    // Add the randomly chosen fed tile to terra track
+    terra5StackPane.getChildren().add(0, new FederationTokenPane(terraBonus, 1.0));
 
     // Initialize the tech tiles
     add(new TechTileHBox(techTiles.get(0)), 0, 8);

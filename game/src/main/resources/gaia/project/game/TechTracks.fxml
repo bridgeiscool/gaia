@@ -22,8 +22,7 @@
   </columnConstraints>
   
   <!-- Terraforming column  --> 
-  <StackPane GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="terraTrack">
-    <Label fx:id="terra5Label" text="+12VP" style="-fx-text-fill: white"/>    
+  <StackPane GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="terraTrack" fx:id="terra5StackPane">
     <HBox fx:id="terra5" alignment="CENTER_LEFT" prefHeight="50"/>
   </StackPane>
   <HBox fx:id="terraAdvTech" GridPane.rowIndex="1" GridPane.columnIndex="0" alignment="CENTER" />

@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.input.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.*?>
+
+<fx:root type="javafx.scene.layout.GridPane" xmlns:fx="http://javafx.com/fxml" hgap="5" vgap="5">
+  <stylesheets>
+    <URL value="@app.css" />
+  </stylesheets>
+  <columnConstraints>
+    <ColumnConstraints halignment="CENTER" />
+    <ColumnConstraints halignment="CENTER" />
+  </columnConstraints>
+
+  <!-- Terraforming column -->
+  <VBox fx:id="knowledgeBox" GridPane.rowIndex="0" GridPane.columnIndex="0" spacing="3" alignment="CENTER">
+    <Label fx:id="knowledgeCount" />
+  </VBox>
+  <VBox fx:id="coinsBox" GridPane.rowIndex="0" GridPane.columnIndex="1" spacing="3" alignment="CENTER">
+    <Label fx:id="coinsCount" />
+  </VBox>
+  <VBox fx:id="oreBox" GridPane.rowIndex="1" GridPane.columnIndex="0" spacing="3" alignment="CENTER">
+    <Label fx:id="oreCount" />
+  </VBox>
+  <VBox fx:id="ptBox" GridPane.rowIndex="1" GridPane.columnIndex="1" spacing="3" alignment="CENTER">
+    <Label fx:id="ptCount" />
+  </VBox>
+  <VBox fx:id="qicBox" GridPane.rowIndex="2" GridPane.columnIndex="0" spacing="3" alignment="CENTER">
+    <Label fx:id="qicCount" />
+  </VBox>
+  <VBox fx:id="vpBox" GridPane.rowIndex="2" GridPane.columnIndex="1" spacing="3" alignment="CENTER">
+    <Label fx:id="vpCount" />
+  </VBox>
+</fx:root>

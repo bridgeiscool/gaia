@@ -6,10 +6,10 @@ import gaia.project.game.model.FederationTile;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
-import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-public class FederationTokens extends GridPane {
+public class FederationTokens extends HBox {
   @FXML
   private VBox knowledgeBox;
   @FXML

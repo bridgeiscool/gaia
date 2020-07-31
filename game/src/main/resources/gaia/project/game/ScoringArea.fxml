@@ -1,0 +1,69 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.input.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.*?>
+
+<fx:root type="javafx.scene.layout.BorderPane" xmlns:fx="http://javafx.com/fxml">
+  <stylesheets>
+    <URL value="@app.css" />
+  </stylesheets>
+
+  <top>
+    <VBox alignment="CENTER">
+      <Label text="SCORING" style="fx-font-size:28" />
+      <Separator />
+    </VBox>
+  </top>
+  <center>
+    <VBox spacing="2" alignment="CENTER">
+      <HBox styleClass="roundScoringBox">
+        <Label fx:id="round6" />
+      </HBox>
+      <HBox styleClass="roundScoringBox">
+        <Label fx:id="round5" />
+      </HBox>
+      <HBox styleClass="roundScoringBox">
+        <Label fx:id="round4" />
+      </HBox>
+      <HBox styleClass="roundScoringBox">
+        <Label fx:id="round3" />
+      </HBox>
+      <HBox styleClass="roundScoringBox">
+        <Label fx:id="round2" />
+      </HBox>
+      <HBox styleClass="roundScoringBox">
+        <Label fx:id="round1" />
+      </HBox>
+    </VBox>
+  </center>
+  <right>
+    <VBox alignment="CENTER">
+      <GridPane hgap="5" vgap="5">
+        <padding>
+          <Insets left="15" right="15" top="10" bottom="10" />
+        </padding>
+        <columnConstraints>
+          <ColumnConstraints halignment="CENTER" />
+          <ColumnConstraints halignment="CENTER" />
+        </columnConstraints>
+        
+        <Label fx:id="endScoring1" GridPane.rowIndex="0" GridPane.columnIndex="0" />
+        <Label fx:id="endScoring2" GridPane.rowIndex="0" GridPane.columnIndex="1" />
+        
+        <Label fx:id="p1Scoring1" GridPane.rowIndex="1" GridPane.columnIndex="0" />
+        <Label fx:id="p1Scoring2" GridPane.rowIndex="1" GridPane.columnIndex="1" />
+        
+        <Label fx:id="p2Scoring1" GridPane.rowIndex="2" GridPane.columnIndex="0" />
+        <Label fx:id="p2Scoring2" GridPane.rowIndex="2" GridPane.columnIndex="1" />
+        
+        <Label fx:id="p3Scoring1" GridPane.rowIndex="3" GridPane.columnIndex="0" />
+        <Label fx:id="p3Scoring2" GridPane.rowIndex="3" GridPane.columnIndex="1" />
+      </GridPane>
+    </VBox>
+  </right>
+</fx:root>

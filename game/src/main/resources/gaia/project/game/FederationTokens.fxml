@@ -8,14 +8,10 @@
 <?import javafx.scene.image.*?>
 <?import javafx.geometry.*?>
 
-<fx:root type="javafx.scene.layout.GridPane" xmlns:fx="http://javafx.com/fxml" hgap="5" vgap="5">
+<fx:root type="javafx.scene.layout.HBox" xmlns:fx="http://javafx.com/fxml" spacing="5" alignment="CENTER">
   <stylesheets>
     <URL value="@app.css" />
   </stylesheets>
-  <columnConstraints>
-    <ColumnConstraints halignment="CENTER" />
-    <ColumnConstraints halignment="CENTER" />
-  </columnConstraints>
 
   <!-- Terraforming column -->
   <VBox fx:id="knowledgeBox" GridPane.rowIndex="0" GridPane.columnIndex="0" spacing="3" alignment="CENTER">

@@ -11,7 +11,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 public class RoundBoosterTile extends StackPane {
-  private static final double WIDTH = 50.0;
+  private static final double WIDTH = 66.0;
   private static final double HEIGHT = 180.0;
 
   private RoundBooster roundBooster;

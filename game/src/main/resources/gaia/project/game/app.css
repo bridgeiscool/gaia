@@ -128,7 +128,7 @@
 }
 
 .greenFedToken {
-	-fx-fill: green;
+	-fx-fill: darkgreen;
 	-fx-stroke: black;
 	-fx-stroke-type: outside;
 	-fx-stroke-width: 1;
@@ -139,6 +139,13 @@
 	-fx-stroke: black;
 	-fx-stroke-type: outside;
 	-fx-stroke-width: 1;
+}
+
+.roundScoringBox {
+	-fx-alignment: center;
+	-fx-border-color: black;
+	-fx-border-width: 1;
+	-fx-pref-width: 120;
 }
 
 .menu-bar {

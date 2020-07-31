@@ -43,9 +43,9 @@
   </center>
   <right>
     <VBox alignment="CENTER">
-      <GridPane hgap="5" vgap="5">
+      <GridPane hgap="5" vgap="5" prefWidth="155">
         <padding>
-          <Insets left="15" right="15" top="10" bottom="10" />
+          <Insets left="10" right="10" top="10" bottom="10" />
         </padding>
         <columnConstraints>
           <ColumnConstraints halignment="CENTER" />

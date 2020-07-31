@@ -8,7 +8,7 @@
 <?import javafx.scene.image.*?>
 <?import javafx.geometry.*?>
 
-<fx:root type="javafx.scene.layout.HBox" xmlns:fx="http://javafx.com/fxml" spacing="5" alignment="CENTER">
+<fx:root type="javafx.scene.layout.HBox" xmlns:fx="http://javafx.com/fxml" spacing="2" alignment="CENTER">
   <stylesheets>
     <URL value="@app.css" />
   </stylesheets>

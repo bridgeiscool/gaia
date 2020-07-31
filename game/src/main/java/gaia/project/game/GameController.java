@@ -66,14 +66,14 @@ public class GameController extends BorderPane {
     TechTracks techTracks = new TechTracks(techTiles, advTechTiles.subList(0, 6), federationTiles.get(0));
     PowerActionsController powerActions = new PowerActionsController();
 
-    HBox roundBoosters = new HBox(5);
+    HBox roundBoosters = new HBox(2);
     List<RoundBooster> allBoosters = new ArrayList<>(Arrays.asList(RoundBooster.values()));
     Collections.shuffle(allBoosters, random);
 
     ObservableList<Node> children = roundBoosters.getChildren();
     children.addAll(allBoosters.subList(0, 6).stream().map(RoundBoosterTile::new).collect(Collectors.toList()));
 
-    VBox boostersAndFeds = new VBox(5, roundBoosters, new FederationTokens(federationTiles.get(0)));
+    VBox boostersAndFeds = new VBox(5, new FederationTokens(federationTiles.get(0)), roundBoosters);
     boostersAndFeds.setAlignment(Pos.CENTER);
 
     HBox miscContent = new HBox(

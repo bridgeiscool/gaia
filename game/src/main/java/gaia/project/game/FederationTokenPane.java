@@ -8,8 +8,8 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Polygon;
 
 public class FederationTokenPane extends StackPane {
-  private static final double HEIGHT = 70;
-  private static final double WIDTH = 62;
+  private static final double HEIGHT = 64;
+  private static final double WIDTH = 60;
 
   public FederationTokenPane(FederationTile federationTile, double scaling) {
     ObservableList<Node> children = getChildren();

@@ -1,12 +1,12 @@
 package gaia.project.game.model;
 
 public enum FederationTile implements UpdatePlayer {
-  RESEARCH(EnumUtil.RESEARCH_BONUS, true, "6VP 2k"),
-  CREDITS(EnumUtil.CREDIT_BONUS, true, "7VP 6c"),
-  ORE(EnumUtil.ORE_BONUS, true, "7VP 2o"),
-  QIC(EnumUtil.QIC_BONUS, true, "8VP 1q"),
-  POWER(EnumUtil.POWER_BONUS, true, "8VP 2pt"),
-  VP(EnumUtil.VP_BONUS, false, "12VP");
+  RESEARCH(EnumUtil.RESEARCH_BONUS, true, "6 2k"),
+  CREDITS(EnumUtil.CREDIT_BONUS, true, "7 6c"),
+  ORE(EnumUtil.ORE_BONUS, true, "7 2o"),
+  QIC(EnumUtil.QIC_BONUS, true, "8 1q"),
+  POWER(EnumUtil.POWER_BONUS, true, "8 2pt"),
+  VP(EnumUtil.VP_BONUS, false, "12");
 
   private final UpdatePlayer action;
   private final boolean flippable;

@@ -6,7 +6,7 @@ public enum RoundBooster {
   ORE_K("(+1o)", "(+1k)"),
   Q_C("(+1q)", "(+2c)"),
   ORE_PT("(+1o)", "(+2pt)"),
-  GAIA_PLANETS("[]: +1/GP", "(+4c)"),
+  GAIA_PLANETS("[]: GP", "(+4c)"),
   MINES("[]:M", "(+1o)"),
   TPS("[]:TP", "(+1o)"),
   RLS("[]:RL", "(+1k)"),

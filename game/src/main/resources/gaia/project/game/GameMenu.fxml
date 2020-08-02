@@ -15,10 +15,5 @@
         <MenuItem text="Exit" onAction="#exitGame" />
       </items>
     </Menu>
-    <Menu text="View">
-      <items>
-        <MenuItem text="Game View" onAction="#gameView" />
-      </items>
-    </Menu>
   </menus>
 </fx:root>

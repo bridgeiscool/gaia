@@ -12,9 +12,12 @@ import java.util.stream.StreamSupport;
 import com.google.common.annotations.VisibleForTesting;
 
 import gaia.project.game.PlanetType;
+import gaia.project.game.model.Player;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.input.MouseEvent;
 
 public class GameBoard extends Group implements Iterable<Sector> {
   private final List<Sector> sectors;
@@ -47,10 +50,14 @@ public class GameBoard extends Group implements Iterable<Sector> {
     return maybeValid;
   }
 
+  private List<Hex> hexes() {
+    return sectors.stream().flatMap(s -> StreamSupport.stream(s.spliterator(), false)).collect(Collectors.toList());
+  }
+
   @VisibleForTesting
   boolean isValid() {
-    List<Hex> hexes =
-        sectors.stream().flatMap(s -> StreamSupport.stream(s.spliterator(), false)).collect(Collectors.toList());
+    List<Hex> hexes = hexes();
+
     for (Hex hex : hexes) {
       if (hex.getPlanet().isPresent() && hex.getPlanet().get().getPlanetType() != PlanetType.TRANSDIM) {
         for (Hex adjacent : hex.getHexesWithinRange(hexes, 1)) {
@@ -95,5 +102,20 @@ public class GameBoard extends Group implements Iterable<Sector> {
   @Override
   public Iterator<Sector> iterator() {
     return sectors.iterator();
+  }
+
+  public void highlightHexes(Player activePlayer, EventHandler<MouseEvent> listener) {
+    for (Hex hex : hexes()) {
+      if (activePlayer.getRace()
+          .getHomePlanet() == hex.getPlanet().map(Planet::getPlanetType).orElse(PlanetType.NONE)) {
+        hex.highlight(activePlayer, listener);
+      }
+    }
+  }
+
+  public void clearHighlighting() {
+    for (Hex hex : hexes()) {
+      hex.clearHighlighting();
+    }
   }
 }

@@ -33,18 +33,9 @@ public class GaiaProjectController {
 
   // Game flow methods
   public void newGame() {
-    gameController.newGame();
-    showView(View.GAME);
-  }
-
-  public void showView(View view) {
-    switch (view) {
-      case GAME:
-        primaryStage.setScene(gameScene);
-        break;
-      default:
-        throw new IllegalStateException();
-    }
+    System.out.println("New Game");
+    primaryStage.setScene(gameScene);
+    gameController.executeGame();
   }
 
   private class MenuPane extends BorderPane {

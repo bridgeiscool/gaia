@@ -33,10 +33,4 @@ public class GameMenu extends MenuBar {
   private void exitGame() {
     Platform.exit();
   }
-
-  // View menu
-  @FXML
-  private void gameView() {
-    mainController.showView(View.GAME);
-  }
 }

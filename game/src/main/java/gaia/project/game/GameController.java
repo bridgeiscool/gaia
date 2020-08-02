@@ -10,8 +10,10 @@ import java.util.stream.Collectors;
 
 import gaia.project.game.board.GameBoard;
 import gaia.project.game.model.Player;
+import gaia.project.game.model.PlayerEnum;
 import gaia.project.game.model.Race;
 import gaia.project.game.model.RoundBooster;
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -26,6 +28,11 @@ public class GameController extends BorderPane {
   @FXML
   private BorderPane mainPane;
 
+  private final Game game;
+  private final GameBoard gameBoard;
+
+  private final List<Runnable> setupQueue = new ArrayList<>();
+
   public GameController() {
     FXMLLoader loader = new FXMLLoader(GameController.class.getResource("GameMain.fxml"));
     loader.setController(this);
@@ -38,15 +45,15 @@ public class GameController extends BorderPane {
 
     // Init game board
     Random random = new Random(System.currentTimeMillis());
-    GameBoard gameBoard = GameBoard.random(random);
+    this.gameBoard = GameBoard.random(random);
     mainPane.centerProperty().set(gameBoard);
 
-    Game game = Game.generateGame();
+    this.game = Game.generateGame();
 
     // Init player boards
-    PlayerBoardController xenos = new PlayerBoardController(new Player(Race.XENOS));
-    PlayerBoardController terrans = new PlayerBoardController(new Player(Race.TERRANS));
-    PlayerBoardController hadschHallas = new PlayerBoardController(new Player(Race.HADSCH_HALLAS));
+    PlayerBoardController xenos = new PlayerBoardController(game.getPlayers().get(0));
+    PlayerBoardController terrans = new PlayerBoardController(game.getPlayers().get(1));
+    PlayerBoardController hadschHallas = new PlayerBoardController(game.getPlayers().get(2));
 
     // Init tech tracks
     TechTracks techTracks = new TechTracks(game.getTechTiles(), game.getAdvancedTechTiles(), game.getTerraBonus());
@@ -74,8 +81,59 @@ public class GameController extends BorderPane {
     mainPane.setBottom(hbox);
   }
 
-  public void newGame() {
-    // TODO Auto-generated method stub
+  void executeGame() {
+    setupGame();
+  }
 
+  private void setupGame() {
+    List<PlayerEnum> order = getPlacementOrder(game.getPlayers());
+    for (PlayerEnum toPrompt : order) {
+      setupQueue.add(() -> {
+        gameBoard.highlightHexes(game.getPlayers().get(toPrompt.getIdx()), me -> {
+          finishUserSetupMine();
+        });
+      });
+    }
+
+    Platform.runLater(setupQueue.remove(0));
+  }
+
+  private void finishUserSetupMine() {
+    gameBoard.clearHighlighting();
+    if (setupQueue.isEmpty()) {
+      pickRoundBoosters();
+    } else {
+      Platform.runLater(setupQueue.remove(0));
+    }
+  }
+
+  private void pickRoundBoosters() {
+    System.out.println("Done with placing mines!");
+  }
+
+  private List<PlayerEnum> getPlacementOrder(List<Player> players) {
+    List<PlayerEnum> placementOrder = new ArrayList<>();
+    for (Player player : players) {
+      if (player.getRace() != Race.IVITS) {
+        placementOrder.add(player.getPlayerEnum());
+      }
+    }
+
+    List<Player> reversed = new ArrayList<>(players);
+    Collections.reverse(reversed);
+
+    for (Player player : reversed) {
+      if (player.getRace() != Race.IVITS) {
+        placementOrder.add(player.getPlayerEnum());
+      }
+    }
+
+    // Add 3rd Xenos mine
+    players.stream().filter(p -> p.getRace() == Race.XENOS).forEach(p -> placementOrder.add(p.getPlayerEnum()));
+
+    // Add Ivits
+    players.stream().filter(p -> p.getRace() == Race.IVITS).forEach(p -> placementOrder.add(p.getPlayerEnum()));
+
+    return placementOrder;
   }
 }

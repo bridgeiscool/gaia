@@ -13,6 +13,10 @@ import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 
 import gaia.project.game.PlanetType;
+import gaia.project.game.model.Player;
+import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Polygon;
 
@@ -20,9 +24,11 @@ public final class Hex extends StackPane {
   private final double centerX;
   private final double centerY;
   private final int sectorId;
+  private final HexPolygon polygon;
 
   @Nullable
   private final Planet planet;
+  private EventHandler<? super MouseEvent> currentEventHandler;
 
   public static Hex emptyHex(double centerX, double centerY, int sectorId) {
     return new Hex(centerX, centerY, sectorId, null);
@@ -42,27 +48,26 @@ public final class Hex extends StackPane {
     setLayoutY(centerY);
     this.setPrefSize(4.0 * HEX_SIZE, 2 * ROOT_3 * HEX_SIZE);
     this.setMinSize(4.0 * HEX_SIZE, 2 * ROOT_3 * HEX_SIZE);
-    this.getChildren()
-        .add(
-            new HexPolygon(
-                // TOP LEFT
-                centerX - HEX_SIZE,
-                centerY - HEX_SIZE * ROOT_3,
-                // TOP RIGHT
-                centerX + HEX_SIZE,
-                centerY - HEX_SIZE * ROOT_3,
-                // RIGHT
-                centerX + HEX_SIZE * 2,
-                centerY,
-                // BOTTOM_RIGHT
-                centerX + HEX_SIZE,
-                centerY + HEX_SIZE * ROOT_3,
-                // BOTTOM_LEFT
-                centerX - HEX_SIZE,
-                centerY + HEX_SIZE * ROOT_3,
-                // LEFT
-                centerX - HEX_SIZE * 2,
-                centerY));
+    this.polygon = new HexPolygon(
+        // TOP LEFT
+        centerX - HEX_SIZE,
+        centerY - HEX_SIZE * ROOT_3,
+        // TOP RIGHT
+        centerX + HEX_SIZE,
+        centerY - HEX_SIZE * ROOT_3,
+        // RIGHT
+        centerX + HEX_SIZE * 2,
+        centerY,
+        // BOTTOM_RIGHT
+        centerX + HEX_SIZE,
+        centerY + HEX_SIZE * ROOT_3,
+        // BOTTOM_LEFT
+        centerX - HEX_SIZE,
+        centerY + HEX_SIZE * ROOT_3,
+        // LEFT
+        centerX - HEX_SIZE * 2,
+        centerY);
+    this.getChildren().add(polygon);
 
     if (planet != null) {
       this.getChildren().add(planet);
@@ -90,6 +95,32 @@ public final class Hex extends StackPane {
 
   private double distanceTo(Hex other) {
     return Math.sqrt(Math.pow(centerX - other.centerX, 2) + Math.pow(centerY - other.centerY, 2));
+  }
+
+  public void highlight(Player activePlayer, EventHandler<MouseEvent> listener) {
+    ObservableList<String> styleClass = polygon.getStyleClass();
+    styleClass.clear();
+    styleClass.add("highlightedHex");
+    EventHandler<? super MouseEvent> eventHandler = me -> {
+      activePlayer.buildSetupMine(this);
+      listener.handle(me);
+    };
+    this.currentEventHandler = eventHandler;
+    this.setOnMouseClicked(eventHandler);
+  }
+
+  public void clearHighlighting() {
+    ObservableList<String> styleClass = polygon.getStyleClass();
+    styleClass.clear();
+    styleClass.add("hexStyle");
+    if (currentEventHandler != null) {
+      removeEventHandler(MouseEvent.MOUSE_CLICKED, currentEventHandler);
+      currentEventHandler = null;
+    }
+  }
+
+  public void addMine(Mine mine) {
+    getChildren().add(mine);
   }
 
   @Override

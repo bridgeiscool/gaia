@@ -1,15 +1,16 @@
 package gaia.project.game.model;
 
+import gaia.project.game.PlanetType;
 import javafx.scene.paint.Color;
 
 public enum Race {
-  XENOS("Xenos", "yellowRace", Color.YELLOW) {
+  XENOS("Xenos", "yellowRace", Color.YELLOW, PlanetType.YELLOW) {
     @Override
     public int getStartingAiLevel() {
       return 1;
     }
   },
-  GLEENS("Gleens", "yellowRace", Color.YELLOW) {
+  GLEENS("Gleens", "yellowRace", Color.YELLOW, PlanetType.YELLOW) {
     @Override
     public int getStartingQic() {
       return 0;
@@ -20,7 +21,7 @@ public enum Race {
       return 1;
     }
   },
-  TERRANS("Terrans", "blueRace", Color.BLUE) {
+  TERRANS("Terrans", "blueRace", Color.BLUE, PlanetType.BLUE) {
     @Override
     public int getStartingBin1() {
       return 4;
@@ -31,7 +32,7 @@ public enum Race {
       return 1;
     }
   },
-  LANTIDS("Lantids", "blueRace", Color.BLUE) {
+  LANTIDS("Lantids", "blueRace", Color.BLUE, PlanetType.BLUE) {
     @Override
     public int getStartingCredits() {
       return 13;
@@ -42,7 +43,7 @@ public enum Race {
       return 2;
     }
   },
-  HADSCH_HALLAS("Hadsch Hallas", "redRace", Color.RED) {
+  HADSCH_HALLAS("Hadsch Hallas", "redRace", Color.RED, PlanetType.RED) {
     @Override
     public int getStartingCreditIncome() {
       return 3;
@@ -53,7 +54,7 @@ public enum Race {
       return 1;
     }
   },
-  IVITS("Ivits", "redRace", Color.RED) {
+  IVITS("Ivits", "redRace", Color.RED, PlanetType.RED) {
     @Override
     public int getStartingQicIncome() {
       return 1;
@@ -63,11 +64,13 @@ public enum Race {
   private final String raceName;
   private final String boardStyle;
   private final Color color;
+  private final PlanetType homePlanet;
 
-  private Race(String raceName, String boardStyle, Color color) {
+  private Race(String raceName, String boardStyle, Color color, PlanetType homePlanet) {
     this.raceName = raceName;
     this.boardStyle = boardStyle;
     this.color = color;
+    this.homePlanet = homePlanet;
   }
 
   public String getRaceName() {
@@ -80,6 +83,10 @@ public enum Race {
 
   public Color getColor() {
     return color;
+  }
+
+  public PlanetType getHomePlanet() {
+    return homePlanet;
   }
 
   public int getStartingOre() {

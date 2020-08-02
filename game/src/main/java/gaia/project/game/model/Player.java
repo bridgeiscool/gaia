@@ -8,6 +8,7 @@ import com.google.common.base.Preconditions;
 
 import gaia.project.game.PlanetType;
 import gaia.project.game.board.Gaiaformer;
+import gaia.project.game.board.Hex;
 import gaia.project.game.board.KnowledgeAcademy;
 import gaia.project.game.board.Mine;
 import gaia.project.game.board.PlanetaryInstitute;
@@ -24,6 +25,7 @@ import javafx.collections.ObservableSet;
 // Backing bean to store player's information
 public class Player {
   private final Race race;
+  private final PlayerEnum playerEnum;
   private final IntegerProperty gaiaBin;
   private final IntegerProperty bin1;
   private final IntegerProperty bin2;
@@ -66,8 +68,9 @@ public class Player {
   private final ObservableSet<QicAcademy> qa = FXCollections.observableSet(new HashSet<>());
   private final ObservableSet<Gaiaformer> gaiaformers = FXCollections.observableSet(new HashSet<>());
 
-  public Player(Race race) {
+  public Player(Race race, PlayerEnum playerEnum) {
     this.race = race;
+    this.playerEnum = playerEnum;
     this.gaiaBin = new SimpleIntegerProperty(0);
     this.bin1 = new SimpleIntegerProperty(race.getStartingBin1());
     this.bin2 = new SimpleIntegerProperty(race.getStartingBin2());
@@ -93,6 +96,10 @@ public class Player {
 
   public Race getRace() {
     return race;
+  }
+
+  public PlayerEnum getPlayerEnum() {
+    return playerEnum;
   }
 
   // Major functionality methods
@@ -249,4 +256,19 @@ public class Player {
     return knowledgeLevel;
   }
 
+  // Action methods
+
+  public void buildMine(Hex hex) {
+    buildMine(hex, false);
+  }
+
+  public void buildSetupMine(Hex hex) {
+    buildMine(hex, true);
+  }
+
+  private void buildMine(Hex hex, boolean setup) {
+    Mine mine = new Mine(hex, race.getColor());
+    mines.add(mine);
+    hex.addMine(mine);
+  }
 }

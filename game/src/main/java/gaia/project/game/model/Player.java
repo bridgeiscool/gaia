@@ -17,8 +17,10 @@ import gaia.project.game.board.ResearchLab;
 import gaia.project.game.board.TradingPost;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.Property;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableSet;
 
@@ -43,6 +45,8 @@ public class Player {
   private final IntegerProperty score;
 
   private final Set<FederationTile> federationTiles = EnumSet.noneOf(FederationTile.class);
+
+  private final Property<RoundBooster> roundBooster = new SimpleObjectProperty<>();
 
   // Tech track related
   private final IntegerProperty terraformingLevel;
@@ -256,8 +260,11 @@ public class Player {
     return knowledgeLevel;
   }
 
-  // Action methods
+  public Property<RoundBooster> getRoundBooster() {
+    return roundBooster;
+  }
 
+  // Action methods
   public void buildMine(Hex hex) {
     buildMine(hex, false);
   }

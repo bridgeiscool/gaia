@@ -28,6 +28,7 @@ public final class Hex extends StackPane {
 
   @Nullable
   private final Planet planet;
+  @Nullable
   private EventHandler<? super MouseEvent> currentEventHandler;
 
   public static Hex emptyHex(double centerX, double centerY, int sectorId) {
@@ -97,16 +98,15 @@ public final class Hex extends StackPane {
     return Math.sqrt(Math.pow(centerX - other.centerX, 2) + Math.pow(centerY - other.centerY, 2));
   }
 
-  public void highlight(Player activePlayer, EventHandler<MouseEvent> listener) {
+  public void highlight(Player activePlayer, EventHandler<MouseEvent> topLevel) {
     ObservableList<String> styleClass = polygon.getStyleClass();
     styleClass.clear();
     styleClass.add("highlightedHex");
-    EventHandler<? super MouseEvent> eventHandler = me -> {
+    this.currentEventHandler = me -> {
       activePlayer.buildSetupMine(this);
-      listener.handle(me);
+      topLevel.handle(me);
     };
-    this.currentEventHandler = eventHandler;
-    this.setOnMouseClicked(eventHandler);
+    this.setOnMouseClicked(currentEventHandler);
   }
 
   public void clearHighlighting() {

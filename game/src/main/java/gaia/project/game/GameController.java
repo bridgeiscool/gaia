@@ -30,6 +30,7 @@ public class GameController extends BorderPane {
 
   private final Game game;
   private final GameBoard gameBoard;
+  private final List<RoundBoosterTile> roundBoosters;
 
   private final List<Runnable> setupQueue = new ArrayList<>();
 
@@ -59,14 +60,15 @@ public class GameController extends BorderPane {
     TechTracks techTracks = new TechTracks(game.getTechTiles(), game.getAdvancedTechTiles(), game.getTerraBonus());
     PowerActionsController powerActions = new PowerActionsController();
 
-    HBox roundBoosters = new HBox(2);
+    HBox roundBoosterBox = new HBox(2);
     List<RoundBooster> allBoosters = new ArrayList<>(Arrays.asList(RoundBooster.values()));
     Collections.shuffle(allBoosters, random);
 
-    ObservableList<Node> children = roundBoosters.getChildren();
-    children.addAll(allBoosters.subList(0, 6).stream().map(RoundBoosterTile::new).collect(Collectors.toList()));
+    ObservableList<Node> children = roundBoosterBox.getChildren();
+    this.roundBoosters = allBoosters.subList(0, 6).stream().map(RoundBoosterTile::new).collect(Collectors.toList());
+    children.addAll(roundBoosters);
 
-    VBox boostersAndFeds = new VBox(5, new FederationTokens(game), roundBoosters);
+    VBox boostersAndFeds = new VBox(5, new FederationTokens(game), roundBoosterBox);
     boostersAndFeds.setAlignment(Pos.CENTER);
 
     HBox miscContent = new HBox(
@@ -81,11 +83,8 @@ public class GameController extends BorderPane {
     mainPane.setBottom(hbox);
   }
 
-  void executeGame() {
-    setupGame();
-  }
-
-  private void setupGame() {
+  // SETUP METHODS
+  void setupGame() {
     List<PlayerEnum> order = getPlacementOrder(game.getPlayers());
     for (PlayerEnum toPrompt : order) {
       setupQueue.add(() -> {
@@ -108,7 +107,30 @@ public class GameController extends BorderPane {
   }
 
   private void pickRoundBoosters() {
-    System.out.println("Done with placing mines!");
+    List<Player> toReverse = new ArrayList<>(game.getPlayers());
+    Collections.reverse(toReverse);
+    for (Player player : toReverse) {
+      setupQueue.add(() -> {
+        roundBoosters.forEach(rb -> rb.highlight(player, me -> {
+          finishRoundBoosterSelection();
+        }));
+      });
+    }
+
+    Platform.runLater(setupQueue.remove(0));
+  }
+
+  private void finishRoundBoosterSelection() {
+    roundBoosters.forEach(RoundBoosterTile::clearHighlighting);
+    if (setupQueue.isEmpty()) {
+      startGame();
+    } else {
+      Platform.runLater(setupQueue.remove(0));
+    }
+  }
+
+  private void startGame() {
+    System.out.println("Starting game!");
   }
 
   private List<PlayerEnum> getPlacementOrder(List<Player> players) {
@@ -136,4 +158,6 @@ public class GameController extends BorderPane {
 
     return placementOrder;
   }
+
+  // END SETUP METHODS
 }

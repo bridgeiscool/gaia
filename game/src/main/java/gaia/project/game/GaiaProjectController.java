@@ -35,7 +35,7 @@ public class GaiaProjectController {
   public void newGame() {
     System.out.println("New Game");
     primaryStage.setScene(gameScene);
-    gameController.executeGame();
+    gameController.setupGame();
   }
 
   private class MenuPane extends BorderPane {

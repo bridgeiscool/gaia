@@ -4,9 +4,12 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
-import java.util.stream.Collectors;
+
+import com.google.common.base.Preconditions;
 
 import gaia.project.game.model.AdvancedTechTile;
 import gaia.project.game.model.EndScoring;
@@ -28,13 +31,14 @@ public class Game implements Serializable {
   private final List<RoundScoringBonus> roundScoringBonuses;
   private final EndScoring endScoring1;
   private final EndScoring endScoring2;
-  private final List<Player> players;
+  private final Map<PlayerEnum, Player> players;
   private final FederationTile terraBonus;
 
   // Game state
   private final Property<Round> currentRound;
   private final List<PlayerEnum> currentPlayerOrder;
   private final List<PlayerEnum> passedPlayers;
+  private PlayerEnum activePlayer;
 
   public static Game generateGame() {
     return generateGame(System.currentTimeMillis());
@@ -56,10 +60,10 @@ public class Game implements Serializable {
     List<RoundBooster> allBoosters = new ArrayList<>(Arrays.asList(RoundBooster.values()));
     Collections.shuffle(allBoosters, random);
 
-    List<Player> players = Arrays.asList(
-        new Player(Race.XENOS, PlayerEnum.PLAYER1),
-        new Player(Race.TERRANS, PlayerEnum.PLAYER2),
-        new Player(Race.HADSCH_HALLAS, PlayerEnum.PLAYER3));
+    Map<PlayerEnum, Player> players = new HashMap<>();
+    players.put(PlayerEnum.PLAYER1, new Player(Race.XENOS, PlayerEnum.PLAYER1));
+    players.put(PlayerEnum.PLAYER2, new Player(Race.TERRANS, PlayerEnum.PLAYER2));
+    players.put(PlayerEnum.PLAYER3, new Player(Race.HADSCH_HALLAS, PlayerEnum.PLAYER3));
 
     return new Game(
         allBoosters.subList(0, 6),
@@ -80,7 +84,7 @@ public class Game implements Serializable {
       List<RoundScoringBonus> roundScoringBonuses,
       EndScoring endScoring1,
       EndScoring endScoring2,
-      List<Player> players) {
+      Map<PlayerEnum, Player> players) {
     this.roundBoosters = roundBoosters;
     this.techTiles = techTiles;
     this.advancedTechTiles = advancedTechTiles;
@@ -91,9 +95,9 @@ public class Game implements Serializable {
     this.players = players;
 
     this.currentRound = new SimpleObjectProperty<>(Round.SETUP);
-    this.currentPlayerOrder =
-        players.stream().map(Player::getPlayerEnum).collect(Collectors.toCollection(ArrayList::new));
+    this.currentPlayerOrder = new ArrayList<>(Arrays.asList(PlayerEnum.values()));
     this.passedPlayers = new ArrayList<>();
+    this.activePlayer = PlayerEnum.PLAYER1;
   }
 
   public List<RoundBooster> getRoundBoosters() {
@@ -124,7 +128,7 @@ public class Game implements Serializable {
     return endScoring2;
   }
 
-  public List<Player> getPlayers() {
+  public Map<PlayerEnum, Player> getPlayers() {
     return players;
   }
 
@@ -138,5 +142,27 @@ public class Game implements Serializable {
 
   public List<PlayerEnum> getPassedPlayers() {
     return passedPlayers;
+  }
+
+  public PlayerEnum getActivePlayer() {
+    return activePlayer;
+  }
+
+  public void nextActivePlayer() {
+    Preconditions.checkArgument(passedPlayers.size() != currentPlayerOrder.size());
+    System.out.println(this.activePlayer);
+
+    // Keep cycling until we hit a player who has not passed...
+    int currentIdx = currentPlayerOrder.indexOf(activePlayer);
+    do {
+      currentIdx = (currentIdx + 1) % currentPlayerOrder.size();
+    } while (passedPlayers.contains(currentPlayerOrder.get(currentIdx)));
+
+    this.activePlayer = currentPlayerOrder.get(currentIdx);
+    System.out.println(this.activePlayer);
+  }
+
+  public boolean allPlayersPassed() {
+    return passedPlayers.size() == players.size();
   }
 }

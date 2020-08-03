@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.input.*?>
+<?import javafx.event.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.geometry.*?>
+
+<VBox xmlns:fx="http://javafx.com/fxml" spacing="5" alignment="CENTER">
+  <stylesheets>
+    <URL value="@app.css" />
+  </stylesheets>
+  
+  <Button fx:id="buildMine" onAction="#buildMine" text="Build Mine" prefWidth="200" />
+  <Button fx:id="startGaiaProject" onAction="#gaiaProject" text="Start Gaia Project" prefWidth="200" />
+  <Button fx:id="upgradeBuilding" onAction="#upgradeBuilding" text="Upgrade Building" prefWidth="200" />
+  <Button fx:id="federate" onAction="#federate" text="Federate" prefWidth="200" />
+  <Button fx:id="advanceTech" onAction="#advanceTech" text="Advance Tech" prefWidth="200" />
+  <Button fx:id="powerAction" onAction="#powerAction" text="Power/QIC Action" prefWidth="200" />
+  <Button fx:id="specialAction" onAction="#specialAction" text="Special Action" prefWidth="200" />
+  <Button fx:id="pass" onAction="#pass" text="Pass" prefWidth="200" />
+</VBox>

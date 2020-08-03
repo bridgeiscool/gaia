@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.stream.Collectors;
 
@@ -12,6 +13,7 @@ import gaia.project.game.board.GameBoard;
 import gaia.project.game.model.Player;
 import gaia.project.game.model.PlayerEnum;
 import gaia.project.game.model.Race;
+import gaia.project.game.model.Round;
 import gaia.project.game.model.RoundBooster;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
@@ -33,6 +35,7 @@ public class GameController extends BorderPane {
   private final List<RoundBoosterTile> roundBoosters;
 
   private final List<Runnable> setupQueue = new ArrayList<>();
+  private final ActionChoiceDialog actionChoiceDialog;
 
   public GameController() {
     FXMLLoader loader = new FXMLLoader(GameController.class.getResource("GameMain.fxml"));
@@ -52,9 +55,9 @@ public class GameController extends BorderPane {
     this.game = Game.generateGame();
 
     // Init player boards
-    PlayerBoardController xenos = new PlayerBoardController(game.getPlayers().get(0));
-    PlayerBoardController terrans = new PlayerBoardController(game.getPlayers().get(1));
-    PlayerBoardController hadschHallas = new PlayerBoardController(game.getPlayers().get(2));
+    PlayerBoardController player1 = new PlayerBoardController(game.getPlayers().get(PlayerEnum.PLAYER1));
+    PlayerBoardController player2 = new PlayerBoardController(game.getPlayers().get(PlayerEnum.PLAYER2));
+    PlayerBoardController player3 = new PlayerBoardController(game.getPlayers().get(PlayerEnum.PLAYER3));
 
     // Init tech tracks
     TechTracks techTracks = new TechTracks(game.getTechTiles(), game.getAdvancedTechTiles(), game.getTerraBonus());
@@ -79,8 +82,14 @@ public class GameController extends BorderPane {
     VBox vbox = new VBox(5, techTracks, powerActions, new Separator(), miscContent);
     mainPane.setRight(vbox);
 
-    HBox hbox = new HBox(5, xenos, terrans, hadschHallas);
+    HBox hbox = new HBox(5, player1, player2, player3);
     mainPane.setBottom(hbox);
+
+    this.actionChoiceDialog = new ActionChoiceDialog(this);
+  }
+
+  Game getGame() {
+    return game;
   }
 
   // SETUP METHODS
@@ -88,7 +97,7 @@ public class GameController extends BorderPane {
     List<PlayerEnum> order = getPlacementOrder(game.getPlayers());
     for (PlayerEnum toPrompt : order) {
       setupQueue.add(() -> {
-        gameBoard.highlightHexes(game.getPlayers().get(toPrompt.getIdx()), me -> {
+        gameBoard.highlightHexes(game.getPlayers().get(toPrompt), me -> {
           finishUserSetupMine();
         });
       });
@@ -107,11 +116,11 @@ public class GameController extends BorderPane {
   }
 
   private void pickRoundBoosters() {
-    List<Player> toReverse = new ArrayList<>(game.getPlayers());
+    List<PlayerEnum> toReverse = new ArrayList<>(Arrays.asList(PlayerEnum.values()));
     Collections.reverse(toReverse);
-    for (Player player : toReverse) {
+    for (PlayerEnum player : toReverse) {
       setupQueue.add(() -> {
-        roundBoosters.forEach(rb -> rb.highlight(player, me -> {
+        roundBoosters.forEach(rb -> rb.highlight(game.getPlayers().get(player), me -> {
           finishRoundBoosterSelection();
         }));
       });
@@ -129,35 +138,64 @@ public class GameController extends BorderPane {
     }
   }
 
-  private void startGame() {
-    System.out.println("Starting game!");
-  }
-
-  private List<PlayerEnum> getPlacementOrder(List<Player> players) {
+  private List<PlayerEnum> getPlacementOrder(Map<PlayerEnum, Player> players) {
     List<PlayerEnum> placementOrder = new ArrayList<>();
-    for (Player player : players) {
-      if (player.getRace() != Race.IVITS) {
-        placementOrder.add(player.getPlayerEnum());
+    for (PlayerEnum playerNo : Arrays.asList(PlayerEnum.values())) {
+      if (players.get(playerNo).getRace() != Race.IVITS) {
+        placementOrder.add(playerNo);
       }
     }
 
-    List<Player> reversed = new ArrayList<>(players);
+    List<PlayerEnum> reversed = new ArrayList<>(Arrays.asList(PlayerEnum.values()));
     Collections.reverse(reversed);
 
-    for (Player player : reversed) {
-      if (player.getRace() != Race.IVITS) {
-        placementOrder.add(player.getPlayerEnum());
+    for (PlayerEnum playerNo : reversed) {
+      if (players.get(playerNo).getRace() != Race.IVITS) {
+        placementOrder.add(playerNo);
       }
     }
 
     // Add 3rd Xenos mine
-    players.stream().filter(p -> p.getRace() == Race.XENOS).forEach(p -> placementOrder.add(p.getPlayerEnum()));
+    players.entrySet()
+        .stream()
+        .filter(e -> e.getValue().getRace() == Race.XENOS)
+        .forEach(e -> placementOrder.add(e.getKey()));
 
     // Add Ivits
-    players.stream().filter(p -> p.getRace() == Race.IVITS).forEach(p -> placementOrder.add(p.getPlayerEnum()));
+    players.entrySet()
+        .stream()
+        .filter(e -> e.getValue().getRace() == Race.IVITS)
+        .forEach(e -> placementOrder.add(e.getKey()));
 
     return placementOrder;
   }
 
   // END SETUP METHODS
+
+  // MAIN ACTION METHODS
+  private void startGame() {
+    System.out.println("Starting game!");
+    game.getCurrentRound().setValue(Round.ROUND1);
+    promptPlayer();
+  }
+
+  private void promptPlayer() {
+    actionChoiceDialog.show();
+  }
+
+  void finishAction() {
+    System.out.println("Finishing action");
+    if (game.allPlayersPassed()) {
+      finishRound();
+    }
+
+    game.nextActivePlayer();
+    Platform.runLater(() -> promptPlayer());
+
+  }
+
+  void finishRound() {
+    System.out.println("Round over!");
+  }
+
 }

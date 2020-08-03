@@ -36,7 +36,7 @@ public class FederationTokens extends HBox {
   private Label vpCount;
 
   public FederationTokens(Game game) {
-    FXMLLoader loader = new FXMLLoader(TechTracks.class.getResource("FederationTokens.fxml"));
+    FXMLLoader loader = new FXMLLoader(FederationTokens.class.getResource("FederationTokens.fxml"));
     loader.setController(this);
     loader.setRoot(this);
     try {

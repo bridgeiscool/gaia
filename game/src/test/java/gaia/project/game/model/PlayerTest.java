@@ -4,14 +4,12 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import gaia.project.game.model.Player;
-
 public class PlayerTest {
   private Player player;
 
   @Before
   public void before() {
-    player = new Player(Race.GLEENS);
+    player = new Player(Race.GLEENS, PlayerEnum.PLAYER1);
   }
 
   // Charge power tests (Gleens start with 0-4-2 in bins 1-2-3)

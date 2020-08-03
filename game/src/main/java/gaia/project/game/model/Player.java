@@ -277,5 +277,11 @@ public class Player {
     Mine mine = new Mine(hex, race.getColor());
     mines.add(mine);
     hex.addMine(mine);
+
+    // Update income
+    if (mines.size() != 3) {
+      currentIncome.getOreIncome().setValue(currentIncome.getOreIncome().getValue() + 1);
+    }
+
   }
 }

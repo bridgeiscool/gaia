@@ -260,8 +260,16 @@ public class Player {
     return knowledgeLevel;
   }
 
-  public Property<RoundBooster> getRoundBooster() {
-    return roundBooster;
+  public void setRoundBooster(RoundBooster roundBooster) {
+    if (this.roundBooster.getValue() != null) {
+      // TODO: Check for VPs
+
+      this.roundBooster.getValue().removeIncome(currentIncome);
+    }
+
+    // Add new income
+    roundBooster.addIncome(currentIncome);
+    this.roundBooster.setValue(roundBooster);
   }
 
   // Action methods

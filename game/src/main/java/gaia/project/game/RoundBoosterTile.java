@@ -49,7 +49,7 @@ public class RoundBoosterTile extends StackPane {
     if (!isTaken()) {
       rectangle.highlight();
       this.currentEventHandler = me -> {
-        activePlayer.getRoundBooster().setValue(roundBooster);
+        activePlayer.setRoundBooster(roundBooster);
         currentPlayer = Optional.of(activePlayer.getPlayerEnum());
         getChildren().add(new Circle(10, activePlayer.getRace().getColor()));
         topLevel.handle(me);

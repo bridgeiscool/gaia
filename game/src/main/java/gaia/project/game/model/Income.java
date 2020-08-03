@@ -57,7 +57,9 @@ public class Income implements UpdatePlayer {
 
     } else {
       player.getBin1().setValue(player.getBin1().getValue().intValue() + powerIncome.getValue());
-      player.chargePower(chargeIncome.getValue());
+      if (chargeIncome.getValue() > 0) {
+        player.chargePower(chargeIncome.getValue());
+      }
     }
   }
 }

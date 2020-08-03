@@ -175,12 +175,42 @@ public class GameController extends BorderPane {
   // MAIN ACTION METHODS
   private void startGame() {
     System.out.println("Starting game!");
-    game.getCurrentRound().setValue(Round.ROUND1);
+    newRound();
+  }
+
+  private void newRound() {
+    game.newRound();
+    System.out.println("Starting round " + game.getCurrentRound().getValue());
+    takeIncome();
+    gaiaPhase();
     promptPlayer();
   }
 
+  private void takeIncome() {
+    for (Player player : game.getPlayers().values()) {
+      player.takeIncome();
+    }
+  }
+
+  private void gaiaPhase() {
+    // Empty for now...
+  }
+
   private void promptPlayer() {
-    actionChoiceDialog.show();
+    AppUtil.guiThread(() -> actionChoiceDialog.show());
+  }
+
+  void selectNewRoundBooster() {
+    roundBoosters.forEach(rb -> rb.highlight(game.getPlayers().get(game.getActivePlayer()), me -> {
+      newRoundBoosterSelected();
+    }));
+    roundBoosters.forEach(rb -> rb.clearToken(game.getActivePlayer()));
+  }
+
+  private void newRoundBoosterSelected() {
+    roundBoosters.forEach(RoundBoosterTile::clearHighlighting);
+    game.getPassedPlayers().add(game.getActivePlayer());
+    finishAction();
   }
 
   void finishAction() {
@@ -190,12 +220,27 @@ public class GameController extends BorderPane {
     }
 
     game.nextActivePlayer();
-    Platform.runLater(() -> promptPlayer());
+    promptPlayer();
 
   }
 
   void finishRound() {
     System.out.println("Round over!");
+    // TODO: Clear actions
+
+    if (game.getCurrentRound().getValue() == Round.ROUND6) {
+      endGame();
+    } else {
+
+      game.getCurrentPlayerOrder().clear();
+      game.getCurrentPlayerOrder().addAll(game.getPassedPlayers());
+      game.getPassedPlayers().clear();
+      newRound();
+    }
+  }
+
+  void endGame() {
+    System.out.println("Game is over!");
   }
 
 }

@@ -49,6 +49,8 @@ public class ActionChoiceDialog {
       throw new RuntimeException(e);
     }
 
+    // Enable/disable buttons for active player here
+
   }
 
   public void show() {
@@ -93,10 +95,8 @@ public class ActionChoiceDialog {
 
   @FXML
   private void pass() {
-    Game game = gameController.getGame();
-    System.out.println("Player " + game.getActivePlayer() + " passed!");
-    game.getPassedPlayers().add(game.getActivePlayer());
-    dialogStage.hide();
-    gameController.finishAction();
+    AppUtil.guiThread(() -> dialogStage.hide());
+    gameController.selectNewRoundBooster();
+
   }
 }

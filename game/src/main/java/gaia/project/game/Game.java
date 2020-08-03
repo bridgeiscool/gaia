@@ -148,9 +148,13 @@ public class Game implements Serializable {
     return activePlayer;
   }
 
+  public void newRound() {
+    currentRound.setValue(currentRound.getValue().nextRound());
+    activePlayer = currentPlayerOrder.get(0);
+  }
+
   public void nextActivePlayer() {
     Preconditions.checkArgument(passedPlayers.size() != currentPlayerOrder.size());
-    System.out.println(this.activePlayer);
 
     // Keep cycling until we hit a player who has not passed...
     int currentIdx = currentPlayerOrder.indexOf(activePlayer);
@@ -159,7 +163,6 @@ public class Game implements Serializable {
     } while (passedPlayers.contains(currentPlayerOrder.get(currentIdx)));
 
     this.activePlayer = currentPlayerOrder.get(currentIdx);
-    System.out.println(this.activePlayer);
   }
 
   public boolean allPlayersPassed() {

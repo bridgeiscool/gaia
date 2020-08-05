@@ -80,6 +80,11 @@ public enum RoundBooster {
     public void removeIncome(Income removeFrom) {
       removeFrom.getCreditIncome().setValue(removeFrom.getCreditIncome().getValue() - 4);
     }
+
+    @Override
+    public void addVps(Player player) {
+      player.getScore().setValue(player.getScore().getValue() + player.getGaiaPlanets().getValue());
+    }
   },
   MINES("[]:M", "(+1o)") {
 
@@ -93,6 +98,10 @@ public enum RoundBooster {
       removeFrom.getOreIncome().setValue(removeFrom.getOreIncome().getValue() - 1);
     }
 
+    @Override
+    public void addVps(Player player) {
+      player.getScore().setValue(player.getScore().getValue() + player.getMines().size());
+    }
   },
   TPS("[]:TP", "(+1o)") {
     @Override
@@ -103,6 +112,11 @@ public enum RoundBooster {
     @Override
     public void removeIncome(Income removeFrom) {
       removeFrom.getOreIncome().setValue(removeFrom.getOreIncome().getValue() - 1);
+    }
+
+    @Override
+    public void addVps(Player player) {
+      player.getScore().setValue(player.getScore().getValue() + 2 * player.getTradingPosts().size());
     }
   },
   RLS("[]:RL", "(+1k)") {
@@ -117,6 +131,10 @@ public enum RoundBooster {
       removeFrom.getResearchIncome().setValue(removeFrom.getResearchIncome().getValue() - 1);
     }
 
+    @Override
+    public void addVps(Player player) {
+      player.getScore().setValue(player.getScore().getValue() + 3 * player.getResearchLabs().size());
+    }
   },
   BIGS("[]:BB", "(+4p)") {
     @Override
@@ -127,6 +145,14 @@ public enum RoundBooster {
     @Override
     public void removeIncome(Income removeFrom) {
       removeFrom.getChargeIncome().setValue(removeFrom.getChargeIncome().getValue() - 4);
+    }
+
+    @Override
+    public void addVps(Player player) {
+      player.getScore()
+          .setValue(
+              player.getScore().getValue()
+                  + 4 * (player.getPi().size() + player.getKa().size() + player.getQa().size()));
     }
   };
 
@@ -149,4 +175,8 @@ public enum RoundBooster {
   public abstract void addIncome(Income addTo);
 
   public abstract void removeIncome(Income removeFrom);
+
+  public void addVps(Player player) {
+    // By default does nothing...
+  }
 }

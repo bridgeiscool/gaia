@@ -62,6 +62,7 @@ public class Player {
   private final BooleanProperty gaiaBuildBonus = new SimpleBooleanProperty(false);
   private final IntegerProperty bigBuildingPower = new SimpleIntegerProperty(3);
   private final Set<PlanetType> builtOn = EnumSet.noneOf(PlanetType.class);
+  private final IntegerProperty gaiaPlanets = new SimpleIntegerProperty(0);
 
   // Buildings, etc
   private final ObservableSet<Mine> mines = FXCollections.observableSet(new HashSet<>());
@@ -260,10 +261,13 @@ public class Player {
     return knowledgeLevel;
   }
 
+  public IntegerProperty getGaiaPlanets() {
+    return gaiaPlanets;
+  }
+
   public void setRoundBooster(RoundBooster roundBooster) {
     if (this.roundBooster.getValue() != null) {
-      // TODO: Check for VPs
-
+      this.roundBooster.getValue().addVps(this);
       this.roundBooster.getValue().removeIncome(currentIncome);
     }
 
@@ -291,5 +295,10 @@ public class Player {
       currentIncome.getOreIncome().setValue(currentIncome.getOreIncome().getValue() + 1);
     }
 
+    // Update planet counts
+    builtOn.add(hex.getPlanet().get().getPlanetType());
+    if (hex.getPlanet().get().getPlanetType() == PlanetType.GAIA) {
+      gaiaPlanets.setValue(gaiaPlanets.getValue() + 1);
+    }
   }
 }

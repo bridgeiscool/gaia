@@ -11,6 +11,8 @@ import gaia.project.game.model.FederationTile;
 import gaia.project.game.model.Player;
 import gaia.project.game.model.PlayerEnum;
 import gaia.project.game.model.TechTile;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
@@ -165,6 +167,14 @@ public class TechTracks extends GridPane {
       gaiaTrack.get(player.getGaiaformingLevel().get()).getChildren().add(new TechMarker(player));
       econTrack.get(player.getEconLevel().get()).getChildren().add(new TechMarker(player));
       knowledgeTrack.get(player.getKnowledgeLevel().get()).getChildren().add(new TechMarker(player));
+
+      // Add listeners to update UI from changes to underlying players
+      player.getTerraformingLevel().addListener(new ProcessTrackBump(terraTrack, player));
+      player.getNavLevel().addListener(new ProcessTrackBump(navTrack, player));
+      player.getAiLevel().addListener(new ProcessTrackBump(aiTrack, player));
+      player.getGaiaformingLevel().addListener(new ProcessTrackBump(gaiaTrack, player));
+      player.getEconLevel().addListener(new ProcessTrackBump(econTrack, player));
+      player.getKnowledgeLevel().addListener(new ProcessTrackBump(knowledgeTrack, player));
     }
 
     // Add the randomly chosen fed tile to terra track
@@ -191,13 +201,28 @@ public class TechTracks extends GridPane {
 
   }
 
-  private class TechMarker extends Circle {
-    private PlayerEnum player;
+  private static class ProcessTrackBump implements ChangeListener<Number> {
+    private final List<HBox> track;
+    private final Player player;
+
+    ProcessTrackBump(List<HBox> track, Player player) {
+      this.track = track;
+      this.player = player;
+    }
+
+    @Override
+    public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+      track.get(oldValue.intValue()).getChildren().removeIf(n -> ((TechMarker) n).player == player.getPlayerEnum());
+      track.get(newValue.intValue()).getChildren().add(new TechMarker(player));
+    }
+  }
+
+  private static class TechMarker extends Circle {
+    private final PlayerEnum player;
 
     TechMarker(Player player) {
       super(10, player.getRace().getColor());
       this.player = player.getPlayerEnum();
     }
-
   }
 }

@@ -6,11 +6,8 @@ import java.util.List;
 
 import com.google.common.base.Preconditions;
 
-import gaia.project.game.model.AdvancedTechTile;
-import gaia.project.game.model.FederationTile;
 import gaia.project.game.model.Player;
 import gaia.project.game.model.PlayerEnum;
-import gaia.project.game.model.TechTile;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
@@ -137,12 +134,8 @@ public class TechTracks extends GridPane {
   @FXML
   private HBox wildTechTile3;
 
-  public TechTracks(
-      Game game,
-      List<TechTile> techTiles,
-      List<AdvancedTechTile> advTechTiles,
-      FederationTile terraBonus) {
-    Preconditions.checkArgument(advTechTiles.size() == 6);
+  public TechTracks(Game game) {
+    Preconditions.checkArgument(game.getAdvancedTechTiles().size() == 6);
 
     FXMLLoader loader = new FXMLLoader(TechTracks.class.getResource("TechTracks.fxml"));
     loader.setController(this);
@@ -178,26 +171,26 @@ public class TechTracks extends GridPane {
     }
 
     // Add the randomly chosen fed tile to terra track
-    terra5StackPane.getChildren().add(0, new FederationTokenPane(terraBonus, 1.0));
+    terra5StackPane.getChildren().add(0, new FederationTokenPane(game.getTerraBonus(), 1.0));
 
     // Initialize the tech tiles
-    add(new TechTileHBox(techTiles.get(0)), 0, 8);
-    add(new TechTileHBox(techTiles.get(1)), 1, 8);
-    add(new TechTileHBox(techTiles.get(2)), 2, 8);
-    add(new TechTileHBox(techTiles.get(3)), 3, 8);
-    add(new TechTileHBox(techTiles.get(4)), 4, 8);
-    add(new TechTileHBox(techTiles.get(5)), 5, 8);
-    wildTechTile1.getChildren().add(new TechTileHBox(techTiles.get(6)));
-    wildTechTile2.getChildren().add(new TechTileHBox(techTiles.get(7)));
-    wildTechTile3.getChildren().add(new TechTileHBox(techTiles.get(8)));
+    add(new TechTileHBox(game.getTechTiles().get(0)), 0, 8);
+    add(new TechTileHBox(game.getTechTiles().get(1)), 1, 8);
+    add(new TechTileHBox(game.getTechTiles().get(2)), 2, 8);
+    add(new TechTileHBox(game.getTechTiles().get(3)), 3, 8);
+    add(new TechTileHBox(game.getTechTiles().get(4)), 4, 8);
+    add(new TechTileHBox(game.getTechTiles().get(5)), 5, 8);
+    wildTechTile1.getChildren().add(new TechTileHBox(game.getTechTiles().get(6)));
+    wildTechTile2.getChildren().add(new TechTileHBox(game.getTechTiles().get(7)));
+    wildTechTile3.getChildren().add(new TechTileHBox(game.getTechTiles().get(8)));
 
     // Initialize the adv tech tiles
-    terraAdvTech.getChildren().add(new AdvancedTechTileHBox(advTechTiles.get(0)));
-    navAdvTech.getChildren().add(new AdvancedTechTileHBox(advTechTiles.get(1)));
-    aiAdvTech.getChildren().add(new AdvancedTechTileHBox(advTechTiles.get(2)));
-    gaiaAdvTech.getChildren().add(new AdvancedTechTileHBox(advTechTiles.get(3)));
-    econAdvTech.getChildren().add(new AdvancedTechTileHBox(advTechTiles.get(4)));
-    knowledgeAdvTech.getChildren().add(new AdvancedTechTileHBox(advTechTiles.get(5)));
+    terraAdvTech.getChildren().add(new AdvancedTechTileHBox(game.getAdvancedTechTiles().get(0)));
+    navAdvTech.getChildren().add(new AdvancedTechTileHBox(game.getAdvancedTechTiles().get(1)));
+    aiAdvTech.getChildren().add(new AdvancedTechTileHBox(game.getAdvancedTechTiles().get(2)));
+    gaiaAdvTech.getChildren().add(new AdvancedTechTileHBox(game.getAdvancedTechTiles().get(3)));
+    econAdvTech.getChildren().add(new AdvancedTechTileHBox(game.getAdvancedTechTiles().get(4)));
+    knowledgeAdvTech.getChildren().add(new AdvancedTechTileHBox(game.getAdvancedTechTiles().get(5)));
 
   }
 

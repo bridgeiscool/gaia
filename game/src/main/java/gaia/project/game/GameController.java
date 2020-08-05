@@ -60,7 +60,8 @@ public class GameController extends BorderPane {
     PlayerBoardController player3 = new PlayerBoardController(game.getPlayers().get(PlayerEnum.PLAYER3));
 
     // Init tech tracks
-    TechTracks techTracks = new TechTracks(game.getTechTiles(), game.getAdvancedTechTiles(), game.getTerraBonus());
+    TechTracks techTracks =
+        new TechTracks(game, game.getTechTiles(), game.getAdvancedTechTiles(), game.getTerraBonus());
     PowerActionsController powerActions = new PowerActionsController();
 
     HBox roundBoosterBox = new HBox(2);

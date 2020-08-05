@@ -1,12 +1,15 @@
 package gaia.project.game;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 import com.google.common.base.Preconditions;
 
 import gaia.project.game.model.AdvancedTechTile;
 import gaia.project.game.model.FederationTile;
+import gaia.project.game.model.Player;
+import gaia.project.game.model.PlayerEnum;
 import gaia.project.game.model.TechTile;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -14,6 +17,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.shape.Circle;
 
 public class TechTracks extends GridPane {
   // Terraforming
@@ -37,6 +41,7 @@ public class TechTracks extends GridPane {
   private HBox terraTechTile;
   @FXML
   private Label terraTechTileLabel;
+  private final List<HBox> terraTrack;
 
   // Nav
   @FXML
@@ -53,6 +58,7 @@ public class TechTracks extends GridPane {
   private HBox nav1;
   @FXML
   private HBox nav0;
+  private final List<HBox> navTrack;
 
   // AI
   @FXML
@@ -69,6 +75,7 @@ public class TechTracks extends GridPane {
   private HBox ai1;
   @FXML
   private HBox ai0;
+  private final List<HBox> aiTrack;
 
   // Gaiaforming
   @FXML
@@ -85,6 +92,7 @@ public class TechTracks extends GridPane {
   private HBox gaia1;
   @FXML
   private HBox gaia0;
+  private final List<HBox> gaiaTrack;
 
   // Econ
   @FXML
@@ -101,6 +109,7 @@ public class TechTracks extends GridPane {
   private HBox econ1;
   @FXML
   private HBox econ0;
+  private final List<HBox> econTrack;
 
   // Knowledge
   @FXML
@@ -117,6 +126,8 @@ public class TechTracks extends GridPane {
   private HBox knowledge1;
   @FXML
   private HBox knowledge0;
+  private final List<HBox> knowledgeTrack;
+
   @FXML
   private HBox wildTechTile1;
   @FXML
@@ -124,7 +135,11 @@ public class TechTracks extends GridPane {
   @FXML
   private HBox wildTechTile3;
 
-  public TechTracks(List<TechTile> techTiles, List<AdvancedTechTile> advTechTiles, FederationTile terraBonus) {
+  public TechTracks(
+      Game game,
+      List<TechTile> techTiles,
+      List<AdvancedTechTile> advTechTiles,
+      FederationTile terraBonus) {
     Preconditions.checkArgument(advTechTiles.size() == 6);
 
     FXMLLoader loader = new FXMLLoader(TechTracks.class.getResource("TechTracks.fxml"));
@@ -134,6 +149,22 @@ public class TechTracks extends GridPane {
       loader.load();
     } catch (IOException e) {
       throw new RuntimeException(e);
+    }
+
+    terraTrack = Arrays.asList(terra0, terra1, terra2, terra3, terra4, terra5);
+    navTrack = Arrays.asList(nav0, nav1, nav2, nav3, nav4, nav5);
+    aiTrack = Arrays.asList(ai0, ai1, ai2, ai3, ai4, ai5);
+    gaiaTrack = Arrays.asList(gaia0, gaia1, gaia2, gaia3, gaia4, gaia5);
+    econTrack = Arrays.asList(econ0, econ1, econ2, econ3, econ4, econ5);
+    knowledgeTrack = Arrays.asList(knowledge0, knowledge1, knowledge2, knowledge3, knowledge4, knowledge5);
+
+    for (Player player : game.getPlayers().values()) {
+      terraTrack.get(player.getTerraformingLevel().get()).getChildren().add(new TechMarker(player));
+      navTrack.get(player.getNavLevel().get()).getChildren().add(new TechMarker(player));
+      aiTrack.get(player.getAiLevel().get()).getChildren().add(new TechMarker(player));
+      gaiaTrack.get(player.getGaiaformingLevel().get()).getChildren().add(new TechMarker(player));
+      econTrack.get(player.getEconLevel().get()).getChildren().add(new TechMarker(player));
+      knowledgeTrack.get(player.getKnowledgeLevel().get()).getChildren().add(new TechMarker(player));
     }
 
     // Add the randomly chosen fed tile to terra track
@@ -157,6 +188,16 @@ public class TechTracks extends GridPane {
     gaiaAdvTech.getChildren().add(new AdvancedTechTileHBox(advTechTiles.get(3)));
     econAdvTech.getChildren().add(new AdvancedTechTileHBox(advTechTiles.get(4)));
     knowledgeAdvTech.getChildren().add(new AdvancedTechTileHBox(advTechTiles.get(5)));
+
+  }
+
+  private class TechMarker extends Circle {
+    private PlayerEnum player;
+
+    TechMarker(Player player) {
+      super(10, player.getRace().getColor());
+      this.player = player.getPlayerEnum();
+    }
 
   }
 }

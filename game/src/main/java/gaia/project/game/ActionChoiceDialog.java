@@ -2,6 +2,7 @@ package gaia.project.game;
 
 import java.io.IOException;
 
+import gaia.project.game.model.Player;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -50,6 +51,8 @@ public class ActionChoiceDialog {
     }
 
     // Enable/disable buttons for active player here
+    Player player = gameController.getGame().getPlayers().get(gameController.getGame().getActivePlayer());
+    advanceTech.setDisable(player.getResearch().getValue() < 4);
 
   }
 

@@ -49,15 +49,15 @@ public class Player {
   private final Property<RoundBooster> roundBooster = new SimpleObjectProperty<>();
 
   // Tech track related
-  private final IntegerProperty terraformingLevel;
-  private final IntegerProperty navLevel;
-  private final IntegerProperty aiLevel;
-  private final IntegerProperty gaiaformingLevel;
-  private final IntegerProperty econLevel;
-  private final IntegerProperty knowledgeLevel;
-  private final IntegerProperty terraCost;
-  private final IntegerProperty navRange;
-  private final IntegerProperty gaiaformerCost;
+  private final IntegerProperty terraformingLevel = new SimpleIntegerProperty(0);
+  private final IntegerProperty navLevel = new SimpleIntegerProperty(0);
+  private final IntegerProperty aiLevel = new SimpleIntegerProperty(0);
+  private final IntegerProperty gaiaformingLevel = new SimpleIntegerProperty(0);
+  private final IntegerProperty econLevel = new SimpleIntegerProperty(0);
+  private final IntegerProperty knowledgeLevel = new SimpleIntegerProperty(0);
+  private final IntegerProperty terraCost = new SimpleIntegerProperty(3);
+  private final IntegerProperty navRange = new SimpleIntegerProperty(1);
+  private final IntegerProperty gaiaformerCost = new SimpleIntegerProperty(50);
 
   // Tech tile related
   private final Set<TechTile> techTiles = EnumSet.noneOf(TechTile.class);
@@ -102,25 +102,19 @@ public class Player {
       }
     });
     this.qic = new SimpleIntegerProperty(race.getStartingQic());
-
-    this.terraformingLevel = new SimpleIntegerProperty(race.getStartingTerraformingLevel());
-    this.navLevel = new SimpleIntegerProperty(race.getStartingNavLevel());
-    this.aiLevel = new SimpleIntegerProperty(race.getStartingAiLevel());
-    this.gaiaformingLevel = new SimpleIntegerProperty(race.getStartingGaiaformingLevel());
-    this.econLevel = new SimpleIntegerProperty(race.getStartingEconLevel());
-    this.knowledgeLevel = new SimpleIntegerProperty(race.getStartingKnowledgeLevel());
-
     this.availableGaiaformers = new SimpleIntegerProperty(this.gaiaformingLevel.get());
-
     this.currentIncome = new Income(race);
-
     this.score = new SimpleIntegerProperty(10);
 
-    this.terraCost = new SimpleIntegerProperty(3);
-    this.navRange = new SimpleIntegerProperty(1);
-    this.gaiaformerCost = new SimpleIntegerProperty(50);
-
+    // We set up tech bonuses so that when we add race starting techs we get the bonus
     setupTechBonuses();
+    this.terraformingLevel.setValue(race.getStartingTerraformingLevel());
+    this.navLevel.setValue(race.getStartingNavLevel());
+    this.aiLevel.setValue(race.getStartingAiLevel());
+    this.gaiaformingLevel.setValue(race.getStartingGaiaformingLevel());
+    this.econLevel.setValue(race.getStartingEconLevel());
+    this.knowledgeLevel.setValue(race.getStartingKnowledgeLevel());
+
   }
 
   private void setupTechBonuses() {
@@ -204,7 +198,7 @@ public class Player {
           break;
         case 5:
           flippableTechTiles.setValue(flippableTechTiles.getValue() - 1);
-          System.out.println("Implement GF level 5!");
+          score.setValue(score.getValue() + 4 + gaiaPlanets.getValue());
           break;
       }
     });

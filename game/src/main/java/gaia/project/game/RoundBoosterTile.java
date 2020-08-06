@@ -2,8 +2,6 @@ package gaia.project.game;
 
 import java.util.Optional;
 
-import javax.annotation.Nullable;
-
 import gaia.project.game.model.Player;
 import gaia.project.game.model.PlayerEnum;
 import gaia.project.game.model.RoundBooster;
@@ -27,8 +25,6 @@ public class RoundBoosterTile extends StackPane {
   private RoundBooster roundBooster;
   private Optional<PlayerEnum> currentPlayer = Optional.empty();
   private final BoosterRectangle rectangle;
-  @Nullable
-  private EventHandler<? super MouseEvent> currentEventHandler;
 
   public RoundBoosterTile(RoundBooster roundBooster) {
     this.roundBooster = roundBooster;
@@ -48,22 +44,18 @@ public class RoundBoosterTile extends StackPane {
   public void highlight(Player activePlayer, EventHandler<MouseEvent> topLevel) {
     if (!isTaken()) {
       rectangle.highlight();
-      this.currentEventHandler = me -> {
+      this.setOnMouseClicked(me -> {
         activePlayer.setRoundBooster(roundBooster);
         currentPlayer = Optional.of(activePlayer.getPlayerEnum());
         getChildren().add(new Circle(10, activePlayer.getRace().getColor()));
         topLevel.handle(me);
-      };
-      this.setOnMouseClicked(currentEventHandler);
+      });
     }
   }
 
   public void clearHighlighting() {
     rectangle.setNormalBorder();
-    if (currentEventHandler != null) {
-      removeEventHandler(MouseEvent.MOUSE_CLICKED, currentEventHandler);
-      currentEventHandler = null;
-    }
+    setOnMouseClicked(null);
   }
 
   public void clearToken(PlayerEnum activePlayer) {

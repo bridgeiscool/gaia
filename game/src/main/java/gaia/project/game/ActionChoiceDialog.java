@@ -50,15 +50,17 @@ public class ActionChoiceDialog {
       throw new RuntimeException(e);
     }
 
-    // Enable/disable buttons for active player here
-    Player player = gameController.getGame().getPlayers().get(gameController.getGame().getActivePlayer());
-    advanceTech.setDisable(player.getResearch().getValue() < 4);
-
   }
 
   public void show() {
     dialogStage.setTitle(gameController.getGame().getActivePlayer() + "'s turn.");
+    toggleButtonEnable();
     dialogStage.showAndWait();
+  }
+
+  private void toggleButtonEnable() {
+    Player player = gameController.getGame().getPlayers().get(gameController.getGame().getActivePlayer());
+    advanceTech.setDisable(player.getResearch().getValue() < 4);
   }
 
   @FXML
@@ -83,7 +85,8 @@ public class ActionChoiceDialog {
 
   @FXML
   private void advanceTech() {
-
+    gameController.activateTechTracks();
+    AppUtil.guiThread(() -> dialogStage.hide());
   }
 
   @FXML

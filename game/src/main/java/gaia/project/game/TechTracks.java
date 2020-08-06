@@ -8,11 +8,14 @@ import com.google.common.base.Preconditions;
 
 import gaia.project.game.model.Player;
 import gaia.project.game.model.PlayerEnum;
+import javafx.beans.property.IntegerProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -192,6 +195,52 @@ public class TechTracks extends GridPane {
     econAdvTech.getChildren().add(new AdvancedTechTileHBox(game.getAdvancedTechTiles().get(4)));
     knowledgeAdvTech.getChildren().add(new AdvancedTechTileHBox(game.getAdvancedTechTiles().get(5)));
 
+  }
+
+  void highlightTracks(Player activePlayer, EventHandler<? super MouseEvent> topLevel) {
+    activateHBox(activePlayer, topLevel, terraTrack, activePlayer.getTerraformingLevel());
+    activateHBox(activePlayer, topLevel, navTrack, activePlayer.getNavLevel());
+    activateHBox(activePlayer, topLevel, aiTrack, activePlayer.getAiLevel());
+    activateHBox(activePlayer, topLevel, gaiaTrack, activePlayer.getGaiaformingLevel());
+    activateHBox(activePlayer, topLevel, econTrack, activePlayer.getEconLevel());
+    activateHBox(activePlayer, topLevel, knowledgeTrack, activePlayer.getKnowledgeLevel());
+  }
+
+  private void activateHBox(
+      Player activePlayer,
+      EventHandler<? super MouseEvent> topLevel,
+      List<HBox> track,
+      IntegerProperty toUpdate) {
+    for (HBox hbox : track) {
+      if (hbox.getChildren().stream().anyMatch(n -> ((TechMarker) n).player == activePlayer.getPlayerEnum())) {
+        int idx = track.indexOf(hbox);
+        if (idx < 4
+            || (idx == 4
+                && track.get(5).getChildren().isEmpty()
+                && activePlayer.getFlippableTechTiles().intValue() > 0)) {
+          hbox.getStyleClass().add("highlightedHbox");
+          hbox.setOnMouseClicked(me -> {
+            activePlayer.advanceTech(toUpdate);
+            clearActivation();
+            topLevel.handle(me);
+          });
+        }
+      }
+    }
+  }
+
+  private void clearActivation() {
+    terraTrack.forEach(this::clearActivation);
+    navTrack.forEach(this::clearActivation);
+    aiTrack.forEach(this::clearActivation);
+    gaiaTrack.forEach(this::clearActivation);
+    econTrack.forEach(this::clearActivation);
+    knowledgeTrack.forEach(this::clearActivation);
+  }
+
+  private void clearActivation(HBox hbox) {
+    hbox.getStyleClass().clear();
+    hbox.setOnMouseClicked(null);
   }
 
   private static class ProcessTrackBump implements ChangeListener<Number> {

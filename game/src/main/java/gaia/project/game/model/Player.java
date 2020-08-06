@@ -55,6 +55,9 @@ public class Player {
   private final IntegerProperty gaiaformingLevel;
   private final IntegerProperty econLevel;
   private final IntegerProperty knowledgeLevel;
+  private final IntegerProperty terraCost;
+  private final IntegerProperty navRange;
+  private final IntegerProperty gaiaformerCost;
 
   // Tech tile related
   private final Set<TechTile> techTiles = EnumSet.noneOf(TechTile.class);
@@ -81,8 +84,23 @@ public class Player {
     this.bin2 = new SimpleIntegerProperty(race.getStartingBin2());
     this.bin3 = new SimpleIntegerProperty(race.getStartingBin3());
     this.ore = new SimpleIntegerProperty(race.getStartingOre());
+    this.ore.addListener((o, oldValue, newValue) -> {
+      if (newValue.intValue() > 15) {
+        this.ore.setValue(15);
+      }
+    });
     this.credits = new SimpleIntegerProperty(race.getStartingCredits());
+    this.credits.addListener((o, oldValue, newValue) -> {
+      if (newValue.intValue() > 30) {
+        this.credits.setValue(30);
+      }
+    });
     this.research = new SimpleIntegerProperty(race.getStartingKnowledge());
+    this.research.addListener((o, oldValue, newValue) -> {
+      if (newValue.intValue() > 15) {
+        this.research.setValue(15);
+      }
+    });
     this.qic = new SimpleIntegerProperty(race.getStartingQic());
 
     this.terraformingLevel = new SimpleIntegerProperty(race.getStartingTerraformingLevel());
@@ -97,6 +115,149 @@ public class Player {
     this.currentIncome = new Income(race);
 
     this.score = new SimpleIntegerProperty(10);
+
+    this.terraCost = new SimpleIntegerProperty(3);
+    this.navRange = new SimpleIntegerProperty(1);
+    this.gaiaformerCost = new SimpleIntegerProperty(50);
+
+    setupTechBonuses();
+  }
+
+  private void setupTechBonuses() {
+    terraformingLevel.addListener((o, oldValue, newValue) -> {
+      switch (newValue.intValue()) {
+        case 1:
+        case 4:
+          ore.setValue(ore.getValue() + 2);
+          break;
+        case 3:
+          chargePower(3);
+          // Fall through
+        case 2:
+          terraCost.setValue(4 - newValue.intValue());
+          break;
+        case 5:
+          flippableTechTiles.setValue(flippableTechTiles.getValue() - 1);
+          System.out.println("Implement gaining federationToken!");
+          break;
+      }
+    });
+
+    navLevel.addListener((o, oldValue, newValue) -> {
+      switch (newValue.intValue()) {
+        case 3:
+          chargePower(3);
+          // Fall through
+        case 1:
+          qic.setValue(qic.getValue() + 1);
+          break;
+        case 2:
+          navRange.setValue(2);
+          break;
+        case 4:
+          navRange.setValue(3);
+          break;
+        case 5:
+          flippableTechTiles.setValue(flippableTechTiles.getValue() - 1);
+          navRange.setValue(4);
+          System.out.println("Implement gaining lonely planet!");
+          break;
+      }
+    });
+
+    aiLevel.addListener((o, oldValue, newValue) -> {
+      switch (newValue.intValue()) {
+        case 1:
+        case 2:
+          qic.setValue(qic.getValue() + 1);
+          break;
+        case 3:
+          chargePower(3);
+          // Fall through
+        case 4:
+          qic.setValue(qic.getValue() + 2);
+          break;
+        case 5:
+          flippableTechTiles.setValue(flippableTechTiles.getValue() - 1);
+          qic.setValue(qic.getValue() + 4);
+          break;
+      }
+    });
+
+    gaiaformingLevel.addListener((o, oldValue, newValue) -> {
+      switch (newValue.intValue()) {
+        case 1:
+          gaiaformerCost.setValue(6);
+          availableGaiaformers.setValue(availableGaiaformers.getValue() + 1);
+          break;
+        case 2:
+          bin1.setValue(bin1.getValue() + 3);
+          break;
+        case 3:
+          chargePower(3);
+          gaiaformerCost.setValue(4);
+          availableGaiaformers.setValue(availableGaiaformers.getValue() + 1);
+          break;
+        case 4:
+          gaiaformerCost.setValue(3);
+          availableGaiaformers.setValue(availableGaiaformers.getValue() + 1);
+          break;
+        case 5:
+          flippableTechTiles.setValue(flippableTechTiles.getValue() - 1);
+          System.out.println("Implement GF level 5!");
+          break;
+      }
+    });
+
+    econLevel.addListener((o, oldValue, newValue) -> {
+      switch (newValue.intValue()) {
+        case 1:
+          currentIncome.getCreditIncome().setValue(currentIncome.getCreditIncome().getValue() + 2);
+          currentIncome.getChargeIncome().setValue(currentIncome.getChargeIncome().getValue() + 1);
+          break;
+        case 2:
+          currentIncome.getOreIncome().setValue(currentIncome.getOreIncome().getValue() + 1);
+          currentIncome.getChargeIncome().setValue(currentIncome.getChargeIncome().getValue() + 1);
+          break;
+        case 3:
+          chargePower(3);
+          currentIncome.getCreditIncome().setValue(currentIncome.getCreditIncome().getValue() + 1);
+          currentIncome.getChargeIncome().setValue(currentIncome.getChargeIncome().getValue() + 1);
+          break;
+        case 4:
+          currentIncome.getCreditIncome().setValue(currentIncome.getCreditIncome().getValue() + 1);
+          currentIncome.getOreIncome().setValue(currentIncome.getOreIncome().getValue() + 1);
+          currentIncome.getChargeIncome().setValue(currentIncome.getChargeIncome().getValue() + 1);
+          break;
+        case 5:
+          flippableTechTiles.setValue(flippableTechTiles.getValue() - 1);
+          currentIncome.getCreditIncome().setValue(currentIncome.getCreditIncome().getValue() - 4);
+          currentIncome.getOreIncome().setValue(currentIncome.getOreIncome().getValue() - 2);
+          currentIncome.getChargeIncome().setValue(currentIncome.getChargeIncome().getValue() - 4);
+          ore.setValue(ore.getValue() + 3);
+          credits.setValue(credits.getValue() + 6);
+          chargePower(6);
+          break;
+      }
+    });
+
+    knowledgeLevel.addListener((o, oldValue, newValue) -> {
+      switch (newValue.intValue()) {
+        case 3:
+          chargePower(3);
+          // Fall through
+        case 1:
+        case 2:
+        case 4:
+          currentIncome.getResearchIncome().setValue(currentIncome.getResearchIncome().getValue() + 1);
+          break;
+        case 5:
+          flippableTechTiles.setValue(flippableTechTiles.getValue() - 1);
+          currentIncome.getResearchIncome().setValue(currentIncome.getResearchIncome().getValue() - 4);
+          research.setValue(research.getValue() + 9);
+          break;
+      }
+    });
   }
 
   public Race getRace() {
@@ -300,5 +461,15 @@ public class Player {
     if (hex.getPlanet().get().getPlanetType() == PlanetType.GAIA) {
       gaiaPlanets.setValue(gaiaPlanets.getValue() + 1);
     }
+  }
+
+  public void advanceTech(IntegerProperty techTrack) {
+    techTrack.setValue(techTrack.getValue() + 1);
+    research.setValue(research.getValue() - 4);
+    techTrackBumped();
+  }
+
+  private void techTrackBumped() {
+    // Hook to handle VPs
   }
 }

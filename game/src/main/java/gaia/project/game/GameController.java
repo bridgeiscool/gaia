@@ -36,6 +36,7 @@ public class GameController extends BorderPane {
 
   private final List<Runnable> setupQueue = new ArrayList<>();
   private final ActionChoiceDialog actionChoiceDialog;
+  private final TechTracks techTracks;
 
   public GameController() {
     FXMLLoader loader = new FXMLLoader(GameController.class.getResource("GameMain.fxml"));
@@ -60,7 +61,7 @@ public class GameController extends BorderPane {
     PlayerBoardController player3 = new PlayerBoardController(game.getPlayers().get(PlayerEnum.PLAYER3));
 
     // Init tech tracks
-    TechTracks techTracks = new TechTracks(game);
+    techTracks = new TechTracks(game);
     PowerActionsController powerActions = new PowerActionsController();
 
     HBox roundBoosterBox = new HBox(2);
@@ -183,7 +184,7 @@ public class GameController extends BorderPane {
     System.out.println("Starting round " + game.getCurrentRound().getValue());
     takeIncome();
     gaiaPhase();
-    promptPlayer();
+    promptPlayerAction();
   }
 
   private void takeIncome() {
@@ -196,7 +197,7 @@ public class GameController extends BorderPane {
     // Empty for now...
   }
 
-  private void promptPlayer() {
+  private void promptPlayerAction() {
     AppUtil.guiThread(() -> actionChoiceDialog.show());
   }
 
@@ -213,6 +214,12 @@ public class GameController extends BorderPane {
     finishAction();
   }
 
+  void activateTechTracks() {
+    techTracks.highlightTracks(game.getPlayers().get(game.getActivePlayer()), me -> {
+      finishAction();
+    });
+  }
+
   void finishAction() {
     System.out.println("Finishing action");
     if (game.allPlayersPassed()) {
@@ -220,7 +227,7 @@ public class GameController extends BorderPane {
     }
 
     game.nextActivePlayer();
-    promptPlayer();
+    promptPlayerAction();
 
   }
 

@@ -17,9 +17,9 @@ public class Income implements UpdatePlayer {
     this.oreIncome = new SimpleIntegerProperty(race.getStartingOreIncome());
     this.creditIncome = new SimpleIntegerProperty(race.getStartingCreditIncome());
     this.researchIncome = new SimpleIntegerProperty(race.getStartingResearchIncome());
-    this.qicIncome = new SimpleIntegerProperty(0);
-    this.powerIncome = new SimpleIntegerProperty(0);
-    this.chargeIncome = new SimpleIntegerProperty(0);
+    this.qicIncome = new SimpleIntegerProperty(race.getStartingQicIncome());
+    this.powerIncome = new SimpleIntegerProperty(race.getStartingPtIncome());
+    this.chargeIncome = new SimpleIntegerProperty();
   }
 
   public IntegerProperty getOreIncome() {

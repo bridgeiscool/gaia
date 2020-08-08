@@ -302,6 +302,8 @@ public class GameController extends BorderPane {
   }
 
   void endGame() {
+    game.getEndScoring1().addToFinalScores(game.getPlayers().values());
+    game.getEndScoring2().addToFinalScores(game.getPlayers().values());
     System.out.println("Game is over!");
   }
 

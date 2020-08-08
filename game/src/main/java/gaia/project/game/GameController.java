@@ -73,6 +73,12 @@ public class GameController extends BorderPane {
     PlayerBoardController player2 = new PlayerBoardController(game.getPlayers().get(PlayerEnum.PLAYER2));
     PlayerBoardController player3 = new PlayerBoardController(game.getPlayers().get(PlayerEnum.PLAYER3));
 
+    // Init round bonuses
+    for (int i = 0; i < 6; ++i) {
+      // i + 1 because we're skipping the setup "round"
+      game.getRoundScoringBonuses().get(i).addListeners(game, Round.values()[i + 1]);
+    }
+
     // Init tech tracks
     techTracks = new TechTracks(game);
     PowerActionsController powerActions = new PowerActionsController();

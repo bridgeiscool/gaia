@@ -1,5 +1,6 @@
 package gaia.project.game.model;
 
+import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Set;
@@ -23,6 +24,7 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.collections.ObservableSet;
 
 // Backing bean to store player's information
@@ -44,8 +46,6 @@ public class Player {
   private final Income currentIncome;
 
   private final IntegerProperty score;
-
-  private final Set<FederationTile> federationTiles = EnumSet.noneOf(FederationTile.class);
 
   private final Property<RoundBooster> roundBooster = new SimpleObjectProperty<>();
 
@@ -76,6 +76,7 @@ public class Player {
   private final ObservableSet<KnowledgeAcademy> ka = FXCollections.observableSet(new HashSet<>());
   private final ObservableSet<QicAcademy> qa = FXCollections.observableSet(new HashSet<>());
   private final ObservableSet<Gaiaformer> gaiaformers = FXCollections.observableSet(new HashSet<>());
+  private final ObservableList<FederationTile> federationTiles = FXCollections.observableList(new ArrayList<>());
 
   // Scoring Related
   private final ObservableSet<Integer> sectors = FXCollections.observableSet(new HashSet<>());
@@ -354,7 +355,7 @@ public class Player {
     return currentIncome;
   }
 
-  public Set<FederationTile> getFederationTiles() {
+  public ObservableList<FederationTile> getFederationTiles() {
     return federationTiles;
   }
 

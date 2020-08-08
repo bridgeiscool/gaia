@@ -11,13 +11,12 @@ import java.util.stream.StreamSupport;
 
 import com.google.common.annotations.VisibleForTesting;
 
+import gaia.project.game.CallBack;
 import gaia.project.game.PlanetType;
 import gaia.project.game.model.Player;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Node;
-import javafx.scene.input.MouseEvent;
 
 public class GameBoard extends Group implements Iterable<Sector> {
   private final List<Sector> sectors;
@@ -104,11 +103,11 @@ public class GameBoard extends Group implements Iterable<Sector> {
     return sectors.iterator();
   }
 
-  public void highlightHexes(Player activePlayer, EventHandler<MouseEvent> listener) {
+  public void highlightHexes(Player activePlayer, CallBack callBack) {
     for (Hex hex : hexes()) {
       if (activePlayer.getRace()
           .getHomePlanet() == hex.getPlanet().map(Planet::getPlanetType).orElse(PlanetType.NONE)) {
-        hex.highlight(activePlayer, listener);
+        hex.highlight(activePlayer, callBack);
       }
     }
   }

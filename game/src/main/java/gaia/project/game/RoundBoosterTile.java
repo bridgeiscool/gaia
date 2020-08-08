@@ -6,11 +6,9 @@ import gaia.project.game.model.Player;
 import gaia.project.game.model.PlayerEnum;
 import gaia.project.game.model.RoundBooster;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -41,21 +39,21 @@ public class RoundBoosterTile extends StackPane {
     return currentPlayer.isPresent();
   }
 
-  public void highlight(Player activePlayer, EventHandler<MouseEvent> topLevel) {
+  public void highlight(Player activePlayer, CallBack callBack) {
     if (!isTaken()) {
       rectangle.highlight();
       this.setOnMouseClicked(me -> {
         activePlayer.setRoundBooster(roundBooster);
         currentPlayer = Optional.of(activePlayer.getPlayerEnum());
         getChildren().add(new Circle(10, activePlayer.getRace().getColor()));
-        topLevel.handle(me);
+        callBack.call();
       });
     }
   }
 
   public void clearHighlighting() {
-    rectangle.setNormalBorder();
     setOnMouseClicked(null);
+    rectangle.setNormalBorder();
   }
 
   public void clearToken(PlayerEnum activePlayer) {

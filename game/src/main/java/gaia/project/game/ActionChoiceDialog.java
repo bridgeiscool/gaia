@@ -3,21 +3,20 @@ package gaia.project.game;
 import java.io.IOException;
 
 import gaia.project.game.model.Player;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
+import javafx.scene.control.ButtonBar.ButtonData;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
 
-public class ActionChoiceDialog {
+public class ActionChoiceDialog extends Dialog<Actions> {
+  private static final ButtonType SUBMIT = new ButtonType("Submit", ButtonData.OK_DONE);
   private final GameController gameController;
-  private final Stage dialogStage;
+  private Actions selectedAction;
 
-  @FXML
-  private Label actionPrompt;
   @FXML
   private Button buildMine;
   @FXML
@@ -35,74 +34,84 @@ public class ActionChoiceDialog {
   @FXML
   private Button pass;
 
-  public ActionChoiceDialog(GameController gameController) {
+  ActionChoiceDialog(GameController gameController) {
     this.gameController = gameController;
 
     try {
       FXMLLoader loader = new FXMLLoader(ActionChoiceDialog.class.getResource("ActionChoice.fxml"));
       loader.setController(this);
-      Parent parent = (Parent) loader.load();
-      dialogStage = new Stage();
-      dialogStage.setScene(new Scene(parent));
-      dialogStage.setResizable(false);
-      dialogStage.initModality(Modality.APPLICATION_MODAL);
+      getDialogPane().setContent((Node) loader.load());
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
 
-  }
+    setResultConverter(button -> selectedAction);
+    getDialogPane().getButtonTypes().add(SUBMIT);
 
-  public void show() {
-    dialogStage.setTitle(gameController.getGame().getActivePlayer() + "'s turn.");
+    final Button submitButton = (Button) getDialogPane().lookupButton(SUBMIT);
+    submitButton.addEventFilter(ActionEvent.ACTION, event -> {
+      if (selectedAction == null) {
+        event.consume();
+      }
+    });
+
     toggleButtonEnable();
-    dialogStage.showAndWait();
   }
 
   private void toggleButtonEnable() {
     Player player = gameController.getGame().getPlayers().get(gameController.getGame().getActivePlayer());
+
+    buildMine.setDisable(true);
+    startGaiaProject.setDisable(true);
+    upgradeBuilding.setDisable(true);
+    federate.setDisable(true);
     advanceTech.setDisable(player.getResearch().getValue() < 4);
+    powerAction.setDisable(true);
+    specialAction.setDisable(true);
   }
 
   @FXML
   private void buildMine() {
-    System.out.println("Mine!");
+    selectedAction = Actions.BUILD_MINE;
   }
 
   @FXML
   private void gaiaProject() {
-
+    selectedAction = Actions.GAIA_PROJECT;
   }
 
   @FXML
   private void upgradeBuilding() {
-
+    selectedAction = Actions.UPGRADE_BUILDING;
   }
 
   @FXML
   private void federate() {
-
+    selectedAction = Actions.FEDERATE;
   }
 
   @FXML
   private void advanceTech() {
-    gameController.activateTechTracks();
-    AppUtil.guiThread(() -> dialogStage.hide());
+    selectedAction = Actions.ADVANCE_TECH;
+    // gameController.activateTechTracks();
+    // System.out.println("Closing dialog tech");
   }
 
   @FXML
   private void powerAction() {
-
+    selectedAction = Actions.POWER_ACTION;
   }
 
   @FXML
   private void specialAction() {
-
+    selectedAction = Actions.SPECIAL_ACTION;
   }
 
   @FXML
   private void pass() {
-    AppUtil.guiThread(() -> dialogStage.hide());
-    gameController.selectNewRoundBooster();
+    selectedAction = Actions.PASS;
+    // gameController.selectNewRoundBooster();
+    // System.out.println("Closing dialog pass");
 
   }
 }

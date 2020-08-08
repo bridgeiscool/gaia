@@ -10,8 +10,18 @@
 <?import javafx.scene.shape.*?>
 <?import javafx.geometry.*?>
 
-<fx:root type="javafx.scene.layout.BorderPane" fx:id="mainPane" styleClass="graybackground" xmlns:fx="http://javafx.com/fxml">
+<fx:root type="javafx.scene.layout.BorderPane" fx:id="mainPane" styleClass="graybackground"
+  xmlns:fx="http://javafx.com/fxml">
   <stylesheets>
     <URL value="@app.css" />
   </stylesheets>
+
+  <top>
+    <HBox alignment="CENTER" spacing="10">
+      <Button fx:id="showActions" text="Show Actions" onAction="#showActions" disable="true" />
+      <Button fx:id="conversions" text="Conversions" onAction="#showConversions" disable="true" />
+      <Button fx:id="confirmAction" text="Confirm" onAction="#confirmAction" disable="true" />
+      <Button fx:id="resetTurn" text="Reset Turn" onAction="#resetTurn" disable="true" />
+    </HBox>
+  </top>
 </fx:root>

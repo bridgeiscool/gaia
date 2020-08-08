@@ -1,0 +1,5 @@
+package gaia.project.game;
+
+public enum Actions {
+  BUILD_MINE, GAIA_PROJECT, UPGRADE_BUILDING, FEDERATE, ADVANCE_TECH, POWER_ACTION, SPECIAL_ACTION, PASS;
+}

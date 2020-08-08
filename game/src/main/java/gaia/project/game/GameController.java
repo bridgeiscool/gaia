@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Collectors;
 
@@ -21,6 +22,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
 import javafx.scene.control.Separator;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -30,12 +34,21 @@ public class GameController extends BorderPane {
   @FXML
   private BorderPane mainPane;
 
+  // Top
+  @FXML
+  private Button showActions;
+  @FXML
+  private Button conversions;
+  @FXML
+  private Button confirmAction;
+  @FXML
+  private Button resetTurn;
+
   private final Game game;
   private final GameBoard gameBoard;
   private final List<RoundBoosterTile> roundBoosters;
 
   private final List<Runnable> setupQueue = new ArrayList<>();
-  private final ActionChoiceDialog actionChoiceDialog;
   private final TechTracks techTracks;
 
   public GameController() {
@@ -86,11 +99,57 @@ public class GameController extends BorderPane {
     HBox hbox = new HBox(5, player1, player2, player3);
     mainPane.setBottom(hbox);
 
-    this.actionChoiceDialog = new ActionChoiceDialog(this);
+    // Top buttons
   }
 
   Game getGame() {
     return game;
+  }
+
+  // Button Methods
+  @FXML
+  private void showActions() {
+    showActions.setDisable(true);
+    Optional<Actions> selectedAction = new ActionChoiceDialog(this).showAndWait();
+    if (selectedAction.isPresent()) {
+      switch (selectedAction.get()) {
+        case ADVANCE_TECH:
+          activateTechTracks();
+          break;
+        case PASS:
+          selectNewRoundBooster();
+          break;
+        case BUILD_MINE:
+        case GAIA_PROJECT:
+        case UPGRADE_BUILDING:
+        case FEDERATE:
+        case POWER_ACTION:
+        case SPECIAL_ACTION:
+          throw new IllegalStateException("Not implemented yet!");
+      }
+    } else {
+      showActions.setDisable(false);
+    }
+  }
+
+  @FXML
+  private void showConversions() {
+    // TODO: Implements
+  }
+
+  @FXML
+  private void confirmAction() {
+    if (game.allPlayersPassed()) {
+      finishRound();
+    } else {
+      game.nextActivePlayer();
+      promptPlayerAction();
+    }
+  }
+
+  @FXML
+  private void resetTurn() {
+    // TODO: Implement
   }
 
   // SETUP METHODS
@@ -98,9 +157,7 @@ public class GameController extends BorderPane {
     List<PlayerEnum> order = getPlacementOrder(game.getPlayers());
     for (PlayerEnum toPrompt : order) {
       setupQueue.add(() -> {
-        gameBoard.highlightHexes(game.getPlayers().get(toPrompt), me -> {
-          finishUserSetupMine();
-        });
+        gameBoard.highlightHexes(game.getPlayers().get(toPrompt), this::finishUserSetupMine);
       });
     }
 
@@ -121,9 +178,7 @@ public class GameController extends BorderPane {
     Collections.reverse(toReverse);
     for (PlayerEnum player : toReverse) {
       setupQueue.add(() -> {
-        roundBoosters.forEach(rb -> rb.highlight(game.getPlayers().get(player), me -> {
-          finishRoundBoosterSelection();
-        }));
+        roundBoosters.forEach(rb -> rb.highlight(game.getPlayers().get(player), this::finishRoundBoosterSelection));
       });
     }
 
@@ -176,12 +231,13 @@ public class GameController extends BorderPane {
   // MAIN ACTION METHODS
   private void startGame() {
     System.out.println("Starting game!");
+    resetTurn.setDisable(false);
     newRound();
   }
 
   private void newRound() {
     game.newRound();
-    System.out.println("Starting round " + game.getCurrentRound().getValue());
+    new Alert(AlertType.INFORMATION, "Starting round " + game.getCurrentRound().getValue()).showAndWait();
     takeIncome();
     gaiaPhase();
     promptPlayerAction();
@@ -198,14 +254,20 @@ public class GameController extends BorderPane {
   }
 
   private void promptPlayerAction() {
-    AppUtil.guiThread(() -> actionChoiceDialog.show());
+    showActions.setDisable(false);
+    conversions.setDisable(false);
+    confirmAction.setDisable(true);
   }
 
   void selectNewRoundBooster() {
-    roundBoosters.forEach(rb -> rb.highlight(game.getPlayers().get(game.getActivePlayer()), me -> {
-      newRoundBoosterSelected();
-    }));
-    roundBoosters.forEach(rb -> rb.clearToken(game.getActivePlayer()));
+    if (game.getCurrentRound().getValue() != Round.ROUND6) {
+      roundBoosters
+          .forEach(rb -> rb.highlight(game.getPlayers().get(game.getActivePlayer()), this::newRoundBoosterSelected));
+      roundBoosters.forEach(rb -> rb.clearToken(game.getActivePlayer()));
+    } else {
+      game.getPassedPlayers().add(game.getActivePlayer());
+      finishAction();
+    }
   }
 
   private void newRoundBoosterSelected() {
@@ -215,20 +277,16 @@ public class GameController extends BorderPane {
   }
 
   void activateTechTracks() {
-    techTracks.highlightTracks(game.getPlayers().get(game.getActivePlayer()), me -> {
-      finishAction();
-    });
+    techTracks.highlightTracks(game.getPlayers().get(game.getActivePlayer()), this::finishTrackBump);
+  }
+
+  void finishTrackBump() {
+    techTracks.clearActivation();
+    finishAction();
   }
 
   void finishAction() {
-    System.out.println("Finishing action");
-    if (game.allPlayersPassed()) {
-      finishRound();
-    }
-
-    game.nextActivePlayer();
-    promptPlayerAction();
-
+    confirmAction.setDisable(false);
   }
 
   void finishRound() {

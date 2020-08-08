@@ -12,11 +12,10 @@ import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 
+import gaia.project.game.CallBack;
 import gaia.project.game.PlanetType;
 import gaia.project.game.model.Player;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Polygon;
 
@@ -96,13 +95,13 @@ public final class Hex extends StackPane {
     return Math.sqrt(Math.pow(centerX - other.centerX, 2) + Math.pow(centerY - other.centerY, 2));
   }
 
-  public void highlight(Player activePlayer, EventHandler<MouseEvent> topLevel) {
+  public void highlight(Player activePlayer, CallBack callBack) {
     ObservableList<String> styleClass = polygon.getStyleClass();
     styleClass.clear();
     styleClass.add("highlightedHex");
     this.setOnMouseClicked(me -> {
       activePlayer.buildSetupMine(this);
-      topLevel.handle(me);
+      callBack.call();
     });
   }
 

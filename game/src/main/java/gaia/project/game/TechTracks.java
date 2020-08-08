@@ -11,11 +11,9 @@ import gaia.project.game.model.PlayerEnum;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -197,20 +195,16 @@ public class TechTracks extends GridPane {
 
   }
 
-  void highlightTracks(Player activePlayer, EventHandler<? super MouseEvent> topLevel) {
-    activateHBox(activePlayer, topLevel, terraTrack, activePlayer.getTerraformingLevel());
-    activateHBox(activePlayer, topLevel, navTrack, activePlayer.getNavLevel());
-    activateHBox(activePlayer, topLevel, aiTrack, activePlayer.getAiLevel());
-    activateHBox(activePlayer, topLevel, gaiaTrack, activePlayer.getGaiaformingLevel());
-    activateHBox(activePlayer, topLevel, econTrack, activePlayer.getEconLevel());
-    activateHBox(activePlayer, topLevel, knowledgeTrack, activePlayer.getKnowledgeLevel());
+  void highlightTracks(Player activePlayer, CallBack callBack) {
+    activateHBox(activePlayer, callBack, terraTrack, activePlayer.getTerraformingLevel());
+    activateHBox(activePlayer, callBack, navTrack, activePlayer.getNavLevel());
+    activateHBox(activePlayer, callBack, aiTrack, activePlayer.getAiLevel());
+    activateHBox(activePlayer, callBack, gaiaTrack, activePlayer.getGaiaformingLevel());
+    activateHBox(activePlayer, callBack, econTrack, activePlayer.getEconLevel());
+    activateHBox(activePlayer, callBack, knowledgeTrack, activePlayer.getKnowledgeLevel());
   }
 
-  private void activateHBox(
-      Player activePlayer,
-      EventHandler<? super MouseEvent> topLevel,
-      List<HBox> track,
-      IntegerProperty toUpdate) {
+  private void activateHBox(Player activePlayer, CallBack callBack, List<HBox> track, IntegerProperty toUpdate) {
     for (HBox hbox : track) {
       if (hbox.getChildren().stream().anyMatch(n -> ((TechMarker) n).player == activePlayer.getPlayerEnum())) {
         int idx = track.indexOf(hbox);
@@ -222,14 +216,14 @@ public class TechTracks extends GridPane {
           hbox.setOnMouseClicked(me -> {
             activePlayer.advanceTech(toUpdate);
             clearActivation();
-            topLevel.handle(me);
+            callBack.call();
           });
         }
       }
     }
   }
 
-  private void clearActivation() {
+  void clearActivation() {
     terraTrack.forEach(this::clearActivation);
     navTrack.forEach(this::clearActivation);
     aiTrack.forEach(this::clearActivation);

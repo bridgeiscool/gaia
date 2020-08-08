@@ -14,7 +14,7 @@
   <stylesheets>
     <URL value="@app.css" />
   </stylesheets>
-  
+
   <Button fx:id="buildMine" onAction="#buildMine" text="Build Mine" prefWidth="200" />
   <Button fx:id="startGaiaProject" onAction="#gaiaProject" text="Start Gaia Project" prefWidth="200" />
   <Button fx:id="upgradeBuilding" onAction="#upgradeBuilding" text="Upgrade Building" prefWidth="200" />

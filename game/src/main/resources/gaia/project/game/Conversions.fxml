@@ -1,0 +1,58 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.input.*?>
+<?import javafx.event.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.geometry.*?>
+
+<VBox styleClass="vbox-padded" xmlns:fx="http://javafx.com/fxml">
+  <stylesheets>
+    <URL value="@app.css" />
+  </stylesheets>
+
+  <GridPane>
+    <columnConstraints>
+      <ColumnConstraints halignment="CENTER" />
+      <ColumnConstraints halignment="CENTER" prefWidth="40" />
+      <ColumnConstraints halignment="RIGHT" />
+    </columnConstraints>
+
+    <Label text="+2 NAV" GridPane.rowIndex="0" GridPane.columnIndex="1" GridPane.columnSpan="2"/>
+    
+    <Button text="^" onAction="#qicToNav" GridPane.rowIndex="1" GridPane.columnIndex="2" />
+    
+    <Label text="4p" GridPane.rowIndex="2" GridPane.columnIndex="0" />
+    <Button text=">" onAction="#powerToQic" GridPane.rowIndex="2" GridPane.columnIndex="1" />
+    <Label text="1q" GridPane.rowIndex="2" GridPane.columnIndex="2" />
+    
+    <Button text="v" onAction="#qicToOre" GridPane.rowIndex="3" GridPane.columnIndex="2" />
+    
+    <Label text="3p" GridPane.rowIndex="4" GridPane.columnIndex="0" />
+    <Button text=">" onAction="#powerToOre" GridPane.rowIndex="4" GridPane.columnIndex="1" />  
+    <Label text="1o" GridPane.rowIndex="4" GridPane.columnIndex="2" /> 
+  
+    <Label text="4p" GridPane.rowIndex="5" GridPane.columnIndex="0" />
+    <Button text=">" onAction="#powerToKnowledge" GridPane.rowIndex="5" GridPane.columnIndex="1" />  
+    <Label text="1k" GridPane.rowIndex="5" GridPane.columnIndex="2" />
+  
+    <Button text="v" onAction="#knowledgeToCredits" GridPane.rowIndex="6" GridPane.columnIndex="2" />
+  
+    <Label text="1p" GridPane.rowIndex="7" GridPane.columnIndex="0" />
+    <Button text=">" onAction="#powerToCredits" GridPane.rowIndex="7" GridPane.columnIndex="1" />  
+    <Label text="1c" GridPane.rowIndex="7" GridPane.columnIndex="2" />
+  
+    <Label text="1o" GridPane.rowIndex="8" GridPane.columnIndex="0" />
+    <Button text=">" onAction="#oreToCredits" GridPane.rowIndex="8" GridPane.columnIndex="1" />  
+    <Label text="1c" GridPane.rowIndex="8" GridPane.columnIndex="2" />
+  
+  
+    <Label text="1o" GridPane.rowIndex="9" GridPane.columnIndex="0" />
+    <Button text=">" onAction="#oreToPower" GridPane.rowIndex="9" GridPane.columnIndex="1" />  
+    <Label text="1pt" GridPane.rowIndex="9" GridPane.columnIndex="2" />
+  </GridPane>
+</VBox>

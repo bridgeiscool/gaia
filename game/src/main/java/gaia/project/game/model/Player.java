@@ -14,6 +14,7 @@ import gaia.project.game.board.Mine;
 import gaia.project.game.board.PlanetaryInstitute;
 import gaia.project.game.board.QicAcademy;
 import gaia.project.game.board.ResearchLab;
+import gaia.project.game.board.Satellite;
 import gaia.project.game.board.TradingPost;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
@@ -64,7 +65,7 @@ public class Player {
   private final IntegerProperty flippableTechTiles = new SimpleIntegerProperty(0);
   private final BooleanProperty gaiaBuildBonus = new SimpleBooleanProperty(false);
   private final IntegerProperty bigBuildingPower = new SimpleIntegerProperty(3);
-  private final Set<PlanetType> builtOn = EnumSet.noneOf(PlanetType.class);
+  private final ObservableSet<PlanetType> builtOn = FXCollections.observableSet(EnumSet.noneOf(PlanetType.class));
   private final IntegerProperty gaiaPlanets = new SimpleIntegerProperty(0);
 
   // Buildings, etc
@@ -75,6 +76,12 @@ public class Player {
   private final ObservableSet<KnowledgeAcademy> ka = FXCollections.observableSet(new HashSet<>());
   private final ObservableSet<QicAcademy> qa = FXCollections.observableSet(new HashSet<>());
   private final ObservableSet<Gaiaformer> gaiaformers = FXCollections.observableSet(new HashSet<>());
+
+  // Scoring Related
+  private final ObservableSet<Integer> sectors = FXCollections.observableSet(new HashSet<>());
+  private final ObservableSet<Satellite> satellites = FXCollections.observableSet(new HashSet<>());
+  private final IntegerProperty totalBuildings = new SimpleIntegerProperty(0);
+  private final IntegerProperty buildingsInFeds = new SimpleIntegerProperty(0);
 
   public Player(Race race, PlayerEnum playerEnum) {
     this.race = race;
@@ -114,7 +121,6 @@ public class Player {
     this.gaiaformingLevel.setValue(race.getStartingGaiaformingLevel());
     this.econLevel.setValue(race.getStartingEconLevel());
     this.knowledgeLevel.setValue(race.getStartingKnowledgeLevel());
-
   }
 
   private void setupTechBonuses() {
@@ -356,7 +362,7 @@ public class Player {
     return bigBuildingPower;
   }
 
-  public Set<PlanetType> getBuiltOn() {
+  public ObservableSet<PlanetType> getBuiltOn() {
     return builtOn;
   }
 
@@ -431,6 +437,22 @@ public class Player {
     this.roundBooster.setValue(roundBooster);
   }
 
+  public ObservableSet<Integer> getSectors() {
+    return sectors;
+  }
+
+  public ObservableSet<Satellite> getSatellites() {
+    return satellites;
+  }
+
+  public IntegerProperty getTotalBuildings() {
+    return totalBuildings;
+  }
+
+  public IntegerProperty getBuildingsInFeds() {
+    return buildingsInFeds;
+  }
+
   // Action methods
   public void buildMine(Hex hex) {
     buildMine(hex, false);
@@ -455,6 +477,10 @@ public class Player {
     if (hex.getPlanet().get().getPlanetType() == PlanetType.GAIA) {
       gaiaPlanets.setValue(gaiaPlanets.getValue() + 1);
     }
+    totalBuildings.setValue(totalBuildings.getValue() + 1);
+    sectors.add(hex.getSectorId());
+
+    // TODO: Add logic to check if it adds onto a previous federation
   }
 
   public void advanceTech(IntegerProperty techTrack) {

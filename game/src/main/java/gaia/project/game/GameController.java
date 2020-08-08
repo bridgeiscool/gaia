@@ -88,10 +88,7 @@ public class GameController extends BorderPane {
     VBox boostersAndFeds = new VBox(5, new FederationTokens(game), roundBoosterBox);
     boostersAndFeds.setAlignment(Pos.CENTER);
 
-    HBox miscContent = new HBox(
-        10,
-        new ScoringArea(game.getRoundScoringBonuses(), game.getEndScoring1(), game.getEndScoring2()),
-        boostersAndFeds);
+    HBox miscContent = new HBox(10, new ScoringArea(game), boostersAndFeds);
 
     VBox vbox = new VBox(5, techTracks, powerActions, new Separator(), miscContent);
     mainPane.setRight(vbox);

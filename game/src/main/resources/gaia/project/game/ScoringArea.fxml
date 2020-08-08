@@ -20,7 +20,7 @@
     </VBox>
   </top>
   <center>
-    <VBox spacing="2" alignment="CENTER">
+    <VBox spacing="3" alignment="CENTER">
       <HBox styleClass="roundScoringBox">
         <Label fx:id="round6" />
       </HBox>
@@ -39,17 +39,20 @@
       <HBox styleClass="roundScoringBox">
         <Label fx:id="round1" />
       </HBox>
+      <HBox styleClass="roundScoringBox">
+        <Label fx:id="setup" text="SETUP" />
+      </HBox>
     </VBox>
   </center>
   <right>
     <VBox alignment="CENTER">
-      <GridPane hgap="5" vgap="5" prefWidth="155">
+      <GridPane hgap="5" vgap="5" prefWidth="170">
         <padding>
           <Insets left="10" right="10" top="10" bottom="10" />
         </padding>
         <columnConstraints>
-          <ColumnConstraints halignment="CENTER" />
-          <ColumnConstraints halignment="CENTER" />
+          <ColumnConstraints halignment="CENTER" prefWidth="85" />
+          <ColumnConstraints halignment="CENTER" prefWidth="85" />
         </columnConstraints>
         
         <Label fx:id="endScoring1" GridPane.rowIndex="0" GridPane.columnIndex="0" />

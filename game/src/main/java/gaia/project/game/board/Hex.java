@@ -73,6 +73,10 @@ public final class Hex extends StackPane {
 
   }
 
+  public int getSectorId() {
+    return sectorId;
+  }
+
   public Optional<Planet> getPlanet() {
     return Optional.ofNullable(planet);
   }

@@ -174,6 +174,8 @@ public class Game implements Serializable {
     endScoring2.addToFinalScores(players.values());
     for (Player player : players.values()) {
       player.getScore().setValue(player.getScore().getValue() + player.getProjectedTechScoring().getValue());
+      player.convertResourcesToVps();
     }
+
   }
 }

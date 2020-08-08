@@ -298,6 +298,13 @@ public class Player {
     }
   }
 
+  public void sacPower(int numTimes) {
+    Preconditions.checkArgument(numTimes <= bin2.intValue() / 2);
+
+    bin2.setValue(bin2.getValue() - numTimes * 2);
+    bin3.setValue(bin3.getValue() + numTimes);
+  }
+
   public void takeIncome() {
     currentIncome.updatePlayer(this);
   }
@@ -499,5 +506,16 @@ public class Player {
 
   private void techTrackBumped() {
     // Hook to handle VPs
+  }
+
+  // END GAME
+  public void convertResourcesToVps() {
+    if (bin2.intValue() > 1) {
+      sacPower(bin2.intValue() / 2);
+    }
+
+    score.setValue(
+        score.getValue()
+            + (credits.intValue() + ore.intValue() + research.intValue() + qic.intValue() + bin3.intValue()) / 3);
   }
 }

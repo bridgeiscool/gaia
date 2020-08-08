@@ -82,6 +82,7 @@ public class Player {
   private final ObservableSet<Satellite> satellites = FXCollections.observableSet(new HashSet<>());
   private final IntegerProperty totalBuildings = new SimpleIntegerProperty(0);
   private final IntegerProperty buildingsInFeds = new SimpleIntegerProperty(0);
+  private final IntegerProperty projectedTechScoring = new SimpleIntegerProperty(0);
 
   public Player(Race race, PlayerEnum playerEnum) {
     this.race = race;
@@ -426,6 +427,10 @@ public class Player {
     return gaiaPlanets;
   }
 
+  public IntegerProperty getProjectedTechScoring() {
+    return projectedTechScoring;
+  }
+
   public void setRoundBooster(RoundBooster roundBooster) {
     if (this.roundBooster.getValue() != null) {
       this.roundBooster.getValue().addVps(this);
@@ -486,6 +491,9 @@ public class Player {
   public void advanceTech(IntegerProperty techTrack) {
     techTrack.setValue(techTrack.getValue() + 1);
     research.setValue(research.getValue() - 4);
+    if (techTrack.getValue() > 2) {
+      projectedTechScoring.setValue(projectedTechScoring.getValue() + 4);
+    }
     techTrackBumped();
   }
 

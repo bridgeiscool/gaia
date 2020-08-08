@@ -168,4 +168,12 @@ public class Game implements Serializable {
   public boolean allPlayersPassed() {
     return passedPlayers.size() == players.size();
   }
+
+  public void endGameScoring() {
+    endScoring1.addToFinalScores(players.values());
+    endScoring2.addToFinalScores(players.values());
+    for (Player player : players.values()) {
+      player.getScore().setValue(player.getScore().getValue() + player.getProjectedTechScoring().getValue());
+    }
+  }
 }

@@ -54,5 +54,7 @@
     <Label text="1o" GridPane.rowIndex="9" GridPane.columnIndex="0" />
     <Button text=">" onAction="#oreToPower" GridPane.rowIndex="9" GridPane.columnIndex="1" />  
     <Label text="1pt" GridPane.rowIndex="9" GridPane.columnIndex="2" />
+    
+    <Button text="Sac power" onAction="#sacPower" GridPane.rowIndex="10" GridPane.columnIndex="0" GridPane.columnSpan="3" />
   </GridPane>
 </VBox>

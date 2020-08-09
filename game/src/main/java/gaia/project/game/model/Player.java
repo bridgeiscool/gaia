@@ -59,6 +59,7 @@ public class Player {
   private final IntegerProperty terraCost = new SimpleIntegerProperty(3);
   private final IntegerProperty navRange = new SimpleIntegerProperty(1);
   private final IntegerProperty gaiaformerCost = new SimpleIntegerProperty(50);
+  private final IntegerProperty tempNavRange = new SimpleIntegerProperty(0);
 
   // Tech tile related
   private final Set<TechTile> techTiles = EnumSet.noneOf(TechTile.class);
@@ -437,6 +438,14 @@ public class Player {
 
   public IntegerProperty getProjectedTechScoring() {
     return projectedTechScoring;
+  }
+
+  public IntegerProperty getNavRange() {
+    return navRange;
+  }
+
+  public IntegerProperty getTempNavRange() {
+    return tempNavRange;
   }
 
   public void setRoundBooster(RoundBooster roundBooster) {

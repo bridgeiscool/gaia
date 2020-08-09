@@ -290,6 +290,7 @@ public class GameController extends BorderPane {
 
   void finishAction() {
     confirmAction.setDisable(false);
+    game.getPlayers().get(game.getActivePlayer()).getTempNavRange().setValue(0);
   }
 
   void finishRound() {

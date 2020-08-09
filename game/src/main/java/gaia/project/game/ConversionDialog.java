@@ -30,33 +30,81 @@ public class ConversionDialog extends Dialog<Void> {
   }
 
   @FXML
-  private void qicToNav() {}
+  private void qicToNav() {
+    if (activePlayer.getQic().getValue() > 0) {
+      activePlayer.getQic().setValue(activePlayer.getQic().getValue() - 1);
+      activePlayer.getTempNavRange().setValue(activePlayer.getTempNavRange().getValue() + 2);
+    }
+  }
 
   @FXML
-  private void powerToQic() {}
+  private void powerToQic() {
+    if (activePlayer.getBin3().getValue() > 3) {
+      activePlayer.getBin3().setValue(activePlayer.getBin3().getValue() - 4);
+      activePlayer.getQic().setValue(activePlayer.getQic().getValue() + 1);
+    }
+  }
 
   @FXML
-  private void qicToOre() {}
+  private void qicToOre() {
+    if (activePlayer.getQic().getValue() > 0) {
+      activePlayer.getQic().setValue(activePlayer.getQic().getValue() - 1);
+      activePlayer.getOre().setValue(activePlayer.getOre().getValue() + 1);
+    }
+  }
 
   @FXML
-  private void powerToOre() {}
+  private void powerToOre() {
+    if (activePlayer.getBin3().getValue() > 2) {
+      activePlayer.getBin3().setValue(activePlayer.getBin3().getValue() - 3);
+      activePlayer.getOre().setValue(activePlayer.getOre().getValue() + 1);
+    }
+  }
 
   @FXML
-  private void powerToKnowledge() {}
+  private void powerToKnowledge() {
+    if (activePlayer.getBin3().getValue() > 3) {
+      activePlayer.getBin3().setValue(activePlayer.getBin3().getValue() - 4);
+      activePlayer.getResearch().setValue(activePlayer.getResearch().getValue() + 1);
+    }
+  }
 
   @FXML
-  private void knowledgeToCredits() {}
+  private void knowledgeToCredits() {
+    if (activePlayer.getResearch().getValue() > 0) {
+      activePlayer.getResearch().setValue(activePlayer.getResearch().getValue() - 1);
+      activePlayer.getCredits().setValue(activePlayer.getCredits().getValue() + 1);
+    }
+  }
 
   @FXML
-  private void powerToCredits() {}
+  private void powerToCredits() {
+    if (activePlayer.getBin3().getValue() > 0) {
+      activePlayer.getBin3().setValue(activePlayer.getBin3().getValue() - 1);
+      activePlayer.getCredits().setValue(activePlayer.getCredits().getValue() + 1);
+    }
+  }
 
   @FXML
   private void oreToCredits() {
-
+    if (activePlayer.getOre().intValue() > 0) {
+      activePlayer.getOre().setValue(activePlayer.getOre().getValue() - 1);
+      activePlayer.getCredits().setValue(activePlayer.getCredits().getValue() + 1);
+    }
   }
 
   @FXML
   private void oreToPower() {
+    if (activePlayer.getOre().intValue() > 0) {
+      activePlayer.getOre().setValue(activePlayer.getOre().getValue() - 1);
+      activePlayer.getBin1().setValue(activePlayer.getBin1().getValue() + 1);
+    }
+  }
 
+  @FXML
+  private void sacPower() {
+    if (activePlayer.getBin2().intValue() > 1) {
+      activePlayer.sacPower(1);
+    }
   }
 }

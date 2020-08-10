@@ -77,6 +77,14 @@ public final class Hex extends StackPane {
     return sectorId;
   }
 
+  public double getCenterX() {
+    return centerX;
+  }
+
+  public double getCenterY() {
+    return centerY;
+  }
+
   public Optional<Planet> getPlanet() {
     return Optional.ofNullable(planet);
   }

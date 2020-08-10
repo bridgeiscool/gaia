@@ -1,6 +1,6 @@
 package gaia.project.game.model;
 
-public enum TechTile implements UpdatePlayer {
+public enum TechTile {
   CHARGE_4(p -> {}) {
     @Override
     public String display() {
@@ -34,7 +34,9 @@ public enum TechTile implements UpdatePlayer {
       return "+1q +1o";
     }
   },
-  GAIA_VP(p -> p.getGaiaBuildBonus().setValue(true)) {
+  GAIA_VP(p -> p.getGaiaPlanets().addListener((o, oldValue, newValue) -> {
+    p.getScore().setValue(p.getScore().getValue() + 3);
+  })) {
     @Override
     public String display() {
       return "GP -> 3VP";
@@ -73,7 +75,6 @@ public enum TechTile implements UpdatePlayer {
     this.update = update;
   }
 
-  @Override
   public void updatePlayer(Player player) {
     update.updatePlayer(player);
   }

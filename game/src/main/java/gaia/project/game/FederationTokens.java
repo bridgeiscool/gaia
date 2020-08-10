@@ -3,6 +3,7 @@ package gaia.project.game;
 import java.io.IOException;
 
 import gaia.project.game.model.FederationTile;
+import gaia.project.game.model.Game;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;

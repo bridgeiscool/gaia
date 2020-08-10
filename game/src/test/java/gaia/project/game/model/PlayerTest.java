@@ -1,5 +1,11 @@
 package gaia.project.game.model;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -57,5 +63,19 @@ public class PlayerTest {
   @Test(expected = IllegalArgumentException.class)
   public void exceptionOnEmptyChargeCall() {
     player.chargePower(0);
+  }
+
+  @Test
+  public void testSerialization() throws IOException, ClassNotFoundException {
+    Player player = new Player(Race.TERRANS, PlayerEnum.PLAYER1);
+    try (ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ObjectOutputStream oos = new ObjectOutputStream(baos)) {
+      oos.writeObject(player);
+      try (ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
+          ObjectInputStream ois = new ObjectInputStream(bais)) {
+        Player reRead = (Player) ois.readObject();
+
+      }
+    }
   }
 }

@@ -1,8 +1,5 @@
 package gaia.project.game.model;
 
-import gaia.project.game.Game;
-import gaia.project.game.board.Mine;
-import gaia.project.game.board.TradingPost;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.Property;
 import javafx.collections.ListChangeListener;
@@ -13,7 +10,7 @@ public enum RoundScoringBonus {
   MINE("Mine -> 2") {
     @Override
     public void addListeners(Game game, Round round) {
-      game.getPlayers().values().forEach(p -> p.getMines().addListener((SetChangeListener<Mine>) change -> {
+      game.getPlayers().values().forEach(p -> p.getMines().addListener((SetChangeListener<Coords>) change -> {
         if (game.getCurrentRound().getValue() == round && change.wasAdded()) {
           p.getScore().setValue(p.getScore().getValue() + 2);
         }
@@ -43,25 +40,21 @@ public enum RoundScoringBonus {
   TP_3("TP -> 3") {
     @Override
     public void addListeners(Game game, Round round) {
-      game.getPlayers()
-          .values()
-          .forEach(p -> p.getTradingPosts().addListener((SetChangeListener<TradingPost>) change -> {
-            if (game.getCurrentRound().getValue() == round && change.wasAdded()) {
-              p.getScore().setValue(p.getScore().getValue() + 3);
-            }
-          }));
+      game.getPlayers().values().forEach(p -> p.getTradingPosts().addListener((SetChangeListener<Coords>) change -> {
+        if (game.getCurrentRound().getValue() == round && change.wasAdded()) {
+          p.getScore().setValue(p.getScore().getValue() + 3);
+        }
+      }));
     }
   },
   TP_4("TP -> 4") {
     @Override
     public void addListeners(Game game, Round round) {
-      game.getPlayers()
-          .values()
-          .forEach(p -> p.getTradingPosts().addListener((SetChangeListener<TradingPost>) change -> {
-            if (game.getCurrentRound().getValue() == round && change.wasAdded()) {
-              p.getScore().setValue(p.getScore().getValue() + 4);
-            }
-          }));
+      game.getPlayers().values().forEach(p -> p.getTradingPosts().addListener((SetChangeListener<Coords>) change -> {
+        if (game.getCurrentRound().getValue() == round && change.wasAdded()) {
+          p.getScore().setValue(p.getScore().getValue() + 4);
+        }
+      }));
     }
   },
   DIG("DIG -> 2") {

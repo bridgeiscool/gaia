@@ -1,9 +1,11 @@
 package gaia.project.game.board;
 
+import java.io.Serializable;
+
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
-public class Mine extends Rectangle {
+public class Mine extends Rectangle implements Serializable {
   public static final int LENGTH = 20;
   public static final int WIDTH = 15;
 

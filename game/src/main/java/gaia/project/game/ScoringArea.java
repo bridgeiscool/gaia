@@ -5,6 +5,7 @@ import java.io.IOException;
 import com.google.common.base.Preconditions;
 
 import gaia.project.game.model.EndScoring;
+import gaia.project.game.model.Game;
 import gaia.project.game.model.Player;
 import gaia.project.game.model.PlayerEnum;
 import javafx.fxml.FXML;

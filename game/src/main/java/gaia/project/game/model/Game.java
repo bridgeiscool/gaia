@@ -1,5 +1,8 @@
-package gaia.project.game;
+package gaia.project.game.model;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,21 +13,15 @@ import java.util.Map;
 import java.util.Random;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 
-import gaia.project.game.model.AdvancedTechTile;
-import gaia.project.game.model.EndScoring;
-import gaia.project.game.model.FederationTile;
-import gaia.project.game.model.Player;
-import gaia.project.game.model.PlayerEnum;
-import gaia.project.game.model.Race;
-import gaia.project.game.model.Round;
-import gaia.project.game.model.RoundBooster;
-import gaia.project.game.model.RoundScoringBonus;
-import gaia.project.game.model.TechTile;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
 
 public class Game implements Serializable {
+  private static final long serialVersionUID = -3521179457356267066L;
+
   private final List<RoundBooster> roundBoosters;
   private final List<TechTile> techTiles;
   private final List<AdvancedTechTile> advancedTechTiles;
@@ -35,7 +32,7 @@ public class Game implements Serializable {
   private final FederationTile terraBonus;
 
   // Game state
-  private final Property<Round> currentRound;
+  private transient Property<Round> currentRound;
   private final List<PlayerEnum> currentPlayerOrder;
   private final List<PlayerEnum> passedPlayers;
   private PlayerEnum activePlayer;
@@ -85,14 +82,14 @@ public class Game implements Serializable {
       EndScoring endScoring1,
       EndScoring endScoring2,
       Map<PlayerEnum, Player> players) {
-    this.roundBoosters = roundBoosters;
-    this.techTiles = techTiles;
-    this.advancedTechTiles = advancedTechTiles;
+    this.roundBoosters = ImmutableList.copyOf(roundBoosters);
+    this.techTiles = ImmutableList.copyOf(techTiles);
+    this.advancedTechTiles = ImmutableList.copyOf(advancedTechTiles);
     this.terraBonus = terraBonus;
-    this.roundScoringBonuses = roundScoringBonuses;
+    this.roundScoringBonuses = ImmutableList.copyOf(roundScoringBonuses);
     this.endScoring1 = endScoring1;
     this.endScoring2 = endScoring2;
-    this.players = players;
+    this.players = ImmutableMap.copyOf(players);
 
     this.currentRound = new SimpleObjectProperty<>(Round.SETUP);
     this.currentPlayerOrder = new ArrayList<>(Arrays.asList(PlayerEnum.values()));
@@ -177,5 +174,15 @@ public class Game implements Serializable {
       player.convertResourcesToVps();
     }
 
+  }
+
+  private void writeObject(ObjectOutputStream oos) throws IOException {
+    oos.defaultWriteObject();
+    oos.writeUTF(currentRound.getValue().name());
+  }
+
+  private void readObject(ObjectInputStream ois) throws ClassNotFoundException, IOException {
+    ois.defaultReadObject();
+    currentRound = new SimpleObjectProperty<>(Round.valueOf(ois.readUTF()));
   }
 }

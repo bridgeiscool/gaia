@@ -1,17 +1,21 @@
 package gaia.project.game.model;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
 public class Income implements UpdatePlayer {
   private static final long serialVersionUID = 5922169349684403967L;
 
-  private final IntegerProperty oreIncome;
-  private final IntegerProperty creditIncome;
-  private final IntegerProperty researchIncome;
-  private final IntegerProperty qicIncome;
-  private final IntegerProperty powerIncome;
-  private final IntegerProperty chargeIncome;
+  private transient IntegerProperty oreIncome;
+  private transient IntegerProperty creditIncome;
+  private transient IntegerProperty researchIncome;
+  private transient IntegerProperty qicIncome;
+  private transient IntegerProperty powerIncome;
+  private transient IntegerProperty chargeIncome;
 
   public Income(Race race) {
     this.oreIncome = new SimpleIntegerProperty(race.getStartingOreIncome());
@@ -61,5 +65,23 @@ public class Income implements UpdatePlayer {
         player.chargePower(chargeIncome.getValue());
       }
     }
+  }
+
+  private void writeObject(ObjectOutputStream oos) throws IOException {
+    oos.writeInt(oreIncome.get());
+    oos.writeInt(creditIncome.get());
+    oos.writeInt(researchIncome.get());
+    oos.writeInt(qicIncome.get());
+    oos.writeInt(powerIncome.get());
+    oos.writeInt(chargeIncome.get());
+  }
+
+  private void readObject(ObjectInputStream ois) throws ClassNotFoundException, IOException {
+    oreIncome = new SimpleIntegerProperty(ois.readInt());
+    creditIncome = new SimpleIntegerProperty(ois.readInt());
+    researchIncome = new SimpleIntegerProperty(ois.readInt());
+    qicIncome = new SimpleIntegerProperty(ois.readInt());
+    powerIncome = new SimpleIntegerProperty(ois.readInt());
+    chargeIncome = new SimpleIntegerProperty(ois.readInt());
   }
 }

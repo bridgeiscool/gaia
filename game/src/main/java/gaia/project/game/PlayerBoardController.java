@@ -2,13 +2,7 @@ package gaia.project.game;
 
 import java.io.IOException;
 
-import gaia.project.game.board.Gaiaformer;
-import gaia.project.game.board.KnowledgeAcademy;
-import gaia.project.game.board.Mine;
-import gaia.project.game.board.PlanetaryInstitute;
-import gaia.project.game.board.QicAcademy;
-import gaia.project.game.board.ResearchLab;
-import gaia.project.game.board.TradingPost;
+import gaia.project.game.model.Coords;
 import gaia.project.game.model.Player;
 import javafx.collections.SetChangeListener;
 import javafx.fxml.FXML;
@@ -113,32 +107,27 @@ public class PlayerBoardController extends VBox {
         .bindBidirectional(player.getCurrentIncome().getChargeIncome(), StringConverters.numberWithPrefix("+P: "));
 
     mines.setText(player.getMines().size() + " / 8");
-    player.getMines().addListener((SetChangeListener<Mine>) change -> mines.setText(player.getMines().size() + " / 8"));
+    player.getMines()
+        .addListener((SetChangeListener<Coords>) change -> mines.setText(player.getMines().size() + " / 8"));
     tradingPosts.setText(player.getTradingPosts().size() + " / 4");
     player.getTradingPosts()
-        .addListener(
-            (SetChangeListener<TradingPost>) change -> tradingPosts.setText(player.getTradingPosts() + " / 4"));
+        .addListener((SetChangeListener<Coords>) change -> tradingPosts.setText(player.getTradingPosts() + " / 4"));
     researchLabs.setText(player.getResearchLabs().size() + " / 3");
     player.getResearchLabs()
-        .addListener(
-            (SetChangeListener<ResearchLab>) change -> researchLabs.setText(player.getResearchLabs() + " / 3"));
+        .addListener((SetChangeListener<Coords>) change -> researchLabs.setText(player.getResearchLabs() + " / 3"));
     planetaryInstitute.setText(player.getPi().size() + " / 1");
     player.getPi()
-        .addListener(
-            (SetChangeListener<PlanetaryInstitute>) change -> planetaryInstitute
-                .setText(player.getPi().size() + " / 1"));
+        .addListener((SetChangeListener<Coords>) change -> planetaryInstitute.setText(player.getPi().size() + " / 1"));
     knowledgeAcademy.setText(player.getKa().size() + " / 1");
     player.getKa()
-        .addListener(
-            (SetChangeListener<KnowledgeAcademy>) change -> knowledgeAcademy.setText(player.getKa().size() + " / 1"));
+        .addListener((SetChangeListener<Coords>) change -> knowledgeAcademy.setText(player.getKa().size() + " / 1"));
     qicAcademy.setText(player.getQa().size() + " / 1");
     player.getQa()
-        .addListener((SetChangeListener<QicAcademy>) change -> qicAcademy.setText(player.getQa().size() + " / 1"));
+        .addListener((SetChangeListener<Coords>) change -> qicAcademy.setText(player.getQa().size() + " / 1"));
 
     gaiaformers.setText(player.getGaiaformers().size() + " / ");
     player.getGaiaformers()
-        .addListener(
-            (SetChangeListener<Gaiaformer>) change -> gaiaformers.setText(player.getGaiaformers().size() + " /"));
+        .addListener((SetChangeListener<Coords>) change -> gaiaformers.setText(player.getGaiaformers().size() + " /"));
     availableGaiaformers.textProperty()
         .bindBidirectional(player.getAvailableGaiaformers(), new NumberStringConverter());
 

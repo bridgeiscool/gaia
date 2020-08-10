@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.function.Function;
 
 import gaia.project.game.PlanetType;
-import gaia.project.game.board.Satellite;
 import javafx.collections.SetChangeListener;
 import javafx.scene.control.Label;
 import javafx.util.converter.NumberStringConverter;
@@ -66,7 +65,7 @@ public enum EndScoring {
       label.setText(String.valueOf(player.getSatellites().size()));
       player.getSatellites()
           .addListener(
-              (SetChangeListener<Satellite>) change -> label.setText(String.valueOf(player.getSatellites().size())));
+              (SetChangeListener<Coords>) change -> label.setText(String.valueOf(player.getSatellites().size())));
     }
 
     @Override

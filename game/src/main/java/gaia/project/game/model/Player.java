@@ -1,26 +1,21 @@
 package gaia.project.game.model;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.EnumSet;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import com.google.common.base.Preconditions;
 
 import gaia.project.game.PlanetType;
-import gaia.project.game.board.Gaiaformer;
 import gaia.project.game.board.Hex;
-import gaia.project.game.board.KnowledgeAcademy;
 import gaia.project.game.board.Mine;
-import gaia.project.game.board.PlanetaryInstitute;
-import gaia.project.game.board.QicAcademy;
-import gaia.project.game.board.ResearchLab;
-import gaia.project.game.board.Satellite;
-import gaia.project.game.board.TradingPost;
-import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.Property;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
@@ -28,63 +23,64 @@ import javafx.collections.ObservableList;
 import javafx.collections.ObservableSet;
 
 // Backing bean to store player's information
-public class Player {
+public class Player implements Serializable {
+  private static final long serialVersionUID = -5027584264184182306L;
+
   private final Race race;
   private final PlayerEnum playerEnum;
-  private final IntegerProperty gaiaBin;
-  private final IntegerProperty bin1;
-  private final IntegerProperty bin2;
-  private final IntegerProperty bin3;
+  private transient IntegerProperty gaiaBin;
+  private transient IntegerProperty bin1;
+  private transient IntegerProperty bin2;
+  private transient IntegerProperty bin3;
 
-  private final IntegerProperty ore;
-  private final IntegerProperty credits;
-  private final IntegerProperty research;
-  private final IntegerProperty qic;
+  private transient IntegerProperty ore;
+  private transient IntegerProperty credits;
+  private transient IntegerProperty research;
+  private transient IntegerProperty qic;
 
-  private final IntegerProperty availableGaiaformers;
+  private transient IntegerProperty availableGaiaformers;
 
   private final Income currentIncome;
 
-  private final IntegerProperty score;
+  private transient IntegerProperty score;
 
-  private final Property<RoundBooster> roundBooster = new SimpleObjectProperty<>();
+  private transient Property<RoundBooster> roundBooster = new SimpleObjectProperty<>();
 
   // Tech track related
-  private final IntegerProperty terraformingLevel = new SimpleIntegerProperty(0);
-  private final IntegerProperty navLevel = new SimpleIntegerProperty(0);
-  private final IntegerProperty aiLevel = new SimpleIntegerProperty(0);
-  private final IntegerProperty gaiaformingLevel = new SimpleIntegerProperty(0);
-  private final IntegerProperty econLevel = new SimpleIntegerProperty(0);
-  private final IntegerProperty knowledgeLevel = new SimpleIntegerProperty(0);
-  private final IntegerProperty terraCost = new SimpleIntegerProperty(3);
-  private final IntegerProperty navRange = new SimpleIntegerProperty(1);
-  private final IntegerProperty gaiaformerCost = new SimpleIntegerProperty(50);
-  private final IntegerProperty tempNavRange = new SimpleIntegerProperty(0);
+  private transient IntegerProperty terraformingLevel = new SimpleIntegerProperty(0);
+  private transient IntegerProperty navLevel = new SimpleIntegerProperty(0);
+  private transient IntegerProperty aiLevel = new SimpleIntegerProperty(0);
+  private transient IntegerProperty gaiaformingLevel = new SimpleIntegerProperty(0);
+  private transient IntegerProperty econLevel = new SimpleIntegerProperty(0);
+  private transient IntegerProperty knowledgeLevel = new SimpleIntegerProperty(0);
+  private transient IntegerProperty terraCost = new SimpleIntegerProperty(3);
+  private transient IntegerProperty navRange = new SimpleIntegerProperty(1);
+  private transient IntegerProperty gaiaformerCost = new SimpleIntegerProperty(50);
+  private transient IntegerProperty tempNavRange = new SimpleIntegerProperty(0);
 
   // Tech tile related
-  private final Set<TechTile> techTiles = EnumSet.noneOf(TechTile.class);
-  private final IntegerProperty flippableTechTiles = new SimpleIntegerProperty(0);
-  private final BooleanProperty gaiaBuildBonus = new SimpleBooleanProperty(false);
-  private final IntegerProperty bigBuildingPower = new SimpleIntegerProperty(3);
-  private final ObservableSet<PlanetType> builtOn = FXCollections.observableSet(EnumSet.noneOf(PlanetType.class));
-  private final IntegerProperty gaiaPlanets = new SimpleIntegerProperty(0);
+  private transient ObservableSet<TechTile> techTiles = FXCollections.observableSet(new HashSet<>());
+  private transient IntegerProperty flippableTechTiles = new SimpleIntegerProperty(0);
+  private transient IntegerProperty bigBuildingPower = new SimpleIntegerProperty(3);
+  private transient ObservableSet<PlanetType> builtOn = FXCollections.observableSet(new HashSet<>());
+  private transient IntegerProperty gaiaPlanets = new SimpleIntegerProperty(0);
 
   // Buildings, etc
-  private final ObservableSet<Mine> mines = FXCollections.observableSet(new HashSet<>());
-  private final ObservableSet<TradingPost> tradingPosts = FXCollections.observableSet(new HashSet<>());
-  private final ObservableSet<ResearchLab> researchLabs = FXCollections.observableSet(new HashSet<>());
-  private final ObservableSet<PlanetaryInstitute> pi = FXCollections.observableSet(new HashSet<>());
-  private final ObservableSet<KnowledgeAcademy> ka = FXCollections.observableSet(new HashSet<>());
-  private final ObservableSet<QicAcademy> qa = FXCollections.observableSet(new HashSet<>());
-  private final ObservableSet<Gaiaformer> gaiaformers = FXCollections.observableSet(new HashSet<>());
-  private final ObservableList<FederationTile> federationTiles = FXCollections.observableList(new ArrayList<>());
+  private transient ObservableSet<Coords> mines = FXCollections.observableSet(new HashSet<>());
+  private transient ObservableSet<Coords> tradingPosts = FXCollections.observableSet(new HashSet<>());
+  private transient ObservableSet<Coords> researchLabs = FXCollections.observableSet(new HashSet<>());
+  private transient ObservableSet<Coords> pi = FXCollections.observableSet(new HashSet<>());
+  private transient ObservableSet<Coords> ka = FXCollections.observableSet(new HashSet<>());
+  private transient ObservableSet<Coords> qa = FXCollections.observableSet(new HashSet<>());
+  private transient ObservableSet<Coords> gaiaformers = FXCollections.observableSet(new HashSet<>());
+  private transient ObservableList<FederationTile> federationTiles = FXCollections.observableList(new ArrayList<>());
 
   // Scoring Related
-  private final ObservableSet<Integer> sectors = FXCollections.observableSet(new HashSet<>());
-  private final ObservableSet<Satellite> satellites = FXCollections.observableSet(new HashSet<>());
-  private final IntegerProperty totalBuildings = new SimpleIntegerProperty(0);
-  private final IntegerProperty buildingsInFeds = new SimpleIntegerProperty(0);
-  private final IntegerProperty projectedTechScoring = new SimpleIntegerProperty(0);
+  private transient ObservableSet<Integer> sectors = FXCollections.observableSet(new HashSet<>());
+  private transient ObservableSet<Coords> satellites = FXCollections.observableSet(new HashSet<>());
+  private transient IntegerProperty totalBuildings = new SimpleIntegerProperty(0);
+  private transient IntegerProperty buildingsInFeds = new SimpleIntegerProperty(0);
+  private transient IntegerProperty projectedTechScoring = new SimpleIntegerProperty(0);
 
   public Player(Race race, PlayerEnum playerEnum) {
     this.race = race;
@@ -364,10 +360,6 @@ public class Player {
     return techTiles;
   }
 
-  public BooleanProperty getGaiaBuildBonus() {
-    return gaiaBuildBonus;
-  }
-
   public IntegerProperty getBigBuildingPower() {
     return bigBuildingPower;
   }
@@ -376,27 +368,27 @@ public class Player {
     return builtOn;
   }
 
-  public ObservableSet<Mine> getMines() {
+  public ObservableSet<Coords> getMines() {
     return mines;
   }
 
-  public ObservableSet<TradingPost> getTradingPosts() {
+  public ObservableSet<Coords> getTradingPosts() {
     return tradingPosts;
   }
 
-  public ObservableSet<ResearchLab> getResearchLabs() {
+  public ObservableSet<Coords> getResearchLabs() {
     return researchLabs;
   }
 
-  public ObservableSet<PlanetaryInstitute> getPi() {
+  public ObservableSet<Coords> getPi() {
     return pi;
   }
 
-  public ObservableSet<KnowledgeAcademy> getKa() {
+  public ObservableSet<Coords> getKa() {
     return ka;
   }
 
-  public ObservableSet<QicAcademy> getQa() {
+  public ObservableSet<Coords> getQa() {
     return qa;
   }
 
@@ -404,7 +396,7 @@ public class Player {
     return availableGaiaformers;
   }
 
-  public ObservableSet<Gaiaformer> getGaiaformers() {
+  public ObservableSet<Coords> getGaiaformers() {
     return gaiaformers;
   }
 
@@ -463,7 +455,7 @@ public class Player {
     return sectors;
   }
 
-  public ObservableSet<Satellite> getSatellites() {
+  public ObservableSet<Coords> getSatellites() {
     return satellites;
   }
 
@@ -486,7 +478,7 @@ public class Player {
 
   private void buildMine(Hex hex, boolean setup) {
     Mine mine = new Mine(hex, race.getColor());
-    mines.add(mine);
+    mines.add(new Coords(hex.getCenterX(), hex.getCenterY()));
     hex.addMine(mine);
 
     // Update income
@@ -527,5 +519,108 @@ public class Player {
     score.setValue(
         score.getValue()
             + (credits.intValue() + ore.intValue() + research.intValue() + qic.intValue() + bin3.intValue()) / 3);
+  }
+
+  // Serialization
+  private void writeObject(ObjectOutputStream oos) throws IOException {
+    oos.defaultWriteObject();
+    oos.writeInt(gaiaBin.get());
+    oos.writeInt(bin1.get());
+    oos.writeInt(bin2.get());
+    oos.writeInt(bin3.get());
+    oos.writeInt(ore.get());
+    oos.writeInt(credits.get());
+    oos.writeInt(research.get());
+    oos.writeInt(qic.get());
+    oos.writeInt(availableGaiaformers.get());
+    oos.writeInt(score.get());
+    oos.writeUTF(roundBooster.getValue() == null ? "NONE" : roundBooster.getValue().name());
+
+    // Tech track
+    oos.writeInt(terraformingLevel.get());
+    oos.writeInt(navLevel.get());
+    oos.writeInt(aiLevel.get());
+    oos.writeInt(gaiaformingLevel.get());
+    oos.writeInt(econLevel.get());
+    oos.writeInt(knowledgeLevel.get());
+    oos.writeInt(terraCost.get());
+    oos.writeInt(navRange.get());
+    oos.writeInt(gaiaformerCost.get());
+
+    // Tech tile
+    oos.writeInt(flippableTechTiles.get());
+    oos.writeInt(bigBuildingPower.get());
+    oos.writeObject(new HashSet<>(builtOn));
+    oos.writeInt(gaiaPlanets.get());
+
+    // Buildings etc
+    oos.writeObject(new HashSet<>(mines));
+    oos.writeObject(new HashSet<>(tradingPosts));
+    oos.writeObject(new HashSet<>(researchLabs));
+    oos.writeObject(new HashSet<>(pi));
+    oos.writeObject(new HashSet<>(ka));
+    oos.writeObject(new HashSet<>(qa));
+    oos.writeObject(new HashSet<>(gaiaformers));
+    oos.writeObject(new ArrayList<>(federationTiles));
+
+    // Scoring related
+    oos.writeObject(new HashSet<>(sectors));
+    oos.writeObject(new HashSet<>(satellites));
+    oos.writeInt(totalBuildings.get());
+    oos.writeInt(buildingsInFeds.get());
+    oos.writeInt(projectedTechScoring.get());
+  }
+
+  @SuppressWarnings("unchecked")
+  private void readObject(ObjectInputStream ois) throws ClassNotFoundException, IOException {
+    ois.defaultReadObject();
+    gaiaBin = new SimpleIntegerProperty(ois.readInt());
+    bin1 = new SimpleIntegerProperty(ois.readInt());
+    bin2 = new SimpleIntegerProperty(ois.readInt());
+    bin3 = new SimpleIntegerProperty(ois.readInt());
+    ore = new SimpleIntegerProperty(ois.readInt());
+    credits = new SimpleIntegerProperty(ois.readInt());
+    research = new SimpleIntegerProperty(ois.readInt());
+    qic = new SimpleIntegerProperty(ois.readInt());
+    availableGaiaformers = new SimpleIntegerProperty(ois.readInt());
+    score = new SimpleIntegerProperty(ois.readInt());
+    String maybeBooster = ois.readUTF();
+    roundBooster = "NONE".equals(maybeBooster)
+        ? new SimpleObjectProperty<>()
+        : new SimpleObjectProperty<>(RoundBooster.valueOf(ois.readUTF()));
+
+    // Tech track
+    terraformingLevel = new SimpleIntegerProperty(ois.readInt());
+    navLevel = new SimpleIntegerProperty(ois.readInt());
+    aiLevel = new SimpleIntegerProperty(ois.readInt());
+    gaiaformingLevel = new SimpleIntegerProperty(ois.readInt());
+    econLevel = new SimpleIntegerProperty(ois.readInt());
+    knowledgeLevel = new SimpleIntegerProperty(ois.readInt());
+    terraCost = new SimpleIntegerProperty(ois.readInt());
+    navRange = new SimpleIntegerProperty(ois.readInt());
+    gaiaformerCost = new SimpleIntegerProperty(ois.readInt());
+
+    // Tech tile
+    flippableTechTiles = new SimpleIntegerProperty(ois.readInt());
+    bigBuildingPower = new SimpleIntegerProperty(ois.readInt());
+    builtOn = FXCollections.observableSet((Set<PlanetType>) ois.readObject());
+    gaiaPlanets = new SimpleIntegerProperty(ois.readInt());
+
+    // Buildings
+    mines = FXCollections.observableSet((Set<Coords>) ois.readObject());
+    tradingPosts = FXCollections.observableSet((Set<Coords>) ois.readObject());
+    researchLabs = FXCollections.observableSet((Set<Coords>) ois.readObject());
+    pi = FXCollections.observableSet((Set<Coords>) ois.readObject());
+    ka = FXCollections.observableSet((Set<Coords>) ois.readObject());
+    qa = FXCollections.observableSet((Set<Coords>) ois.readObject());
+    gaiaformers = FXCollections.observableSet((Set<Coords>) ois.readObject());
+    federationTiles = FXCollections.observableList((List<FederationTile>) ois.readObject());
+
+    // Scoring related
+    sectors = FXCollections.observableSet((Set<Integer>) ois.readObject());
+    satellites = FXCollections.observableSet((Set<Coords>) ois.readObject());
+    totalBuildings = new SimpleIntegerProperty(ois.readInt());
+    buildingsInFeds = new SimpleIntegerProperty(ois.readInt());
+    projectedTechScoring = new SimpleIntegerProperty(ois.readInt());
   }
 }

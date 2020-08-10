@@ -11,6 +11,7 @@ import java.util.Random;
 import java.util.stream.Collectors;
 
 import gaia.project.game.board.GameBoard;
+import gaia.project.game.model.Game;
 import gaia.project.game.model.Player;
 import gaia.project.game.model.PlayerEnum;
 import gaia.project.game.model.Race;

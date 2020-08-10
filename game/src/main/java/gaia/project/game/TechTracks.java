@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.google.common.base.Preconditions;
 
+import gaia.project.game.model.Game;
 import gaia.project.game.model.Player;
 import gaia.project.game.model.PlayerEnum;
 import javafx.beans.property.IntegerProperty;

@@ -68,7 +68,31 @@ public class ScoringArea extends BorderPane {
     round4.setText(game.getRoundScoringBonuses().get(3).getText());
     round5.setText(game.getRoundScoringBonuses().get(4).getText());
     round6.setText(game.getRoundScoringBonuses().get(5).getText());
-    setup.setTextFill(Color.WHITE);
+
+    // Initialize highlighted round, which may not be SETUP when reload happens
+    switch (game.getCurrentRound().getValue()) {
+      case SETUP:
+        setup.setTextFill(Color.WHITE);
+        break;
+      case ROUND1:
+        round1.setTextFill(Color.WHITE);
+        break;
+      case ROUND2:
+        round2.setTextFill(Color.WHITE);
+        break;
+      case ROUND3:
+        round3.setTextFill(Color.WHITE);
+        break;
+      case ROUND4:
+        round4.setTextFill(Color.WHITE);
+        break;
+      case ROUND5:
+        round5.setTextFill(Color.WHITE);
+        break;
+      case ROUND6:
+        round6.setTextFill(Color.WHITE);
+        break;
+    }
 
     this.endScoring1.setText(scoring1.getDisplayText());
     this.endScoring2.setText(scoring2.getDisplayText());

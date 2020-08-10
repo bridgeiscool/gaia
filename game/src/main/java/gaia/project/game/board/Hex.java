@@ -9,14 +9,15 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 
-import gaia.project.game.CallBack;
 import gaia.project.game.PlanetType;
 import gaia.project.game.model.Coords;
 import gaia.project.game.model.Player;
+import gaia.project.game.model.PlayerEnum;
 import javafx.collections.ObservableList;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Polygon;
@@ -27,7 +28,11 @@ public final class Hex extends StackPane {
   private final HexPolygon polygon;
   @Nullable
   private final Planet planet;
-  private boolean hasBuilding;
+  @Nullable
+  private Building building;
+  @Nullable
+  private PlayerEnum builder;
+  private boolean hasGaiaformer;
 
   public static Hex emptyHex(Coords coords, int sectorId) {
     return new Hex(coords, sectorId, null);
@@ -85,6 +90,18 @@ public final class Hex extends StackPane {
     return Optional.ofNullable(planet);
   }
 
+  public boolean hasBuilding() {
+    return building != null;
+  }
+
+  public Optional<PlayerEnum> getBuilder() {
+    return Optional.ofNullable(builder);
+  }
+
+  public int getPower() {
+    return building == null ? 0 : building.getPower();
+  }
+
   public Collection<Hex> getHexesWithinRange(List<Hex> hexes, int i) {
     return hexes.stream()
         .filter(h -> distanceTo(h.getCoords()) < TWO_ROOT_3 * HEX_SIZE * i + 1.0)
@@ -100,13 +117,13 @@ public final class Hex extends StackPane {
     return distanceTo(coords) < TWO_ROOT_3 * HEX_SIZE * range + 1.0;
   }
 
-  public void highlight(Player activePlayer, BiConsumer<Hex, Player> toExecute, CallBack callBack) {
+  public void highlight(Player activePlayer, BiConsumer<Hex, Player> toExecute, Consumer<Hex> callBack) {
     ObservableList<String> styleClass = polygon.getStyleClass();
     styleClass.clear();
     styleClass.add("highlightedHex");
     this.setOnMouseClicked(me -> {
       toExecute.accept(this, activePlayer);
-      callBack.call();
+      callBack.accept(this);
     });
   }
 
@@ -119,15 +136,12 @@ public final class Hex extends StackPane {
 
   public void addMine(Mine mine) {
     // Remove a gaiaformer if it's there
-    if (getChildren().get(getChildren().size() - 1) instanceof Gaiaformer) {
+    if (hasGaiaformer) {
       getChildren().remove(getChildren().size() - 1);
     }
     getChildren().add(mine);
-    hasBuilding = true;
-  }
-
-  public boolean hasBuilding() {
-    return hasBuilding;
+    building = Building.MINE;
+    builder = mine.getPlayer();
   }
 
   @Override

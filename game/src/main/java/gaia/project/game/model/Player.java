@@ -278,6 +278,11 @@ public class Player implements Serializable {
     }
   }
 
+  public void leechPower(int power) {
+    chargePower(power);
+    Util.minus(score, power - 1);
+  }
+
   public void chargePower(int toCharge) {
     Preconditions.checkArgument(toCharge > 0);
     int remainingCharge = toCharge;
@@ -512,6 +517,11 @@ public class Player implements Serializable {
     tempNavRange.setValue(0);
   }
 
+  public int getPowerGain(Hex hex) {
+    Preconditions.checkArgument(hex.getPower() > 0);
+    return hex.getPower() == 3 ? bigBuildingPower.intValue() : hex.getPower();
+  }
+
   // Action methods
   public void buildMine(Hex hex) {
     buildMine(hex, false);
@@ -522,7 +532,7 @@ public class Player implements Serializable {
   }
 
   private void buildMine(Hex hex, boolean setup) {
-    Mine mine = new Mine(hex, race.getColor());
+    Mine mine = new Mine(hex, race.getColor(), playerEnum);
     mines.add(hex.getCoords());
     hex.addMine(mine);
 

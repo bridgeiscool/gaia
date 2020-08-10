@@ -6,9 +6,11 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -117,7 +119,7 @@ public class GameController extends BorderPane {
           gameBoard.hexes()
               .stream()
               .filter(h -> h.getCoords().equals(m))
-              .forEach(h -> h.addMine(new Mine(h, p.getRace().getColor())));
+              .forEach(h -> h.addMine(new Mine(h, p.getRace().getColor(), p.getPlayerEnum())));
         });
       });
 
@@ -219,7 +221,7 @@ public class GameController extends BorderPane {
     Platform.runLater(setupQueue.remove(0));
   }
 
-  private void finishUserSetupMine() {
+  private void finishUserSetupMine(Hex hex) {
     gameBoard.clearHighlighting();
     if (setupQueue.isEmpty()) {
       pickRoundBoosters();
@@ -365,9 +367,35 @@ public class GameController extends BorderPane {
     };
   }
 
-  private void finishMineBuild() {
+  private void finishMineBuild(Hex hex) {
     gameBoard.clearHighlighting();
+    checkForLeech(hex);
     finishAction();
+  }
+
+  private void checkForLeech(Hex hex) {
+    Collection<Hex> withinRange = hex.getHexesWithinRange(gameBoard.hexes(), 2);
+    Map<PlayerEnum, Hex> powerMap = withinRange.stream()
+        .filter(h -> h.hasBuilding())
+        .filter(h -> h.getBuilder().get() != game.getActivePlayer())
+        .collect(
+            Collectors.toMap(h -> h.getBuilder().get(), h -> h, (h1, h2) -> h1.getPower() > h2.getPower() ? h1 : h2));
+    for (Entry<PlayerEnum, Hex> entry : powerMap.entrySet()) {
+      Player player = game.getPlayers().get(entry.getKey());
+      int powerToGain = player.getPowerGain(entry.getValue());
+      if (powerToGain == 1) {
+        player.chargePower(1);
+      } else {
+        new Alert(
+            AlertType.CONFIRMATION,
+            player.getRace().getRaceName() + " may gain " + powerToGain + " for " + (powerToGain - 1),
+            ButtonType.NO,
+            ButtonType.YES).showAndWait()
+                .filter(response -> response == ButtonType.YES)
+                .ifPresent(bt -> player.leechPower(powerToGain));
+      }
+
+    }
   }
 
   private void finishAction() {

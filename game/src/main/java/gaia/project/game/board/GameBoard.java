@@ -7,13 +7,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import com.google.common.annotations.VisibleForTesting;
 
-import gaia.project.game.CallBack;
 import gaia.project.game.PlanetType;
 import gaia.project.game.model.Player;
 import javafx.collections.ObservableList;
@@ -114,7 +114,7 @@ public class GameBoard extends Group implements Iterable<Sector> {
       Player activePlayer,
       Predicate<Hex> filter,
       BiConsumer<Hex, Player> toExecute,
-      CallBack callBack) {
+      Consumer<Hex> callBack) {
     hexes().stream().filter(filter).forEach(h -> h.highlight(activePlayer, toExecute, callBack));
   }
 

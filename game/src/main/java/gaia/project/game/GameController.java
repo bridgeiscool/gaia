@@ -139,6 +139,10 @@ public class GameController extends BorderPane {
     }
   }
 
+  Game getGame() {
+    return game;
+  }
+
   // Button Methods
   @FXML
   private void showActions() {

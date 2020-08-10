@@ -2,8 +2,10 @@ package gaia.project.game;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 import gaia.project.game.model.Game;
 import javafx.fxml.FXMLLoader;
@@ -18,6 +20,8 @@ import javafx.stage.Stage;
 
 public class GaiaProjectController {
   private final Stage primaryStage;
+
+  private GameController currentGame;
 
   public GaiaProjectController(Stage primaryStage) {
     this.primaryStage = primaryStage;
@@ -38,9 +42,9 @@ public class GaiaProjectController {
   public void loadGame() {
     FileChooser fileChooser = new FileChooser();
     fileChooser.setTitle("Choose a game to load");
-    File saveFile = fileChooser.showOpenDialog(primaryStage);
+    File loadFile = fileChooser.showOpenDialog(primaryStage);
     try {
-      loadGame(saveFile);
+      loadGame(loadFile);
     } catch (IOException | ClassNotFoundException e) {
       new Alert(AlertType.ERROR, "Could not load previous turn: " + e.getMessage(), ButtonType.OK).showAndWait();
     }
@@ -55,7 +59,17 @@ public class GaiaProjectController {
   }
 
   public void saveGame() {
-
+    if (currentGame != null) {
+      FileChooser fileChooser = new FileChooser();
+      fileChooser.setTitle("Choose save file");
+      File saveFile = fileChooser.showSaveDialog(primaryStage);
+      try (FileOutputStream fos = new FileOutputStream(saveFile);
+          ObjectOutputStream oos = new ObjectOutputStream(fos)) {
+        oos.writeObject(currentGame.getGame());
+      } catch (IOException e) {
+        new Alert(AlertType.ERROR, "Could not save game: " + e.getMessage(), ButtonType.OK).showAndWait();
+      }
+    }
   }
 
   private class MenuPane extends BorderPane {

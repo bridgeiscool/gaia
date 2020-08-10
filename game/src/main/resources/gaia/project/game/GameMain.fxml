@@ -21,7 +21,7 @@
       <Button fx:id="showActions" text="Show Actions" onAction="#showActions" disable="true" />
       <Button fx:id="conversions" text="Conversions" onAction="#showConversions" disable="true" />
       <Button fx:id="confirmAction" text="Confirm" onAction="#confirmAction" disable="true" />
-      <Button fx:id="resetTurn" text="Reset Turn" onAction="#resetTurn" disable="true" />
+      <Button fx:id="resetTurn" text="Reset Turn" onAction="#resetTurn" />
     </HBox>
   </top>
 </fx:root>

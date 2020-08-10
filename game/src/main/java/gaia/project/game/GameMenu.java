@@ -30,6 +30,16 @@ public class GameMenu extends MenuBar {
   }
 
   @FXML
+  private void loadGame() {
+    mainController.loadGame();
+  }
+
+  @FXML
+  private void saveGame() {
+    mainController.saveGame();
+  }
+
+  @FXML
   private void exitGame() {
     Platform.exit();
   }

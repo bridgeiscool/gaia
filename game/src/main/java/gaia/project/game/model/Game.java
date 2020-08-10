@@ -16,11 +16,15 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 
+import gaia.project.game.board.GameBoard;
+import gaia.project.game.board.SectorLocation;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
 
 public class Game implements Serializable {
   private static final long serialVersionUID = -3521179457356267066L;
+
+  private final List<SectorLocation> gameBoard;
 
   private final List<RoundBooster> roundBoosters;
   private final List<TechTile> techTiles;
@@ -44,6 +48,8 @@ public class Game implements Serializable {
   public static Game generateGame(long seed) {
     Random random = new Random(seed);
 
+    List<SectorLocation> gameBoard = GameBoard.random(random).getSectorLocations();
+
     List<TechTile> techTiles = new ArrayList<>(Arrays.asList(TechTile.values()));
     Collections.shuffle(techTiles, random);
     List<AdvancedTechTile> advTechTiles = new ArrayList<>(Arrays.asList(AdvancedTechTile.values()));
@@ -63,6 +69,7 @@ public class Game implements Serializable {
     players.put(PlayerEnum.PLAYER3, new Player(Race.HADSCH_HALLAS, PlayerEnum.PLAYER3));
 
     return new Game(
+        gameBoard,
         allBoosters.subList(0, 6),
         techTiles,
         advTechTiles.subList(0, 6),
@@ -74,6 +81,7 @@ public class Game implements Serializable {
   }
 
   private Game(
+      List<SectorLocation> gameBoard,
       List<RoundBooster> roundBoosters,
       List<TechTile> techTiles,
       List<AdvancedTechTile> advancedTechTiles,
@@ -82,6 +90,7 @@ public class Game implements Serializable {
       EndScoring endScoring1,
       EndScoring endScoring2,
       Map<PlayerEnum, Player> players) {
+    this.gameBoard = ImmutableList.copyOf(gameBoard);
     this.roundBoosters = ImmutableList.copyOf(roundBoosters);
     this.techTiles = ImmutableList.copyOf(techTiles);
     this.advancedTechTiles = ImmutableList.copyOf(advancedTechTiles);
@@ -143,6 +152,10 @@ public class Game implements Serializable {
 
   public PlayerEnum getActivePlayer() {
     return activePlayer;
+  }
+
+  public List<SectorLocation> getGameBoard() {
+    return gameBoard;
   }
 
   public void newRound() {

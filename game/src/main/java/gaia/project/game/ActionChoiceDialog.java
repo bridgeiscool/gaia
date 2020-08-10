@@ -2,6 +2,7 @@ package gaia.project.game;
 
 import java.io.IOException;
 
+import gaia.project.game.model.Game;
 import gaia.project.game.model.Player;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -14,7 +15,7 @@ import javafx.scene.control.Dialog;
 
 public class ActionChoiceDialog extends Dialog<Actions> {
   private static final ButtonType SUBMIT = new ButtonType("Submit", ButtonData.OK_DONE);
-  private final GameController gameController;
+  private final Game game;
   private Actions selectedAction;
 
   @FXML
@@ -34,8 +35,8 @@ public class ActionChoiceDialog extends Dialog<Actions> {
   @FXML
   private Button pass;
 
-  ActionChoiceDialog(GameController gameController) {
-    this.gameController = gameController;
+  ActionChoiceDialog(Game game) {
+    this.game = game;
 
     try {
       FXMLLoader loader = new FXMLLoader(ActionChoiceDialog.class.getResource("ActionChoice.fxml"));
@@ -59,7 +60,7 @@ public class ActionChoiceDialog extends Dialog<Actions> {
   }
 
   private void toggleButtonEnable() {
-    Player player = gameController.getGame().getPlayers().get(gameController.getGame().getActivePlayer());
+    Player player = game.getPlayers().get(game.getActivePlayer());
 
     buildMine.setDisable(true);
     startGaiaProject.setDisable(true);
@@ -93,8 +94,6 @@ public class ActionChoiceDialog extends Dialog<Actions> {
   @FXML
   private void advanceTech() {
     selectedAction = Actions.ADVANCE_TECH;
-    // gameController.activateTechTracks();
-    // System.out.println("Closing dialog tech");
   }
 
   @FXML
@@ -110,8 +109,6 @@ public class ActionChoiceDialog extends Dialog<Actions> {
   @FXML
   private void pass() {
     selectedAction = Actions.PASS;
-    // gameController.selectNewRoundBooster();
-    // System.out.println("Closing dialog pass");
 
   }
 }

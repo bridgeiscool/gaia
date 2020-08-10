@@ -19,6 +19,7 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 
 public class GameBoard extends Group implements Iterable<Sector> {
+  private final List<SectorLocation> sectorLocations;
   private final List<Sector> sectors;
 
   public static GameBoard originalBoard() {
@@ -49,7 +50,7 @@ public class GameBoard extends Group implements Iterable<Sector> {
     return maybeValid;
   }
 
-  private List<Hex> hexes() {
+  public List<Hex> hexes() {
     return sectors.stream().flatMap(s -> StreamSupport.stream(s.spliterator(), false)).collect(Collectors.toList());
   }
 
@@ -73,8 +74,8 @@ public class GameBoard extends Group implements Iterable<Sector> {
     return true;
   }
 
-  @VisibleForTesting
   public GameBoard(List<SectorLocation> sectorPlacements) {
+    this.sectorLocations = sectorPlacements;
     sectors = new ArrayList<>();
 
     // Position all sectors on the screen
@@ -96,6 +97,10 @@ public class GameBoard extends Group implements Iterable<Sector> {
     sectors.add(Sector8.getInstance(this, sectorPlacements.get(7)));
     sectors.add(Sector9.getInstance(this, sectorPlacements.get(8)));
     sectors.add(Sector10.getInstance(this, sectorPlacements.get(9)));
+  }
+
+  public List<SectorLocation> getSectorLocations() {
+    return sectorLocations;
   }
 
   @Override

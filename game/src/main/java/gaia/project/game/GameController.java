@@ -1,22 +1,24 @@
 package gaia.project.game;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Random;
 import java.util.stream.Collectors;
 
 import gaia.project.game.board.GameBoard;
+import gaia.project.game.board.Mine;
 import gaia.project.game.model.Game;
 import gaia.project.game.model.Player;
 import gaia.project.game.model.PlayerEnum;
 import gaia.project.game.model.Race;
 import gaia.project.game.model.Round;
-import gaia.project.game.model.RoundBooster;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -26,12 +28,15 @@ import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Separator;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 public class GameController extends BorderPane {
+  private static final File PREV_TURN_START = new File("temp.gp");
+
   @FXML
   private BorderPane mainPane;
 
@@ -45,6 +50,8 @@ public class GameController extends BorderPane {
   @FXML
   private Button resetTurn;
 
+  private final GaiaProjectController parent;
+
   private final Game game;
   private final GameBoard gameBoard;
   private final List<RoundBoosterTile> roundBoosters;
@@ -52,7 +59,7 @@ public class GameController extends BorderPane {
   private final List<Runnable> setupQueue = new ArrayList<>();
   private final TechTracks techTracks;
 
-  public GameController() {
+  public GameController(GaiaProjectController parent, Game game, boolean load) {
     FXMLLoader loader = new FXMLLoader(GameController.class.getResource("GameMain.fxml"));
     loader.setController(this);
     loader.setRoot(this);
@@ -63,11 +70,10 @@ public class GameController extends BorderPane {
     }
 
     // Init game board
-    Random random = new Random(System.currentTimeMillis());
-    this.gameBoard = GameBoard.random(random);
+    this.parent = parent;
+    this.game = game;
+    this.gameBoard = new GameBoard(game.getGameBoard());
     mainPane.centerProperty().set(gameBoard);
-
-    this.game = Game.generateGame();
 
     // Init player boards
     PlayerBoardController player1 = new PlayerBoardController(game.getPlayers().get(PlayerEnum.PLAYER1));
@@ -85,11 +91,9 @@ public class GameController extends BorderPane {
     PowerActionsController powerActions = new PowerActionsController();
 
     HBox roundBoosterBox = new HBox(2);
-    List<RoundBooster> allBoosters = new ArrayList<>(Arrays.asList(RoundBooster.values()));
-    Collections.shuffle(allBoosters, random);
 
     ObservableList<Node> children = roundBoosterBox.getChildren();
-    this.roundBoosters = allBoosters.subList(0, 6).stream().map(RoundBoosterTile::new).collect(Collectors.toList());
+    this.roundBoosters = game.getRoundBoosters().stream().map(RoundBoosterTile::new).collect(Collectors.toList());
     children.addAll(roundBoosters);
 
     VBox boostersAndFeds = new VBox(5, new FederationTokens(game), roundBoosterBox);
@@ -103,18 +107,43 @@ public class GameController extends BorderPane {
     HBox hbox = new HBox(5, player1, player2, player3);
     mainPane.setBottom(hbox);
 
-    // Top buttons
-  }
+    if (load) {
+      game.getPlayers().values().forEach(p -> {
+        p.getMines().forEach(m -> {
+          gameBoard.hexes()
+              .stream()
+              .filter(h -> h.hasCoords(m))
+              .forEach(h -> h.addMine(new Mine(h, p.getRace().getColor())));
+        });
+      });
 
-  Game getGame() {
-    return game;
+      // TODO: Add other buildings...
+
+      // Add back round booster tokens
+      if (game.getCurrentRound().getValue() != Round.SETUP) {
+        for (Player player : game.getPlayers().values()) {
+          roundBoosters.forEach(rb -> {
+            if (rb.getRoundBooster() == player.getRoundBooster()) {
+              rb.addToken(player);
+            }
+          });
+        }
+      }
+    }
+
+    // If a new game or reloading during setup, call setupGame; otherwise prompt player for action
+    if (!load || game.getCurrentRound().getValue() == Round.SETUP) {
+      setupGame();
+    } else {
+      promptPlayerAction();
+    }
   }
 
   // Button Methods
   @FXML
   private void showActions() {
     showActions.setDisable(true);
-    Optional<Actions> selectedAction = new ActionChoiceDialog(this).showAndWait();
+    Optional<Actions> selectedAction = new ActionChoiceDialog(game).showAndWait();
     if (selectedAction.isPresent()) {
       switch (selectedAction.get()) {
         case ADVANCE_TECH:
@@ -153,11 +182,17 @@ public class GameController extends BorderPane {
 
   @FXML
   private void resetTurn() {
-    // TODO: Implement
+    try {
+      parent.loadGame(PREV_TURN_START);
+    } catch (IOException | ClassNotFoundException e) {
+      new Alert(AlertType.ERROR, "Could not load previous turn: " + e.getMessage(), ButtonType.OK).showAndWait();
+    }
   }
 
   // SETUP METHODS
-  void setupGame() {
+  private void setupGame() {
+    // Save at the beginning of the setup - will have to reset whole setup if anything goes wrong...
+    saveState();
     List<PlayerEnum> order = getPlacementOrder(game.getPlayers());
     for (PlayerEnum toPrompt : order) {
       setupQueue.add(() -> {
@@ -258,6 +293,7 @@ public class GameController extends BorderPane {
   }
 
   private void promptPlayerAction() {
+    saveState();
     showActions.setDisable(false);
     conversions.setDisable(false);
     confirmAction.setDisable(true);
@@ -315,4 +351,12 @@ public class GameController extends BorderPane {
     System.out.println("Game is over!");
   }
 
+  private void saveState() {
+    try (FileOutputStream fos = new FileOutputStream(PREV_TURN_START);
+        ObjectOutputStream oos = new ObjectOutputStream(fos)) {
+      oos.writeObject(game);
+    } catch (IOException e) {
+      new Alert(AlertType.ERROR, "Could not save game state: " + e.getMessage(), ButtonType.OK).showAndWait();
+    }
+  }
 }

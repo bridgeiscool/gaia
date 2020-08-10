@@ -1,41 +1,61 @@
 package gaia.project.game;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 
+import gaia.project.game.model.Game;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 public class GaiaProjectController {
   private final Stage primaryStage;
 
-  private StartScreenController startScreenController;
-  private Scene startScreenScene;
-  private GameController gameController;
-  private Scene gameScene;
-
   public GaiaProjectController(Stage primaryStage) {
     this.primaryStage = primaryStage;
-    initializeScenes();
-  }
-
-  private void initializeScenes() {
-    startScreenController = new StartScreenController(this);
-    startScreenScene = new Scene(new MenuPane(startScreenController));
-
-    gameController = new GameController();
-    gameScene = new Scene(new MenuPane(gameController));
+    StartScreenController startScreenController = new StartScreenController(this);
+    Scene startScreenScene = new Scene(new MenuPane(startScreenController));
 
     primaryStage.setScene(startScreenScene);
   }
 
   // Game flow methods
   public void newGame() {
-    System.out.println("New Game");
-    primaryStage.setScene(gameScene);
-    gameController.setupGame();
+    Game game = Game.generateGame();
+
+    GameController gameController = new GameController(this, game, false);
+    primaryStage.setScene(new Scene(new MenuPane(gameController)));
+  }
+
+  public void loadGame() {
+    FileChooser fileChooser = new FileChooser();
+    fileChooser.setTitle("Choose a game to load");
+    File saveFile = fileChooser.showOpenDialog(primaryStage);
+    try {
+      loadGame(saveFile);
+    } catch (IOException | ClassNotFoundException e) {
+      new Alert(AlertType.ERROR, "Could not load previous turn: " + e.getMessage(), ButtonType.OK).showAndWait();
+    }
+  }
+
+  public void loadGame(File file) throws IOException, ClassNotFoundException {
+    try (FileInputStream fis = new FileInputStream(file); ObjectInputStream ois = new ObjectInputStream(fis)) {
+      Game game = (Game) ois.readObject();
+      GameController gameController = new GameController(this, game, true);
+      primaryStage.setScene(new Scene(new MenuPane(gameController)));
+    }
+  }
+
+  public void saveGame() {
+
   }
 
   private class MenuPane extends BorderPane {

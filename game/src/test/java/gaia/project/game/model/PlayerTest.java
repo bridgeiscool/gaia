@@ -68,6 +68,8 @@ public class PlayerTest {
   @Test
   public void testSerialization() throws IOException, ClassNotFoundException {
     Player player = new Player(Race.TERRANS, PlayerEnum.PLAYER1);
+    player.getMines().add(new Coords(0.0, 0.1));
+    player.setRoundBooster(RoundBooster.BIGS);
     try (ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ObjectOutputStream oos = new ObjectOutputStream(baos)) {
       oos.writeObject(player);

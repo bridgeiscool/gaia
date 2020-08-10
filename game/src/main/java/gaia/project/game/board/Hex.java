@@ -14,12 +14,14 @@ import javax.annotation.Nullable;
 
 import gaia.project.game.CallBack;
 import gaia.project.game.PlanetType;
+import gaia.project.game.model.Coords;
 import gaia.project.game.model.Player;
 import javafx.collections.ObservableList;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Polygon;
 
 public final class Hex extends StackPane {
+  private static final double THRESHOLD = .0001;
   private final double centerX;
   private final double centerY;
   private final int sectorId;
@@ -89,13 +91,6 @@ public final class Hex extends StackPane {
     return Optional.ofNullable(planet);
   }
 
-  static class HexPolygon extends Polygon {
-    HexPolygon(double... points) {
-      super(points);
-      this.getStyleClass().add("hexStyle");
-    }
-  }
-
   public Collection<Hex> getHexesWithinRange(List<Hex> hexes, int i) {
     return hexes.stream()
         .filter(h -> distanceTo(h) < TWO_ROOT_3 * HEX_SIZE * i + 1.0)
@@ -105,6 +100,11 @@ public final class Hex extends StackPane {
 
   private double distanceTo(Hex other) {
     return Math.sqrt(Math.pow(centerX - other.centerX, 2) + Math.pow(centerY - other.centerY, 2));
+  }
+
+  public boolean hasCoords(Coords coords) {
+    return Math
+        .sqrt(Math.pow(centerX - coords.getCenterX(), 2) + Math.pow(centerY - coords.getCenterY(), 2)) < THRESHOLD;
   }
 
   public void highlight(Player activePlayer, CallBack callBack) {
@@ -158,5 +158,12 @@ public final class Hex extends StackPane {
         + centerY
         + "), Sector "
         + sectorId;
+  }
+
+  static class HexPolygon extends Polygon {
+    HexPolygon(double... points) {
+      super(points);
+      this.getStyleClass().add("hexStyle");
+    }
   }
 }

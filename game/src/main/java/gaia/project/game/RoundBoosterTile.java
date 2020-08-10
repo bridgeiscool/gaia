@@ -44,16 +44,28 @@ public class RoundBoosterTile extends StackPane {
       rectangle.highlight();
       this.setOnMouseClicked(me -> {
         activePlayer.setRoundBooster(roundBooster);
-        currentPlayer = Optional.of(activePlayer.getPlayerEnum());
-        getChildren().add(new Circle(10, activePlayer.getRace().getColor()));
+        addToken(activePlayer);
         callBack.call();
       });
     }
   }
 
+  public RoundBooster getRoundBooster() {
+    return roundBooster;
+  }
+
+  public void setRoundBooster(RoundBooster roundBooster) {
+    this.roundBooster = roundBooster;
+  }
+
   public void clearHighlighting() {
     setOnMouseClicked(null);
     rectangle.setNormalBorder();
+  }
+
+  public void addToken(Player player) {
+    currentPlayer = Optional.of(player.getPlayerEnum());
+    getChildren().add(new Circle(10, player.getRace().getColor()));
   }
 
   public void clearToken(PlayerEnum activePlayer) {

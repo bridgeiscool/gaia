@@ -24,10 +24,14 @@ public class StartScreenController extends BorderPane {
 
   // Button Handling Methods
   @FXML
-  public void startGame() throws IOException {}
+  public void startGame() {
+    controller.newGame();
+  }
 
   @FXML
-  public void joinGame() throws IOException {}
+  public void loadGame() {
+    controller.loadGame();
+  }
 
   @FXML
   void exitGame() {

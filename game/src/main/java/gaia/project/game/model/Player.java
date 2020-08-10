@@ -451,6 +451,10 @@ public class Player implements Serializable {
     this.roundBooster.setValue(roundBooster);
   }
 
+  public RoundBooster getRoundBooster() {
+    return roundBooster.getValue();
+  }
+
   public ObservableSet<Integer> getSectors() {
     return sectors;
   }
@@ -587,7 +591,7 @@ public class Player implements Serializable {
     String maybeBooster = ois.readUTF();
     roundBooster = "NONE".equals(maybeBooster)
         ? new SimpleObjectProperty<>()
-        : new SimpleObjectProperty<>(RoundBooster.valueOf(ois.readUTF()));
+        : new SimpleObjectProperty<>(RoundBooster.valueOf(maybeBooster));
 
     // Tech track
     terraformingLevel = new SimpleIntegerProperty(ois.readInt());

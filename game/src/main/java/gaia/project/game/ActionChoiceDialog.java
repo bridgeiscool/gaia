@@ -62,7 +62,8 @@ public class ActionChoiceDialog extends Dialog<Actions> {
   private void toggleButtonEnable() {
     Player player = game.getPlayers().get(game.getActivePlayer());
 
-    buildMine.setDisable(true);
+    buildMine.setDisable(
+        player.getMines().size() == 8 || player.getCredits().getValue() < 2 || player.getOre().intValue() < 1);
     startGaiaProject.setDisable(true);
     upgradeBuilding.setDisable(true);
     federate.setDisable(true);

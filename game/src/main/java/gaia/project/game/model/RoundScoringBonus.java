@@ -60,7 +60,11 @@ public enum RoundScoringBonus {
   DIG("DIG -> 2") {
     @Override
     public void addListeners(Game game, Round round) {
-      // TODO: Implement
+      game.getPlayers().values().forEach(p -> p.getCurrentDigs().addListener((o, oldValue, newValue) -> {
+        if (game.getCurrentRound().getValue() == round && newValue.intValue() > oldValue.intValue()) {
+          Util.plus(p.getScore(), 2 * (newValue.intValue() - oldValue.intValue()));
+        }
+      }));
     }
   },
   TECH("TECH -> 2") {

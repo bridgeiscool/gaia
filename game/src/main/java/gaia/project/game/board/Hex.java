@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
@@ -21,52 +22,49 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Polygon;
 
 public final class Hex extends StackPane {
-  private static final double THRESHOLD = .0001;
-  private final double centerX;
-  private final double centerY;
+  private final Coords coords;
   private final int sectorId;
   private final HexPolygon polygon;
-
   @Nullable
   private final Planet planet;
+  private boolean hasBuilding;
 
-  public static Hex emptyHex(double centerX, double centerY, int sectorId) {
-    return new Hex(centerX, centerY, sectorId, null);
+  public static Hex emptyHex(Coords coords, int sectorId) {
+    return new Hex(coords, sectorId, null);
   }
 
-  public static Hex withPlanet(double centerX, double centerY, int sectorId, PlanetType planetType) {
-    return new Hex(centerX, centerY, sectorId, new Planet(centerX, centerY, planetType));
+  public static Hex withPlanet(Coords coords, int sectorId, PlanetType planetType) {
+    return new Hex(coords, sectorId, new Planet(coords.getCenterX(), coords.getCenterY(), planetType));
   }
 
   // Planet is @Nullable
-  private Hex(double centerX, double centerY, int sectorId, Planet planet) {
-    this.centerX = centerX;
-    this.centerY = centerY;
+  private Hex(Coords coords, int sectorId, Planet planet) {
+    this.coords = coords;
     this.sectorId = sectorId;
     this.planet = planet;
-    setLayoutX(centerX);
-    setLayoutY(centerY);
+    setLayoutX(coords.getCenterX());
+    setLayoutY(coords.getCenterY());
     this.setPrefSize(4.0 * HEX_SIZE, 2 * ROOT_3 * HEX_SIZE);
     this.setMinSize(4.0 * HEX_SIZE, 2 * ROOT_3 * HEX_SIZE);
     this.polygon = new HexPolygon(
         // TOP LEFT
-        centerX - HEX_SIZE,
-        centerY - HEX_SIZE * ROOT_3,
+        coords.getCenterX() - HEX_SIZE,
+        coords.getCenterY() - HEX_SIZE * ROOT_3,
         // TOP RIGHT
-        centerX + HEX_SIZE,
-        centerY - HEX_SIZE * ROOT_3,
+        coords.getCenterX() + HEX_SIZE,
+        coords.getCenterY() - HEX_SIZE * ROOT_3,
         // RIGHT
-        centerX + HEX_SIZE * 2,
-        centerY,
+        coords.getCenterX() + HEX_SIZE * 2,
+        coords.getCenterY(),
         // BOTTOM_RIGHT
-        centerX + HEX_SIZE,
-        centerY + HEX_SIZE * ROOT_3,
+        coords.getCenterX() + HEX_SIZE,
+        coords.getCenterY() + HEX_SIZE * ROOT_3,
         // BOTTOM_LEFT
-        centerX - HEX_SIZE,
-        centerY + HEX_SIZE * ROOT_3,
+        coords.getCenterX() - HEX_SIZE,
+        coords.getCenterY() + HEX_SIZE * ROOT_3,
         // LEFT
-        centerX - HEX_SIZE * 2,
-        centerY);
+        coords.getCenterX() - HEX_SIZE * 2,
+        coords.getCenterY());
     this.getChildren().add(polygon);
 
     if (planet != null) {
@@ -79,12 +77,8 @@ public final class Hex extends StackPane {
     return sectorId;
   }
 
-  public double getCenterX() {
-    return centerX;
-  }
-
-  public double getCenterY() {
-    return centerY;
+  public Coords getCoords() {
+    return coords;
   }
 
   public Optional<Planet> getPlanet() {
@@ -93,26 +87,25 @@ public final class Hex extends StackPane {
 
   public Collection<Hex> getHexesWithinRange(List<Hex> hexes, int i) {
     return hexes.stream()
-        .filter(h -> distanceTo(h) < TWO_ROOT_3 * HEX_SIZE * i + 1.0)
+        .filter(h -> distanceTo(h.getCoords()) < TWO_ROOT_3 * HEX_SIZE * i + 1.0)
         .filter(h -> !h.equals(this))
         .collect(Collectors.toList());
   }
 
-  private double distanceTo(Hex other) {
-    return Math.sqrt(Math.pow(centerX - other.centerX, 2) + Math.pow(centerY - other.centerY, 2));
+  private double distanceTo(Coords other) {
+    return coords.distanceTo(other);
   }
 
-  public boolean hasCoords(Coords coords) {
-    return Math
-        .sqrt(Math.pow(centerX - coords.getCenterX(), 2) + Math.pow(centerY - coords.getCenterY(), 2)) < THRESHOLD;
+  public boolean isWithinRangeOf(Coords coords, int range) {
+    return distanceTo(coords) < TWO_ROOT_3 * HEX_SIZE * range + 1.0;
   }
 
-  public void highlight(Player activePlayer, CallBack callBack) {
+  public void highlight(Player activePlayer, BiConsumer<Hex, Player> toExecute, CallBack callBack) {
     ObservableList<String> styleClass = polygon.getStyleClass();
     styleClass.clear();
     styleClass.add("highlightedHex");
     this.setOnMouseClicked(me -> {
-      activePlayer.buildSetupMine(this);
+      toExecute.accept(this, activePlayer);
       callBack.call();
     });
   }
@@ -125,7 +118,16 @@ public final class Hex extends StackPane {
   }
 
   public void addMine(Mine mine) {
+    // Remove a gaiaformer if it's there
+    if (getChildren().get(getChildren().size() - 1) instanceof Gaiaformer) {
+      getChildren().remove(getChildren().size() - 1);
+    }
     getChildren().add(mine);
+    hasBuilding = true;
+  }
+
+  public boolean hasBuilding() {
+    return hasBuilding;
   }
 
   @Override
@@ -141,21 +143,21 @@ public final class Hex extends StackPane {
       return false;
     Hex hex = (Hex) obj;
     // field comparison
-    return centerX == hex.centerX && centerY == hex.centerY && sectorId == hex.sectorId;
+    return coords.equals(hex.getCoords()) && sectorId == hex.sectorId;
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(centerX, centerY);
+    return Objects.hash(coords, sectorId);
   }
 
   @Override
   public String toString() {
     return (planet == null ? "Empty: " : planet.getPlanetType().toString() + ": ")
         + "("
-        + centerX
+        + coords.getCenterX()
         + ", "
-        + centerY
+        + coords.getCenterY()
         + "), Sector "
         + sectorId;
   }

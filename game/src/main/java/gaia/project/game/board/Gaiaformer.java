@@ -1,5 +1,7 @@
 package gaia.project.game.board;
 
-public class Gaiaformer {
+import javafx.scene.shape.Polygon;
+
+public class Gaiaformer extends Polygon {
 
 }

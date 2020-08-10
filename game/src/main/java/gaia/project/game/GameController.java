@@ -10,11 +10,14 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import gaia.project.game.board.GameBoard;
+import gaia.project.game.board.Hex;
 import gaia.project.game.board.Mine;
 import gaia.project.game.board.Planet;
+import gaia.project.game.model.Coords;
 import gaia.project.game.model.Game;
 import gaia.project.game.model.Player;
 import gaia.project.game.model.PlayerEnum;
@@ -113,7 +116,7 @@ public class GameController extends BorderPane {
         p.getMines().forEach(m -> {
           gameBoard.hexes()
               .stream()
-              .filter(h -> h.hasCoords(m))
+              .filter(h -> h.getCoords().equals(m))
               .forEach(h -> h.addMine(new Mine(h, p.getRace().getColor())));
         });
       });
@@ -158,6 +161,8 @@ public class GameController extends BorderPane {
           selectNewRoundBooster();
           break;
         case BUILD_MINE:
+          selectMineBuild();
+          break;
         case GAIA_PROJECT:
         case UPGRADE_BUILDING:
         case FEDERATE:
@@ -206,6 +211,7 @@ public class GameController extends BorderPane {
             activePlayer,
             h -> activePlayer.getRace()
                 .getHomePlanet() == h.getPlanet().map(Planet::getPlanetType).orElse(PlanetType.NONE),
+            (hex, player) -> player.buildSetupMine(hex),
             this::finishUserSetupMine);
       });
     }
@@ -309,7 +315,7 @@ public class GameController extends BorderPane {
     confirmAction.setDisable(true);
   }
 
-  void selectNewRoundBooster() {
+  private void selectNewRoundBooster() {
     if (game.getCurrentRound().getValue() != Round.ROUND6) {
       roundBoosters
           .forEach(rb -> rb.highlight(game.getPlayers().get(game.getActivePlayer()), this::newRoundBoosterSelected));
@@ -326,21 +332,50 @@ public class GameController extends BorderPane {
     finishAction();
   }
 
-  void activateTechTracks() {
+  private void activateTechTracks() {
     techTracks.highlightTracks(game.getPlayers().get(game.getActivePlayer()), this::finishTrackBump);
   }
 
-  void finishTrackBump() {
+  private void finishTrackBump() {
     techTracks.clearActivation();
     finishAction();
   }
 
-  void finishAction() {
+  private void selectMineBuild() {
+    Player activePlayer = game.getPlayers().get(game.getActivePlayer());
+    gameBoard.highlightHexes(activePlayer, possibleMineBuilds(activePlayer), (hex, player) -> {
+      player.buildMine(hex);
+    }, this::finishMineBuild);
+  }
+
+  private Predicate<Hex> possibleMineBuilds(Player activePlayer) {
+    return hex -> {
+      for (Coords coords : activePlayer.allBuildingLocations()) {
+        if (hex.getPlanet().isPresent()
+            && !hex.hasBuilding()
+            && hex.isWithinRangeOf(
+                coords,
+                activePlayer.getNavRange().intValue() + activePlayer.getTempNavRange().intValue())
+            && activePlayer.canDigTo(hex)) {
+          return true;
+        }
+      }
+
+      return false;
+    };
+  }
+
+  private void finishMineBuild() {
+    gameBoard.clearHighlighting();
+    finishAction();
+  }
+
+  private void finishAction() {
     confirmAction.setDisable(false);
     game.getPlayers().get(game.getActivePlayer()).getTempNavRange().setValue(0);
   }
 
-  void finishRound() {
+  private void finishRound() {
     System.out.println("Round over!");
     // TODO: Clear actions
 

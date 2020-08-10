@@ -3,8 +3,11 @@ package gaia.project.game.model;
 import java.io.Serializable;
 import java.util.Objects;
 
+import com.google.common.math.DoubleMath;
+
 public class Coords implements Serializable {
   private static final long serialVersionUID = 8966739407025893484L;
+  private static final double THRESHOLD = .000001;
 
   private final double centerX;
   private final double centerY;
@@ -22,6 +25,10 @@ public class Coords implements Serializable {
     return centerY;
   }
 
+  public double distanceTo(Coords other) {
+    return Math.sqrt(Math.pow(centerX - other.centerX, 2) + Math.pow(centerY - other.centerY, 2));
+  }
+
   @Override
   public boolean equals(Object obj) {
     // self check
@@ -34,8 +41,10 @@ public class Coords implements Serializable {
     if (getClass() != obj.getClass())
       return false;
     Coords coords = (Coords) obj;
+
     // field comparison
-    return centerX == coords.centerX && centerY == coords.centerY;
+    return DoubleMath.fuzzyEquals(centerX, coords.centerX, THRESHOLD)
+        && DoubleMath.fuzzyEquals(centerY, coords.centerY, THRESHOLD);
   }
 
   @Override

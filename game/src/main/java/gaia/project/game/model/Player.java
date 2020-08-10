@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableSet;
 
 import gaia.project.game.PlanetType;
 import gaia.project.game.board.Hex;
@@ -57,6 +58,7 @@ public class Player implements Serializable {
   private transient IntegerProperty navRange = new SimpleIntegerProperty(1);
   private transient IntegerProperty gaiaformerCost = new SimpleIntegerProperty(50);
   private transient IntegerProperty tempNavRange = new SimpleIntegerProperty(0);
+  private transient IntegerProperty currentDigs = new SimpleIntegerProperty(0);
 
   // Tech tile related
   private transient ObservableSet<TechTile> techTiles = FXCollections.observableSet(new HashSet<>());
@@ -440,6 +442,10 @@ public class Player implements Serializable {
     return tempNavRange;
   }
 
+  public IntegerProperty getCurrentDigs() {
+    return currentDigs;
+  }
+
   public void setRoundBooster(RoundBooster roundBooster) {
     if (this.roundBooster.getValue() != null) {
       this.roundBooster.getValue().addVps(this);
@@ -471,6 +477,41 @@ public class Player implements Serializable {
     return buildingsInFeds;
   }
 
+  // Utility methods
+  public Set<Coords> allBuildingLocations() {
+    return ImmutableSet.<Coords> builder()
+        .addAll(mines)
+        .addAll(tradingPosts)
+        .addAll(researchLabs)
+        .addAll(pi)
+        .addAll(ka)
+        .addAll(qa)
+        .build();
+  }
+
+  public boolean canDigTo(Hex hex) {
+    Preconditions.checkArgument(hex.getPlanet().isPresent());
+    PlanetType planetType = hex.getPlanet().get().getPlanetType();
+    if (planetType == PlanetType.TRANSDIM) {
+      return false;
+    }
+
+    if (planetType == PlanetType.GAIA) {
+      return gaiaformed(hex) || qic.get() > 0;
+    }
+
+    return race.getHomePlanet().numDigsTo(planetType) - currentDigs.intValue() <= ore.intValue() / terraCost.intValue();
+  }
+
+  private boolean gaiaformed(Hex hex) {
+    return gaiaformers.stream().anyMatch(c -> hex.getCoords().equals(c));
+  }
+
+  public void endTurn() {
+    currentDigs.setValue(0);
+    tempNavRange.setValue(0);
+  }
+
   // Action methods
   public void buildMine(Hex hex) {
     buildMine(hex, false);
@@ -482,7 +523,7 @@ public class Player implements Serializable {
 
   private void buildMine(Hex hex, boolean setup) {
     Mine mine = new Mine(hex, race.getColor());
-    mines.add(new Coords(hex.getCenterX(), hex.getCenterY()));
+    mines.add(hex.getCoords());
     hex.addMine(mine);
 
     // Update income
@@ -491,12 +532,34 @@ public class Player implements Serializable {
     }
 
     // Update planet counts
-    builtOn.add(hex.getPlanet().get().getPlanetType());
-    if (hex.getPlanet().get().getPlanetType() == PlanetType.GAIA) {
+    PlanetType planetType = hex.getPlanet().get().getPlanetType();
+    builtOn.add(planetType);
+    if (planetType == PlanetType.GAIA) {
       gaiaPlanets.setValue(gaiaPlanets.getValue() + 1);
     }
     totalBuildings.setValue(totalBuildings.getValue() + 1);
     sectors.add(hex.getSectorId());
+
+    if (!setup) {
+      // Handle cost for transformation
+      if (planetType == PlanetType.GAIA) {
+        if (gaiaformed(hex)) {
+          gaiaformers.remove(hex.getCoords());
+        } else {
+          Util.minus(qic, 1);
+        }
+      } else {
+        if (race.getHomePlanet().numDigsTo(planetType) > currentDigs.intValue()) {
+          int diff = race.getHomePlanet().numDigsTo(planetType) - currentDigs.intValue();
+          Util.plus(currentDigs, diff);
+          Util.minus(ore, diff * terraCost.intValue());
+        }
+      }
+
+      // Pay mine cost
+      Util.minus(ore, 1);
+      Util.minus(credits, 2);
+    }
 
     // TODO: Add logic to check if it adds onto a previous federation
   }
@@ -603,6 +666,9 @@ public class Player implements Serializable {
     terraCost = new SimpleIntegerProperty(ois.readInt());
     navRange = new SimpleIntegerProperty(ois.readInt());
     gaiaformerCost = new SimpleIntegerProperty(ois.readInt());
+    // These two are not written because they are ephemeral
+    tempNavRange = new SimpleIntegerProperty(0);
+    currentDigs = new SimpleIntegerProperty(0);
 
     // Tech tile
     flippableTechTiles = new SimpleIntegerProperty(ois.readInt());

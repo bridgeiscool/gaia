@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 
 import gaia.project.game.board.GameBoard;
 import gaia.project.game.board.Mine;
+import gaia.project.game.board.Planet;
 import gaia.project.game.model.Game;
 import gaia.project.game.model.Player;
 import gaia.project.game.model.PlayerEnum;
@@ -199,8 +200,13 @@ public class GameController extends BorderPane {
     saveState();
     List<PlayerEnum> order = getPlacementOrder(game.getPlayers());
     for (PlayerEnum toPrompt : order) {
+      Player activePlayer = game.getPlayers().get(toPrompt);
       setupQueue.add(() -> {
-        gameBoard.highlightHexes(game.getPlayers().get(toPrompt), this::finishUserSetupMine);
+        gameBoard.highlightHexes(
+            activePlayer,
+            h -> activePlayer.getRace()
+                .getHomePlanet() == h.getPlanet().map(Planet::getPlanetType).orElse(PlanetType.NONE),
+            this::finishUserSetupMine);
       });
     }
 

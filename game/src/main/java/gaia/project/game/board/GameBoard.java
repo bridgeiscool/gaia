@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -108,13 +109,8 @@ public class GameBoard extends Group implements Iterable<Sector> {
     return sectors.iterator();
   }
 
-  public void highlightHexes(Player activePlayer, CallBack callBack) {
-    for (Hex hex : hexes()) {
-      if (activePlayer.getRace()
-          .getHomePlanet() == hex.getPlanet().map(Planet::getPlanetType).orElse(PlanetType.NONE)) {
-        hex.highlight(activePlayer, callBack);
-      }
-    }
+  public void highlightHexes(Player activePlayer, Predicate<Hex> filter, CallBack callBack) {
+    hexes().stream().filter(filter).forEach(h -> h.highlight(activePlayer, callBack));
   }
 
   public void clearHighlighting() {

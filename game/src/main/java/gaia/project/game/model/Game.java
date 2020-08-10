@@ -19,6 +19,7 @@ import com.google.common.collect.ImmutableMap;
 import gaia.project.game.board.GameBoard;
 import gaia.project.game.board.SectorLocation;
 import javafx.beans.property.Property;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
 public class Game implements Serializable {
@@ -34,6 +35,19 @@ public class Game implements Serializable {
   private final EndScoring endScoring2;
   private final Map<PlayerEnum, Player> players;
   private final FederationTile terraBonus;
+
+  // Power Actions
+  private transient Property<Boolean> k3ActionTaken = new SimpleBooleanProperty(false);
+  private transient Property<Boolean> doubleTfActionTaken = new SimpleBooleanProperty(false);
+  private transient Property<Boolean> creditsActionTaken = new SimpleBooleanProperty(false);
+  private transient Property<Boolean> oreActionTaken = new SimpleBooleanProperty(false);
+  private transient Property<Boolean> k2ActionTaken = new SimpleBooleanProperty(false);
+  private transient Property<Boolean> tfActionTaken = new SimpleBooleanProperty(false);
+  private transient Property<Boolean> ptActionTaken = new SimpleBooleanProperty(false);
+
+  private transient Property<Boolean> q2ActionTaken = new SimpleBooleanProperty(false);
+  private transient Property<Boolean> q3ActionTaken = new SimpleBooleanProperty(false);
+  private transient Property<Boolean> q4ActionTaken = new SimpleBooleanProperty(false);
 
   // Game state
   private transient Property<Round> currentRound;
@@ -158,6 +172,50 @@ public class Game implements Serializable {
     return gameBoard;
   }
 
+  public static long getSerialversionuid() {
+    return serialVersionUID;
+  }
+
+  public Property<Boolean> getK3ActionTaken() {
+    return k3ActionTaken;
+  }
+
+  public Property<Boolean> getDoubleTfActionTaken() {
+    return doubleTfActionTaken;
+  }
+
+  public Property<Boolean> getCreditsActionTaken() {
+    return creditsActionTaken;
+  }
+
+  public Property<Boolean> getOreActionTaken() {
+    return oreActionTaken;
+  }
+
+  public Property<Boolean> getK2ActionTaken() {
+    return k2ActionTaken;
+  }
+
+  public Property<Boolean> getTfActionTaken() {
+    return tfActionTaken;
+  }
+
+  public Property<Boolean> getPtActionTaken() {
+    return ptActionTaken;
+  }
+
+  public Property<Boolean> getQ2ActionTaken() {
+    return q2ActionTaken;
+  }
+
+  public Property<Boolean> getQ3ActionTaken() {
+    return q3ActionTaken;
+  }
+
+  public Property<Boolean> getQ4ActionTaken() {
+    return q4ActionTaken;
+  }
+
   public void newRound() {
     currentRound.setValue(currentRound.getValue().nextRound());
     activePlayer = currentPlayerOrder.get(0);
@@ -192,10 +250,30 @@ public class Game implements Serializable {
   private void writeObject(ObjectOutputStream oos) throws IOException {
     oos.defaultWriteObject();
     oos.writeUTF(currentRound.getValue().name());
+    oos.writeBoolean(k3ActionTaken.getValue());
+    oos.writeBoolean(doubleTfActionTaken.getValue());
+    oos.writeBoolean(creditsActionTaken.getValue());
+    oos.writeBoolean(oreActionTaken.getValue());
+    oos.writeBoolean(k2ActionTaken.getValue());
+    oos.writeBoolean(tfActionTaken.getValue());
+    oos.writeBoolean(ptActionTaken.getValue());
+    oos.writeBoolean(q2ActionTaken.getValue());
+    oos.writeBoolean(q3ActionTaken.getValue());
+    oos.writeBoolean(q4ActionTaken.getValue());
   }
 
   private void readObject(ObjectInputStream ois) throws ClassNotFoundException, IOException {
     ois.defaultReadObject();
     currentRound = new SimpleObjectProperty<>(Round.valueOf(ois.readUTF()));
+    k3ActionTaken = new SimpleBooleanProperty(ois.readBoolean());
+    doubleTfActionTaken = new SimpleBooleanProperty(ois.readBoolean());
+    creditsActionTaken = new SimpleBooleanProperty(ois.readBoolean());
+    oreActionTaken = new SimpleBooleanProperty(ois.readBoolean());
+    k2ActionTaken = new SimpleBooleanProperty(ois.readBoolean());
+    tfActionTaken = new SimpleBooleanProperty(ois.readBoolean());
+    ptActionTaken = new SimpleBooleanProperty(ois.readBoolean());
+    q2ActionTaken = new SimpleBooleanProperty(ois.readBoolean());
+    q3ActionTaken = new SimpleBooleanProperty(ois.readBoolean());
+    q4ActionTaken = new SimpleBooleanProperty(ois.readBoolean());
   }
 }

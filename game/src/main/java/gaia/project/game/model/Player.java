@@ -310,6 +310,11 @@ public class Player implements Serializable {
     bin3.setValue(bin3.getValue() + numTimes);
   }
 
+  public void spendPower(int numPower) {
+    Util.minus(bin3, numPower);
+    Util.plus(bin1, numPower);
+  }
+
   public void takeIncome() {
     currentIncome.updatePlayer(this);
   }

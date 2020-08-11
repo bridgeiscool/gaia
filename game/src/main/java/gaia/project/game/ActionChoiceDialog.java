@@ -68,7 +68,9 @@ public class ActionChoiceDialog extends Dialog<Actions> {
     upgradeBuilding.setDisable(true);
     federate.setDisable(true);
     advanceTech.setDisable(player.getResearch().getValue() < 4);
-    powerAction.setDisable(true);
+    powerAction.setDisable(
+        player.getBin3().intValue() < game.getCheapestPowerAction()
+            && player.getQic().intValue() < game.getCheapestQicAction());
     specialAction.setDisable(true);
   }
 

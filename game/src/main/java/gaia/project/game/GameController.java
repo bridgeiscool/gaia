@@ -61,9 +61,10 @@ public class GameController extends BorderPane {
   private final Game game;
   private final GameBoard gameBoard;
   private final List<RoundBoosterTile> roundBoosters;
+  private final TechTracks techTracks;
+  private final PowerActionsController powerActionsController;
 
   private final List<Runnable> setupQueue = new ArrayList<>();
-  private final TechTracks techTracks;
 
   public GameController(GaiaProjectController parent, Game game, boolean load) {
     FXMLLoader loader = new FXMLLoader(GameController.class.getResource("GameMain.fxml"));
@@ -94,7 +95,7 @@ public class GameController extends BorderPane {
 
     // Init tech tracks
     techTracks = new TechTracks(game);
-    PowerActionsController powerActions = new PowerActionsController();
+    powerActionsController = new PowerActionsController(this);
 
     HBox roundBoosterBox = new HBox(2);
 
@@ -107,7 +108,7 @@ public class GameController extends BorderPane {
 
     HBox miscContent = new HBox(10, new ScoringArea(game), boostersAndFeds);
 
-    VBox vbox = new VBox(5, techTracks, powerActions, new Separator(), miscContent);
+    VBox vbox = new VBox(5, techTracks, powerActionsController, new Separator(), miscContent);
     mainPane.setRight(vbox);
 
     HBox hbox = new HBox(5, player1, player2, player3);
@@ -156,19 +157,21 @@ public class GameController extends BorderPane {
     Optional<Actions> selectedAction = new ActionChoiceDialog(game).showAndWait();
     if (selectedAction.isPresent()) {
       switch (selectedAction.get()) {
+        case BUILD_MINE:
+          selectMineBuild();
+          break;
         case ADVANCE_TECH:
           activateTechTracks();
+          break;
+        case POWER_ACTION:
+          highlightPowerActions();
           break;
         case PASS:
           selectNewRoundBooster();
           break;
-        case BUILD_MINE:
-          selectMineBuild();
-          break;
         case GAIA_PROJECT:
         case UPGRADE_BUILDING:
         case FEDERATE:
-        case POWER_ACTION:
         case SPECIAL_ACTION:
           throw new IllegalStateException("Not implemented yet!");
       }
@@ -343,7 +346,7 @@ public class GameController extends BorderPane {
     finishAction();
   }
 
-  private void selectMineBuild() {
+  void selectMineBuild() {
     Player activePlayer = game.getPlayers().get(game.getActivePlayer());
     gameBoard.highlightHexes(activePlayer, possibleMineBuilds(activePlayer), (hex, player) -> {
       player.buildMine(hex);
@@ -394,13 +397,22 @@ public class GameController extends BorderPane {
                 .filter(response -> response == ButtonType.YES)
                 .ifPresent(bt -> player.leechPower(powerToGain));
       }
-
     }
+  }
+
+  private void highlightPowerActions() {
+    powerActionsController.highlightActions(game.getPlayers().get(game.getActivePlayer()), this::finishPowerAction);
+  }
+
+  void finishPowerAction() {
+    powerActionsController.clearHighlighting();
+    finishAction();
   }
 
   private void finishAction() {
     confirmAction.setDisable(false);
     game.getPlayers().get(game.getActivePlayer()).getTempNavRange().setValue(0);
+    game.getPlayers().get(game.getActivePlayer()).getCurrentDigs().setValue(0);
   }
 
   private void finishRound() {

@@ -244,7 +244,43 @@ public class Game implements Serializable {
       player.getScore().setValue(player.getScore().getValue() + player.getProjectedTechScoring().getValue());
       player.convertResourcesToVps();
     }
+  }
 
+  public int getCheapestPowerAction() {
+    if (!ptActionTaken.getValue() || !tfActionTaken.getValue()) {
+      return 3;
+    }
+
+    if (!creditsActionTaken.getValue() || !oreActionTaken.getValue() || !k2ActionTaken.getValue()) {
+      return 4;
+    }
+
+    if (!doubleTfActionTaken.getValue()) {
+      return 5;
+    }
+
+    if (!k3ActionTaken.getValue()) {
+      return 7;
+    }
+
+    // Just has to be bigger than possible power someone could have
+    return 100;
+  }
+
+  public int getCheapestQicAction() {
+    if (!q2ActionTaken.getValue()) {
+      return 2;
+    }
+
+    if (!q3ActionTaken.getValue()) {
+      return 3;
+    }
+
+    if (!q4ActionTaken.getValue()) {
+      return 4;
+    }
+
+    return 20;
   }
 
   private void writeObject(ObjectOutputStream oos) throws IOException {

@@ -118,8 +118,29 @@
 	-fx-stroke-width: 1;
 }
 
+.powerActionHighlighted {
+	-fx-fill: purple;
+	-fx-stroke: white;
+	-fx-stroke-type: outside;
+	-fx-stroke-width: 2;
+}
+
 .qicAction {
 	-fx-fill: green;
+	-fx-stroke: black;
+	-fx-stroke-type: outside;
+	-fx-stroke-width: 1;
+}
+
+.qicActionHighlighted {
+	-fx-fill: green;
+	-fx-stroke: white;
+	-fx-stroke-type: outside;
+	-fx-stroke-width: 2;
+}
+
+.takenAction {
+	-fx-fill: gray;
 	-fx-stroke: black;
 	-fx-stroke-type: outside;
 	-fx-stroke-width: 1;

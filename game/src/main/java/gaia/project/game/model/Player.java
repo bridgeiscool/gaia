@@ -15,6 +15,7 @@ import com.google.common.collect.ImmutableSet;
 import gaia.project.game.PlanetType;
 import gaia.project.game.board.Hex;
 import gaia.project.game.board.Mine;
+import gaia.project.game.board.TradingPost;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -77,6 +78,9 @@ public class Player implements Serializable {
   private transient ObservableSet<Coords> gaiaformers = FXCollections.observableSet(new HashSet<>());
   private transient ObservableList<FederationTile> federationTiles = FXCollections.observableList(new ArrayList<>());
 
+  // Income related
+  private final List<IncomeUpdater> tpIncome;
+
   // Scoring Related
   private transient ObservableSet<Integer> sectors = FXCollections.observableSet(new HashSet<>());
   private transient ObservableSet<Coords> satellites = FXCollections.observableSet(new HashSet<>());
@@ -113,6 +117,7 @@ public class Player implements Serializable {
     this.availableGaiaformers = new SimpleIntegerProperty(this.gaiaformingLevel.get());
     this.currentIncome = new Income(race);
     this.score = new SimpleIntegerProperty(10);
+    this.tpIncome = race.getTpIncome();
 
     // We set up tech bonuses so that when we add race starting techs we get the bonus
     setupTechBonuses();
@@ -585,11 +590,22 @@ public class Player implements Serializable {
     if (techTrack.getValue() > 2) {
       projectedTechScoring.setValue(projectedTechScoring.getValue() + 4);
     }
-    techTrackBumped();
   }
 
-  private void techTrackBumped() {
-    // Hook to handle VPs
+  public void buildTradingPost(Hex hex, boolean cheap) {
+    TradingPost tp = new TradingPost(hex, race.getColor(), playerEnum);
+    hex.switchBuildingUI(tp);
+    tradingPosts.add(hex.getCoords());
+    mines.remove(hex.getCoords());
+
+    Util.minus(ore, 2);
+    Util.minus(credits, cheap ? 3 : 6);
+
+    // Update Income
+    if (mines.size() != 2) {
+      Util.minus(currentIncome.getOreIncome(), 1);
+    }
+    tpIncome.get(tradingPosts.size() - 1).update(currentIncome);
   }
 
   // END GAME

@@ -65,7 +65,7 @@ public class ActionChoiceDialog extends Dialog<Actions> {
     buildMine.setDisable(
         player.getMines().size() == 8 || player.getCredits().getValue() < 2 || player.getOre().intValue() < 1);
     startGaiaProject.setDisable(true);
-    upgradeBuilding.setDisable(true);
+    upgradeBuilding.setDisable(player.getOre().intValue() < 2 || player.getCredits().intValue() < 3);
     federate.setDisable(true);
     advanceTech.setDisable(player.getResearch().getValue() < 4);
     powerAction.setDisable(

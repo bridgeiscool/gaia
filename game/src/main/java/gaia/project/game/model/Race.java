@@ -1,5 +1,9 @@
 package gaia.project.game.model;
 
+import java.util.List;
+
+import com.google.common.collect.ImmutableList;
+
 import gaia.project.game.PlanetType;
 import javafx.scene.paint.Color;
 
@@ -159,5 +163,9 @@ public enum Race {
 
   public int getStartingKnowledgeLevel() {
     return 0;
+  }
+
+  public List<IncomeUpdater> getTpIncome() {
+    return ImmutableList.of(new CreditIncome(3), new CreditIncome(4), new CreditIncome(4), new CreditIncome(5));
   }
 }

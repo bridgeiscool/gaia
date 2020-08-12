@@ -19,6 +19,7 @@ import gaia.project.game.board.GameBoard;
 import gaia.project.game.board.Hex;
 import gaia.project.game.board.Mine;
 import gaia.project.game.board.Planet;
+import gaia.project.game.board.TradingPost;
 import gaia.project.game.model.Coords;
 import gaia.project.game.model.Game;
 import gaia.project.game.model.Player;
@@ -124,6 +125,15 @@ public class GameController extends BorderPane {
         });
       });
 
+      game.getPlayers().values().forEach(p -> {
+        p.getTradingPosts().forEach(m -> {
+          gameBoard.hexes()
+              .stream()
+              .filter(h -> h.getCoords().equals(m))
+              .forEach(h -> h.addTradingPost(new TradingPost(h, p.getRace().getColor(), p.getPlayerEnum())));
+        });
+      });
+
       // TODO: Add other buildings...
 
       // Add back round booster tokens
@@ -160,6 +170,9 @@ public class GameController extends BorderPane {
         case BUILD_MINE:
           selectMineBuild();
           break;
+        case UPGRADE_BUILDING:
+          selectBuildingUpgrade();
+          break;
         case ADVANCE_TECH:
           activateTechTracks();
           break;
@@ -170,7 +183,6 @@ public class GameController extends BorderPane {
           selectNewRoundBooster();
           break;
         case GAIA_PROJECT:
-        case UPGRADE_BUILDING:
         case FEDERATE:
         case SPECIAL_ACTION:
           throw new IllegalStateException("Not implemented yet!");
@@ -371,6 +383,21 @@ public class GameController extends BorderPane {
   }
 
   private void finishMineBuild(Hex hex) {
+    gameBoard.clearHighlighting();
+    checkForLeech(hex);
+    finishAction();
+  }
+
+  private void selectBuildingUpgrade() {
+    Player activePlayer = game.getPlayers().get(game.getActivePlayer());
+    gameBoard.highlightHexes(
+        activePlayer,
+        h -> h.canUpgrade(activePlayer, gameBoard),
+        (hex, player) -> hex.upgradeBuilding(player, gameBoard),
+        this::finishBuildingUpgrade);
+  }
+
+  private void finishBuildingUpgrade(Hex hex) {
     gameBoard.clearHighlighting();
     checkForLeech(hex);
     finishAction();

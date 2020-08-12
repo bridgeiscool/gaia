@@ -111,10 +111,12 @@ public class PlayerBoardController extends VBox {
         .addListener((SetChangeListener<Coords>) change -> mines.setText(player.getMines().size() + " / 8"));
     tradingPosts.setText(player.getTradingPosts().size() + " / 4");
     player.getTradingPosts()
-        .addListener((SetChangeListener<Coords>) change -> tradingPosts.setText(player.getTradingPosts() + " / 4"));
+        .addListener(
+            (SetChangeListener<Coords>) change -> tradingPosts.setText(player.getTradingPosts().size() + " / 4"));
     researchLabs.setText(player.getResearchLabs().size() + " / 3");
     player.getResearchLabs()
-        .addListener((SetChangeListener<Coords>) change -> researchLabs.setText(player.getResearchLabs() + " / 3"));
+        .addListener(
+            (SetChangeListener<Coords>) change -> researchLabs.setText(player.getResearchLabs().size() + " / 3"));
     planetaryInstitute.setText(player.getPi().size() + " / 1");
     player.getPi()
         .addListener((SetChangeListener<Coords>) change -> planetaryInstitute.setText(player.getPi().size() + " / 1"));

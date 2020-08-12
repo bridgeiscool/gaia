@@ -14,11 +14,14 @@ import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 
+import com.google.common.base.Preconditions;
+
 import gaia.project.game.PlanetType;
 import gaia.project.game.model.Coords;
 import gaia.project.game.model.Player;
 import gaia.project.game.model.PlayerEnum;
 import javafx.collections.ObservableList;
+import javafx.scene.Node;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Polygon;
 
@@ -142,6 +145,63 @@ public final class Hex extends StackPane {
     getChildren().add(mine);
     building = Building.MINE;
     builder = mine.getPlayer();
+  }
+
+  // For reloading game
+  public void addTradingPost(TradingPost tradingPost) {
+    getChildren().add(tradingPost);
+    building = Building.TRADING_POST;
+    builder = tradingPost.getPlayer();
+  }
+
+  public boolean canUpgrade(Player activePlayer, GameBoard gameBoard) {
+    if (building == null || builder != activePlayer.getPlayerEnum()) {
+      return false;
+    }
+
+    switch (building) {
+      case PLANETARY_INSTITUTE:
+      case ACADEMY:
+        return false;
+      case MINE:
+        return activePlayer.getTradingPosts().size() < 4
+            && activePlayer.getOre().intValue() >= 2
+            && activePlayer.getCredits().intValue() >= (hasNeighbor(gameBoard) ? 3 : 6);
+      case TRADING_POST:
+        return (activePlayer.getResearchLabs().size() < 3
+            && activePlayer.getOre().intValue() >= 3
+            && activePlayer.getCredits().intValue() >= 5)
+            || (activePlayer.getPi().isEmpty()
+                && activePlayer.getOre().intValue() >= 4
+                && activePlayer.getCredits().intValue() >= 6);
+      case RESEARCH_LAB:
+        return (activePlayer.getKa().isEmpty() || activePlayer.getQa().isEmpty())
+            && activePlayer.getOre().intValue() >= 6
+            && activePlayer.getCredits().intValue() >= 6;
+      default:
+        throw new IllegalStateException("whaaaa");
+    }
+  }
+
+  private boolean hasNeighbor(GameBoard gameBoard) {
+    return getHexesWithinRange(gameBoard.hexes(), 2).stream().anyMatch(h -> h.builder != null && h.builder != builder);
+  }
+
+  public void upgradeBuilding(Player player, GameBoard gameBoard) {
+    Preconditions.checkArgument(building != null);
+    switch (building) {
+      case MINE:
+        player.buildTradingPost(this, hasNeighbor(gameBoard));
+        building = Building.TRADING_POST;
+        break;
+      default:
+        throw new IllegalStateException("Can't upgrade building: " + building);
+    }
+  }
+
+  public void switchBuildingUI(Node newBuilding) {
+    getChildren().remove(getChildren().size() - 1);
+    getChildren().add(newBuilding);
   }
 
   @Override

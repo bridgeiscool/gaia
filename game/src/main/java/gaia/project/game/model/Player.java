@@ -134,7 +134,7 @@ public class Player implements Serializable {
       switch (newValue.intValue()) {
         case 1:
         case 4:
-          ore.setValue(ore.getValue() + 2);
+          Util.plus(ore, 2);
           break;
         case 3:
           chargePower(3);
@@ -155,7 +155,7 @@ public class Player implements Serializable {
           chargePower(3);
           // Fall through
         case 1:
-          qic.setValue(qic.getValue() + 1);
+          Util.plus(qic, 1);
           break;
         case 2:
           navRange.setValue(2);
@@ -175,17 +175,17 @@ public class Player implements Serializable {
       switch (newValue.intValue()) {
         case 1:
         case 2:
-          qic.setValue(qic.getValue() + 1);
+          Util.plus(qic, 1);
           break;
         case 3:
           chargePower(3);
           // Fall through
         case 4:
-          qic.setValue(qic.getValue() + 2);
+          Util.plus(qic, 2);
           break;
         case 5:
           flippableTechTiles.setValue(flippableTechTiles.getValue() - 1);
-          qic.setValue(qic.getValue() + 4);
+          Util.plus(qic, 4);
           break;
       }
     });
@@ -197,7 +197,7 @@ public class Player implements Serializable {
           availableGaiaformers.setValue(availableGaiaformers.getValue() + 1);
           break;
         case 2:
-          bin1.setValue(bin1.getValue() + 3);
+          Util.plus(bin1, 3);
           break;
         case 3:
           chargePower(3);
@@ -240,8 +240,8 @@ public class Player implements Serializable {
           currentIncome.getCreditIncome().setValue(currentIncome.getCreditIncome().getValue() - 4);
           currentIncome.getOreIncome().setValue(currentIncome.getOreIncome().getValue() - 2);
           currentIncome.getChargeIncome().setValue(currentIncome.getChargeIncome().getValue() - 4);
-          ore.setValue(ore.getValue() + 3);
-          credits.setValue(credits.getValue() + 6);
+          Util.plus(ore, 3);
+          Util.plus(credits, 6);
           chargePower(6);
           break;
       }
@@ -260,7 +260,7 @@ public class Player implements Serializable {
         case 5:
           flippableTechTiles.setValue(flippableTechTiles.getValue() - 1);
           currentIncome.getResearchIncome().setValue(currentIncome.getResearchIncome().getValue() - 4);
-          research.setValue(research.getValue() + 9);
+          Util.plus(research, 9);
           break;
       }
     });
@@ -723,5 +723,7 @@ public class Player implements Serializable {
     totalBuildings = new SimpleIntegerProperty(ois.readInt());
     buildingsInFeds = new SimpleIntegerProperty(ois.readInt());
     projectedTechScoring = new SimpleIntegerProperty(ois.readInt());
+
+    setupTechBonuses();
   }
 }

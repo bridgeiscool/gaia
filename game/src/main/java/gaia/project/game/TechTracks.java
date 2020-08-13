@@ -3,6 +3,7 @@ package gaia.project.game;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.google.common.base.Preconditions;
 
@@ -14,7 +15,6 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -38,10 +38,6 @@ public class TechTracks extends GridPane {
   private HBox terra1;
   @FXML
   private HBox terra0;
-  @FXML
-  private HBox terraTechTile;
-  @FXML
-  private Label terraTechTileLabel;
   private final List<HBox> terraTrack;
 
   // Nav
@@ -136,6 +132,8 @@ public class TechTracks extends GridPane {
   @FXML
   private HBox wildTechTile3;
 
+  private List<TechTileHBox> techTiles;
+
   public TechTracks(Game game) {
     Preconditions.checkArgument(game.getAdvancedTechTiles().size() == 6);
 
@@ -176,15 +174,16 @@ public class TechTracks extends GridPane {
     terra5StackPane.getChildren().add(0, new FederationTokenPane(game.getTerraBonus(), 1.0));
 
     // Initialize the tech tiles
-    add(new TechTileHBox(game.getTechTiles().get(0)), 0, 8);
-    add(new TechTileHBox(game.getTechTiles().get(1)), 1, 8);
-    add(new TechTileHBox(game.getTechTiles().get(2)), 2, 8);
-    add(new TechTileHBox(game.getTechTiles().get(3)), 3, 8);
-    add(new TechTileHBox(game.getTechTiles().get(4)), 4, 8);
-    add(new TechTileHBox(game.getTechTiles().get(5)), 5, 8);
-    wildTechTile1.getChildren().add(new TechTileHBox(game.getTechTiles().get(6)));
-    wildTechTile2.getChildren().add(new TechTileHBox(game.getTechTiles().get(7)));
-    wildTechTile3.getChildren().add(new TechTileHBox(game.getTechTiles().get(8)));
+    techTiles = game.getTechTiles().stream().map(TechTileHBox::new).collect(Collectors.toList());
+    add(techTiles.get(0), 0, 8);
+    add(techTiles.get(1), 1, 8);
+    add(techTiles.get(2), 2, 8);
+    add(techTiles.get(3), 3, 8);
+    add(techTiles.get(4), 4, 8);
+    add(techTiles.get(5), 5, 8);
+    wildTechTile1.getChildren().add(techTiles.get(6));
+    wildTechTile2.getChildren().add(techTiles.get(7));
+    wildTechTile3.getChildren().add(techTiles.get(8));
 
     // Initialize the adv tech tiles
     terraAdvTech.getChildren().add(new AdvancedTechTileHBox(game.getAdvancedTechTiles().get(0)));
@@ -236,6 +235,10 @@ public class TechTracks extends GridPane {
   private void clearActivation(HBox hbox) {
     hbox.getStyleClass().clear();
     hbox.setOnMouseClicked(null);
+  }
+
+  public List<TechTileHBox> getTechTiles() {
+    return techTiles;
   }
 
   private static class ProcessTrackBump implements ChangeListener<Number> {

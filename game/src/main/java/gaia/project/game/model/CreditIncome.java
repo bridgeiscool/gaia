@@ -9,7 +9,12 @@ public class CreditIncome implements IncomeUpdater {
   }
 
   @Override
-  public void update(Income income) {
+  public void addTo(Income income) {
     Util.plus(income.getCreditIncome(), credits);
+  }
+
+  @Override
+  public void removeFrom(Income income) {
+    Util.minus(income.getChargeIncome(), credits);
   }
 }

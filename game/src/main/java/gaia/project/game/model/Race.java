@@ -168,4 +168,8 @@ public enum Race {
   public List<IncomeUpdater> getTpIncome() {
     return ImmutableList.of(new CreditIncome(3), new CreditIncome(4), new CreditIncome(4), new CreditIncome(5));
   }
+
+  public List<IncomeUpdater> getRlIncome() {
+    return ImmutableList.of(new ResearchIncome(1), new ResearchIncome(1), new ResearchIncome(1));
+  }
 }

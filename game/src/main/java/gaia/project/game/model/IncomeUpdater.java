@@ -3,5 +3,7 @@ package gaia.project.game.model;
 import java.io.Serializable;
 
 public interface IncomeUpdater extends Serializable {
-  void update(Income income);
+  void addTo(Income income);
+
+  void removeFrom(Income income);
 }

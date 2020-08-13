@@ -22,6 +22,10 @@ import gaia.project.game.model.Player;
 import gaia.project.game.model.PlayerEnum;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonBar.ButtonData;
+import javafx.scene.control.ButtonType;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Polygon;
 
@@ -97,6 +101,10 @@ public final class Hex extends StackPane {
     return building != null;
   }
 
+  public boolean checkTechTile() {
+    return building != null && (building == Building.ACADEMY || building == Building.RESEARCH_LAB);
+  }
+
   public Optional<PlayerEnum> getBuilder() {
     return Optional.ofNullable(builder);
   }
@@ -154,6 +162,12 @@ public final class Hex extends StackPane {
     builder = tradingPost.getPlayer();
   }
 
+  public void addResearchLab(ResearchLab researchLab) {
+    getChildren().add(researchLab);
+    building = Building.RESEARCH_LAB;
+    builder = researchLab.getPlayer();
+  }
+
   public boolean canUpgrade(Player activePlayer, GameBoard gameBoard) {
     if (building == null || builder != activePlayer.getPlayerEnum()) {
       return false;
@@ -194,9 +208,37 @@ public final class Hex extends StackPane {
         player.buildTradingPost(this, hasNeighbor(gameBoard));
         building = Building.TRADING_POST;
         break;
+      case TRADING_POST:
+        building = getUpgradeTo(player);
+        if (building == Building.RESEARCH_LAB) {
+          player.buildResearchLab(this);
+        }
+        break;
       default:
         throw new IllegalStateException("Can't upgrade building: " + building);
     }
+  }
+
+  private Building getUpgradeTo(Player player) {
+    Preconditions.checkArgument(player.getResearchLabs().size() < 3 || player.getPi().isEmpty());
+    if (player.getResearchLabs().size() == 3) {
+      return Building.PLANETARY_INSTITUTE;
+    }
+
+    if (!player.getPi().isEmpty()) {
+      return Building.RESEARCH_LAB;
+    }
+
+    Optional<ButtonType> response;
+    ButtonType rl = new ButtonType("Research Lab", ButtonData.LEFT);
+    ButtonType pi = new ButtonType("PI", ButtonData.RIGHT);
+    do {
+      response = new Alert(AlertType.CONFIRMATION, "Research lab or PI?", rl, pi).showAndWait();
+    } while (response.isEmpty());
+
+    return response.get().getButtonData().equals(ButtonData.LEFT)
+        ? Building.RESEARCH_LAB
+        : Building.PLANETARY_INSTITUTE;
   }
 
   public void switchBuildingUI(Node newBuilding) {

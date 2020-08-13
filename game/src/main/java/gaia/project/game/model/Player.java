@@ -64,7 +64,7 @@ public class Player implements Serializable {
 
   // Tech tile related
   private transient ObservableSet<TechTile> techTiles = FXCollections.observableSet(new HashSet<>());
-  private transient IntegerProperty flippableTechTiles = new SimpleIntegerProperty(0);
+  private transient IntegerProperty flippableFederationTiles = new SimpleIntegerProperty(0);
   private transient IntegerProperty bigBuildingPower = new SimpleIntegerProperty(3);
   private transient ObservableSet<PlanetType> builtOn = FXCollections.observableSet(new HashSet<>());
   private transient IntegerProperty gaiaPlanets = new SimpleIntegerProperty(0);
@@ -146,7 +146,7 @@ public class Player implements Serializable {
           terraCost.setValue(4 - newValue.intValue());
           break;
         case 5:
-          flippableTechTiles.setValue(flippableTechTiles.getValue() - 1);
+          flippableFederationTiles.setValue(flippableFederationTiles.getValue() - 1);
           System.out.println("Implement gaining federationToken!");
           break;
       }
@@ -167,7 +167,7 @@ public class Player implements Serializable {
           navRange.setValue(3);
           break;
         case 5:
-          flippableTechTiles.setValue(flippableTechTiles.getValue() - 1);
+          flippableFederationTiles.setValue(flippableFederationTiles.getValue() - 1);
           navRange.setValue(4);
           System.out.println("Implement gaining lonely planet!");
           break;
@@ -187,7 +187,7 @@ public class Player implements Serializable {
           Util.plus(qic, 2);
           break;
         case 5:
-          flippableTechTiles.setValue(flippableTechTiles.getValue() - 1);
+          flippableFederationTiles.setValue(flippableFederationTiles.getValue() - 1);
           Util.plus(qic, 4);
           break;
       }
@@ -212,7 +212,7 @@ public class Player implements Serializable {
           availableGaiaformers.setValue(availableGaiaformers.getValue() + 1);
           break;
         case 5:
-          flippableTechTiles.setValue(flippableTechTiles.getValue() - 1);
+          flippableFederationTiles.setValue(flippableFederationTiles.getValue() - 1);
           score.setValue(score.getValue() + 4 + gaiaPlanets.getValue());
           break;
       }
@@ -239,7 +239,7 @@ public class Player implements Serializable {
           currentIncome.getChargeIncome().setValue(currentIncome.getChargeIncome().getValue() + 1);
           break;
         case 5:
-          flippableTechTiles.setValue(flippableTechTiles.getValue() - 1);
+          flippableFederationTiles.setValue(flippableFederationTiles.getValue() - 1);
           currentIncome.getCreditIncome().setValue(currentIncome.getCreditIncome().getValue() - 4);
           currentIncome.getOreIncome().setValue(currentIncome.getOreIncome().getValue() - 2);
           currentIncome.getChargeIncome().setValue(currentIncome.getChargeIncome().getValue() - 4);
@@ -261,7 +261,7 @@ public class Player implements Serializable {
           currentIncome.getResearchIncome().setValue(currentIncome.getResearchIncome().getValue() + 1);
           break;
         case 5:
-          flippableTechTiles.setValue(flippableTechTiles.getValue() - 1);
+          flippableFederationTiles.setValue(flippableFederationTiles.getValue() - 1);
           currentIncome.getResearchIncome().setValue(currentIncome.getResearchIncome().getValue() - 4);
           Util.plus(research, 9);
           break;
@@ -282,7 +282,7 @@ public class Player implements Serializable {
     federationTile.updatePlayer(this);
     federationTiles.add(federationTile);
     if (federationTile.isFlippable()) {
-      Util.plus(flippableTechTiles, 1);
+      Util.plus(flippableFederationTiles, 1);
     }
   }
 
@@ -364,8 +364,8 @@ public class Player implements Serializable {
     return score;
   }
 
-  public IntegerProperty getFlippableTechTiles() {
-    return flippableTechTiles;
+  public IntegerProperty getFlippableFederationTiles() {
+    return flippableFederationTiles;
   }
 
   public Income getCurrentIncome() {
@@ -587,9 +587,11 @@ public class Player implements Serializable {
     // TODO: Add logic to check if it adds onto a previous federation
   }
 
-  public void advanceTech(IntegerProperty techTrack) {
+  public void advanceTech(IntegerProperty techTrack, boolean free) {
     techTrack.setValue(techTrack.getValue() + 1);
-    research.setValue(research.getValue() - 4);
+    if (!free) {
+      research.setValue(research.getValue() - 4);
+    }
     if (techTrack.getValue() > 2) {
       projectedTechScoring.setValue(projectedTechScoring.getValue() + 4);
     }
@@ -663,10 +665,11 @@ public class Player implements Serializable {
     oos.writeInt(gaiaformerCost.get());
 
     // Tech tile
-    oos.writeInt(flippableTechTiles.get());
+    oos.writeInt(flippableFederationTiles.get());
     oos.writeInt(bigBuildingPower.get());
     oos.writeObject(new HashSet<>(builtOn));
     oos.writeInt(gaiaPlanets.get());
+    oos.writeObject(new HashSet<>(techTiles));
 
     // Buildings etc
     oos.writeObject(new HashSet<>(mines));
@@ -719,10 +722,11 @@ public class Player implements Serializable {
     currentDigs = new SimpleIntegerProperty(0);
 
     // Tech tile
-    flippableTechTiles = new SimpleIntegerProperty(ois.readInt());
+    flippableFederationTiles = new SimpleIntegerProperty(ois.readInt());
     bigBuildingPower = new SimpleIntegerProperty(ois.readInt());
     builtOn = FXCollections.observableSet((Set<PlanetType>) ois.readObject());
     gaiaPlanets = new SimpleIntegerProperty(ois.readInt());
+    techTiles = FXCollections.observableSet((Set<TechTile>) ois.readObject());
 
     // Buildings
     mines = FXCollections.observableSet((Set<Coords>) ois.readObject());

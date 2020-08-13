@@ -3,6 +3,7 @@ package gaia.project.game;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.google.common.base.Preconditions;
@@ -10,6 +11,7 @@ import com.google.common.base.Preconditions;
 import gaia.project.game.model.Game;
 import gaia.project.game.model.Player;
 import gaia.project.game.model.PlayerEnum;
+import gaia.project.game.model.Util;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -21,6 +23,13 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Circle;
 
 public class TechTracks extends GridPane {
+  public static final int TERRA = 0;
+  public static final int NAV = 1;
+  public static final int AI = 2;
+  public static final int GAIA = 3;
+  public static final int ECON = 4;
+  public static final int KNOWLEDGE = 5;
+
   // Terraforming
   @FXML
   private StackPane terra5StackPane;
@@ -175,46 +184,51 @@ public class TechTracks extends GridPane {
 
     // Initialize the tech tiles
     techTiles = game.getTechTiles().stream().map(TechTileHBox::new).collect(Collectors.toList());
-    add(techTiles.get(0), 0, 8);
-    add(techTiles.get(1), 1, 8);
-    add(techTiles.get(2), 2, 8);
-    add(techTiles.get(3), 3, 8);
-    add(techTiles.get(4), 4, 8);
-    add(techTiles.get(5), 5, 8);
+    add(techTiles.get(TERRA), 0, 8);
+    add(techTiles.get(NAV), 1, 8);
+    add(techTiles.get(AI), 2, 8);
+    add(techTiles.get(GAIA), 3, 8);
+    add(techTiles.get(ECON), 4, 8);
+    add(techTiles.get(KNOWLEDGE), 5, 8);
     wildTechTile1.getChildren().add(techTiles.get(6));
     wildTechTile2.getChildren().add(techTiles.get(7));
     wildTechTile3.getChildren().add(techTiles.get(8));
 
     // Initialize the adv tech tiles
-    terraAdvTech.getChildren().add(new AdvancedTechTileHBox(game.getAdvancedTechTiles().get(0)));
-    navAdvTech.getChildren().add(new AdvancedTechTileHBox(game.getAdvancedTechTiles().get(1)));
-    aiAdvTech.getChildren().add(new AdvancedTechTileHBox(game.getAdvancedTechTiles().get(2)));
-    gaiaAdvTech.getChildren().add(new AdvancedTechTileHBox(game.getAdvancedTechTiles().get(3)));
-    econAdvTech.getChildren().add(new AdvancedTechTileHBox(game.getAdvancedTechTiles().get(4)));
-    knowledgeAdvTech.getChildren().add(new AdvancedTechTileHBox(game.getAdvancedTechTiles().get(5)));
+    terraAdvTech.getChildren().add(new AdvancedTechTileHBox(game.getAdvancedTechTiles().get(TERRA)));
+    navAdvTech.getChildren().add(new AdvancedTechTileHBox(game.getAdvancedTechTiles().get(NAV)));
+    aiAdvTech.getChildren().add(new AdvancedTechTileHBox(game.getAdvancedTechTiles().get(AI)));
+    gaiaAdvTech.getChildren().add(new AdvancedTechTileHBox(game.getAdvancedTechTiles().get(GAIA)));
+    econAdvTech.getChildren().add(new AdvancedTechTileHBox(game.getAdvancedTechTiles().get(ECON)));
+    knowledgeAdvTech.getChildren().add(new AdvancedTechTileHBox(game.getAdvancedTechTiles().get(KNOWLEDGE)));
 
   }
 
-  void highlightTracks(Player activePlayer, CallBack callBack) {
-    activateHBox(activePlayer, callBack, terraTrack, activePlayer.getTerraformingLevel());
-    activateHBox(activePlayer, callBack, navTrack, activePlayer.getNavLevel());
-    activateHBox(activePlayer, callBack, aiTrack, activePlayer.getAiLevel());
-    activateHBox(activePlayer, callBack, gaiaTrack, activePlayer.getGaiaformingLevel());
-    activateHBox(activePlayer, callBack, econTrack, activePlayer.getEconLevel());
-    activateHBox(activePlayer, callBack, knowledgeTrack, activePlayer.getKnowledgeLevel());
+  void highlightTracks(Player activePlayer, CallBack callBack, boolean free) {
+    activateHBox(activePlayer, callBack, terraTrack, activePlayer.getTerraformingLevel(), free);
+    activateHBox(activePlayer, callBack, navTrack, activePlayer.getNavLevel(), free);
+    activateHBox(activePlayer, callBack, aiTrack, activePlayer.getAiLevel(), free);
+    activateHBox(activePlayer, callBack, gaiaTrack, activePlayer.getGaiaformingLevel(), free);
+    activateHBox(activePlayer, callBack, econTrack, activePlayer.getEconLevel(), free);
+    activateHBox(activePlayer, callBack, knowledgeTrack, activePlayer.getKnowledgeLevel(), free);
   }
 
-  private void activateHBox(Player activePlayer, CallBack callBack, List<HBox> track, IntegerProperty toUpdate) {
+  private void activateHBox(
+      Player activePlayer,
+      CallBack callBack,
+      List<HBox> track,
+      IntegerProperty toUpdate,
+      boolean free) {
     for (HBox hbox : track) {
       if (hbox.getChildren().stream().anyMatch(n -> ((TechMarker) n).player == activePlayer.getPlayerEnum())) {
         int idx = track.indexOf(hbox);
         if (idx < 4
             || (idx == 4
                 && track.get(5).getChildren().isEmpty()
-                && activePlayer.getFlippableTechTiles().intValue() > 0)) {
+                && activePlayer.getFlippableFederationTiles().intValue() > 0)) {
           hbox.getStyleClass().add("highlightedHbox");
           hbox.setOnMouseClicked(me -> {
-            activePlayer.advanceTech(toUpdate);
+            activePlayer.advanceTech(toUpdate, free);
             clearActivation();
             callBack.call();
           });
@@ -237,8 +251,64 @@ public class TechTracks extends GridPane {
     hbox.setOnMouseClicked(null);
   }
 
-  public List<TechTileHBox> getTechTiles() {
-    return techTiles;
+  void highlightTechTiles(Player activePlayer, CallBack callback, CallBack wildCallback) {
+    techTiles.get(TERRA).highlight(activePlayer, callback, Optional.of(p -> {
+      if (p.getTerraformingLevel().getValue() < 4
+          || (p.getTerraformingLevel().getValue() == 4
+              && terra5.getChildren().isEmpty()
+              && p.getFlippableFederationTiles().intValue() > 0)) {
+        Util.plus(p.getTerraformingLevel(), 1);
+      }
+    }));
+    techTiles.get(NAV).highlight(activePlayer, callback, Optional.of(p -> {
+      if (p.getNavLevel().getValue() < 4
+          || (p.getNavLevel().getValue() == 4
+              && nav5.getChildren().isEmpty()
+              && p.getFlippableFederationTiles().intValue() > 0)) {
+        Util.plus(p.getNavLevel(), 1);
+      }
+    }));
+    techTiles.get(AI).highlight(activePlayer, callback, Optional.of(p -> {
+      if (p.getAiLevel().getValue() < 4
+          || (p.getAiLevel().getValue() == 4
+              && ai5.getChildren().isEmpty()
+              && p.getFlippableFederationTiles().intValue() > 0)) {
+        Util.plus(p.getAiLevel(), 1);
+      }
+    }));
+    techTiles.get(GAIA).highlight(activePlayer, callback, Optional.of(p -> {
+      if (p.getGaiaformingLevel().getValue() < 4
+          || (p.getGaiaformingLevel().getValue() == 4
+              && gaia5.getChildren().isEmpty()
+              && p.getFlippableFederationTiles().intValue() > 0)) {
+        Util.plus(p.getGaiaformingLevel(), 1);
+      }
+    }));
+    techTiles.get(ECON).highlight(activePlayer, callback, Optional.of(p -> {
+      if (p.getEconLevel().getValue() < 4
+          || (p.getEconLevel().getValue() == 4
+              && econ5.getChildren().isEmpty()
+              && p.getFlippableFederationTiles().intValue() > 0)) {
+        Util.plus(p.getEconLevel(), 1);
+      }
+    }));
+    techTiles.get(KNOWLEDGE).highlight(activePlayer, callback, Optional.of(p -> {
+      if (p.getKnowledgeLevel().getValue() < 4
+          || (p.getKnowledgeLevel().getValue() == 4
+              && knowledge5.getChildren().isEmpty()
+              && p.getFlippableFederationTiles().intValue() > 0)) {
+        Util.plus(p.getKnowledgeLevel(), 1);
+      }
+    }));
+
+    // Wild ones get a callback from the main controller to pick the tech track
+    techTiles.subList(6, 9).stream().forEach(tt -> {
+      tt.highlight(activePlayer, wildCallback, Optional.empty());
+    });
+  }
+
+  void clearTechtileHighlighting() {
+    techTiles.forEach(tt -> tt.clearHighlighting());
   }
 
   private static class ProcessTrackBump implements ChangeListener<Number> {

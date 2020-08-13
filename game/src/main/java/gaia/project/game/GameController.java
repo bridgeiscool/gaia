@@ -184,7 +184,7 @@ public class GameController extends BorderPane {
           selectBuildingUpgrade();
           break;
         case ADVANCE_TECH:
-          activateTechTracks();
+          activateTechTracks(false);
           break;
         case POWER_ACTION:
           highlightPowerActions();
@@ -359,8 +359,8 @@ public class GameController extends BorderPane {
     finishAction();
   }
 
-  private void activateTechTracks() {
-    techTracks.highlightTracks(game.getPlayers().get(game.getActivePlayer()), this::finishTrackBump);
+  private void activateTechTracks(boolean free) {
+    techTracks.highlightTracks(game.getPlayers().get(game.getActivePlayer()), this::finishTrackBump, free);
   }
 
   private void finishTrackBump() {
@@ -418,13 +418,15 @@ public class GameController extends BorderPane {
   }
 
   private void highLightTechTiles() {
-    for (TechTileHBox techTile : techTracks.getTechTiles()) {
-      techTile.highlight(game.getPlayers().get(game.getActivePlayer()), this::finishTechTileGain);
-    }
+    Player activePlayer = game.getPlayers().get(game.getActivePlayer());
+    techTracks.highlightTechTiles(activePlayer, this::finishTechTileGain, () -> {
+      techTracks.clearTechtileHighlighting();
+      activateTechTracks(true);
+    });
   }
 
   private void finishTechTileGain() {
-    techTracks.getTechTiles().forEach(tt -> tt.clearHighlighting());
+    techTracks.clearTechtileHighlighting();
     finishAction();
   }
 

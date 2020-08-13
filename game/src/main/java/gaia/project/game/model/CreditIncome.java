@@ -15,6 +15,6 @@ public class CreditIncome implements IncomeUpdater {
 
   @Override
   public void removeFrom(Income income) {
-    Util.minus(income.getChargeIncome(), credits);
+    Util.minus(income.getCreditIncome(), credits);
   }
 }

@@ -1,7 +1,10 @@
 package gaia.project.game;
 
+import java.util.Optional;
+
 import gaia.project.game.model.Player;
 import gaia.project.game.model.TechTile;
+import gaia.project.game.model.UpdatePlayer;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
@@ -23,13 +26,16 @@ public class TechTileHBox extends HBox {
     getStyleClass().add("techTile");
   }
 
-  public void highlight(Player activePlayer, CallBack callBack) {
+  public void highlight(Player activePlayer, CallBack callBack, Optional<UpdatePlayer> techBump) {
     if (!activePlayer.getTechTiles().contains(techTile)) {
       getStyleClass().clear();
       getStyleClass().add(HIGHLIGHTED);
       this.setOnMouseClicked(me -> {
         activePlayer.getTechTiles().add(techTile);
         techTile.updatePlayer(activePlayer);
+        if (techBump.isPresent()) {
+          techBump.get().updatePlayer(activePlayer);
+        }
         callBack.call();
       });
     }

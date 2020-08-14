@@ -6,6 +6,16 @@ public enum TechTile {
     public String display() {
       return "ACT: +4p";
     }
+
+    @Override
+    public boolean isAction() {
+      return true;
+    }
+
+    @Override
+    public void onAction(Player player) {
+      player.chargePower(4);
+    }
   },
   POWER_ORE(p -> {
     Util.plus(p.getCurrentIncome().getChargeIncome(), 1);
@@ -80,4 +90,12 @@ public enum TechTile {
   }
 
   public abstract String display();
+
+  public boolean isAction() {
+    return false;
+  }
+
+  public void onAction(Player player) {
+    // Does nothing by default
+  }
 }

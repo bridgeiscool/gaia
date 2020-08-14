@@ -4,7 +4,17 @@ public enum AdvancedTechTile {
   KNOWLEDGE_ACTION {
     @Override
     public String display() {
-      return "ACT: +3k";
+      return "+3k";
+    }
+
+    @Override
+    public boolean isAction() {
+      return true;
+    }
+
+    @Override
+    public void onAction(Player player) {
+      Util.plus(player.getResearch(), 3);
     }
   },
   ORE_ACTION {
@@ -12,11 +22,32 @@ public enum AdvancedTechTile {
     public String display() {
       return "ACT: +3o";
     }
+
+    @Override
+    public boolean isAction() {
+      return true;
+    }
+
+    @Override
+    public void onAction(Player player) {
+      Util.plus(player.getOre(), 3);
+    }
   },
   Q_C_ACTION {
     @Override
     public String display() {
       return "ACT: +q,5c";
+    }
+
+    @Override
+    public boolean isAction() {
+      return true;
+    }
+
+    @Override
+    public void onAction(Player player) {
+      Util.plus(player.getQic(), 1);
+      Util.plus(player.getCredits(), 5);
     }
   },
   SECTOR_SCORING {
@@ -93,4 +124,12 @@ public enum AdvancedTechTile {
   };
 
   public abstract String display();
+
+  public boolean isAction() {
+    return false;
+  }
+
+  public void onAction(Player player) {
+    // Does nothing by default - override for actions
+  }
 }

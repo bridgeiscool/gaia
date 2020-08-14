@@ -13,6 +13,15 @@ public enum RoundBooster {
       removeFrom.getCreditIncome().setValue(removeFrom.getCreditIncome().getValue() - 2);
     }
 
+    @Override
+    public boolean isAction() {
+      return true;
+    }
+
+    @Override
+    public void onAction(Player player) {
+      Util.plus(player.getCurrentDigs(), 1);
+    }
   },
   JUMP("+3 NAV", "(+2p)") {
     @Override
@@ -23,6 +32,16 @@ public enum RoundBooster {
     @Override
     public void removeIncome(Income removeFrom) {
       removeFrom.getChargeIncome().setValue(removeFrom.getChargeIncome().getValue() - 2);
+    }
+
+    @Override
+    public boolean isAction() {
+      return true;
+    }
+
+    @Override
+    public void onAction(Player player) {
+      Util.plus(player.getTempNavRange(), 3);
     }
   },
   ORE_K("(+1o)", "(+1k)") {
@@ -178,5 +197,13 @@ public enum RoundBooster {
 
   public void addVps(Player player) {
     // By default does nothing...
+  }
+
+  public boolean isAction() {
+    return false;
+  }
+
+  public void onAction(Player player) {
+    // Does nothing by default - override for actions
   }
 }

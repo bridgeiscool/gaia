@@ -16,6 +16,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import gaia.project.game.board.Academy;
+import gaia.project.game.board.Gaiaformer;
 import gaia.project.game.board.GameBoard;
 import gaia.project.game.board.Hex;
 import gaia.project.game.board.Mine;
@@ -119,59 +120,7 @@ public class GameController extends BorderPane {
     mainPane.setBottom(hbox);
 
     if (load) {
-      game.getPlayers().values().forEach(p -> {
-        p.getMines().forEach(m -> {
-          gameBoard.hexes()
-              .stream()
-              .filter(h -> h.getCoords().equals(m))
-              .forEach(h -> h.addMine(new Mine(h, p.getRace().getColor(), p.getPlayerEnum())));
-        });
-      });
-
-      game.getPlayers().values().forEach(p -> {
-        p.getTradingPosts().forEach(m -> {
-          gameBoard.hexes()
-              .stream()
-              .filter(h -> h.getCoords().equals(m))
-              .forEach(h -> h.addTradingPost(new TradingPost(h, p.getRace().getColor(), p.getPlayerEnum())));
-        });
-      });
-
-      game.getPlayers().values().forEach(p -> {
-        p.getResearchLabs().forEach(m -> {
-          gameBoard.hexes()
-              .stream()
-              .filter(h -> h.getCoords().equals(m))
-              .forEach(h -> h.addResearchLab(new ResearchLab(h, p.getRace().getColor(), p.getPlayerEnum())));
-        });
-      });
-
-      game.getPlayers().values().forEach(p -> {
-        p.getPi().forEach(m -> {
-          gameBoard.hexes()
-              .stream()
-              .filter(h -> h.getCoords().equals(m))
-              .forEach(h -> h.addPi(new PlanetaryInstitute(h, p.getRace().getColor(), p.getPlayerEnum())));
-        });
-      });
-
-      game.getPlayers().values().forEach(p -> {
-        p.getKa().forEach(m -> {
-          gameBoard.hexes()
-              .stream()
-              .filter(h -> h.getCoords().equals(m))
-              .forEach(h -> h.addAcademy(new Academy(h, p.getRace().getColor(), p.getPlayerEnum())));
-        });
-      });
-
-      game.getPlayers().values().forEach(p -> {
-        p.getQa().forEach(m -> {
-          gameBoard.hexes()
-              .stream()
-              .filter(h -> h.getCoords().equals(m))
-              .forEach(h -> h.addAcademy(new Academy(h, p.getRace().getColor(), p.getPlayerEnum())));
-        });
-      });
+      resetGameBoard(game);
 
       // Add back round booster tokens
       if (game.getCurrentRound().getValue() != Round.SETUP) {
@@ -193,6 +142,71 @@ public class GameController extends BorderPane {
     }
   }
 
+  private void resetGameBoard(Game game) {
+    game.getPlayers().values().forEach(p -> {
+      p.getMines().forEach(m -> {
+        gameBoard.hexes()
+            .stream()
+            .filter(h -> h.getCoords().equals(m))
+            .forEach(h -> h.addMine(new Mine(h, p.getRace().getColor(), p.getPlayerEnum())));
+      });
+    });
+
+    game.getPlayers().values().forEach(p -> {
+      p.getTradingPosts().forEach(m -> {
+        gameBoard.hexes()
+            .stream()
+            .filter(h -> h.getCoords().equals(m))
+            .forEach(h -> h.addTradingPost(new TradingPost(h, p.getRace().getColor(), p.getPlayerEnum())));
+      });
+    });
+
+    game.getPlayers().values().forEach(p -> {
+      p.getResearchLabs().forEach(m -> {
+        gameBoard.hexes()
+            .stream()
+            .filter(h -> h.getCoords().equals(m))
+            .forEach(h -> h.addResearchLab(new ResearchLab(h, p.getRace().getColor(), p.getPlayerEnum())));
+      });
+    });
+
+    game.getPlayers().values().forEach(p -> {
+      p.getPi().forEach(m -> {
+        gameBoard.hexes()
+            .stream()
+            .filter(h -> h.getCoords().equals(m))
+            .forEach(h -> h.addPi(new PlanetaryInstitute(h, p.getRace().getColor(), p.getPlayerEnum())));
+      });
+    });
+
+    game.getPlayers().values().forEach(p -> {
+      p.getKa().forEach(m -> {
+        gameBoard.hexes()
+            .stream()
+            .filter(h -> h.getCoords().equals(m))
+            .forEach(h -> h.addAcademy(new Academy(h, p.getRace().getColor(), p.getPlayerEnum())));
+      });
+    });
+
+    game.getPlayers().values().forEach(p -> {
+      p.getQa().forEach(m -> {
+        gameBoard.hexes()
+            .stream()
+            .filter(h -> h.getCoords().equals(m))
+            .forEach(h -> h.addAcademy(new Academy(h, p.getRace().getColor(), p.getPlayerEnum())));
+      });
+    });
+
+    game.getPlayers().values().forEach(p -> {
+      p.getGaiaformers().forEach(m -> {
+        gameBoard.hexes()
+            .stream()
+            .filter(h -> h.getCoords().equals(m))
+            .forEach(h -> h.addGaiaformer(new Gaiaformer(h, p.getRace().getColor(), p.getPlayerEnum())));
+      });
+    });
+  }
+
   Game getGame() {
     return game;
   }
@@ -207,6 +221,9 @@ public class GameController extends BorderPane {
         case BUILD_MINE:
           selectMineBuild();
           break;
+        case GAIA_PROJECT:
+          selectGaiaProject();
+          break;
         case UPGRADE_BUILDING:
           selectBuildingUpgrade();
           break;
@@ -219,7 +236,6 @@ public class GameController extends BorderPane {
         case PASS:
           selectNewRoundBooster();
           break;
-        case GAIA_PROJECT:
         case FEDERATE:
         case SPECIAL_ACTION:
           throw new IllegalStateException("Not implemented yet!");
@@ -359,7 +375,14 @@ public class GameController extends BorderPane {
   }
 
   private void gaiaPhase() {
-    // Empty for now...
+    gameBoard.hexes()
+        .stream()
+        .filter(h -> h.hasGaiaformer() && h.getPlanet().get().getPlanetType() == PlanetType.TRANSDIM)
+        .forEach(h -> h.getPlanet().get().transdimToGaia());
+    if (game.getPlayers().values().stream().anyMatch(p -> p.getRace() == Race.TERRANS && p.getGaiaBin().get() > 0)) {
+      System.out.println("Terran Special Ability!");
+    }
+    game.getPlayers().values().forEach(Player::gaiaPhase);
   }
 
   private void promptPlayerAction() {
@@ -422,6 +445,35 @@ public class GameController extends BorderPane {
   private void finishMineBuild(Hex hex) {
     gameBoard.clearHighlighting();
     checkForLeech(hex);
+    finishAction();
+  }
+
+  private void selectGaiaProject() {
+    Player activePlayer = game.getPlayers().get(game.getActivePlayer());
+    gameBoard.highlightHexes(activePlayer, possibleGaiaProjects(activePlayer), (hex, player) -> {
+      player.addGaiaformer(hex);
+    }, this::finishGaiaProject);
+  }
+
+  private Predicate<Hex> possibleGaiaProjects(Player activePlayer) {
+    return hex -> {
+      for (Coords coords : activePlayer.allBuildingLocations()) {
+        if (hex.getPlanet().isPresent()
+            && hex.getPlanet().get().getPlanetType() == PlanetType.TRANSDIM
+            && !hex.hasGaiaformer()
+            && hex.isWithinRangeOf(
+                coords,
+                activePlayer.getNavRange().intValue() + activePlayer.getTempNavRange().intValue())) {
+          return true;
+        }
+      }
+
+      return false;
+    };
+  }
+
+  public void finishGaiaProject(Hex hex) {
+    gameBoard.clearHighlighting();
     finishAction();
   }
 

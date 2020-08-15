@@ -120,6 +120,10 @@ public final class Hex extends StackPane {
         .collect(Collectors.toList());
   }
 
+  public boolean hasGaiaformer() {
+    return hasGaiaformer;
+  }
+
   private double distanceTo(Coords other) {
     return coords.distanceTo(other);
   }
@@ -128,6 +132,7 @@ public final class Hex extends StackPane {
     return distanceTo(coords) < TWO_ROOT_3 * HEX_SIZE * range + 1.0;
   }
 
+  // Action methods
   public void highlight(Player activePlayer, BiConsumer<Hex, Player> toExecute, Consumer<Hex> callBack) {
     ObservableList<String> styleClass = polygon.getStyleClass();
     styleClass.clear();
@@ -178,6 +183,12 @@ public final class Hex extends StackPane {
     getChildren().add(academy);
     building = Building.ACADEMY;
     builder = academy.getPlayer();
+  }
+
+  public void addGaiaformer(Gaiaformer gaiaformer) {
+    getChildren().add(gaiaformer);
+    hasGaiaformer = true;
+    builder = gaiaformer.getPlayer();
   }
 
   public boolean canUpgrade(Player activePlayer, GameBoard gameBoard) {

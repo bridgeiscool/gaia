@@ -14,6 +14,7 @@ import com.google.common.collect.ImmutableSet;
 
 import gaia.project.game.PlanetType;
 import gaia.project.game.board.Academy;
+import gaia.project.game.board.Gaiaformer;
 import gaia.project.game.board.Hex;
 import gaia.project.game.board.Mine;
 import gaia.project.game.board.PlanetaryInstitute;
@@ -422,6 +423,10 @@ public class Player implements Serializable {
     return availableGaiaformers;
   }
 
+  public int getGaiaformerCost() {
+    return gaiaformerCost.intValue();
+  }
+
   public ObservableSet<Coords> getGaiaformers() {
     return gaiaformers;
   }
@@ -528,6 +533,8 @@ public class Player implements Serializable {
   }
 
   private boolean gaiaformed(Hex hex) {
+    System.out.println(hex);
+    System.out.println(gaiaformers);
     return gaiaformers.stream().anyMatch(c -> hex.getCoords().equals(c));
   }
 
@@ -591,6 +598,35 @@ public class Player implements Serializable {
     }
 
     // TODO: Add logic to check if it adds onto a previous federation
+  }
+
+  public void addGaiaformer(Hex hex) {
+    Preconditions.checkArgument(bin1.get() + bin2.get() + bin3.get() >= gaiaformerCost.get());
+    Gaiaformer gaiaformer = new Gaiaformer(hex, race.getColor(), playerEnum);
+    hex.addGaiaformer(gaiaformer);
+
+    gaiaformers.add(hex.getCoords());
+
+    if (bin1.get() > gaiaformerCost.get()) {
+      Util.minus(bin1, gaiaformerCost.get());
+    } else {
+      int remainingPower = gaiaformerCost.get() - bin1.get();
+      bin1.setValue(0);
+      if (bin2.get() > remainingPower) {
+        Util.minus(bin2, remainingPower);
+      } else {
+        remainingPower = remainingPower - bin2.get();
+        bin3.setValue(0);
+        Util.minus(bin3, remainingPower);
+      }
+    }
+
+    Util.plus(gaiaBin, gaiaformerCost.get());
+  }
+
+  public void gaiaPhase() {
+    Util.plus(bin1, gaiaBin.get());
+    gaiaBin.setValue(0);
   }
 
   public void advanceTech(IntegerProperty techTrack, boolean free) {

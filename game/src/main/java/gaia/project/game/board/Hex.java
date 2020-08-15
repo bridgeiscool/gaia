@@ -174,6 +174,12 @@ public final class Hex extends StackPane {
     builder = pi.getPlayer();
   }
 
+  public void addAcademy(Academy academy) {
+    getChildren().add(academy);
+    building = Building.ACADEMY;
+    builder = academy.getPlayer();
+  }
+
   public boolean canUpgrade(Player activePlayer, GameBoard gameBoard) {
     if (building == null || builder != activePlayer.getPlayerEnum()) {
       return false;
@@ -215,20 +221,24 @@ public final class Hex extends StackPane {
         building = Building.TRADING_POST;
         break;
       case TRADING_POST:
-        building = getUpgradeTo(player);
+        building = getTpUpgradeTo(player);
         if (building == Building.RESEARCH_LAB) {
           player.buildResearchLab(this);
         } else {
-          // ResearchLab
+          // PI
           player.buildPI(this);
         }
+        break;
+      case RESEARCH_LAB:
+        building = Building.ACADEMY;
+        player.buildAcademy(this, knowledgeAcademy(player));
         break;
       default:
         throw new IllegalStateException("Can't upgrade building: " + building);
     }
   }
 
-  private Building getUpgradeTo(Player player) {
+  private Building getTpUpgradeTo(Player player) {
     Preconditions.checkArgument(player.getResearchLabs().size() < 3 || player.getPi().isEmpty());
     if (player.getResearchLabs().size() == 3) {
       return Building.PLANETARY_INSTITUTE;
@@ -248,6 +258,26 @@ public final class Hex extends StackPane {
     return response.get().getButtonData().equals(ButtonData.LEFT)
         ? Building.RESEARCH_LAB
         : Building.PLANETARY_INSTITUTE;
+  }
+
+  private boolean knowledgeAcademy(Player player) {
+    Preconditions.checkArgument(player.getKa().isEmpty() || player.getQa().isEmpty());
+    if (!player.getKa().isEmpty()) {
+      return false;
+    }
+
+    if (!player.getQa().isEmpty()) {
+      return true;
+    }
+
+    Optional<ButtonType> response;
+    ButtonType ka = new ButtonType("Knowldge Academy", ButtonData.LEFT);
+    ButtonType qa = new ButtonType("QIC Academy", ButtonData.RIGHT);
+    do {
+      response = new Alert(AlertType.CONFIRMATION, "Which academy?", ka, qa).showAndWait();
+    } while (response.isEmpty());
+
+    return response.get().getButtonData().equals(ButtonData.LEFT);
   }
 
   public void switchBuildingUI(Node newBuilding) {

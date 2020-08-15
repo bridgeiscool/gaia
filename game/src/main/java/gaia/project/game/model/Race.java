@@ -186,4 +186,8 @@ public enum Race {
   public IncomeUpdater getPiIncome() {
     return new CompoundIncome(new PowerIncome(4), new TokenIncome(1));
   }
+
+  public int getKaIncome() {
+    return 2;
+  }
 }

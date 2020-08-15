@@ -50,7 +50,7 @@
 	-fx-border-color: black;
 }
 
-.blueRace Label {
+.blueRace VBox Label {
 	-fx-text-fill: white;
 	-fx-font-size: 14.0pt;
 }
@@ -61,7 +61,7 @@
 	-fx-border-color: black;
 }
 
-.redRace Label {
+.redRace VBox Label {
 	-fx-text-fill: white;
 	-fx-font-size: 14.0pt;
 }

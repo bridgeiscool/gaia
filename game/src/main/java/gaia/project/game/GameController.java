@@ -15,6 +15,7 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import gaia.project.game.board.Academy;
 import gaia.project.game.board.GameBoard;
 import gaia.project.game.board.Hex;
 import gaia.project.game.board.Mine;
@@ -154,7 +155,23 @@ public class GameController extends BorderPane {
         });
       });
 
-      // TODO: Add other buildings...
+      game.getPlayers().values().forEach(p -> {
+        p.getKa().forEach(m -> {
+          gameBoard.hexes()
+              .stream()
+              .filter(h -> h.getCoords().equals(m))
+              .forEach(h -> h.addAcademy(new Academy(h, p.getRace().getColor(), p.getPlayerEnum())));
+        });
+      });
+
+      game.getPlayers().values().forEach(p -> {
+        p.getQa().forEach(m -> {
+          gameBoard.hexes()
+              .stream()
+              .filter(h -> h.getCoords().equals(m))
+              .forEach(h -> h.addAcademy(new Academy(h, p.getRace().getColor(), p.getPlayerEnum())));
+        });
+      });
 
       // Add back round booster tokens
       if (game.getCurrentRound().getValue() != Round.SETUP) {

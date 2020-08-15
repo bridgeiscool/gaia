@@ -81,7 +81,10 @@ public class PowerActionsController extends GridPane {
       }, callback);
     }
 
-    if (activePlayer.getBin3().intValue() >= 5) {
+    if (activePlayer.getBin3().intValue() >= 5
+        && activePlayer.getMines().size() < 8
+        && activePlayer.getOre().intValue() > 0
+        && activePlayer.getCredits().intValue() > 1) {
       doubleTf.tryHighlight(activePlayer, p -> {
         Util.plus(activePlayer.getCurrentDigs(), 2);
         p.spendPower(5);
@@ -116,7 +119,10 @@ public class PowerActionsController extends GridPane {
       }, callback);
     }
 
-    if (activePlayer.getBin3().intValue() >= 3) {
+    if (activePlayer.getBin3().intValue() >= 3
+        && activePlayer.getMines().size() < 8
+        && activePlayer.getOre().intValue() > 0
+        && activePlayer.getCredits().intValue() > 1) {
       tf.tryHighlight(activePlayer, p -> {
         Util.plus(activePlayer.getCurrentDigs(), 1);
         p.spendPower(3);

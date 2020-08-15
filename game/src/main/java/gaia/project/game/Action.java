@@ -8,7 +8,6 @@ import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 
 public class Action extends StackPane {
@@ -30,7 +29,7 @@ public class Action extends StackPane {
     this.originalStyle = octagonStyle;
     children.add(octagon);
     Label label = new Label(text);
-    label.setTextFill(Color.WHITE);
+    label.getStyleClass().add("actionLabel");
     children.add(label);
   }
 

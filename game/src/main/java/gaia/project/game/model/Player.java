@@ -376,7 +376,7 @@ public class Player implements Serializable {
     return federationTiles;
   }
 
-  public Set<TechTile> getTechTiles() {
+  public ObservableSet<TechTile> getTechTiles() {
     return techTiles;
   }
 

@@ -12,6 +12,7 @@ public class FederationTokenPane extends StackPane {
   private static final double WIDTH = 60;
 
   public FederationTokenPane(FederationTile federationTile, double scaling) {
+    getStyleClass().add("fedToken");
     ObservableList<Node> children = getChildren();
     children.add(new Shape(scaling, federationTile.isFlippable() ? "greenFedToken" : "grayFedToken"));
     children.add(new Label(federationTile.getText()));

@@ -4,14 +4,16 @@ import java.io.IOException;
 
 import gaia.project.game.model.Coords;
 import gaia.project.game.model.Player;
+import gaia.project.game.model.TechTile;
 import javafx.collections.SetChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.GridPane;
 import javafx.util.converter.NumberStringConverter;
 
-public class PlayerBoardController extends VBox {
+public class PlayerBoardController extends GridPane {
   private final Player player;
 
   // Top Bar
@@ -69,6 +71,9 @@ public class PlayerBoardController extends VBox {
   private Label gaiaformers;
   @FXML
   private Label availableGaiaformers;
+
+  @FXML
+  private FlowPane tokenArea;
 
   public PlayerBoardController(Player player) {
     FXMLLoader loader = new FXMLLoader(PlayerBoardController.class.getResource("PlayerBoard.fxml"));
@@ -133,5 +138,9 @@ public class PlayerBoardController extends VBox {
     availableGaiaformers.textProperty()
         .bindBidirectional(player.getAvailableGaiaformers(), new NumberStringConverter());
 
+    player.getTechTiles().forEach(tt -> tokenArea.getChildren().add(new MiniTechTile(tt)));
+    player.getTechTiles().addListener((SetChangeListener<TechTile>) change -> {
+      tokenArea.getChildren().add(new MiniTechTile(change.getElementAdded()));
+    });
   }
 }

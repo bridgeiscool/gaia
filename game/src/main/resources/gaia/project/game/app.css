@@ -39,8 +39,9 @@
 	-fx-border-color: black;
 }
 
-.yellowRace Label {
+.yellowRace VBox Label {
 	-fx-text-fill: black;
+	-fx-font-size: 14.0pt;
 }
 
 .blueRace {
@@ -51,6 +52,7 @@
 
 .blueRace Label {
 	-fx-text-fill: white;
+	-fx-font-size: 14.0pt;
 }
 
 .redRace {
@@ -61,60 +63,84 @@
 
 .redRace Label {
 	-fx-text-fill: white;
+	-fx-font-size: 14.0pt;
 }
 
 .terraTrack {
 	-fx-background-color: maroon;
 	-fx-border-width: 1;
 	-fx-border-color: white;
+	-fx-font-size: 14.0pt;
 }
 
 .navTrack {
 	-fx-background-color: dimgray;
 	-fx-border-width: 1;
 	-fx-border-color: white;
+	-fx-font-size: 14.0pt;
 }
 
 .aiTrack {
 	-fx-background-color: green;
 	-fx-border-width: 1;
 	-fx-border-color: white;
+	-fx-font-size: 14.0pt;
 }
 
 .gaiaTrack {
 	-fx-background-color: purple;
 	-fx-border-width: 1;
 	-fx-border-color: white;
+	-fx-font-size: 14.0pt;
 }
 
 .econTrack {
 	-fx-background-color: sandybrown;
 	-fx-border-width: 1;
 	-fx-border-color: white;
+	-fx-font-size: 14.0pt;
 }
 
 .knowledgeTrack {
 	-fx-background-color: cyan;
 	-fx-border-width: 1;
 	-fx-border-color: white;
+	-fx-font-size: 14.0pt;
 }
 
 .techTile {
 	-fx-background-color: black;
 	-fx-border-color: white;
 	-fx-border-width: 1;
+	-fx-font-size: 14.0pt;
 }
 
 .techTileHighlighted {
 	-fx-background-color: black;
 	-fx-border-color: white;
 	-fx-border-width: 2;
+	-fx-font-size: 14.0pt;
+}
+
+.miniTechTile {
+	-fx-background-color: black;
+	-fx-border-color: white;
+	-fx-border-width: 1;
+	-fx-font-size: 10.0pt;
+}
+
+.miniTechTileHighlighted {
+	-fx-background-color: black;
+	-fx-border-color: white;
+	-fx-border-width: 2;
+	-fx-font-size: 10.0pt;
 }
 
 .advTechTile {
 	-fx-background-color: navy;
 	-fx-border-color: white;
 	-fx-border-width: 1;
+	-fx-font-size: 12.0pt;
 }
 
 .powerAction {
@@ -122,6 +148,10 @@
 	-fx-stroke: black;
 	-fx-stroke-type: outside;
 	-fx-stroke-width: 1;
+}
+
+.powerAction Label {
+	-fx-font-size: 14.0pt;
 }
 
 .powerActionHighlighted {
@@ -142,7 +172,7 @@
 	-fx-fill: green;
 	-fx-stroke: white;
 	-fx-stroke-type: outside;
-	-fx-stroke-width: 2;
+	-fx-stroke-width: 2
 }
 
 .takenAction {
@@ -150,6 +180,7 @@
 	-fx-stroke: black;
 	-fx-stroke-type: outside;
 	-fx-stroke-width: 1;
+	-fx-font-size: 14.0pt;
 }
 
 .roundBooster {
@@ -158,7 +189,15 @@
 
 .roundBooster Label {
 	-fx-text-fill: black;
-	-fx-font-size: 11.0;
+	-fx-font-size: 14.0pt;
+}
+
+.fedToken {
+	
+}
+
+.fedToken Label {
+	-fx-font-size: 14.0pt;
 }
 
 .greenFedToken {
@@ -166,6 +205,7 @@
 	-fx-stroke: black;
 	-fx-stroke-type: outside;
 	-fx-stroke-width: 1;
+	-fx-font-size: 14.0pt;
 }
 
 .grayFedToken {
@@ -173,6 +213,7 @@
 	-fx-stroke: black;
 	-fx-stroke-type: outside;
 	-fx-stroke-width: 1;
+	-fx-font-size: 14.0pt;
 }
 
 .roundScoringBox {
@@ -180,11 +221,21 @@
 	-fx-border-color: black;
 	-fx-border-width: 1;
 	-fx-pref-width: 120;
+	-fx-font-size: 14.0pt;
 }
 
 .highlightedHbox {
 	-fx-border-color:white;
 	-fx-border-width: 2;
+	-fx-font-size: 14.0pt;
+}
+
+.endScoring {
+	
+}
+
+.endScoring Label {
+	-fx-font-size: 14.0pt;
 }
 
 .menu-bar {
@@ -197,21 +248,21 @@
 		linear-gradient(#777777 0.0%, #606060 50.0%, #505250 51.0%, #2a2b2a
 		100.0%);
 	-fx-font-family: "Helvetica";
-	-fx-font-size: 11.0 pt;
+	-fx-font-size: 17.0 pt;
 	-fx-text-fill: white;
 }
 
 .menu {
 	-fx-background-color: transparent;
 	-fx-font-family: "Helvetica";
-	-fx-font-size: 11.0 pt;
+	-fx-font-size: 17.0 pt;
 	-fx-text-fill: white;
 }
 
 .menu-item {
 	-fx-background-color: #757575;
 	-fx-font-family: "Helvetica";
-	-fx-font-size: 11.0 pt;
+	-fx-font-size: 17.0 pt;
 	-fx-text-fill: white;
 }
 
@@ -219,21 +270,18 @@
 	-fx-background-color: #656565;
 }
 
-.label {
+.blackLabel {
+	-fx-text-fill: black;
 	-fx-font-size: 14.0pt;
 }
 
-.blackLabel {
-	-fx-text-fill: black;
-	-fx-font-size: 10.0pt;
+.actionLabel {
+	-fx-text-fill: white;
+	-fx-font-size: 14.0pt;
 }
 
 .label-underlined {
 	-fx-underline: true;
-}
-
-.label-dealer {
-	-fx-font-size: 18.0pt;
 }
 
 .padded-border {

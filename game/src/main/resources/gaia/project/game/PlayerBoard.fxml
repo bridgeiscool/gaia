@@ -8,65 +8,74 @@
 <?import javafx.scene.image.*?>
 <?import javafx.geometry.*?>
 
-<fx:root type="javafx.scene.layout.VBox" xmlns:fx="http://javafx.com/fxml" prefWidth="600">
+<fx:root type="javafx.scene.layout.GridPane" xmlns:fx="http://javafx.com/fxml" prefWidth="600">
   <stylesheets>
     <URL value="@app.css" />
   </stylesheets>
+  <columnConstraints>
+    <ColumnConstraints percentWidth="60.0" halignment="LEFT" />
+    <ColumnConstraints percentWidth="40.0" halignment="LEFT" />
+  </columnConstraints>
+  
 
-  <children>
-    <HBox prefHeight="25" prefWidth="300" spacing="7">
-      <Label fx:id="raceName" />
-      <Label fx:id="vps" />
-    </HBox>
-    <HBox prefHeight="25" prefWidth="300" spacing="7">
-      <Label fx:id="creditsLabel" />
-      <Label fx:id="creditIncome" />
-      <Label fx:id="oreLabel" />
-      <Label fx:id="oreIncome" />
-      <Label fx:id="knowledgeLabel" />
-      <Label fx:id="knowledgeIncome" />
-      <Label fx:id="qicLabel" />
-      <Label fx:id="qicIncome" />
-    </HBox>
-    <HBox prefHeight="25" prefWidth="300" spacing="7">
-      <Label fx:id="gaiaBin" />
-      <Label fx:id="bin1" />
-      <Label fx:id="bin2" />
-      <Label fx:id="bin3" />
-      <Label fx:id="ptIncome" />
-      <Label fx:id="pIncome" />
-    </HBox>
-    <GridPane hgap="10" vgap="1">
-      <columnConstraints>
-        <ColumnConstraints halignment="CENTER"/>
-        <ColumnConstraints halignment="CENTER"/>
-        <ColumnConstraints halignment="CENTER"/>
-        <ColumnConstraints halignment="CENTER"/>
-        <ColumnConstraints halignment="CENTER"/>
-        <ColumnConstraints halignment="CENTER"/>
-        <ColumnConstraints halignment="CENTER"/>
-      </columnConstraints>
-      
-      <!-- Label Row -->
-      <Label text="M" GridPane.rowIndex="0" GridPane.columnIndex="0" />
-      <Label text="TP" GridPane.rowIndex="0" GridPane.columnIndex="1" />
-      <Label text="RL" GridPane.rowIndex="0" GridPane.columnIndex="2" />
-      <Label text="PI" GridPane.rowIndex="0" GridPane.columnIndex="3" />
-      <Label text="KA" GridPane.rowIndex="0" GridPane.columnIndex="4" />
-      <Label text="QA" GridPane.rowIndex="0" GridPane.columnIndex="5" />
-      <Label text="GF" GridPane.rowIndex="0" GridPane.columnIndex="6" />
-      
-      <!-- Value row -->
-      <Label fx:id="mines" GridPane.rowIndex="1" GridPane.columnIndex="0" />
-      <Label fx:id="tradingPosts" GridPane.rowIndex="1" GridPane.columnIndex="1" />
-      <Label fx:id="researchLabs" GridPane.rowIndex="1" GridPane.columnIndex="2" />
-      <Label fx:id="planetaryInstitute" GridPane.rowIndex="1" GridPane.columnIndex="3" />
-      <Label fx:id="knowledgeAcademy" GridPane.rowIndex="1" GridPane.columnIndex="4" />
-      <Label fx:id="qicAcademy" GridPane.rowIndex="1" GridPane.columnIndex="5" />
-      <HBox spacing="0" GridPane.rowIndex="1" GridPane.columnIndex="6">
-        <Label fx:id="gaiaformers" />
-        <Label fx:id="availableGaiaformers" />
+  <VBox GridPane.rowIndex="0" GridPane.columnIndex="0">
+    <children>
+      <HBox prefHeight="25" prefWidth="300" spacing="7">
+        <Label fx:id="raceName" />
+        <Label fx:id="vps" />
       </HBox>
-    </GridPane>
-  </children>
+      <HBox prefHeight="25" prefWidth="300" spacing="7">
+        <Label fx:id="creditsLabel" />
+        <Label fx:id="creditIncome" />
+        <Label fx:id="oreLabel" />
+        <Label fx:id="oreIncome" />
+        <Label fx:id="knowledgeLabel" />
+        <Label fx:id="knowledgeIncome" />
+        <Label fx:id="qicLabel" />
+        <Label fx:id="qicIncome" />
+      </HBox>
+      <HBox prefHeight="25" prefWidth="300" spacing="7">
+        <Label fx:id="gaiaBin" />
+        <Label fx:id="bin1" />
+        <Label fx:id="bin2" />
+        <Label fx:id="bin3" />
+        <Label fx:id="ptIncome" />
+        <Label fx:id="pIncome" />
+      </HBox>
+      <GridPane hgap="10" vgap="1">
+        <columnConstraints>
+          <ColumnConstraints halignment="CENTER"/>
+          <ColumnConstraints halignment="CENTER"/>
+          <ColumnConstraints halignment="CENTER"/>
+          <ColumnConstraints halignment="CENTER"/>
+          <ColumnConstraints halignment="CENTER"/>
+          <ColumnConstraints halignment="CENTER"/>
+          <ColumnConstraints halignment="CENTER"/>
+        </columnConstraints>
+        
+        <!-- Label Row -->
+        <Label text="M" GridPane.rowIndex="0" GridPane.columnIndex="0" />
+        <Label text="TP" GridPane.rowIndex="0" GridPane.columnIndex="1" />
+        <Label text="RL" GridPane.rowIndex="0" GridPane.columnIndex="2" />
+        <Label text="PI" GridPane.rowIndex="0" GridPane.columnIndex="3" />
+        <Label text="KA" GridPane.rowIndex="0" GridPane.columnIndex="4" />
+        <Label text="QA" GridPane.rowIndex="0" GridPane.columnIndex="5" />
+        <Label text="GF" GridPane.rowIndex="0" GridPane.columnIndex="6" />
+        
+        <!-- Value row -->
+        <Label fx:id="mines" GridPane.rowIndex="1" GridPane.columnIndex="0" />
+        <Label fx:id="tradingPosts" GridPane.rowIndex="1" GridPane.columnIndex="1" />
+        <Label fx:id="researchLabs" GridPane.rowIndex="1" GridPane.columnIndex="2" />
+        <Label fx:id="planetaryInstitute" GridPane.rowIndex="1" GridPane.columnIndex="3" />
+        <Label fx:id="knowledgeAcademy" GridPane.rowIndex="1" GridPane.columnIndex="4" />
+        <Label fx:id="qicAcademy" GridPane.rowIndex="1" GridPane.columnIndex="5" />
+        <HBox spacing="0" GridPane.rowIndex="1" GridPane.columnIndex="6">
+          <Label fx:id="gaiaformers" />
+          <Label fx:id="availableGaiaformers" />
+        </HBox>
+      </GridPane>
+    </children>
+  </VBox>
+  
+  <FlowPane hgap="3" vgap="3" fx:id="tokenArea" GridPane.rowIndex="0" GridPane.columnIndex="1" />
 </fx:root>

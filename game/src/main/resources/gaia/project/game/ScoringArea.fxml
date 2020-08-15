@@ -15,7 +15,7 @@
 
   <top>
     <VBox alignment="CENTER">
-      <Label text="SCORING" style="fx-font-size:28" />
+      <Label text="SCORING" style="fx-font-size:28; -fx-text-fill:white;" />
       <Separator />
     </VBox>
   </top>
@@ -46,7 +46,7 @@
   </center>
   <right>
     <VBox alignment="CENTER">
-      <GridPane hgap="5" vgap="5" prefWidth="170">
+      <GridPane hgap="5" vgap="5" prefWidth="170" styleClass="endScoring">
         <padding>
           <Insets left="10" right="10" top="10" bottom="10" />
         </padding>

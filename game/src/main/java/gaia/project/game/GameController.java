@@ -19,6 +19,7 @@ import gaia.project.game.board.GameBoard;
 import gaia.project.game.board.Hex;
 import gaia.project.game.board.Mine;
 import gaia.project.game.board.Planet;
+import gaia.project.game.board.PlanetaryInstitute;
 import gaia.project.game.board.ResearchLab;
 import gaia.project.game.board.TradingPost;
 import gaia.project.game.model.Coords;
@@ -141,6 +142,15 @@ public class GameController extends BorderPane {
               .stream()
               .filter(h -> h.getCoords().equals(m))
               .forEach(h -> h.addResearchLab(new ResearchLab(h, p.getRace().getColor(), p.getPlayerEnum())));
+        });
+      });
+
+      game.getPlayers().values().forEach(p -> {
+        p.getPi().forEach(m -> {
+          gameBoard.hexes()
+              .stream()
+              .filter(h -> h.getCoords().equals(m))
+              .forEach(h -> h.addPi(new PlanetaryInstitute(h, p.getRace().getColor(), p.getPlayerEnum())));
         });
       });
 

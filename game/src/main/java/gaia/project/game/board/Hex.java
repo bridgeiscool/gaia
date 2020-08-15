@@ -168,6 +168,12 @@ public final class Hex extends StackPane {
     builder = researchLab.getPlayer();
   }
 
+  public void addPi(PlanetaryInstitute pi) {
+    getChildren().add(pi);
+    building = Building.PLANETARY_INSTITUTE;
+    builder = pi.getPlayer();
+  }
+
   public boolean canUpgrade(Player activePlayer, GameBoard gameBoard) {
     if (building == null || builder != activePlayer.getPlayerEnum()) {
       return false;
@@ -212,6 +218,9 @@ public final class Hex extends StackPane {
         building = getUpgradeTo(player);
         if (building == Building.RESEARCH_LAB) {
           player.buildResearchLab(this);
+        } else {
+          // ResearchLab
+          player.buildPI(this);
         }
         break;
       default:

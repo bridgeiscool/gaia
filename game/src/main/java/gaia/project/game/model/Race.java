@@ -13,6 +13,11 @@ public enum Race {
     public int getStartingAiLevel() {
       return 1;
     }
+
+    @Override
+    public IncomeUpdater getPiIncome() {
+      return new CompoundIncome(new PowerIncome(4), new QicIncome(1));
+    }
   },
   GLEENS("Gleens", "yellowRace", Color.YELLOW, PlanetType.YELLOW) {
     @Override
@@ -23,6 +28,11 @@ public enum Race {
     @Override
     public int getStartingNavLevel() {
       return 1;
+    }
+
+    @Override
+    public IncomeUpdater getPiIncome() {
+      return new CompoundIncome(new PowerIncome(4), new OreIncome(1));
     }
   },
   TERRANS("Terrans", "blueRace", Color.BLUE, PlanetType.BLUE) {
@@ -36,17 +46,17 @@ public enum Race {
       return 1;
     }
   },
-  LANTIDS("Lantids", "blueRace", Color.BLUE, PlanetType.BLUE) {
-    @Override
-    public int getStartingCredits() {
-      return 13;
-    }
-
-    @Override
-    public int getStartingBin2() {
-      return 2;
-    }
-  },
+  // LANTIDS("Lantids", "blueRace", Color.BLUE, PlanetType.BLUE) {
+  // @Override
+  // public int getStartingCredits() {
+  // return 13;
+  // }
+  //
+  // @Override
+  // public int getStartingBin2() {
+  // return 2;
+  // }
+  // },
   HADSCH_HALLAS("Hadsch Hallas", "redRace", Color.RED, PlanetType.RED) {
     @Override
     public int getStartingCreditIncome() {
@@ -171,5 +181,9 @@ public enum Race {
 
   public List<IncomeUpdater> getRlIncome() {
     return ImmutableList.of(new ResearchIncome(1), new ResearchIncome(1), new ResearchIncome(1));
+  }
+
+  public IncomeUpdater getPiIncome() {
+    return new CompoundIncome(new PowerIncome(4), new TokenIncome(1));
   }
 }

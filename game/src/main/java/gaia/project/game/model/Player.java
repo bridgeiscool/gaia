@@ -15,6 +15,7 @@ import com.google.common.collect.ImmutableSet;
 import gaia.project.game.PlanetType;
 import gaia.project.game.board.Hex;
 import gaia.project.game.board.Mine;
+import gaia.project.game.board.PlanetaryInstitute;
 import gaia.project.game.board.ResearchLab;
 import gaia.project.game.board.TradingPost;
 import javafx.beans.property.IntegerProperty;
@@ -82,6 +83,7 @@ public class Player implements Serializable {
   // Income related
   private final List<IncomeUpdater> tpIncome;
   private final List<IncomeUpdater> rlIncome;
+  private final IncomeUpdater piIncome;
 
   // Scoring Related
   private transient ObservableSet<Integer> sectors = FXCollections.observableSet(new HashSet<>());
@@ -121,6 +123,7 @@ public class Player implements Serializable {
     this.score = new SimpleIntegerProperty(10);
     this.tpIncome = race.getTpIncome();
     this.rlIncome = race.getRlIncome();
+    this.piIncome = race.getPiIncome();
 
     // We set up tech bonuses so that when we add race starting techs we get the bonus
     setupTechBonuses();
@@ -625,6 +628,20 @@ public class Player implements Serializable {
     // Update Income
     tpIncome.get(tradingPosts.size()).removeFrom(currentIncome);
     rlIncome.get(researchLabs.size() - 1).addTo(currentIncome);
+  }
+
+  public void buildPI(Hex hex) {
+    PlanetaryInstitute pi = new PlanetaryInstitute(hex, race.getColor(), playerEnum);
+    hex.switchBuildingUI(pi);
+    this.pi.add(hex.getCoords());
+    tradingPosts.remove(hex.getCoords());
+
+    Util.minus(ore, 4);
+    Util.minus(credits, 6);
+
+    // Update income
+    tpIncome.get(tradingPosts.size()).removeFrom(currentIncome);
+    piIncome.addTo(currentIncome);
   }
 
   // END GAME

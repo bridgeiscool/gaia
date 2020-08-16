@@ -6,7 +6,7 @@ public enum TechTile {
   CHARGE_4() {
     @Override
     public String display() {
-      return "ACT: +4p";
+      return "+4p";
     }
 
     @Override

@@ -17,9 +17,15 @@ public class TechTileHBox extends HBox {
 
   public TechTileHBox(TechTile techTile) {
     this.techTile = techTile;
-    Label label = new Label(techTile.display());
-    label.setTextFill(Color.WHITE);
-    getChildren().add(label);
+    if (techTile.isAction()) {
+      Action action = new Action(20.0, techTile.display(), "specialAction");
+      action.setTaken(false);
+      getChildren().add(action);
+    } else {
+      Label label = new Label(techTile.display());
+      label.setTextFill(Color.WHITE);
+      getChildren().add(label);
+    }
     setPrefHeight(72);
     setPrefWidth(108);
     setAlignment(Pos.CENTER);

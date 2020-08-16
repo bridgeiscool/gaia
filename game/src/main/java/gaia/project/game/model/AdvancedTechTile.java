@@ -20,7 +20,7 @@ public enum AdvancedTechTile {
   ORE_ACTION {
     @Override
     public String display() {
-      return "ACT: +3o";
+      return "+3o";
     }
 
     @Override
@@ -36,7 +36,7 @@ public enum AdvancedTechTile {
   Q_C_ACTION {
     @Override
     public String display() {
-      return "ACT: +q,5c";
+      return "+q+5c";
     }
 
     @Override

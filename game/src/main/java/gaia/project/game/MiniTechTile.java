@@ -1,7 +1,12 @@
 package gaia.project.game;
 
+import java.io.Serializable;
+
+import javax.annotation.Nullable;
+
 import gaia.project.game.model.Player;
 import gaia.project.game.model.TechTile;
+import javafx.collections.MapChangeListener;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
@@ -12,13 +17,29 @@ public class MiniTechTile extends HBox {
   private static final String NORMAL = "techTile";
   private static final String HIGHLIGHTED = "techTileHighlighted";
   private final TechTile techTile;
+  @Nullable
+  private Action action;
 
-  public MiniTechTile(TechTile techTile) {
+  public MiniTechTile(Player player, TechTile techTile) {
     this.techTile = techTile;
-    Label label = new Label(techTile.display());
-    label.setTextFill(Color.WHITE);
-    label.setFont(Font.font(10));
-    getChildren().add(label);
+    if (techTile.isAction()) {
+      this.action = new Action(20.0, techTile.display(), "specialAction");
+      System.out.println(player.getSpecialActions());
+      action.setTaken(player.getSpecialActions().get(techTile));
+      getChildren().add(action);
+
+      // Bind state UI to used status
+      player.getSpecialActions().addListener((MapChangeListener<? super Serializable, ? super Boolean>) listener -> {
+        if (listener.getKey() == techTile) {
+          action.setTaken(listener.getValueAdded());
+        }
+      });
+    } else {
+      Label label = new Label(techTile.display());
+      label.setTextFill(Color.WHITE);
+      label.setFont(Font.font(10));
+      getChildren().add(label);
+    }
     setPrefHeight(36);
     setPrefWidth(54);
     setAlignment(Pos.CENTER);
@@ -31,6 +52,7 @@ public class MiniTechTile extends HBox {
       getStyleClass().add(HIGHLIGHTED);
       this.setOnMouseClicked(me -> {
         techTile.onAction(activePlayer);
+        this.action.setTaken(true);
         callBack.call();
       });
     }
@@ -40,5 +62,9 @@ public class MiniTechTile extends HBox {
     setOnMouseClicked(null);
     getStyleClass().clear();
     getStyleClass().add(NORMAL);
+  }
+
+  public boolean isAction() {
+    return action != null;
   }
 }

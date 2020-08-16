@@ -37,8 +37,8 @@ public class TechTileHBox extends HBox {
       getStyleClass().clear();
       getStyleClass().add(HIGHLIGHTED);
       this.setOnMouseClicked(me -> {
-        activePlayer.getTechTiles().add(techTile);
         techTile.addTo(activePlayer);
+        activePlayer.getTechTiles().add(techTile);
         if (techBump.isPresent()) {
           techBump.get().updatePlayer(activePlayer);
         }

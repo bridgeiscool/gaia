@@ -5,8 +5,10 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import com.google.common.base.Preconditions;
@@ -26,6 +28,7 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 import javafx.collections.ObservableSet;
 
 // Backing bean to store player's information
@@ -72,6 +75,8 @@ public class Player implements Serializable {
   private transient IntegerProperty bigBuildingPower = new SimpleIntegerProperty(3);
   private transient ObservableSet<PlanetType> builtOn = FXCollections.observableSet(new HashSet<>());
   private transient IntegerProperty gaiaPlanets = new SimpleIntegerProperty(0);
+  // Boolean indicates whether the action has been used this round
+  private transient ObservableMap<Serializable, Boolean> specialActions = FXCollections.observableMap(new HashMap<>());
 
   // Buildings, etc
   private transient ObservableSet<Coords> mines = FXCollections.observableSet(new HashSet<>());
@@ -515,6 +520,10 @@ public class Player implements Serializable {
     return buildingsInFeds;
   }
 
+  public ObservableMap<Serializable, Boolean> getSpecialActions() {
+    return specialActions;
+  }
+
   // Utility methods
   public Set<Coords> allBuildingLocations() {
     return ImmutableSet.<Coords> builder()
@@ -548,6 +557,13 @@ public class Player implements Serializable {
   public void endTurn() {
     currentDigs.setValue(0);
     tempNavRange.setValue(0);
+  }
+
+  public void clearSpecialActions() {
+    System.out.println(specialActions);
+    // Should set each value to false
+    specialActions.keySet().forEach(k -> specialActions.put(k, false));
+    System.out.println(specialActions);
   }
 
   public int getPowerGain(Hex hex) {
@@ -753,6 +769,7 @@ public class Player implements Serializable {
     oos.writeObject(new HashSet<>(builtOn));
     oos.writeInt(gaiaPlanets.get());
     oos.writeObject(new HashSet<>(techTiles));
+    oos.writeObject(new HashMap<>(specialActions));
 
     // Buildings etc
     oos.writeObject(new HashSet<>(mines));
@@ -810,6 +827,7 @@ public class Player implements Serializable {
     builtOn = FXCollections.observableSet((Set<PlanetType>) ois.readObject());
     gaiaPlanets = new SimpleIntegerProperty(ois.readInt());
     techTiles = FXCollections.observableSet((Set<TechTile>) ois.readObject());
+    specialActions = FXCollections.observableMap((Map<Serializable, Boolean>) ois.readObject());
 
     // Buildings
     mines = FXCollections.observableSet((Set<Coords>) ois.readObject());

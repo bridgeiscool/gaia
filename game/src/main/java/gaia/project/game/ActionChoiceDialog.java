@@ -74,7 +74,9 @@ public class ActionChoiceDialog extends Dialog<Actions> {
     powerAction.setDisable(
         player.getBin3().intValue() < game.getCheapestPowerAction()
             && player.getQic().intValue() < game.getCheapestQicAction());
-    specialAction.setDisable(!(player.getRoundBooster().isAction() && !player.roundBoosterUsed()));
+    specialAction.setDisable(
+        !(player.getRoundBooster().isAction() && !player.roundBoosterUsed())
+            && !(player.getSpecialActions().containsValue(false)));
   }
 
   @FXML

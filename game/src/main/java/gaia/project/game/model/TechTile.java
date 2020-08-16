@@ -17,11 +17,12 @@ public enum TechTile {
     @Override
     public void onAction(Player player) {
       player.chargePower(4);
+      player.getSpecialActions().put(this, true);
     }
 
     @Override
     public void addTo(Player player) {
-      // Does nothing initially
+      player.getSpecialActions().put(this, false);
     }
   },
   POWER_ORE() {

@@ -43,9 +43,8 @@ public class RoundBoosterTile extends StackPane {
   }
 
   private Action getSpecialAction(RoundBooster roundBooster) {
-    Action action = new Action(20.0, roundBooster.getTopText(), "specialAction");
+    this.action = new Action(20.0, roundBooster.getTopText(), "specialAction");
     action.setTaken(false);
-    this.action = action;
     return action;
   }
 

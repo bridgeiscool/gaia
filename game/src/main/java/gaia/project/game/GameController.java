@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
+import java.util.TreeMap;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -68,6 +69,7 @@ public class GameController extends BorderPane {
   private final List<RoundBoosterTile> roundBoosters;
   private final TechTracks techTracks;
   private final PowerActionsController powerActionsController;
+  private final TreeMap<PlayerEnum, PlayerBoardController> playerBoards = new TreeMap<>();
 
   private final List<Runnable> setupQueue = new ArrayList<>();
 
@@ -88,9 +90,7 @@ public class GameController extends BorderPane {
     mainPane.centerProperty().set(gameBoard);
 
     // Init player boards
-    PlayerBoardController player1 = new PlayerBoardController(game.getPlayers().get(PlayerEnum.PLAYER1));
-    PlayerBoardController player2 = new PlayerBoardController(game.getPlayers().get(PlayerEnum.PLAYER2));
-    PlayerBoardController player3 = new PlayerBoardController(game.getPlayers().get(PlayerEnum.PLAYER3));
+    game.getPlayers().entrySet().forEach(e -> playerBoards.put(e.getKey(), new PlayerBoardController(e.getValue())));
 
     // Init round bonuses
     for (int i = 0; i < 6; ++i) {
@@ -116,8 +116,9 @@ public class GameController extends BorderPane {
     VBox vbox = new VBox(5, techTracks, powerActionsController, new Separator(), miscContent);
     mainPane.setRight(vbox);
 
-    HBox hbox = new HBox(5, player1, player2, player3);
-    mainPane.setBottom(hbox);
+    HBox playerBoardBox = new HBox(5);
+    playerBoards.entrySet().forEach(e -> playerBoardBox.getChildren().add(e.getValue()));
+    mainPane.setBottom(playerBoardBox);
 
     if (load) {
       resetGameBoard(game);
@@ -556,10 +557,15 @@ public class GameController extends BorderPane {
             selectMineBuild();
           });
     }
+
+    playerBoards.get(game.getActivePlayer()).highlightActions(() -> {
+      finishSpecialAction();
+    });
   }
 
   private void clearSpecialActionHighlighting() {
     roundBoosters.forEach(rb -> rb.clearHighlighting());
+    playerBoards.get(game.getActivePlayer()).clearHighlighting();
   }
 
   private void finishSpecialAction() {
@@ -576,7 +582,7 @@ public class GameController extends BorderPane {
   private void finishRound() {
     System.out.println("Round over!");
     roundBoosters.forEach(RoundBoosterTile::clearAction);
-    // TODO: Clear actions
+    game.getPlayers().values().forEach(Player::clearSpecialActions);
 
     if (game.getCurrentRound().getValue() == Round.ROUND6) {
       endGame();

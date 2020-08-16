@@ -138,9 +138,28 @@ public class PlayerBoardController extends GridPane {
     availableGaiaformers.textProperty()
         .bindBidirectional(player.getAvailableGaiaformers(), new NumberStringConverter());
 
-    player.getTechTiles().forEach(tt -> tokenArea.getChildren().add(new MiniTechTile(tt)));
+    // Tech Tiles
+    player.getTechTiles().forEach(tt -> tokenArea.getChildren().add(new MiniTechTile(player, tt)));
     player.getTechTiles().addListener((SetChangeListener<TechTile>) change -> {
-      tokenArea.getChildren().add(new MiniTechTile(change.getElementAdded()));
+      tokenArea.getChildren().add(new MiniTechTile(player, change.getElementAdded()));
     });
+  }
+
+  public void highlightActions(CallBack callback) {
+    tokenArea.getChildren()
+        .stream()
+        .filter(MiniTechTile.class::isInstance)
+        .map(MiniTechTile.class::cast)
+        .filter(MiniTechTile::isAction)
+        .forEach(tt -> tt.highlight(player, callback));
+  }
+
+  public void clearHighlighting() {
+    tokenArea.getChildren()
+        .stream()
+        .filter(MiniTechTile.class::isInstance)
+        .map(MiniTechTile.class::cast)
+        .filter(MiniTechTile::isAction)
+        .forEach(MiniTechTile::clearHighlighting);
   }
 }

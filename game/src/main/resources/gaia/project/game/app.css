@@ -175,6 +175,13 @@
 	-fx-stroke-width: 2
 }
 
+.specialAction {
+	-fx-fill: orange;
+	-fx-stroke: black;
+	-fx-stroke-type: outside;
+	-fx-stroke-width: 1;
+}
+
 .takenAction {
 	-fx-fill: gray;
 	-fx-stroke: black;

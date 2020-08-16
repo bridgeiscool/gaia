@@ -233,11 +233,13 @@ public class GameController extends BorderPane {
         case POWER_ACTION:
           highlightPowerActions();
           break;
+        case SPECIAL_ACTION:
+          highlightSpecialActions();
+          break;
         case PASS:
           selectNewRoundBooster();
           break;
         case FEDERATE:
-        case SPECIAL_ACTION:
           throw new IllegalStateException("Not implemented yet!");
       }
     } else {
@@ -542,6 +544,29 @@ public class GameController extends BorderPane {
     finishAction();
   }
 
+  private void highlightSpecialActions() {
+    Player activePlayer = game.getPlayers().get(game.getActivePlayer());
+    if (activePlayer.getRoundBooster().isAction() && !activePlayer.roundBoosterUsed()) {
+      roundBoosters.stream()
+          .filter(rb -> rb.getRoundBooster() == activePlayer.getRoundBooster())
+          .findFirst()
+          .get()
+          .highlightSpecialAction(activePlayer, () -> {
+            clearSpecialActionHighlighting();
+            selectMineBuild();
+          });
+    }
+  }
+
+  private void clearSpecialActionHighlighting() {
+    roundBoosters.forEach(rb -> rb.clearHighlighting());
+  }
+
+  private void finishSpecialAction() {
+    clearSpecialActionHighlighting();
+    finishAction();
+  }
+
   private void finishAction() {
     confirmAction.setDisable(false);
     game.getPlayers().get(game.getActivePlayer()).getTempNavRange().setValue(0);
@@ -550,6 +575,7 @@ public class GameController extends BorderPane {
 
   private void finishRound() {
     System.out.println("Round over!");
+    roundBoosters.forEach(RoundBoosterTile::clearAction);
     // TODO: Clear actions
 
     if (game.getCurrentRound().getValue() == Round.ROUND6) {

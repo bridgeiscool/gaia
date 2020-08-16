@@ -1,7 +1,7 @@
 package gaia.project.game.model;
 
 public enum RoundBooster {
-  DIG("+1T", "(+2c)") {
+  DIG("TF", "(+2c)") {
 
     @Override
     public void addIncome(Income addTo) {
@@ -23,7 +23,7 @@ public enum RoundBooster {
       Util.plus(player.getCurrentDigs(), 1);
     }
   },
-  JUMP("+3 NAV", "(+2p)") {
+  JUMP("NAV", "(+2p)") {
     @Override
     public void addIncome(Income addTo) {
       addTo.getChargeIncome().setValue(addTo.getChargeIncome().getValue() + 2);

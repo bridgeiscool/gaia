@@ -2,6 +2,8 @@ package gaia.project.game;
 
 import java.util.Optional;
 
+import javax.annotation.Nullable;
+
 import gaia.project.game.model.Player;
 import gaia.project.game.model.PlayerEnum;
 import gaia.project.game.model.RoundBooster;
@@ -23,6 +25,8 @@ public class RoundBoosterTile extends StackPane {
   private RoundBooster roundBooster;
   private Optional<PlayerEnum> currentPlayer = Optional.empty();
   private final BoosterRectangle rectangle;
+  @Nullable
+  private Action action;
 
   public RoundBoosterTile(RoundBooster roundBooster) {
     this.roundBooster = roundBooster;
@@ -30,9 +34,19 @@ public class RoundBoosterTile extends StackPane {
     ObservableList<Node> children = getChildren();
     this.rectangle = new BoosterRectangle();
     children.add(rectangle);
-    VBox vbox = new VBox(60.0, new Label(roundBooster.getTopText()), new Label(roundBooster.getBottomText()));
+    VBox vbox = new VBox(
+        60.0,
+        roundBooster.isAction() ? getSpecialAction(roundBooster) : new Label(roundBooster.getTopText()),
+        new Label(roundBooster.getBottomText()));
     vbox.setAlignment(Pos.CENTER);
     children.add(vbox);
+  }
+
+  private Action getSpecialAction(RoundBooster roundBooster) {
+    Action action = new Action(20.0, roundBooster.getTopText(), "specialAction");
+    action.setTaken(false);
+    this.action = action;
+    return action;
   }
 
   public boolean isTaken() {
@@ -54,10 +68,6 @@ public class RoundBoosterTile extends StackPane {
     return roundBooster;
   }
 
-  public void setRoundBooster(RoundBooster roundBooster) {
-    this.roundBooster = roundBooster;
-  }
-
   public void clearHighlighting() {
     setOnMouseClicked(null);
     rectangle.setNormalBorder();
@@ -72,6 +82,24 @@ public class RoundBoosterTile extends StackPane {
     if (currentPlayer.isPresent() && currentPlayer.get() == activePlayer) {
       getChildren().remove(getChildren().size() - 1);
       currentPlayer = Optional.empty();
+    }
+  }
+
+  public void highlightSpecialAction(Player activePlayer, CallBack callback) {
+    if (currentPlayer.isPresent() && currentPlayer.get() == activePlayer.getPlayerEnum()) {
+      rectangle.highlight();
+      this.setOnMouseClicked(me -> {
+        roundBooster.onAction(activePlayer);
+        activePlayer.setRoundBoosterUsed();
+        action.setTaken(true);
+        callback.call();
+      });
+    }
+  }
+
+  public void clearAction() {
+    if (action != null) {
+      action.setTaken(false);
     }
   }
 

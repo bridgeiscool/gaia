@@ -51,6 +51,7 @@ public class Player implements Serializable {
   private transient IntegerProperty score;
 
   private transient Property<RoundBooster> roundBooster = new SimpleObjectProperty<>();
+  private boolean roundBoosterUsed;
 
   // Tech track related
   private transient IntegerProperty terraformingLevel = new SimpleIntegerProperty(0);
@@ -490,6 +491,14 @@ public class Player implements Serializable {
     return roundBooster.getValue();
   }
 
+  public boolean roundBoosterUsed() {
+    return roundBoosterUsed;
+  }
+
+  public void setRoundBoosterUsed() {
+    roundBoosterUsed = true;
+  }
+
   public ObservableSet<Integer> getSectors() {
     return sectors;
   }
@@ -533,8 +542,6 @@ public class Player implements Serializable {
   }
 
   private boolean gaiaformed(Hex hex) {
-    System.out.println(hex);
-    System.out.println(gaiaformers);
     return gaiaformers.stream().anyMatch(c -> hex.getCoords().equals(c));
   }
 

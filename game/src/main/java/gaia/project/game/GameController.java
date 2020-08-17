@@ -20,8 +20,8 @@ import gaia.project.game.board.Academy;
 import gaia.project.game.board.Gaiaformer;
 import gaia.project.game.board.GameBoard;
 import gaia.project.game.board.Hex;
+import gaia.project.game.board.HexWithPlanet;
 import gaia.project.game.board.Mine;
-import gaia.project.game.board.Planet;
 import gaia.project.game.board.PlanetaryInstitute;
 import gaia.project.game.board.ResearchLab;
 import gaia.project.game.board.TradingPost;
@@ -146,8 +146,7 @@ public class GameController extends BorderPane {
   private void resetGameBoard(Game game) {
     game.getPlayers().values().forEach(p -> {
       p.getMines().forEach(m -> {
-        gameBoard.hexes()
-            .stream()
+        gameBoard.planetaryHexes()
             .filter(h -> h.getCoords().equals(m))
             .forEach(h -> h.addMine(new Mine(h, p.getRace().getColor(), p.getPlayerEnum())));
       });
@@ -155,8 +154,7 @@ public class GameController extends BorderPane {
 
     game.getPlayers().values().forEach(p -> {
       p.getTradingPosts().forEach(m -> {
-        gameBoard.hexes()
-            .stream()
+        gameBoard.planetaryHexes()
             .filter(h -> h.getCoords().equals(m))
             .forEach(h -> h.addTradingPost(new TradingPost(h, p.getRace().getColor(), p.getPlayerEnum())));
       });
@@ -164,8 +162,7 @@ public class GameController extends BorderPane {
 
     game.getPlayers().values().forEach(p -> {
       p.getResearchLabs().forEach(m -> {
-        gameBoard.hexes()
-            .stream()
+        gameBoard.planetaryHexes()
             .filter(h -> h.getCoords().equals(m))
             .forEach(h -> h.addResearchLab(new ResearchLab(h, p.getRace().getColor(), p.getPlayerEnum())));
       });
@@ -173,8 +170,7 @@ public class GameController extends BorderPane {
 
     game.getPlayers().values().forEach(p -> {
       p.getPi().forEach(m -> {
-        gameBoard.hexes()
-            .stream()
+        gameBoard.planetaryHexes()
             .filter(h -> h.getCoords().equals(m))
             .forEach(h -> h.addPi(new PlanetaryInstitute(h, p.getRace().getColor(), p.getPlayerEnum())));
       });
@@ -182,8 +178,7 @@ public class GameController extends BorderPane {
 
     game.getPlayers().values().forEach(p -> {
       p.getKa().forEach(m -> {
-        gameBoard.hexes()
-            .stream()
+        gameBoard.planetaryHexes()
             .filter(h -> h.getCoords().equals(m))
             .forEach(h -> h.addAcademy(new Academy(h, p.getRace().getColor(), p.getPlayerEnum())));
       });
@@ -191,8 +186,7 @@ public class GameController extends BorderPane {
 
     game.getPlayers().values().forEach(p -> {
       p.getQa().forEach(m -> {
-        gameBoard.hexes()
-            .stream()
+        gameBoard.planetaryHexes()
             .filter(h -> h.getCoords().equals(m))
             .forEach(h -> h.addAcademy(new Academy(h, p.getRace().getColor(), p.getPlayerEnum())));
       });
@@ -200,8 +194,7 @@ public class GameController extends BorderPane {
 
     game.getPlayers().values().forEach(p -> {
       p.getGaiaformers().forEach(m -> {
-        gameBoard.hexes()
-            .stream()
+        gameBoard.planetaryHexes()
             .filter(h -> h.getCoords().equals(m))
             .forEach(h -> h.addGaiaformer(new Gaiaformer(h, p.getRace().getColor(), p.getPlayerEnum())));
       });
@@ -280,10 +273,9 @@ public class GameController extends BorderPane {
     for (PlayerEnum toPrompt : order) {
       Player activePlayer = game.getPlayers().get(toPrompt);
       setupQueue.add(() -> {
-        gameBoard.highlightHexes(
+        gameBoard.highlightPlanetaryHexes(
             activePlayer,
-            h -> activePlayer.getRace()
-                .getHomePlanet() == h.getPlanet().map(Planet::getPlanetType).orElse(PlanetType.NONE),
+            h -> activePlayer.getRace().getHomePlanet() == h.getPlanet().getPlanetType(),
             (hex, player) -> player.buildSetupMine(hex),
             this::finishUserSetupMine);
       });
@@ -378,10 +370,9 @@ public class GameController extends BorderPane {
   }
 
   private void gaiaPhase() {
-    gameBoard.hexes()
-        .stream()
-        .filter(h -> h.hasGaiaformer() && h.getPlanet().get().getPlanetType() == PlanetType.TRANSDIM)
-        .forEach(h -> h.getPlanet().get().transdimToGaia());
+    gameBoard.planetaryHexes()
+        .filter(h -> h.hasGaiaformer() && h.getPlanet().getPlanetType() == PlanetType.TRANSDIM)
+        .forEach(h -> h.getPlanet().transdimToGaia());
     if (game.getPlayers().values().stream().anyMatch(p -> p.getRace() == Race.TERRANS && p.getGaiaBin().get() > 0)) {
       System.out.println("Terran Special Ability!");
     }
@@ -423,16 +414,15 @@ public class GameController extends BorderPane {
 
   void selectMineBuild() {
     Player activePlayer = game.getPlayers().get(game.getActivePlayer());
-    gameBoard.highlightHexes(activePlayer, possibleMineBuilds(activePlayer), (hex, player) -> {
+    gameBoard.highlightPlanetaryHexes(activePlayer, possibleMineBuilds(activePlayer), (hex, player) -> {
       player.buildMine(hex);
     }, this::finishMineBuild);
   }
 
-  private Predicate<Hex> possibleMineBuilds(Player activePlayer) {
+  private Predicate<HexWithPlanet> possibleMineBuilds(Player activePlayer) {
     return hex -> {
       for (Coords coords : activePlayer.allBuildingLocations()) {
-        if (hex.getPlanet().isPresent()
-            && !hex.hasBuilding()
+        if (!hex.hasBuilding()
             && hex.isWithinRangeOf(
                 coords,
                 activePlayer.getNavRange().intValue() + activePlayer.getTempNavRange().intValue())
@@ -445,7 +435,7 @@ public class GameController extends BorderPane {
     };
   }
 
-  private void finishMineBuild(Hex hex) {
+  private void finishMineBuild(HexWithPlanet hex) {
     gameBoard.clearHighlighting();
     checkForLeech(hex);
     finishAction();
@@ -453,16 +443,15 @@ public class GameController extends BorderPane {
 
   private void selectGaiaProject() {
     Player activePlayer = game.getPlayers().get(game.getActivePlayer());
-    gameBoard.highlightHexes(activePlayer, possibleGaiaProjects(activePlayer), (hex, player) -> {
+    gameBoard.highlightPlanetaryHexes(activePlayer, possibleGaiaProjects(activePlayer), (hex, player) -> {
       player.addGaiaformer(hex);
     }, this::finishGaiaProject);
   }
 
-  private Predicate<Hex> possibleGaiaProjects(Player activePlayer) {
+  private Predicate<HexWithPlanet> possibleGaiaProjects(Player activePlayer) {
     return hex -> {
       for (Coords coords : activePlayer.allBuildingLocations()) {
-        if (hex.getPlanet().isPresent()
-            && hex.getPlanet().get().getPlanetType() == PlanetType.TRANSDIM
+        if (hex.getPlanet().getPlanetType() == PlanetType.TRANSDIM
             && !hex.hasGaiaformer()
             && hex.isWithinRangeOf(
                 coords,
@@ -482,14 +471,14 @@ public class GameController extends BorderPane {
 
   private void selectBuildingUpgrade() {
     Player activePlayer = game.getPlayers().get(game.getActivePlayer());
-    gameBoard.highlightHexes(
+    gameBoard.highlightPlanetaryHexes(
         activePlayer,
         h -> h.canUpgrade(activePlayer, gameBoard),
         (hex, player) -> hex.upgradeBuilding(player, gameBoard),
         this::finishBuildingUpgrade);
   }
 
-  private void finishBuildingUpgrade(Hex hex) {
+  private void finishBuildingUpgrade(HexWithPlanet hex) {
     gameBoard.clearHighlighting();
     checkForLeech(hex);
     if (hex.checkTechTile()) {
@@ -512,14 +501,16 @@ public class GameController extends BorderPane {
     finishAction();
   }
 
-  private void checkForLeech(Hex hex) {
+  private void checkForLeech(HexWithPlanet hex) {
     Collection<Hex> withinRange = hex.getHexesWithinRange(gameBoard.hexes(), 2);
-    Map<PlayerEnum, Hex> powerMap = withinRange.stream()
+    Map<PlayerEnum, HexWithPlanet> powerMap = withinRange.stream()
+        .filter(h -> !h.isEmpty())
+        .map(HexWithPlanet.class::cast)
         .filter(h -> h.hasBuilding())
         .filter(h -> h.getBuilder().get() != game.getActivePlayer())
         .collect(
             Collectors.toMap(h -> h.getBuilder().get(), h -> h, (h1, h2) -> h1.getPower() > h2.getPower() ? h1 : h2));
-    for (Entry<PlayerEnum, Hex> entry : powerMap.entrySet()) {
+    for (Entry<PlayerEnum, HexWithPlanet> entry : powerMap.entrySet()) {
       Player player = game.getPlayers().get(entry.getKey());
       int powerToGain = player.getPowerGain(entry.getValue());
       if (powerToGain == 1) {

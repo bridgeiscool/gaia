@@ -10,6 +10,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 import com.google.common.annotations.VisibleForTesting;
@@ -56,17 +57,23 @@ public class GameBoard extends Group implements Iterable<Sector> {
     return sectors.stream().flatMap(s -> StreamSupport.stream(s.spliterator(), false)).collect(Collectors.toList());
   }
 
+  public Stream<EmptyHex> emptyHexes() {
+    return hexes().stream().filter(Hex::isEmpty).map(EmptyHex.class::cast);
+  }
+
+  public Stream<HexWithPlanet> planetaryHexes() {
+    return hexes().stream().filter(h -> !h.isEmpty()).map(HexWithPlanet.class::cast);
+  }
+
   @VisibleForTesting
   boolean isValid() {
-    List<Hex> hexes = hexes();
+    List<HexWithPlanet> hexes = planetaryHexes().collect(Collectors.toList());
 
-    for (Hex hex : hexes) {
-      if (hex.getPlanet().isPresent() && hex.getPlanet().get().getPlanetType() != PlanetType.TRANSDIM) {
-        for (Hex adjacent : hex.getHexesWithinRange(hexes, 1)) {
+    for (HexWithPlanet hex : hexes) {
+      if (hex.getPlanet().getPlanetType() != PlanetType.TRANSDIM) {
+        for (Hex adjacent : hex.getHexesWithinRange(hexes(), 1)) {
           // Exclude adjacent planets that aren't purple
-          if (hex.getPlanet().get().getPlanetType() == adjacent.getPlanet()
-              .map(Planet::getPlanetType)
-              .orElse(PlanetType.NONE)) {
+          if (hex.sharesPlanetType(adjacent)) {
             return false;
           }
         }
@@ -110,17 +117,15 @@ public class GameBoard extends Group implements Iterable<Sector> {
     return sectors.iterator();
   }
 
-  public void highlightHexes(
+  public void highlightPlanetaryHexes(
       Player activePlayer,
-      Predicate<Hex> filter,
-      BiConsumer<Hex, Player> toExecute,
-      Consumer<Hex> callBack) {
-    hexes().stream().filter(filter).forEach(h -> h.highlight(activePlayer, toExecute, callBack));
+      Predicate<HexWithPlanet> filter,
+      BiConsumer<HexWithPlanet, Player> toExecute,
+      Consumer<HexWithPlanet> callBack) {
+    planetaryHexes().filter(filter).forEach(h -> h.highlight(activePlayer, toExecute, callBack));
   }
 
   public void clearHighlighting() {
-    for (Hex hex : hexes()) {
-      hex.clearHighlighting();
-    }
+    planetaryHexes().forEach(HexWithPlanet::clearHighlighting);
   }
 }

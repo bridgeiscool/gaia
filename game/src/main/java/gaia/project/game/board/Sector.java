@@ -99,8 +99,8 @@ public class Sector extends Group implements Iterable<Hex> {
 
   private Hex getHex(double centerX, double centerY, PlanetType planetType) {
     return planetType == PlanetType.NONE
-        ? Hex.emptyHex(new Coords(centerX, centerY), sectorId)
-        : Hex.withPlanet(new Coords(centerX, centerY), sectorId, planetType);
+        ? new EmptyHex(new Coords(centerX, centerY), sectorId)
+        : new HexWithPlanet(new Coords(centerX, centerY), sectorId, new Planet(centerX, centerY, planetType));
   }
 
   @Override

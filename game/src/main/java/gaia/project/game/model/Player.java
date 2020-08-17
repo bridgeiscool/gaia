@@ -18,6 +18,7 @@ import gaia.project.game.PlanetType;
 import gaia.project.game.board.Academy;
 import gaia.project.game.board.Gaiaformer;
 import gaia.project.game.board.Hex;
+import gaia.project.game.board.HexWithPlanet;
 import gaia.project.game.board.Mine;
 import gaia.project.game.board.PlanetaryInstitute;
 import gaia.project.game.board.ResearchLab;
@@ -536,9 +537,9 @@ public class Player implements Serializable {
         .build();
   }
 
-  public boolean canDigTo(Hex hex) {
-    Preconditions.checkArgument(hex.getPlanet().isPresent());
-    PlanetType planetType = hex.getPlanet().get().getPlanetType();
+  public boolean canDigTo(HexWithPlanet hex) {
+    Preconditions.checkArgument(!hex.isEmpty());
+    PlanetType planetType = hex.getPlanet().getPlanetType();
     if (planetType == PlanetType.TRANSDIM) {
       return false;
     }
@@ -566,21 +567,21 @@ public class Player implements Serializable {
     System.out.println(specialActions);
   }
 
-  public int getPowerGain(Hex hex) {
+  public int getPowerGain(HexWithPlanet hex) {
     Preconditions.checkArgument(hex.getPower() > 0);
     return hex.getPower() == 3 ? bigBuildingPower.intValue() : hex.getPower();
   }
 
   // Action methods
-  public void buildMine(Hex hex) {
+  public void buildMine(HexWithPlanet hex) {
     buildMine(hex, false);
   }
 
-  public void buildSetupMine(Hex hex) {
+  public void buildSetupMine(HexWithPlanet hex) {
     buildMine(hex, true);
   }
 
-  private void buildMine(Hex hex, boolean setup) {
+  private void buildMine(HexWithPlanet hex, boolean setup) {
     Mine mine = new Mine(hex, race.getColor(), playerEnum);
     mines.add(hex.getCoords());
     hex.addMine(mine);
@@ -591,7 +592,7 @@ public class Player implements Serializable {
     }
 
     // Update planet counts
-    PlanetType planetType = hex.getPlanet().get().getPlanetType();
+    PlanetType planetType = hex.getPlanet().getPlanetType();
     builtOn.add(planetType);
     if (planetType == PlanetType.GAIA) {
       gaiaPlanets.setValue(gaiaPlanets.getValue() + 1);
@@ -623,7 +624,7 @@ public class Player implements Serializable {
     // TODO: Add logic to check if it adds onto a previous federation
   }
 
-  public void addGaiaformer(Hex hex) {
+  public void addGaiaformer(HexWithPlanet hex) {
     Preconditions.checkArgument(bin1.get() + bin2.get() + bin3.get() >= gaiaformerCost.get());
     Gaiaformer gaiaformer = new Gaiaformer(hex, race.getColor(), playerEnum);
     hex.addGaiaformer(gaiaformer);
@@ -662,7 +663,7 @@ public class Player implements Serializable {
     }
   }
 
-  public void buildTradingPost(Hex hex, boolean cheap) {
+  public void buildTradingPost(HexWithPlanet hex, boolean cheap) {
     TradingPost tp = new TradingPost(hex, race.getColor(), playerEnum);
     hex.switchBuildingUI(tp);
     tradingPosts.add(hex.getCoords());
@@ -678,7 +679,7 @@ public class Player implements Serializable {
     tpIncome.get(tradingPosts.size() - 1).addTo(currentIncome);
   }
 
-  public void buildResearchLab(Hex hex) {
+  public void buildResearchLab(HexWithPlanet hex) {
     ResearchLab rl = new ResearchLab(hex, race.getColor(), playerEnum);
     hex.switchBuildingUI(rl);
     researchLabs.add(hex.getCoords());
@@ -692,7 +693,7 @@ public class Player implements Serializable {
     rlIncome.get(researchLabs.size() - 1).addTo(currentIncome);
   }
 
-  public void buildPI(Hex hex) {
+  public void buildPI(HexWithPlanet hex) {
     PlanetaryInstitute pi = new PlanetaryInstitute(hex, race.getColor(), playerEnum);
     hex.switchBuildingUI(pi);
     this.pi.add(hex.getCoords());
@@ -706,7 +707,7 @@ public class Player implements Serializable {
     piIncome.addTo(currentIncome);
   }
 
-  public void buildAcademy(Hex hex, boolean ka) {
+  public void buildAcademy(HexWithPlanet hex, boolean ka) {
     Academy academy = new Academy(hex, race.getColor(), playerEnum);
     hex.switchBuildingUI(academy);
     if (ka) {

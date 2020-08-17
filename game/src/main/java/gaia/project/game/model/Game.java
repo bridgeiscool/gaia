@@ -219,6 +219,16 @@ public class Game implements Serializable {
   public void newRound() {
     currentRound.setValue(currentRound.getValue().nextRound());
     activePlayer = currentPlayerOrder.get(0);
+    k3ActionTaken.setValue(false);
+    doubleTfActionTaken.setValue(false);
+    oreActionTaken.setValue(false);
+    creditsActionTaken.setValue(false);
+    k2ActionTaken.setValue(false);
+    tfActionTaken.setValue(false);
+    ptActionTaken.setValue(false);
+    q2ActionTaken.setValue(false);
+    q3ActionTaken.setValue(false);
+    q4ActionTaken.setValue(false);
   }
 
   public void nextActivePlayer() {

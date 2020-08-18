@@ -18,8 +18,10 @@ import com.google.common.collect.ImmutableMap;
 
 import gaia.project.game.board.GameBoard;
 import gaia.project.game.board.SectorLocation;
+import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
 public class Game implements Serializable {
@@ -48,6 +50,14 @@ public class Game implements Serializable {
   private transient Property<Boolean> q2ActionTaken = new SimpleBooleanProperty(false);
   private transient Property<Boolean> q3ActionTaken = new SimpleBooleanProperty(false);
   private transient Property<Boolean> q4ActionTaken = new SimpleBooleanProperty(false);
+
+  // Federation tokens
+  private transient IntegerProperty vpFederations;
+  private transient IntegerProperty ptFederations;
+  private transient IntegerProperty qicFederations;
+  private transient IntegerProperty oreFederations;
+  private transient IntegerProperty creditFederations;
+  private transient IntegerProperty knowledgeFederations;
 
   // Game state
   private transient Property<Round> currentRound;
@@ -113,6 +123,13 @@ public class Game implements Serializable {
     this.endScoring1 = endScoring1;
     this.endScoring2 = endScoring2;
     this.players = ImmutableMap.copyOf(players);
+
+    this.vpFederations = new SimpleIntegerProperty(terraBonus == FederationTile.VP ? 2 : 3);
+    this.ptFederations = new SimpleIntegerProperty(terraBonus == FederationTile.POWER ? 2 : 3);
+    this.qicFederations = new SimpleIntegerProperty(terraBonus == FederationTile.QIC ? 2 : 3);
+    this.oreFederations = new SimpleIntegerProperty(terraBonus == FederationTile.ORE ? 2 : 3);
+    this.creditFederations = new SimpleIntegerProperty(terraBonus == FederationTile.CREDITS ? 2 : 3);
+    this.knowledgeFederations = new SimpleIntegerProperty(terraBonus == FederationTile.RESEARCH ? 2 : 3);
 
     this.currentRound = new SimpleObjectProperty<>(Round.SETUP);
     this.currentPlayerOrder = new ArrayList<>(Arrays.asList(PlayerEnum.values()));
@@ -216,6 +233,30 @@ public class Game implements Serializable {
     return q4ActionTaken;
   }
 
+  public IntegerProperty getVpFederations() {
+    return vpFederations;
+  }
+
+  public IntegerProperty getPtFederations() {
+    return ptFederations;
+  }
+
+  public IntegerProperty getQicFederations() {
+    return qicFederations;
+  }
+
+  public IntegerProperty getOreFederations() {
+    return oreFederations;
+  }
+
+  public IntegerProperty getCreditFederations() {
+    return creditFederations;
+  }
+
+  public IntegerProperty getKnowledgeFederations() {
+    return knowledgeFederations;
+  }
+
   public void newRound() {
     currentRound.setValue(currentRound.getValue().nextRound());
     activePlayer = currentPlayerOrder.get(0);
@@ -306,6 +347,13 @@ public class Game implements Serializable {
     oos.writeBoolean(q2ActionTaken.getValue());
     oos.writeBoolean(q3ActionTaken.getValue());
     oos.writeBoolean(q4ActionTaken.getValue());
+
+    oos.writeInt(vpFederations.get());
+    oos.writeInt(ptFederations.get());
+    oos.writeInt(qicFederations.get());
+    oos.writeInt(oreFederations.get());
+    oos.writeInt(creditFederations.get());
+    oos.writeInt(knowledgeFederations.get());
   }
 
   private void readObject(ObjectInputStream ois) throws ClassNotFoundException, IOException {
@@ -321,5 +369,12 @@ public class Game implements Serializable {
     q2ActionTaken = new SimpleBooleanProperty(ois.readBoolean());
     q3ActionTaken = new SimpleBooleanProperty(ois.readBoolean());
     q4ActionTaken = new SimpleBooleanProperty(ois.readBoolean());
+
+    vpFederations = new SimpleIntegerProperty(ois.readInt());
+    ptFederations = new SimpleIntegerProperty(ois.readInt());
+    qicFederations = new SimpleIntegerProperty(ois.readInt());
+    oreFederations = new SimpleIntegerProperty(ois.readInt());
+    creditFederations = new SimpleIntegerProperty(ois.readInt());
+    knowledgeFederations = new SimpleIntegerProperty(ois.readInt());
   }
 }

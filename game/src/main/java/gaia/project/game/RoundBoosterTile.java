@@ -75,6 +75,9 @@ public class RoundBoosterTile extends StackPane {
   public void addToken(Player player) {
     currentPlayer = Optional.of(player.getPlayerEnum());
     getChildren().add(new Circle(10, player.getRace().getColor()));
+    if (player.roundBoosterUsed()) {
+      action.setTaken(true);
+    }
   }
 
   public void clearToken(PlayerEnum activePlayer) {

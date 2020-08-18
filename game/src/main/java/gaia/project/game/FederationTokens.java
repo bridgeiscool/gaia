@@ -58,12 +58,12 @@ public class FederationTokens extends HBox {
       throw new RuntimeException(e);
     }
 
-    this.research = new FederationTokenPane(FederationTile.RESEARCH, 1.0);
-    this.credits = new FederationTokenPane(FederationTile.CREDITS, 1.0);
-    this.ore = new FederationTokenPane(FederationTile.ORE, 1.0);
-    this.pt = new FederationTokenPane(FederationTile.POWER, 1.0);
-    this.qic = new FederationTokenPane(FederationTile.QIC, 1.0);
-    this.vp = new FederationTokenPane(FederationTile.VP, 1.0);
+    this.research = FederationTokenPane.regular(FederationTile.RESEARCH);
+    this.credits = FederationTokenPane.regular(FederationTile.CREDITS);
+    this.ore = FederationTokenPane.regular(FederationTile.ORE);
+    this.pt = FederationTokenPane.regular(FederationTile.POWER);
+    this.qic = FederationTokenPane.regular(FederationTile.QIC);
+    this.vp = FederationTokenPane.regular(FederationTile.VP);
 
     // Add tokens to UI
     knowledgeBox.getChildren().add(research);

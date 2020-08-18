@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -26,12 +25,13 @@ import gaia.project.game.board.PlanetaryInstitute;
 import gaia.project.game.board.ResearchLab;
 import gaia.project.game.board.Satellite;
 import gaia.project.game.board.TradingPost;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.Property;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import javafx.collections.ObservableSet;
 
@@ -74,28 +74,28 @@ public class Player implements Serializable {
   private transient IntegerProperty currentDigs = new SimpleIntegerProperty(0);
 
   // Tech tile related
-  private transient ObservableSet<TechTile> techTiles = FXCollections.observableSet(new HashSet<>());
-  private transient IntegerProperty flippableFederationTiles = new SimpleIntegerProperty(0);
+  private transient ObservableSet<TechTile> techTiles = FXCollections.observableSet();
   private transient IntegerProperty bigBuildingPower = new SimpleIntegerProperty(3);
-  private transient ObservableSet<PlanetType> builtOn = FXCollections.observableSet(new HashSet<>());
+  private transient ObservableSet<PlanetType> builtOn = FXCollections.observableSet();
   private transient IntegerProperty gaiaPlanets = new SimpleIntegerProperty(0);
   // Boolean indicates whether the action has been used this round
-  private transient ObservableMap<Serializable, Boolean> specialActions = FXCollections.observableMap(new HashMap<>());
+  private transient ObservableMap<Serializable, Boolean> specialActions = FXCollections.observableHashMap();
 
   // Federation related
   private transient ObservableSet<Set<Coords>> federations = FXCollections.observableSet(new HashSet<>());
-  private transient ObservableSet<Coords> satellites = FXCollections.observableSet(new HashSet<>());
+  private transient ObservableSet<Coords> satellites = FXCollections.observableSet();
+  // Map of tile and whether not it still can be flipped...
+  private transient ObservableSet<FedToken> federationTiles = FXCollections.observableSet();
   private int fedPower = 7;
 
   // Buildings, etc
-  private transient ObservableSet<Coords> mines = FXCollections.observableSet(new HashSet<>());
-  private transient ObservableSet<Coords> tradingPosts = FXCollections.observableSet(new HashSet<>());
-  private transient ObservableSet<Coords> researchLabs = FXCollections.observableSet(new HashSet<>());
-  private transient ObservableSet<Coords> pi = FXCollections.observableSet(new HashSet<>());
-  private transient ObservableSet<Coords> ka = FXCollections.observableSet(new HashSet<>());
-  private transient ObservableSet<Coords> qa = FXCollections.observableSet(new HashSet<>());
-  private transient ObservableSet<Coords> gaiaformers = FXCollections.observableSet(new HashSet<>());
-  private transient ObservableList<FederationTile> federationTiles = FXCollections.observableList(new ArrayList<>());
+  private transient ObservableSet<Coords> mines = FXCollections.observableSet();
+  private transient ObservableSet<Coords> tradingPosts = FXCollections.observableSet();
+  private transient ObservableSet<Coords> researchLabs = FXCollections.observableSet();
+  private transient ObservableSet<Coords> pi = FXCollections.observableSet();
+  private transient ObservableSet<Coords> ka = FXCollections.observableSet();
+  private transient ObservableSet<Coords> qa = FXCollections.observableSet();
+  private transient ObservableSet<Coords> gaiaformers = FXCollections.observableSet();
 
   // Income related
   private final List<IncomeUpdater> tpIncome;
@@ -104,7 +104,7 @@ public class Player implements Serializable {
   private final int kaIncome;
 
   // Scoring Related
-  private transient ObservableSet<Integer> sectors = FXCollections.observableSet(new HashSet<>());
+  private transient ObservableSet<Integer> sectors = FXCollections.observableSet();
   private transient IntegerProperty totalBuildings = new SimpleIntegerProperty(0);
   private transient IntegerProperty buildingsInFeds = new SimpleIntegerProperty(0);
   private transient IntegerProperty projectedTechScoring = new SimpleIntegerProperty(0);
@@ -167,7 +167,7 @@ public class Player implements Serializable {
           terraCost.setValue(4 - newValue.intValue());
           break;
         case 5:
-          flippableFederationTiles.setValue(flippableFederationTiles.getValue() - 1);
+          exhaustFederationTile();
           System.out.println("Implement gaining federationToken!");
           break;
       }
@@ -188,7 +188,7 @@ public class Player implements Serializable {
           navRange.setValue(3);
           break;
         case 5:
-          flippableFederationTiles.setValue(flippableFederationTiles.getValue() - 1);
+          exhaustFederationTile();
           navRange.setValue(4);
           System.out.println("Implement gaining lonely planet!");
           break;
@@ -208,7 +208,7 @@ public class Player implements Serializable {
           Util.plus(qic, 2);
           break;
         case 5:
-          flippableFederationTiles.setValue(flippableFederationTiles.getValue() - 1);
+          exhaustFederationTile();
           Util.plus(qic, 4);
           break;
       }
@@ -233,7 +233,7 @@ public class Player implements Serializable {
           availableGaiaformers.setValue(availableGaiaformers.getValue() + 1);
           break;
         case 5:
-          flippableFederationTiles.setValue(flippableFederationTiles.getValue() - 1);
+          exhaustFederationTile();
           score.setValue(score.getValue() + 4 + gaiaPlanets.getValue());
           break;
       }
@@ -260,7 +260,7 @@ public class Player implements Serializable {
           currentIncome.getChargeIncome().setValue(currentIncome.getChargeIncome().getValue() + 1);
           break;
         case 5:
-          flippableFederationTiles.setValue(flippableFederationTiles.getValue() - 1);
+          exhaustFederationTile();
           currentIncome.getCreditIncome().setValue(currentIncome.getCreditIncome().getValue() - 4);
           currentIncome.getOreIncome().setValue(currentIncome.getOreIncome().getValue() - 2);
           currentIncome.getChargeIncome().setValue(currentIncome.getChargeIncome().getValue() - 4);
@@ -282,7 +282,7 @@ public class Player implements Serializable {
           currentIncome.getResearchIncome().setValue(currentIncome.getResearchIncome().getValue() + 1);
           break;
         case 5:
-          flippableFederationTiles.setValue(flippableFederationTiles.getValue() - 1);
+          exhaustFederationTile();
           currentIncome.getResearchIncome().setValue(currentIncome.getResearchIncome().getValue() - 4);
           Util.plus(research, 9);
           break;
@@ -301,10 +301,7 @@ public class Player implements Serializable {
   // Major functionality methods
   public void addFederationTile(FederationTile federationTile) {
     federationTile.updatePlayer(this);
-    federationTiles.add(federationTile);
-    if (federationTile.isFlippable()) {
-      Util.plus(flippableFederationTiles, 1);
-    }
+    federationTiles.add(new FedToken(federationTile, federationTile.isFlippable()));
   }
 
   public void leechPower(int power) {
@@ -385,15 +382,15 @@ public class Player implements Serializable {
     return score;
   }
 
-  public IntegerProperty getFlippableFederationTiles() {
-    return flippableFederationTiles;
+  public boolean hasFlippableFederationTile() {
+    return federationTiles.stream().anyMatch(ft -> ft.flippable.get());
   }
 
   public Income getCurrentIncome() {
     return currentIncome;
   }
 
-  public ObservableList<FederationTile> getFederationTiles() {
+  public ObservableSet<FedToken> getFederationTiles() {
     return federationTiles;
   }
 
@@ -438,7 +435,7 @@ public class Player implements Serializable {
   }
 
   public int getGaiaformerCost() {
-    return gaiaformerCost.intValue();
+    return gaiaformerCost.get();
   }
 
   public ObservableSet<Coords> getGaiaformers() {
@@ -615,6 +612,16 @@ public class Player implements Serializable {
     }
 
     return false;
+  }
+
+  public void exhaustFederationTile() {
+    Preconditions.checkArgument(hasFlippableFederationTile());
+    for (FedToken token : federationTiles) {
+      if (token.flippable.get()) {
+        token.flip();
+        break;
+      }
+    }
   }
 
   // Action methods
@@ -816,7 +823,6 @@ public class Player implements Serializable {
     oos.writeInt(gaiaformerCost.get());
 
     // Tech tile
-    oos.writeInt(flippableFederationTiles.get());
     oos.writeInt(bigBuildingPower.get());
     oos.writeObject(new HashSet<>(builtOn));
     oos.writeInt(gaiaPlanets.get());
@@ -834,7 +840,7 @@ public class Player implements Serializable {
     oos.writeObject(new HashSet<>(ka));
     oos.writeObject(new HashSet<>(qa));
     oos.writeObject(new HashSet<>(gaiaformers));
-    oos.writeObject(new ArrayList<>(federationTiles));
+    oos.writeObject(new HashSet<>(federationTiles));
 
     // Scoring related
     oos.writeObject(new HashSet<>(sectors));
@@ -877,7 +883,6 @@ public class Player implements Serializable {
     currentDigs = new SimpleIntegerProperty(0);
 
     // Tech tile
-    flippableFederationTiles = new SimpleIntegerProperty(ois.readInt());
     bigBuildingPower = new SimpleIntegerProperty(ois.readInt());
     builtOn = FXCollections.observableSet((Set<PlanetType>) ois.readObject());
     gaiaPlanets = new SimpleIntegerProperty(ois.readInt());
@@ -894,7 +899,7 @@ public class Player implements Serializable {
     ka = FXCollections.observableSet((Set<Coords>) ois.readObject());
     qa = FXCollections.observableSet((Set<Coords>) ois.readObject());
     gaiaformers = FXCollections.observableSet((Set<Coords>) ois.readObject());
-    federationTiles = FXCollections.observableList((List<FederationTile>) ois.readObject());
+    federationTiles = FXCollections.observableSet((Set<FedToken>) ois.readObject());
 
     // Scoring related
     sectors = FXCollections.observableSet((Set<Integer>) ois.readObject());
@@ -906,5 +911,40 @@ public class Player implements Serializable {
     fedPower = 7;
 
     setupTechBonuses();
+  }
+
+  public static class FedToken implements Serializable {
+    private static final long serialVersionUID = 6669365166912310591L;
+    private final FederationTile federationTile;
+    private BooleanProperty flippable;
+
+    public FedToken(FederationTile federationTile, boolean flippable) {
+      this.federationTile = federationTile;
+      this.flippable = new SimpleBooleanProperty(flippable);
+    }
+
+    public BooleanProperty getFlippable() {
+      return flippable;
+    }
+
+    public void flip() {
+      this.flippable.setValue(false);
+    }
+
+    public FederationTile getFederationTile() {
+      return federationTile;
+    }
+
+    // Intentionally not implementing equals so no two instances are the same
+    // Serialization
+    private void writeObject(ObjectOutputStream oos) throws IOException {
+      oos.defaultWriteObject();
+      oos.writeBoolean(flippable.get());
+    }
+
+    private void readObject(ObjectInputStream ois) throws ClassNotFoundException, IOException {
+      ois.defaultReadObject();
+      flippable = new SimpleBooleanProperty(ois.readBoolean());
+    }
   }
 }

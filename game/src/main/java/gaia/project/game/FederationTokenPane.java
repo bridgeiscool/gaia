@@ -17,13 +17,54 @@ public class FederationTokenPane extends StackPane {
 
   private final Shape shape;
 
-  public FederationTokenPane(FederationTile federationTile, double scaling) {
+  public static FederationTokenPane regular(FederationTile federationTile) {
+    return new FederationTokenPane(federationTile, Size.REGULAR);
+  }
+
+  public static FederationTokenPane mini(FederationTile federationTile) {
+    return new FederationTokenPane(federationTile, Size.MINI);
+  }
+
+  public FederationTokenPane(FederationTile federationTile, Size size) {
     this.federationTile = federationTile;
-    getStyleClass().add("fedToken");
+    getStyleClass().add(size.styleClass);
     ObservableList<Node> children = getChildren();
-    this.shape = new Shape(scaling, federationTile.isFlippable() ? "greenFedToken" : "grayFedToken");
+    this.shape = new Shape(size.scaling, federationTile.isFlippable() ? "greenFedToken" : "grayFedToken");
     children.add(shape);
     children.add(new Label(federationTile.getText()));
+  }
+
+  public void flip() {
+    shape.getStyleClass().clear();
+    shape.getStyleClass().add("grayFedToken");
+  }
+
+  public void highlight(Player activePlayer, Consumer<FederationTile> callback) {
+    shape.getStyleClass().clear();
+    shape.getStyleClass().add(federationTile.isFlippable() ? "greenFedTokenHighlighted" : "grayFedTokenHighlighted");
+    this.setOnMouseClicked(me -> {
+      activePlayer.addFederationTile(federationTile);
+      callback.accept(federationTile);
+    });
+  }
+
+  public void clearHighlighting() {
+    shape.getStyleClass().clear();
+    shape.getStyleClass().add(federationTile.isFlippable() ? "greenFedToken" : "grayFedToken");
+    setOnMouseClicked(null);
+  }
+
+  private enum Size {
+    REGULAR(1.0, "fedToken"), MINI(0.5, "miniFedToken");
+
+    private final double scaling;
+    private final String styleClass;
+
+    Size(double scaling, String styleClass) {
+      this.scaling = scaling;
+      this.styleClass = styleClass;
+    }
+
   }
 
   private static class Shape extends Polygon {
@@ -47,20 +88,4 @@ public class FederationTokenPane extends StackPane {
       getStyleClass().add(styleClass);
     }
   }
-
-  public void highlight(Player activePlayer, Consumer<FederationTile> callback) {
-    shape.getStyleClass().clear();
-    shape.getStyleClass().add(federationTile.isFlippable() ? "greenFedTokenHighlighted" : "grayFedTokenHighlighted");
-    this.setOnMouseClicked(me -> {
-      activePlayer.addFederationTile(federationTile);
-      callback.accept(federationTile);
-    });
-  }
-
-  public void clearHighlighting() {
-    shape.getStyleClass().clear();
-    shape.getStyleClass().add(federationTile.isFlippable() ? "greenFedToken" : "grayFedToken");
-    setOnMouseClicked(null);
-  }
-
 }

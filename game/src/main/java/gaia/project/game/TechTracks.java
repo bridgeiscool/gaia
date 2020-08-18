@@ -180,7 +180,7 @@ public class TechTracks extends GridPane {
     }
 
     // Add the randomly chosen fed tile to terra track
-    terra5StackPane.getChildren().add(0, new FederationTokenPane(game.getTerraBonus(), 1.0));
+    terra5StackPane.getChildren().add(0, FederationTokenPane.regular(game.getTerraBonus()));
 
     // Initialize the tech tiles
     techTiles = game.getTechTiles().stream().map(TechTileHBox::new).collect(Collectors.toList());
@@ -223,9 +223,7 @@ public class TechTracks extends GridPane {
       if (hbox.getChildren().stream().anyMatch(n -> ((TechMarker) n).player == activePlayer.getPlayerEnum())) {
         int idx = track.indexOf(hbox);
         if (idx < 4
-            || (idx == 4
-                && track.get(5).getChildren().isEmpty()
-                && activePlayer.getFlippableFederationTiles().intValue() > 0)) {
+            || (idx == 4 && track.get(5).getChildren().isEmpty() && activePlayer.hasFlippableFederationTile())) {
           hbox.getStyleClass().add("highlightedHbox");
           hbox.setOnMouseClicked(me -> {
             activePlayer.advanceTech(toUpdate, free);
@@ -256,23 +254,19 @@ public class TechTracks extends GridPane {
       if (p.getTerraformingLevel().getValue() < 4
           || (p.getTerraformingLevel().getValue() == 4
               && terra5.getChildren().isEmpty()
-              && p.getFlippableFederationTiles().intValue() > 0)) {
+              && p.hasFlippableFederationTile())) {
         Util.plus(p.getTerraformingLevel(), 1);
       }
     }));
     techTiles.get(NAV).highlight(activePlayer, callback, Optional.of(p -> {
       if (p.getNavLevel().getValue() < 4
-          || (p.getNavLevel().getValue() == 4
-              && nav5.getChildren().isEmpty()
-              && p.getFlippableFederationTiles().intValue() > 0)) {
+          || (p.getNavLevel().getValue() == 4 && nav5.getChildren().isEmpty() && p.hasFlippableFederationTile())) {
         Util.plus(p.getNavLevel(), 1);
       }
     }));
     techTiles.get(AI).highlight(activePlayer, callback, Optional.of(p -> {
       if (p.getAiLevel().getValue() < 4
-          || (p.getAiLevel().getValue() == 4
-              && ai5.getChildren().isEmpty()
-              && p.getFlippableFederationTiles().intValue() > 0)) {
+          || (p.getAiLevel().getValue() == 4 && ai5.getChildren().isEmpty() && p.hasFlippableFederationTile())) {
         Util.plus(p.getAiLevel(), 1);
       }
     }));
@@ -280,15 +274,13 @@ public class TechTracks extends GridPane {
       if (p.getGaiaformingLevel().getValue() < 4
           || (p.getGaiaformingLevel().getValue() == 4
               && gaia5.getChildren().isEmpty()
-              && p.getFlippableFederationTiles().intValue() > 0)) {
+              && p.hasFlippableFederationTile())) {
         Util.plus(p.getGaiaformingLevel(), 1);
       }
     }));
     techTiles.get(ECON).highlight(activePlayer, callback, Optional.of(p -> {
       if (p.getEconLevel().getValue() < 4
-          || (p.getEconLevel().getValue() == 4
-              && econ5.getChildren().isEmpty()
-              && p.getFlippableFederationTiles().intValue() > 0)) {
+          || (p.getEconLevel().getValue() == 4 && econ5.getChildren().isEmpty() && p.hasFlippableFederationTile())) {
         Util.plus(p.getEconLevel(), 1);
       }
     }));
@@ -296,7 +288,7 @@ public class TechTracks extends GridPane {
       if (p.getKnowledgeLevel().getValue() < 4
           || (p.getKnowledgeLevel().getValue() == 4
               && knowledge5.getChildren().isEmpty()
-              && p.getFlippableFederationTiles().intValue() > 0)) {
+              && p.hasFlippableFederationTile())) {
         Util.plus(p.getKnowledgeLevel(), 1);
       }
     }));

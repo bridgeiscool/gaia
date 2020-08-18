@@ -206,6 +206,14 @@
 	-fx-font-size: 14.0pt;
 }
 
+.miniFedToken {
+	
+}
+
+.miniFedToken Label {
+	-fx-font-size: 10.0pt;
+}
+
 .fedToken {
 	
 }

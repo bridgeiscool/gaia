@@ -2,8 +2,11 @@ package gaia.project.game;
 
 import java.io.IOException;
 
+import com.google.common.base.Preconditions;
+
 import gaia.project.game.model.Coords;
 import gaia.project.game.model.Player;
+import gaia.project.game.model.Player.FedToken;
 import gaia.project.game.model.TechTile;
 import javafx.collections.SetChangeListener;
 import javafx.fxml.FXML;
@@ -142,6 +145,22 @@ public class PlayerBoardController extends GridPane {
     player.getTechTiles().forEach(tt -> tokenArea.getChildren().add(new MiniTechTile(player, tt)));
     player.getTechTiles().addListener((SetChangeListener<TechTile>) change -> {
       tokenArea.getChildren().add(new MiniTechTile(player, change.getElementAdded()));
+    });
+
+    player.getFederationTiles().forEach(ft -> {
+      FederationTokenPane mini = FederationTokenPane.mini(ft.getFederationTile());
+      if (!ft.getFlippable().get()) {
+        mini.flip();
+      } else {
+        ft.getFlippable().addListener((o, oldValue, newValue) -> {
+          mini.flip();
+        });
+      }
+      tokenArea.getChildren().add(mini);
+    });
+    player.getFederationTiles().addListener((SetChangeListener<FedToken>) change -> {
+      Preconditions.checkArgument(change.wasAdded());
+      tokenArea.getChildren().add(FederationTokenPane.mini(change.getElementAdded().getFederationTile()));
     });
   }
 

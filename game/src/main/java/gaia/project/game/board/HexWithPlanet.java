@@ -93,10 +93,12 @@ public class HexWithPlanet extends Hex {
     // Remove a gaiaformer if it's there
     if (hasGaiaformer) {
       getChildren().remove(getChildren().size() - 1);
+      hasGaiaformer = false;
+    } else {
+      builder = mine.getPlayer();
     }
     getChildren().add(mine);
     building = Building.MINE;
-    builder = mine.getPlayer();
   }
 
   // For reloading game

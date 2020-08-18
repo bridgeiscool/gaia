@@ -435,7 +435,9 @@ public class GameController extends BorderPane {
 
   private Predicate<HexWithPlanet> possibleMineBuilds(Player activePlayer) {
     return hex -> {
-      if (hex.hasGaiaformer() && hex.getBuilder().get() == activePlayer.getPlayerEnum()) {
+      if (hex.hasGaiaformer()
+          && hex.getPlanet().getPlanetType() == PlanetType.GAIA
+          && hex.getBuilder().get() == activePlayer.getPlayerEnum()) {
         return true;
       }
       for (Coords coords : activePlayer.allBuildingLocations()) {

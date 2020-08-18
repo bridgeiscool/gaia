@@ -3,6 +3,7 @@ package gaia.project.game;
 import java.io.IOException;
 
 import gaia.project.game.model.Player;
+import gaia.project.game.model.Util;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -41,6 +42,7 @@ public class ConversionDialog extends Dialog<Void> {
   private void powerToQic() {
     if (activePlayer.getBin3().getValue() > 3) {
       activePlayer.getBin3().setValue(activePlayer.getBin3().getValue() - 4);
+      Util.plus(activePlayer.getBin1(), 4);
       activePlayer.getQic().setValue(activePlayer.getQic().getValue() + 1);
     }
   }
@@ -57,6 +59,7 @@ public class ConversionDialog extends Dialog<Void> {
   private void powerToOre() {
     if (activePlayer.getBin3().getValue() > 2) {
       activePlayer.getBin3().setValue(activePlayer.getBin3().getValue() - 3);
+      Util.plus(activePlayer.getBin1(), 3);
       activePlayer.getOre().setValue(activePlayer.getOre().getValue() + 1);
     }
   }
@@ -65,6 +68,7 @@ public class ConversionDialog extends Dialog<Void> {
   private void powerToKnowledge() {
     if (activePlayer.getBin3().getValue() > 3) {
       activePlayer.getBin3().setValue(activePlayer.getBin3().getValue() - 4);
+      Util.plus(activePlayer.getBin1(), 4);
       activePlayer.getResearch().setValue(activePlayer.getResearch().getValue() + 1);
     }
   }
@@ -81,6 +85,7 @@ public class ConversionDialog extends Dialog<Void> {
   private void powerToCredits() {
     if (activePlayer.getBin3().getValue() > 0) {
       activePlayer.getBin3().setValue(activePlayer.getBin3().getValue() - 1);
+      Util.plus(activePlayer.getBin1(), 1);
       activePlayer.getCredits().setValue(activePlayer.getCredits().getValue() + 1);
     }
   }

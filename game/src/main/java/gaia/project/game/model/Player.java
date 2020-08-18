@@ -13,15 +13,18 @@ import java.util.Set;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Sets;
 
 import gaia.project.game.PlanetType;
 import gaia.project.game.board.Academy;
+import gaia.project.game.board.EmptyHex;
 import gaia.project.game.board.Gaiaformer;
 import gaia.project.game.board.Hex;
 import gaia.project.game.board.HexWithPlanet;
 import gaia.project.game.board.Mine;
 import gaia.project.game.board.PlanetaryInstitute;
 import gaia.project.game.board.ResearchLab;
+import gaia.project.game.board.Satellite;
 import gaia.project.game.board.TradingPost;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.Property;
@@ -79,6 +82,11 @@ public class Player implements Serializable {
   // Boolean indicates whether the action has been used this round
   private transient ObservableMap<Serializable, Boolean> specialActions = FXCollections.observableMap(new HashMap<>());
 
+  // Federation related
+  private transient ObservableSet<Set<Coords>> federations = FXCollections.observableSet(new HashSet<>());
+  private transient ObservableSet<Coords> satellites = FXCollections.observableSet(new HashSet<>());
+  private int fedPower = 7;
+
   // Buildings, etc
   private transient ObservableSet<Coords> mines = FXCollections.observableSet(new HashSet<>());
   private transient ObservableSet<Coords> tradingPosts = FXCollections.observableSet(new HashSet<>());
@@ -97,7 +105,6 @@ public class Player implements Serializable {
 
   // Scoring Related
   private transient ObservableSet<Integer> sectors = FXCollections.observableSet(new HashSet<>());
-  private transient ObservableSet<Coords> satellites = FXCollections.observableSet(new HashSet<>());
   private transient IntegerProperty totalBuildings = new SimpleIntegerProperty(0);
   private transient IntegerProperty buildingsInFeds = new SimpleIntegerProperty(0);
   private transient IntegerProperty projectedTechScoring = new SimpleIntegerProperty(0);
@@ -525,6 +532,10 @@ public class Player implements Serializable {
     return specialActions;
   }
 
+  public int getFedPower() {
+    return fedPower;
+  }
+
   // Utility methods
   public Set<Coords> allBuildingLocations() {
     return ImmutableSet.<Coords> builder()
@@ -545,7 +556,7 @@ public class Player implements Serializable {
     }
 
     if (planetType == PlanetType.GAIA) {
-      return gaiaformed(hex) || qic.get() > 0;
+      return qic.get() > 0;
     }
 
     return race.getHomePlanet().numDigsTo(planetType) - currentDigs.intValue() <= ore.intValue() / terraCost.intValue();
@@ -561,15 +572,49 @@ public class Player implements Serializable {
   }
 
   public void clearSpecialActions() {
-    System.out.println(specialActions);
     // Should set each value to false
     specialActions.keySet().forEach(k -> specialActions.put(k, false));
-    System.out.println(specialActions);
   }
 
   public int getPowerGain(HexWithPlanet hex) {
     Preconditions.checkArgument(hex.getPower() > 0);
     return hex.getPower() == 3 ? bigBuildingPower.intValue() : hex.getPower();
+  }
+
+  public int getExcessBuildingPower() {
+    int totalPower = 0;
+
+    for (Coords coords : mines) {
+      if (!inFederation(coords)) {
+        totalPower += 1;
+      }
+    }
+
+    for (Coords coords : Sets.union(tradingPosts, researchLabs)) {
+      if (!inFederation(coords)) {
+        totalPower += 2;
+      }
+    }
+
+    for (Coords coords : Sets.union(Sets.union(pi, qa), ka)) {
+      if (!inFederation(coords)) {
+        totalPower += bigBuildingPower.intValue();
+      }
+    }
+
+    return totalPower;
+  }
+
+  public boolean inFederation(Coords coords) {
+    for (Set<Coords> federation : federations) {
+      for (Coords inFed : federation) {
+        if (inFed.equals(coords)) {
+          return true;
+        }
+      }
+    }
+
+    return false;
   }
 
   // Action methods
@@ -631,12 +676,12 @@ public class Player implements Serializable {
 
     gaiaformers.add(hex.getCoords());
 
-    if (bin1.get() > gaiaformerCost.get()) {
+    if (bin1.get() >= gaiaformerCost.get()) {
       Util.minus(bin1, gaiaformerCost.get());
     } else {
       int remainingPower = gaiaformerCost.get() - bin1.get();
       bin1.setValue(0);
-      if (bin2.get() > remainingPower) {
+      if (bin2.get() >= remainingPower) {
         Util.minus(bin2, remainingPower);
       } else {
         remainingPower = remainingPower - bin2.get();
@@ -727,6 +772,12 @@ public class Player implements Serializable {
     }
   }
 
+  public void addSatellite(EmptyHex emptyHex) {
+    satellites.add(emptyHex.getCoords());
+    Satellite satellite = new Satellite(emptyHex, race.getColor(), playerEnum);
+    emptyHex.addSatelliteUI(satellite);
+  }
+
   // END GAME
   public void convertResourcesToVps() {
     if (bin2.intValue() > 1) {
@@ -771,6 +822,9 @@ public class Player implements Serializable {
     oos.writeInt(gaiaPlanets.get());
     oos.writeObject(new HashSet<>(techTiles));
     oos.writeObject(new HashMap<>(specialActions));
+
+    // Federations
+    oos.writeObject(new HashSet<>(federations));
 
     // Buildings etc
     oos.writeObject(new HashSet<>(mines));
@@ -830,6 +884,8 @@ public class Player implements Serializable {
     techTiles = FXCollections.observableSet((Set<TechTile>) ois.readObject());
     specialActions = FXCollections.observableMap((Map<Serializable, Boolean>) ois.readObject());
 
+    federations = FXCollections.observableSet((Set<Set<Coords>>) ois.readObject());
+
     // Buildings
     mines = FXCollections.observableSet((Set<Coords>) ois.readObject());
     tradingPosts = FXCollections.observableSet((Set<Coords>) ois.readObject());
@@ -846,6 +902,8 @@ public class Player implements Serializable {
     totalBuildings = new SimpleIntegerProperty(ois.readInt());
     buildingsInFeds = new SimpleIntegerProperty(ois.readInt());
     projectedTechScoring = new SimpleIntegerProperty(ois.readInt());
+
+    fedPower = 7;
 
     setupTechBonuses();
   }

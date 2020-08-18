@@ -151,6 +151,7 @@ public class PlayerBoardController extends GridPane {
         .filter(MiniTechTile.class::isInstance)
         .map(MiniTechTile.class::cast)
         .filter(MiniTechTile::isAction)
+        .filter(tt -> !tt.isTaken())
         .forEach(tt -> tt.highlight(player, callback));
   }
 

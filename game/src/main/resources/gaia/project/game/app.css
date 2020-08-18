@@ -16,6 +16,13 @@
 	-fx-stroke-width: 3;
 }
 
+.highlightedGreenHex {
+	-fx-fill: black;
+	-fx-stroke: lime;
+	-fx-stroke-type: inside;
+	-fx-stroke-width: 3;
+}
+
 .blackBorder {
 	-fx-stroke: black;
 	-fx-stroke-type: outside;
@@ -215,11 +222,27 @@
 	-fx-font-size: 14.0pt;
 }
 
+.greenFedTokenHighlighted {
+	-fx-fill: darkgreen;
+	-fx-stroke: white;
+	-fx-stroke-type: inside;
+	-fx-stroke-width: 2;
+	-fx-font-size: 14.0pt;
+}
+
 .grayFedToken {
 	-fx-fill: gray;
 	-fx-stroke: black;
 	-fx-stroke-type: outside;
 	-fx-stroke-width: 1;
+	-fx-font-size: 14.0pt;
+}
+
+.grayFedTokenHighlighted {
+	-fx-fill: gray;
+	-fx-stroke: white;
+	-fx-stroke-type: inside;
+	-fx-stroke-width: 2;
 	-fx-font-size: 14.0pt;
 }
 

@@ -8,15 +8,18 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import gaia.project.game.board.Academy;
+import gaia.project.game.board.EmptyHex;
 import gaia.project.game.board.Gaiaformer;
 import gaia.project.game.board.GameBoard;
 import gaia.project.game.board.Hex;
@@ -26,12 +29,16 @@ import gaia.project.game.board.PlanetaryInstitute;
 import gaia.project.game.board.ResearchLab;
 import gaia.project.game.board.TradingPost;
 import gaia.project.game.model.Coords;
+import gaia.project.game.model.FederationTile;
 import gaia.project.game.model.Game;
 import gaia.project.game.model.Player;
 import gaia.project.game.model.PlayerEnum;
 import gaia.project.game.model.Race;
 import gaia.project.game.model.Round;
+import gaia.project.game.model.Util;
 import javafx.application.Platform;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -70,8 +77,13 @@ public class GameController extends BorderPane {
   private final TechTracks techTracks;
   private final PowerActionsController powerActionsController;
   private final TreeMap<PlayerEnum, PlayerBoardController> playerBoards = new TreeMap<>();
+  private final FederationTokens federationTokens;
 
   private final List<Runnable> setupQueue = new ArrayList<>();
+
+  // For federations
+  private final Set<Coords> currentFederation = new HashSet<>();
+  private final IntegerProperty fedPower = new SimpleIntegerProperty();
 
   public GameController(GaiaProjectController parent, Game game, boolean load) {
     FXMLLoader loader = new FXMLLoader(GameController.class.getResource("GameMain.fxml"));
@@ -108,7 +120,8 @@ public class GameController extends BorderPane {
     this.roundBoosters = game.getRoundBoosters().stream().map(RoundBoosterTile::new).collect(Collectors.toList());
     children.addAll(roundBoosters);
 
-    VBox boostersAndFeds = new VBox(5, new FederationTokens(game), roundBoosterBox);
+    this.federationTokens = new FederationTokens(game);
+    VBox boostersAndFeds = new VBox(5, federationTokens, roundBoosterBox);
     boostersAndFeds.setAlignment(Pos.CENTER);
 
     HBox miscContent = new HBox(10, new ScoringArea(game), boostersAndFeds);
@@ -221,6 +234,9 @@ public class GameController extends BorderPane {
         case UPGRADE_BUILDING:
           selectBuildingUpgrade();
           break;
+        case FEDERATE:
+          selectFederation();
+          break;
         case ADVANCE_TECH:
           activateTechTracks(false);
           break;
@@ -233,8 +249,6 @@ public class GameController extends BorderPane {
         case PASS:
           selectNewRoundBooster();
           break;
-        case FEDERATE:
-          throw new IllegalStateException("Not implemented yet!");
       }
     } else {
       showActions.setDisable(false);
@@ -421,6 +435,9 @@ public class GameController extends BorderPane {
 
   private Predicate<HexWithPlanet> possibleMineBuilds(Player activePlayer) {
     return hex -> {
+      if (hex.hasGaiaformer() && hex.getBuilder().get() == activePlayer.getPlayerEnum()) {
+        return true;
+      }
       for (Coords coords : activePlayer.allBuildingLocations()) {
         if (!hex.hasBuilding()
             && hex.isWithinRangeOf(
@@ -525,6 +542,95 @@ public class GameController extends BorderPane {
                 .ifPresent(bt -> player.leechPower(powerToGain));
       }
     }
+  }
+
+  void selectFederation() {
+    fedPower.setValue(0);
+    currentFederation.clear();
+    Player activePlayer = game.getPlayers().get(game.getActivePlayer());
+    gameBoard.highlightPlanetaryHexes(
+        activePlayer,
+        h -> h.getBuilder().orElse(null) == game.getActivePlayer() && !activePlayer.inFederation(h.getCoords()),
+        (hex, player) -> hex.highlightGreen(),
+        this::checkFedPower);
+  }
+
+  void checkFedPower(HexWithPlanet hex) {
+    Player activePlayer = game.getPlayers().get(game.getActivePlayer());
+    // Add adjacent hexes
+    currentFederation.add(hex.getCoords());
+    Util.plus(fedPower, hex.getPower() == 3 ? activePlayer.getBigBuildingPower().intValue() : hex.getPower());
+    checkAdjacentHexes(activePlayer, hex);
+
+    if (fedPower.get() < activePlayer.getFedPower()) {
+      selectSatellites();
+    } else {
+      gameBoard.clearHighlighting();
+      selectFederationTile(activePlayer);
+    }
+  }
+
+  // Recursively checks all adjacent hexes to see if they should be added too
+  private void checkAdjacentHexes(Player activePlayer, Hex builtOn) {
+    HexWithPlanet.fromHexes(builtOn.getHexesWithinRange(gameBoard.hexes(), 1).stream())
+        .filter(HexWithPlanet::hasBuilding)
+        .filter(h -> !currentFederation.contains(h.getCoords()))
+        .filter(h -> h.getBuilder().get() == game.getActivePlayer())
+        .forEach(h -> {
+          h.highlightGreen();
+          Util.plus(fedPower, h.getPower() == 3 ? activePlayer.getBigBuildingPower().intValue() : h.getPower());
+          currentFederation.add(h.getCoords());
+          checkAdjacentHexes(activePlayer, h);
+        });
+  }
+
+  void selectSatellites() {
+    Player activePlayer = game.getPlayers().get(game.getActivePlayer());
+    // TODO: Disallow placing next to existing federations
+    gameBoard.highlightEmptyHexes(activePlayer, EmptyHex.possibleSatellite(activePlayer), (hex, player) -> {
+      hex.addSatellite(activePlayer);
+    }, this::finishSatellite);
+  }
+
+  void finishSatellite(EmptyHex hex) {
+    hex.clearHighlighting();
+    Player activePlayer = game.getPlayers().get(game.getActivePlayer());
+    checkAdjacentHexes(activePlayer, hex);
+    if (fedPower.get() >= activePlayer.getFedPower()) {
+      gameBoard.clearHighlighting();
+      selectFederationTile(activePlayer);
+    } else {
+      selectSatellites();
+    }
+  }
+
+  void selectFederationTile(Player activePlayer) {
+    federationTokens.highlight(activePlayer, this::finishFederationTileSelection);
+  }
+
+  void finishFederationTileSelection(FederationTile chosen) {
+    switch (chosen) {
+      case CREDITS:
+        Util.minus(game.getCreditFederations(), 1);
+        break;
+      case ORE:
+        Util.minus(game.getOreFederations(), 1);
+        break;
+      case VP:
+        Util.minus(game.getVpFederations(), 1);
+        break;
+      case POWER:
+        Util.minus(game.getPtFederations(), 1);
+        break;
+      case QIC:
+        Util.minus(game.getOreFederations(), 1);
+        break;
+      case RESEARCH:
+        Util.minus(game.getKnowledgeFederations(), 1);
+        break;
+    }
+    federationTokens.clearHighlighting();
+    finishAction();
   }
 
   private void highlightPowerActions() {

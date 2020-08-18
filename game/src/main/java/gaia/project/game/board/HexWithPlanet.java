@@ -4,6 +4,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
 
@@ -61,6 +62,10 @@ public class HexWithPlanet extends Hex {
 
   public boolean hasGaiaformer() {
     return hasGaiaformer;
+  }
+
+  public static Stream<HexWithPlanet> fromHexes(Stream<Hex> hexes) {
+    return hexes.filter(HexWithPlanet.class::isInstance).map(HexWithPlanet.class::cast);
   }
 
   // Action methods
@@ -231,6 +236,12 @@ public class HexWithPlanet extends Hex {
   public void switchBuildingUI(Node newBuilding) {
     getChildren().remove(getChildren().size() - 1);
     getChildren().add(newBuilding);
+  }
+
+  public void highlightGreen() {
+    ObservableList<String> styleClass = getPolygon().getStyleClass();
+    styleClass.clear();
+    styleClass.add("highlightedGreenHex");
   }
 
   @Override

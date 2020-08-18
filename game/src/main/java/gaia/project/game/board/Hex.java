@@ -7,6 +7,7 @@ import static gaia.project.game.board.BoardUtils.TWO_ROOT_3;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
@@ -79,6 +80,18 @@ public abstract class Hex extends StackPane {
 
   public boolean isWithinRangeOf(Coords coords, int range) {
     return distanceTo(coords) < TWO_ROOT_3 * HEX_SIZE * range + 1.0;
+  }
+
+  public static boolean isContiguous(Set<Coords> maybeContiguous) {
+    for (Coords coords : maybeContiguous) {
+      for (Coords maybeAdjacent : maybeContiguous) {
+        if (coords.distanceTo(maybeAdjacent) < TWO_ROOT_3 * HEX_SIZE + 1.0) {
+          return true;
+        }
+      }
+    }
+
+    return false;
   }
 
   public boolean sharesPlanetType(Hex other) {

@@ -125,7 +125,16 @@ public class GameBoard extends Group implements Iterable<Sector> {
     planetaryHexes().filter(filter).forEach(h -> h.highlight(activePlayer, toExecute, callBack));
   }
 
+  public void highlightEmptyHexes(
+      Player activePlayer,
+      Predicate<EmptyHex> filter,
+      BiConsumer<EmptyHex, Player> toExecute,
+      Consumer<EmptyHex> callBack) {
+    emptyHexes().filter(filter).forEach(h -> h.highlight(activePlayer, toExecute, callBack));
+  }
+
   public void clearHighlighting() {
     planetaryHexes().forEach(HexWithPlanet::clearHighlighting);
+    emptyHexes().forEach(EmptyHex::clearHighlighting);
   }
 }

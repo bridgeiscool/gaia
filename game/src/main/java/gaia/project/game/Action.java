@@ -33,6 +33,10 @@ public class Action extends StackPane {
     children.add(label);
   }
 
+  public boolean isTaken() {
+    return taken;
+  }
+
   public void setTaken(boolean taken) {
     this.taken = taken;
     octagon.getStyleClass().clear();

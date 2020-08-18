@@ -24,7 +24,6 @@ public class MiniTechTile extends HBox {
     this.techTile = techTile;
     if (techTile.isAction()) {
       this.action = new Action(20.0, techTile.display(), "specialAction");
-      System.out.println(player.getSpecialActions());
       action.setTaken(player.getSpecialActions().get(techTile));
       getChildren().add(action);
 
@@ -66,5 +65,9 @@ public class MiniTechTile extends HBox {
 
   public boolean isAction() {
     return action != null;
+  }
+
+  public boolean isTaken() {
+    return action.isTaken();
   }
 }

@@ -501,13 +501,13 @@ public class GameController extends BorderPane {
     gameBoard.clearHighlighting();
     checkForLeech(hex);
     if (hex.checkTechTile()) {
-      highLightTechTiles();
+      highlightTechTiles();
     } else {
       finishAction();
     }
   }
 
-  private void highLightTechTiles() {
+  void highlightTechTiles() {
     Player activePlayer = game.getPlayers().get(game.getActivePlayer());
     techTracks.highlightTechTiles(activePlayer, this::finishTechTileGain, () -> {
       techTracks.clearTechtileHighlighting();

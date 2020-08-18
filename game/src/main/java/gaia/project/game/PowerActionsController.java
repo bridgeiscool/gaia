@@ -143,10 +143,12 @@ public class PowerActionsController extends GridPane {
 
     if (activePlayer.getQic().intValue() >= 4) {
       q4.tryHighlight(activePlayer, p -> {
-        // TODO: Implement gaining tech tiles!
         Util.minus(p.getQic(), 4);
         gameController.getGame().getQ4ActionTaken().setValue(true);
-      }, callback);
+      }, () -> {
+        clearHighlighting();
+        gameController.highlightTechTiles();
+      });
     }
 
     if (activePlayer.getQic().intValue() >= 3) {

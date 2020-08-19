@@ -579,7 +579,7 @@ public class Player implements Serializable {
 
   public int getPowerGain(HexWithPlanet hex) {
     Preconditions.checkArgument(hex.getPower() > 0);
-    return hex.getPower() == 3 ? bigBuildingPower.intValue() : hex.getPower();
+    return Math.min(hex.getPower() == 3 ? bigBuildingPower.intValue() : hex.getPower(), canCharge());
   }
 
   public int getExcessBuildingPower() {

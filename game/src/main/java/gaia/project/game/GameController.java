@@ -543,7 +543,7 @@ public class GameController extends BorderPane {
       int powerToGain = player.getPowerGain(entry.getValue());
       if (powerToGain == 1) {
         player.chargePower(1);
-      } else {
+      } else if (powerToGain > 1) {
         new Alert(
             AlertType.CONFIRMATION,
             player.getRace().getRaceName() + " may gain " + powerToGain + " for " + (powerToGain - 1),

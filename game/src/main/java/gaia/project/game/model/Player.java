@@ -920,7 +920,7 @@ public class Player implements Serializable {
   public static class FedToken implements Serializable {
     private static final long serialVersionUID = 6669365166912310591L;
     private final FederationTile federationTile;
-    private BooleanProperty flippable;
+    private transient BooleanProperty flippable;
 
     public FedToken(FederationTile federationTile, boolean flippable) {
       this.federationTile = federationTile;

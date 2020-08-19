@@ -563,10 +563,10 @@ public class GameController extends BorderPane {
         activePlayer,
         h -> h.getBuilder().orElse(null) == game.getActivePlayer() && !activePlayer.inFederation(h.getCoords()),
         (hex, player) -> hex.highlightGreen(),
-        this::checkFedPower);
+        this::checkIfSatellitesNeeded);
   }
 
-  void checkFedPower(HexWithPlanet hex) {
+  void checkIfSatellitesNeeded(HexWithPlanet hex) {
     Player activePlayer = game.getPlayers().get(game.getActivePlayer());
     // Add adjacent hexes
     currentFederation.add(hex.getCoords());
@@ -574,7 +574,7 @@ public class GameController extends BorderPane {
     checkAdjacentHexes(activePlayer, hex);
 
     if (fedPower.get() < activePlayer.getFedPower()) {
-      selectSatellites();
+      startSelectSatellites();
     } else {
       gameBoard.clearHighlighting();
       selectFederationTile(activePlayer);
@@ -595,12 +595,16 @@ public class GameController extends BorderPane {
         });
   }
 
-  void selectSatellites() {
+  void startSelectSatellites() {
     Player activePlayer = game.getPlayers().get(game.getActivePlayer());
     // TODO: Disallow placing next to existing federations
-    gameBoard.highlightEmptyHexes(activePlayer, EmptyHex.possibleSatellite(activePlayer), (hex, player) -> {
-      hex.addSatellite(activePlayer);
-    }, this::finishSatellite);
+    gameBoard.highlightEmptyHexes(
+        activePlayer,
+        EmptyHex.possibleSatellite(activePlayer, currentFederation),
+        (hex, player) -> {
+          hex.addSatellite(activePlayer);
+        },
+        this::finishSatellite);
   }
 
   void finishSatellite(EmptyHex hex) {
@@ -611,8 +615,21 @@ public class GameController extends BorderPane {
       gameBoard.clearHighlighting();
       selectFederationTile(activePlayer);
     } else {
-      selectSatellites();
+      addMoreSatellites(hex);
     }
+  }
+
+  void addMoreSatellites(EmptyHex lastAdded) {
+    Player activePlayer = game.getPlayers().get(game.getActivePlayer());
+    // TODO: Disallow placing next to existing federations
+    gameBoard.highlightEmptyHexes(
+        activePlayer,
+        EmptyHex.possibleSatellite(activePlayer, currentFederation)
+            .or(h -> h.isWithinRangeOf(lastAdded.getCoords(), 1)),
+        (hex, player) -> {
+          hex.addSatellite(activePlayer);
+        },
+        this::finishSatellite);
   }
 
   void selectFederationTile(Player activePlayer) {

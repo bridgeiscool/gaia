@@ -5,7 +5,6 @@ import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
-import java.util.stream.Stream;
 
 import gaia.project.game.model.Coords;
 import gaia.project.game.model.Player;
@@ -39,17 +38,8 @@ public class EmptyHex extends Hex {
     return satellites.contains(player);
   }
 
-  public static Predicate<EmptyHex> possibleSatellite(Player player) {
-    return h -> Stream
-        .of(
-            player.getMines(),
-            player.getTradingPosts(),
-            player.getResearchLabs(),
-            player.getPi(),
-            player.getQa(),
-            player.getKa())
-        .flatMap(Set::stream)
-        .anyMatch(c -> h.isWithinRangeOf(c, 1))
+  public static Predicate<EmptyHex> possibleSatellite(Player player, Set<Coords> currentBuildings) {
+    return h -> currentBuildings.stream().anyMatch(c -> h.isWithinRangeOf(c, 1))
         && !h.hasSatellite(player.getPlayerEnum());
 
   }

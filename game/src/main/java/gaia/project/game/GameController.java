@@ -660,7 +660,7 @@ public class GameController extends BorderPane {
         Util.minus(game.getPtFederations(), 1);
         break;
       case QIC:
-        Util.minus(game.getOreFederations(), 1);
+        Util.minus(game.getQicFederations(), 1);
         break;
       case RESEARCH:
         Util.minus(game.getKnowledgeFederations(), 1);

@@ -27,6 +27,7 @@ import gaia.project.game.board.HexWithPlanet;
 import gaia.project.game.board.Mine;
 import gaia.project.game.board.PlanetaryInstitute;
 import gaia.project.game.board.ResearchLab;
+import gaia.project.game.board.Satellite;
 import gaia.project.game.board.TradingPost;
 import gaia.project.game.model.Coords;
 import gaia.project.game.model.FederationTile;
@@ -216,6 +217,14 @@ public class GameController extends BorderPane {
         gameBoard.planetaryHexes()
             .filter(h -> h.getCoords().equals(m))
             .forEach(h -> h.addGaiaformer(new Gaiaformer(h, p.getRace().getColor(), p.getPlayerEnum())));
+      });
+    });
+
+    game.getPlayers().values().forEach(p -> {
+      p.getSatellites().forEach(s -> {
+        gameBoard.emptyHexes()
+            .filter(h -> h.getCoords().equals(s))
+            .forEach(h -> h.addSatelliteUI(new Satellite(h, p.getRace().getColor(), p.getPlayerEnum())));
       });
     });
   }

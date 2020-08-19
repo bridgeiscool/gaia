@@ -64,7 +64,7 @@ public class FederationTokenPane extends StackPane {
   }
 
   private enum Size {
-    REGULAR(1.0, "fedToken"), MINI(0.5, "miniFedToken");
+    REGULAR(1.0, "fedToken"), MINI(0.7, "miniFedToken");
 
     private final double scaling;
     private final String styleClass;

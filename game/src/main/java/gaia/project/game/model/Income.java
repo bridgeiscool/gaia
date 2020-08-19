@@ -52,15 +52,20 @@ public class Income implements UpdatePlayer {
 
   @Override
   public void updatePlayer(Player player) {
-    player.getOre().setValue(player.getOre().getValue().intValue() + oreIncome.getValue());
-    player.getCredits().setValue(player.getCredits().getValue().intValue() + creditIncome.getValue());
-    player.getResearch().setValue(player.getResearch().getValue().intValue() + researchIncome.getValue());
-    player.getQic().setValue(player.getQic().getValue().intValue() + qicIncome.getValue());
+    Util.plus(player.getOre(), oreIncome.get());
+    Util.plus(player.getCredits(), creditIncome.get());
+    Util.plus(player.getResearch(), researchIncome.get());
+    Util.plus(player.getQic(), qicIncome.get());
     if (powerIncome.getValue() > 0 && chargeIncome.getValue() > 0) {
-      // TODO: Prompt user for order
-
+      if (player.canCharge() >= chargeIncome.get()) {
+        player.chargePower(chargeIncome.get());
+        Util.plus(player.getBin1(), powerIncome.get());
+      } else {
+        Util.plus(player.getBin1(), powerIncome.get());
+        player.chargePower(chargeIncome.get());
+      }
     } else {
-      player.getBin1().setValue(player.getBin1().getValue().intValue() + powerIncome.getValue());
+      Util.plus(player.getBin1(), powerIncome.get());
       if (chargeIncome.getValue() > 0) {
         player.chargePower(chargeIncome.getValue());
       }

@@ -309,6 +309,10 @@ public class Player implements Serializable {
     Util.minus(score, power - 1);
   }
 
+  public int canCharge() {
+    return 2 * bin1.get() + bin2.get();
+  }
+
   public void chargePower(int toCharge) {
     Preconditions.checkArgument(toCharge > 0);
     int remainingCharge = toCharge;

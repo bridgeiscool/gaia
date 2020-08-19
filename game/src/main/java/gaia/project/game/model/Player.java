@@ -928,6 +928,8 @@ public class Player implements Serializable {
     fedPower = 7;
 
     setupTechBonuses();
+    // Re-add listeners from tech tiles
+    techTiles.stream().filter(TechTile::addsListener).forEach(tt -> tt.addTo(this));
   }
 
   public static class FedToken implements Serializable {

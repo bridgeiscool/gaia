@@ -598,13 +598,17 @@ public class GameController extends BorderPane {
   void startSelectSatellites() {
     Player activePlayer = game.getPlayers().get(game.getActivePlayer());
     // TODO: Disallow placing next to existing federations
-    gameBoard.highlightEmptyHexes(
-        activePlayer,
-        EmptyHex.possibleSatellite(activePlayer, currentFederation),
-        (hex, player) -> {
-          hex.addSatellite(activePlayer);
-        },
-        this::finishSatellite);
+    if (activePlayer.getBin1().get() + activePlayer.getBin2().get() + activePlayer.getBin3().get() > 0) {
+      gameBoard.highlightEmptyHexes(
+          activePlayer,
+          EmptyHex.possibleSatellite(activePlayer, currentFederation),
+          (hex, player) -> {
+            hex.addSatellite(activePlayer);
+          },
+          this::finishSatellite);
+    } else {
+      new Alert(AlertType.WARNING, "You do not have enough power tokens", ButtonType.OK);
+    }
   }
 
   void finishSatellite(EmptyHex hex) {
@@ -622,14 +626,19 @@ public class GameController extends BorderPane {
   void addMoreSatellites(EmptyHex lastAdded) {
     Player activePlayer = game.getPlayers().get(game.getActivePlayer());
     // TODO: Disallow placing next to existing federations
-    gameBoard.highlightEmptyHexes(
-        activePlayer,
-        EmptyHex.possibleSatellite(activePlayer, currentFederation)
-            .or(h -> h.isWithinRangeOf(lastAdded.getCoords(), 1)),
-        (hex, player) -> {
-          hex.addSatellite(activePlayer);
-        },
-        this::finishSatellite);
+
+    if (activePlayer.getBin1().get() + activePlayer.getBin2().get() + activePlayer.getBin3().get() > 0) {
+      gameBoard.highlightEmptyHexes(
+          activePlayer,
+          EmptyHex.possibleSatellite(activePlayer, currentFederation)
+              .or(h -> h.isWithinRangeOf(lastAdded.getCoords(), 1)),
+          (hex, player) -> {
+            hex.addSatellite(activePlayer);
+          },
+          this::finishSatellite);
+    } else {
+      new Alert(AlertType.WARNING, "You do not have enough power tokens", ButtonType.OK);
+    }
   }
 
   void selectFederationTile(Player activePlayer) {

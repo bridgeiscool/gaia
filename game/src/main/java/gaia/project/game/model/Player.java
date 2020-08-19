@@ -784,9 +784,18 @@ public class Player implements Serializable {
   }
 
   public void addSatellite(EmptyHex emptyHex) {
+    Preconditions.checkArgument(bin1.get() + bin2.get() + bin3.get() > 0);
     satellites.add(emptyHex.getCoords());
     Satellite satellite = new Satellite(emptyHex, race.getColor(), playerEnum);
     emptyHex.addSatelliteUI(satellite);
+
+    if (bin1.get() > 0) {
+      Util.minus(bin1, 1);
+    } else if (bin2.get() > 0) {
+      Util.minus(bin2, 1);
+    } else {
+      Util.minus(bin3, 1);
+    }
   }
 
   // END GAME

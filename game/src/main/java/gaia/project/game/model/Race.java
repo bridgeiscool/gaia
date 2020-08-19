@@ -18,23 +18,28 @@ public enum Race {
     public IncomeUpdater getPiIncome() {
       return new CompoundIncome(new PowerIncome(4), new QicIncome(1));
     }
-  },
-  GLEENS("Gleens", "yellowRace", Color.YELLOW, PlanetType.YELLOW) {
-    @Override
-    public int getStartingQic() {
-      return 0;
-    }
 
     @Override
-    public int getStartingNavLevel() {
-      return 1;
-    }
-
-    @Override
-    public IncomeUpdater getPiIncome() {
-      return new CompoundIncome(new PowerIncome(4), new OreIncome(1));
+    public Player getPlayer(PlayerEnum playerEnum) {
+      return new XenosPlayer(playerEnum);
     }
   },
+  // GLEENS("Gleens", "yellowRace", Color.YELLOW, PlanetType.YELLOW) {
+  // @Override
+  // public int getStartingQic() {
+  // return 0;
+  // }
+  //
+  // @Override
+  // public int getStartingNavLevel() {
+  // return 1;
+  // }
+  //
+  // @Override
+  // public IncomeUpdater getPiIncome() {
+  // return new CompoundIncome(new PowerIncome(4), new OreIncome(1));
+  // }
+  // },
   TERRANS("Terrans", "blueRace", Color.BLUE, PlanetType.BLUE) {
     @Override
     public int getStartingBin1() {
@@ -44,6 +49,11 @@ public enum Race {
     @Override
     public int getStartingGaiaformingLevel() {
       return 1;
+    }
+
+    @Override
+    public Player getPlayer(PlayerEnum playerEnum) {
+      return new TerranPlayer(playerEnum);
     }
   },
   // LANTIDS("Lantids", "blueRace", Color.BLUE, PlanetType.BLUE) {
@@ -67,11 +77,23 @@ public enum Race {
     public int getStartingEconLevel() {
       return 1;
     }
+
+    @Override
+    public Player getPlayer(PlayerEnum playerEnum) {
+      // HH have no player-level anything, only the conversions once PI is built
+      return new Player(this, playerEnum);
+    }
   },
   IVITS("Ivits", "redRace", Color.RED, PlanetType.RED) {
     @Override
     public int getStartingQicIncome() {
       return 1;
+    }
+
+    @Override
+    public Player getPlayer(PlayerEnum playerEnum) {
+      // TODO: Implement, leaving this here since logic in GameController for setup
+      return new Player(Race.IVITS, playerEnum);
     }
   };
 
@@ -86,6 +108,8 @@ public enum Race {
     this.color = color;
     this.homePlanet = homePlanet;
   }
+
+  public abstract Player getPlayer(PlayerEnum playerEnum);
 
   public String getRaceName() {
     return raceName;

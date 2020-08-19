@@ -15,7 +15,7 @@ public class PlayerTest {
 
   @Before
   public void before() {
-    player = new Player(Race.GLEENS, PlayerEnum.PLAYER1);
+    player = new Player(Race.XENOS, PlayerEnum.PLAYER1);
   }
 
   // Charge power tests (Gleens start with 0-4-2 in bins 1-2-3)

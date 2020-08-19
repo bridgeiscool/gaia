@@ -15,7 +15,7 @@ import gaia.project.game.model.Race;
 public class IncomeTest {
   @Test
   public void testSerialization() throws IOException, ClassNotFoundException {
-    Income income = new Income(Race.GLEENS);
+    Income income = new Income(Race.XENOS);
     try (ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ObjectOutputStream oos = new ObjectOutputStream(baos)) {
       oos.writeObject(income);

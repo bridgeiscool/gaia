@@ -405,9 +405,6 @@ public class GameController extends BorderPane {
           h.getPlanet().transdimToGaia();
           game.getGaiaformed().add(h.getCoords());
         });
-    if (game.getPlayers().values().stream().anyMatch(p -> p.getRace() == Race.TERRANS && p.getGaiaBin().get() > 0)) {
-      System.out.println("Terran Special Ability!");
-    }
     game.getPlayers().values().forEach(Player::gaiaPhase);
   }
 

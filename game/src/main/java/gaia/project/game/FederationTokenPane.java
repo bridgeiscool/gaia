@@ -48,6 +48,15 @@ public class FederationTokenPane extends StackPane {
     });
   }
 
+  public void highlightForCopy(Player activePlayer, CallBack callback) {
+    shape.getStyleClass().clear();
+    shape.getStyleClass().add(federationTile.isFlippable() ? "greenFedTokenHighlighted" : "grayFedTokenHighlighted");
+    this.setOnMouseClicked(me -> {
+      federationTile.updatePlayer(activePlayer);
+      callback.call();
+    });
+  }
+
   public void clearHighlighting() {
     shape.getStyleClass().clear();
     shape.getStyleClass().add(federationTile.isFlippable() ? "greenFedToken" : "grayFedToken");

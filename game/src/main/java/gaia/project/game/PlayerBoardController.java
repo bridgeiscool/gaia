@@ -179,10 +179,7 @@ public class PlayerBoardController extends GridPane {
         .stream()
         .filter(FederationTokenPane.class::isInstance)
         .map(FederationTokenPane.class::cast)
-        .forEach(ft -> ft.highlight(activePlayer, token -> {
-          token.updatePlayer(player);
-          callback.call();
-        }));
+        .forEach(ft -> ft.highlightForCopy(activePlayer, callback));
   }
 
   public void clearHighlighting() {

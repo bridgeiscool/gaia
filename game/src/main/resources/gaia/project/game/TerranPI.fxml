@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.input.*?>
+<?import javafx.event.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.geometry.*?>
+
+<VBox styleClass="vbox-padded" xmlns:fx="http://javafx.com/fxml">
+  <stylesheets>
+    <URL value="@app.css" />
+  </stylesheets>
+
+  <HBox alignment="CENTER_LEFT" spacing="0">
+    <Label text="Left to spend: " />
+    <Label fx:id="leftToSpend" />
+  </HBox>
+  <Separator />
+
+  <GridPane  hgap="3" vgap="3">
+    <columnConstraints>
+      <ColumnConstraints halignment="CENTER" />
+      <ColumnConstraints halignment="CENTER" />
+      <ColumnConstraints halignment="CENTER" />
+      <ColumnConstraints halignment="CENTER" />
+    </columnConstraints>
+    
+    <Label text="Knowledge" GridPane.rowIndex="0" GridPane.columnIndex="0" />
+    <Button text="+" onAction="#addKnowledge" GridPane.rowIndex="0" GridPane.columnIndex="1" />
+    <Button text="-" onAction="#subtractKnowledge" GridPane.rowIndex="0" GridPane.columnIndex="2" />
+    <Label fx:id="addedKnowledge" GridPane.rowIndex="0" GridPane.columnIndex="3" />
+    
+    <Label text="QIC" GridPane.rowIndex="1" GridPane.columnIndex="0" />
+    <Button text="+" onAction="#addQic" GridPane.rowIndex="1" GridPane.columnIndex="1" />
+    <Button text="-" onAction="#subtractQic" GridPane.rowIndex="1" GridPane.columnIndex="2" />
+    <Label fx:id="addedQic" GridPane.rowIndex="1" GridPane.columnIndex="3" />
+    
+    <Label text="Ore" GridPane.rowIndex="2" GridPane.columnIndex="0" />
+    <Button text="+" onAction="#addOre" GridPane.rowIndex="2" GridPane.columnIndex="1" />
+    <Button text="-" onAction="#subtractOre" GridPane.rowIndex="2" GridPane.columnIndex="2" />
+    <Label fx:id="addedOre" GridPane.rowIndex="2" GridPane.columnIndex="3" />
+    
+    <Label text="Credits" GridPane.rowIndex="3" GridPane.columnIndex="0" />
+    <Button text="+" onAction="#addCredits" GridPane.rowIndex="3" GridPane.columnIndex="1" />
+    <Button text="-" onAction="#subtractCredits" GridPane.rowIndex="3" GridPane.columnIndex="2" />
+    <Label fx:id="addedCredits" GridPane.rowIndex="3" GridPane.columnIndex="3" />
+  </GridPane>
+</VBox>

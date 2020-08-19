@@ -99,6 +99,12 @@ public class GameController extends BorderPane {
     this.parent = parent;
     this.game = game;
     this.gameBoard = new GameBoard(game.getGameBoard());
+    gameBoard.planetaryHexes().forEach(hex -> {
+      if (game.getGaiaformed().contains(hex.getCoords())) {
+        hex.getPlanet().transdimToGaia();
+      }
+    });
+
     mainPane.centerProperty().set(gameBoard);
 
     // Init player boards
@@ -386,7 +392,10 @@ public class GameController extends BorderPane {
   private void gaiaPhase() {
     gameBoard.planetaryHexes()
         .filter(h -> h.hasGaiaformer() && h.getPlanet().getPlanetType() == PlanetType.TRANSDIM)
-        .forEach(h -> h.getPlanet().transdimToGaia());
+        .forEach(h -> {
+          h.getPlanet().transdimToGaia();
+          game.getGaiaformed().add(h.getCoords());
+        });
     if (game.getPlayers().values().stream().anyMatch(p -> p.getRace() == Race.TERRANS && p.getGaiaBin().get() > 0)) {
       System.out.println("Terran Special Ability!");
     }
@@ -632,6 +641,17 @@ public class GameController extends BorderPane {
         break;
     }
     federationTokens.clearHighlighting();
+    finishAction();
+  }
+
+  void highlightUserFeds() {
+    Player activePlayer = game.getPlayers().get(game.getActivePlayer());
+    playerBoards.get(activePlayer.getPlayerEnum()).highlightFederations(activePlayer, this::finishQ3Action);
+  }
+
+  void finishQ3Action() {
+    Player activePlayer = game.getPlayers().get(game.getActivePlayer());
+    playerBoards.get(activePlayer.getPlayerEnum()).clearFederationHighlighting();
     finishAction();
   }
 

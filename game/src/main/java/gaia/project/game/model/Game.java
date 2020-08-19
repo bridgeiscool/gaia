@@ -8,9 +8,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
@@ -28,6 +30,7 @@ public class Game implements Serializable {
   private static final long serialVersionUID = -3521179457356267066L;
 
   private final List<SectorLocation> gameBoard;
+  private final Set<Coords> gaiaformed;
 
   private final List<RoundBooster> roundBoosters;
   private final List<TechTile> techTiles;
@@ -115,6 +118,7 @@ public class Game implements Serializable {
       EndScoring endScoring2,
       Map<PlayerEnum, Player> players) {
     this.gameBoard = ImmutableList.copyOf(gameBoard);
+    this.gaiaformed = new HashSet<>();
     this.roundBoosters = ImmutableList.copyOf(roundBoosters);
     this.techTiles = ImmutableList.copyOf(techTiles);
     this.advancedTechTiles = ImmutableList.copyOf(advancedTechTiles);
@@ -189,8 +193,8 @@ public class Game implements Serializable {
     return gameBoard;
   }
 
-  public static long getSerialversionuid() {
-    return serialVersionUID;
+  public Set<Coords> getGaiaformed() {
+    return gaiaformed;
   }
 
   public Property<Boolean> getK3ActionTaken() {

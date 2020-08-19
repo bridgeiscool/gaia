@@ -153,10 +153,12 @@ public class PowerActionsController extends GridPane {
 
     if (activePlayer.getQic().intValue() >= 3) {
       q3.tryHighlight(activePlayer, p -> {
-        // TODO: Implement federation tile selection
         Util.minus(p.getQic(), 3);
         gameController.getGame().getQ3ActionTaken().setValue(true);
-      }, callback);
+      }, () -> {
+        clearHighlighting();
+        gameController.highlightUserFeds();
+      });
     }
 
     if (activePlayer.getQic().intValue() >= 2) {

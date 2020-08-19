@@ -174,6 +174,17 @@ public class PlayerBoardController extends GridPane {
         .forEach(tt -> tt.highlight(player, callback));
   }
 
+  public void highlightFederations(Player activePlayer, CallBack callback) {
+    tokenArea.getChildren()
+        .stream()
+        .filter(FederationTokenPane.class::isInstance)
+        .map(FederationTokenPane.class::cast)
+        .forEach(ft -> ft.highlight(activePlayer, token -> {
+          token.updatePlayer(player);
+          callback.call();
+        }));
+  }
+
   public void clearHighlighting() {
     tokenArea.getChildren()
         .stream()
@@ -181,5 +192,13 @@ public class PlayerBoardController extends GridPane {
         .map(MiniTechTile.class::cast)
         .filter(MiniTechTile::isAction)
         .forEach(MiniTechTile::clearHighlighting);
+  }
+
+  public void clearFederationHighlighting() {
+    tokenArea.getChildren()
+        .stream()
+        .filter(FederationTokenPane.class::isInstance)
+        .map(FederationTokenPane.class::cast)
+        .forEach(FederationTokenPane::clearHighlighting);
   }
 }

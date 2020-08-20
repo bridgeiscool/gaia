@@ -80,6 +80,8 @@ public class Player implements Serializable {
   private transient IntegerProperty gaiaPlanets = new SimpleIntegerProperty(0);
   // Boolean indicates whether the action has been used this round
   private transient ObservableMap<Serializable, Boolean> specialActions = FXCollections.observableHashMap();
+  private transient ObservableSet<AdvancedTechTile> advTechTiles = FXCollections.observableSet();
+  private transient ObservableSet<TechTile> coveredTechTiles = FXCollections.observableSet();
 
   // Federation related
   private transient ObservableSet<Set<Coords>> federations = FXCollections.observableSet(new HashSet<>());
@@ -804,7 +806,7 @@ public class Player implements Serializable {
     }
   }
 
-  public void takeSpecialAction(PlayerBoardAction specialAction) {
+  public void takeSpecialAction(UpdatePlayer specialAction) {
     specialAction.updatePlayer(this);
     specialActions.put(specialAction, true);
   }
@@ -852,6 +854,8 @@ public class Player implements Serializable {
     oos.writeInt(gaiaPlanets.get());
     oos.writeObject(new HashSet<>(techTiles));
     oos.writeObject(new HashMap<>(specialActions));
+    oos.writeObject(new HashSet<>(coveredTechTiles));
+    oos.writeObject(new HashSet<>(advTechTiles));
 
     // Federations
     oos.writeObject(new HashSet<>(federations));
@@ -912,7 +916,10 @@ public class Player implements Serializable {
     gaiaPlanets = new SimpleIntegerProperty(ois.readInt());
     techTiles = FXCollections.observableSet((Set<TechTile>) ois.readObject());
     specialActions = FXCollections.observableMap((Map<Serializable, Boolean>) ois.readObject());
+    coveredTechTiles = FXCollections.observableSet((Set<TechTile>) ois.readObject());
+    advTechTiles = FXCollections.observableSet((Set<AdvancedTechTile>) ois.readObject());
 
+    // Federations
     federations = FXCollections.observableSet((Set<Set<Coords>>) ois.readObject());
 
     // Buildings

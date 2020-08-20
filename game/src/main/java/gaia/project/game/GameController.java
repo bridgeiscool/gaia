@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -33,6 +34,7 @@ import gaia.project.game.model.Coords;
 import gaia.project.game.model.FederationTile;
 import gaia.project.game.model.Game;
 import gaia.project.game.model.Player;
+import gaia.project.game.model.PlayerBoardAction;
 import gaia.project.game.model.PlayerEnum;
 import gaia.project.game.model.Race;
 import gaia.project.game.model.Round;
@@ -709,14 +711,18 @@ public class GameController extends BorderPane {
           });
     }
 
-    playerBoards.get(game.getActivePlayer()).highlightActions(() -> {
-      finishSpecialAction();
-    });
+    playerBoards.get(game.getActivePlayer()).highlightActions(this::finishSpecialAction);
   }
 
-  private void finishSpecialAction() {
+  private void finishSpecialAction(Serializable action) {
     clearSpecialActionHighlighting();
-    finishAction();
+
+    // Hooks for special actions that require game board interaction
+    if (action == PlayerBoardAction.RL_TO_TP) {
+      System.out.println("Woo!");
+    } else {
+      finishAction();
+    }
   }
 
   private void clearSpecialActionHighlighting() {

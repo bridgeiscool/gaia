@@ -3,6 +3,7 @@ package gaia.project.game;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Map.Entry;
+import java.util.function.Consumer;
 
 import com.google.common.base.Preconditions;
 
@@ -171,21 +172,21 @@ public class PlayerBoardController extends GridPane {
     for (Entry<Serializable, Boolean> entry : player.getSpecialActions().entrySet()) {
       if (entry.getKey() instanceof PlayerBoardAction) {
         PlayerBoardAction key = (PlayerBoardAction) entry.getKey();
-        tokenArea.getChildren().add(new SpecialAction(p -> p.takeSpecialAction(key), key.display(), entry.getValue()));
+        tokenArea.getChildren().add(new SpecialAction(key, key.display(), entry.getValue()));
       }
     }
 
     player.getSpecialActions().addListener((MapChangeListener<Serializable, Boolean>) change -> {
       if (change.getKey() instanceof PlayerBoardAction) {
-        PlayerBoardAction key = (PlayerBoardAction) change.getKey();
         if (!change.getValueAdded()) {
-          tokenArea.getChildren().add(new SpecialAction(p -> p.takeSpecialAction(key), key.display()));
+          PlayerBoardAction key = (PlayerBoardAction) change.getKey();
+          tokenArea.getChildren().add(new SpecialAction(key, key.display()));
         }
       }
     });
   }
 
-  public void highlightActions(CallBack callback) {
+  public void highlightActions(Consumer<Serializable> callback) {
     tokenArea.getChildren()
         .stream()
         .filter(MiniTechTile.class::isInstance)

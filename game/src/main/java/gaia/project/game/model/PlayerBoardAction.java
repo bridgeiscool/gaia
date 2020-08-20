@@ -1,7 +1,7 @@
 package gaia.project.game.model;
 
 // Handles race-specific special actions
-public enum PlayerBoardAction {
+public enum PlayerBoardAction implements UpdatePlayer {
   GAIN_QIC {
     @Override
     public String display() {
@@ -26,8 +26,6 @@ public enum PlayerBoardAction {
     }
 
   };
-
-  public abstract void updatePlayer(Player player);
 
   public abstract String display();
 }

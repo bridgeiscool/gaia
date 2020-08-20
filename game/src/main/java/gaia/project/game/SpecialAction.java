@@ -1,8 +1,10 @@
 package gaia.project.game;
 
+import java.io.Serializable;
 import java.util.function.Consumer;
 
 import gaia.project.game.model.Player;
+import gaia.project.game.model.UpdatePlayer;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -18,19 +20,19 @@ public class SpecialAction extends StackPane {
 
   private final Octagon octagon;
   private boolean taken;
-  private final Consumer<Player> specialAction;
+  private final UpdatePlayer specialAction;
 
-  public SpecialAction(Consumer<Player> specialAction, String text) {
-    this(specialAction, text, false);
+  public SpecialAction(UpdatePlayer specialAction, String display) {
+    this(specialAction, display, false);
   }
 
-  public SpecialAction(Consumer<Player> specialAction, String text, boolean taken) {
+  public SpecialAction(UpdatePlayer specialAction, String display, boolean taken) {
     ObservableList<Node> children = getChildren();
     this.octagon = new Octagon();
     this.specialAction = specialAction;
     setTaken(taken);
     children.add(octagon);
-    Label label = new Label(text);
+    Label label = new Label(display);
     label.getStyleClass().add("actionLabel");
     children.add(label);
   }
@@ -45,14 +47,14 @@ public class SpecialAction extends StackPane {
     octagon.getStyleClass().add(taken ? TAKEN_ACTION : NORMAL);
   }
 
-  public void tryHighlight(Player activePlayer, CallBack callBack) {
+  public void tryHighlight(Player activePlayer, Consumer<Serializable> callBack) {
     if (!taken) {
       octagon.getStyleClass().clear();
       octagon.getStyleClass().add(HIGHLIGHTED);
       this.setOnMouseClicked(me -> {
         setTaken(true);
-        specialAction.accept(activePlayer);
-        callBack.call();
+        activePlayer.takeSpecialAction(specialAction);
+        callBack.accept(specialAction);
       });
     }
   }

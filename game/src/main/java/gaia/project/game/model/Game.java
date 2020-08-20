@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -34,7 +35,8 @@ public class Game implements Serializable {
 
   private final List<RoundBooster> roundBoosters;
   private final List<TechTile> techTiles;
-  private final List<AdvancedTechTile> advancedTechTiles;
+  // Boolean indicates if it's been taken
+  private final Map<AdvancedTechTile, Boolean> advancedTechTiles;
   private final List<RoundScoringBonus> roundScoringBonuses;
   private final EndScoring endScoring1;
   private final EndScoring endScoring2;
@@ -121,7 +123,8 @@ public class Game implements Serializable {
     this.gaiaformed = new HashSet<>();
     this.roundBoosters = ImmutableList.copyOf(roundBoosters);
     this.techTiles = ImmutableList.copyOf(techTiles);
-    this.advancedTechTiles = ImmutableList.copyOf(advancedTechTiles);
+    this.advancedTechTiles = new LinkedHashMap<>(6);
+    advancedTechTiles.forEach(tt -> this.advancedTechTiles.put(tt, Boolean.FALSE));
     this.terraBonus = terraBonus;
     this.roundScoringBonuses = ImmutableList.copyOf(roundScoringBonuses);
     this.endScoring1 = endScoring1;
@@ -149,7 +152,7 @@ public class Game implements Serializable {
     return techTiles;
   }
 
-  public List<AdvancedTechTile> getAdvancedTechTiles() {
+  public Map<AdvancedTechTile, Boolean> getAdvancedTechTiles() {
     return advancedTechTiles;
   }
 

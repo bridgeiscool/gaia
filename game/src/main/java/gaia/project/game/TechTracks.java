@@ -2,12 +2,15 @@ package gaia.project.game;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.google.common.base.Preconditions;
 
+import gaia.project.game.model.AdvancedTechTile;
 import gaia.project.game.model.Game;
 import gaia.project.game.model.Player;
 import gaia.project.game.model.PlayerEnum;
@@ -194,13 +197,15 @@ public class TechTracks extends GridPane {
     wildTechTile2.getChildren().add(techTiles.get(7));
     wildTechTile3.getChildren().add(techTiles.get(8));
 
-    // Initialize the adv tech tiles
-    terraAdvTech.getChildren().add(new AdvancedTechTileHBox(game.getAdvancedTechTiles().get(TERRA)));
-    navAdvTech.getChildren().add(new AdvancedTechTileHBox(game.getAdvancedTechTiles().get(NAV)));
-    aiAdvTech.getChildren().add(new AdvancedTechTileHBox(game.getAdvancedTechTiles().get(AI)));
-    gaiaAdvTech.getChildren().add(new AdvancedTechTileHBox(game.getAdvancedTechTiles().get(GAIA)));
-    econAdvTech.getChildren().add(new AdvancedTechTileHBox(game.getAdvancedTechTiles().get(ECON)));
-    knowledgeAdvTech.getChildren().add(new AdvancedTechTileHBox(game.getAdvancedTechTiles().get(KNOWLEDGE)));
+    // Initialize the adv tech tiles - map is linked hash map so
+    Iterator<Entry<AdvancedTechTile, Boolean>> iterator = game.getAdvancedTechTiles().entrySet().iterator();
+
+    terraAdvTech.getChildren().add(new AdvancedTechTileHBox(iterator.next()));
+    navAdvTech.getChildren().add(new AdvancedTechTileHBox(iterator.next()));
+    aiAdvTech.getChildren().add(new AdvancedTechTileHBox(iterator.next()));
+    gaiaAdvTech.getChildren().add(new AdvancedTechTileHBox(iterator.next()));
+    econAdvTech.getChildren().add(new AdvancedTechTileHBox(iterator.next()));
+    knowledgeAdvTech.getChildren().add(new AdvancedTechTileHBox(iterator.next()));
 
   }
 
@@ -297,6 +302,9 @@ public class TechTracks extends GridPane {
     techTiles.subList(6, 9).stream().forEach(tt -> {
       tt.highlight(activePlayer, wildCallback, Optional.empty());
     });
+
+    // Advanced tech tiles
+
   }
 
   void clearTechtileHighlighting() {

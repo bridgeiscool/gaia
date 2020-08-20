@@ -400,6 +400,10 @@ public class Player implements Serializable {
     return federationTiles;
   }
 
+  public ObservableSet<Set<Coords>> getFederations() {
+    return federations;
+  }
+
   public ObservableSet<TechTile> getTechTiles() {
     return techTiles;
   }

@@ -666,6 +666,7 @@ public class GameController extends BorderPane {
   }
 
   void selectFederationTile(Player activePlayer) {
+    activePlayer.getFederations().add(new HashSet<>(currentFederation));
     federationTokens.highlight(activePlayer, this::finishFederationTileSelection);
   }
 

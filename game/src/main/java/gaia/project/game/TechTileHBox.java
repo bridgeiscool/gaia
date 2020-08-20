@@ -18,7 +18,7 @@ public class TechTileHBox extends HBox {
   public TechTileHBox(TechTile techTile) {
     this.techTile = techTile;
     if (techTile.isAction()) {
-      Action action = new Action(20.0, techTile.display(), "specialAction");
+      SpecialAction action = new SpecialAction(techTile::onAction, techTile.display());
       action.setTaken(false);
       getChildren().add(action);
     } else {

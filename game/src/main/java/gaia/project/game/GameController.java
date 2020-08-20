@@ -714,14 +714,14 @@ public class GameController extends BorderPane {
     });
   }
 
-  private void clearSpecialActionHighlighting() {
-    roundBoosters.forEach(rb -> rb.clearHighlighting());
-    playerBoards.get(game.getActivePlayer()).clearHighlighting();
-  }
-
   private void finishSpecialAction() {
     clearSpecialActionHighlighting();
     finishAction();
+  }
+
+  private void clearSpecialActionHighlighting() {
+    roundBoosters.forEach(rb -> rb.clearHighlighting());
+    playerBoards.get(game.getActivePlayer()).clearHighlighting();
   }
 
   private void finishAction() {

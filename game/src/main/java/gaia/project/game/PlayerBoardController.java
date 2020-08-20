@@ -1,13 +1,17 @@
 package gaia.project.game;
 
 import java.io.IOException;
+import java.io.Serializable;
+import java.util.Map.Entry;
 
 import com.google.common.base.Preconditions;
 
 import gaia.project.game.model.Coords;
 import gaia.project.game.model.Player;
 import gaia.project.game.model.Player.FedToken;
+import gaia.project.game.model.PlayerBoardAction;
 import gaia.project.game.model.TechTile;
+import javafx.collections.MapChangeListener;
 import javafx.collections.SetChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -162,6 +166,23 @@ public class PlayerBoardController extends GridPane {
       Preconditions.checkArgument(change.wasAdded());
       tokenArea.getChildren().add(FederationTokenPane.mini(change.getElementAdded().getFederationTile()));
     });
+
+    // Special actions
+    for (Entry<Serializable, Boolean> entry : player.getSpecialActions().entrySet()) {
+      if (entry.getKey() instanceof PlayerBoardAction) {
+        PlayerBoardAction key = (PlayerBoardAction) entry.getKey();
+        tokenArea.getChildren().add(new SpecialAction(p -> p.takeSpecialAction(key), key.display(), entry.getValue()));
+      }
+    }
+
+    player.getSpecialActions().addListener((MapChangeListener<Serializable, Boolean>) change -> {
+      if (change.getKey() instanceof PlayerBoardAction) {
+        PlayerBoardAction key = (PlayerBoardAction) change.getKey();
+        if (!change.getValueAdded()) {
+          tokenArea.getChildren().add(new SpecialAction(p -> p.takeSpecialAction(key), key.display()));
+        }
+      }
+    });
   }
 
   public void highlightActions(CallBack callback) {
@@ -172,6 +193,12 @@ public class PlayerBoardController extends GridPane {
         .filter(MiniTechTile::isAction)
         .filter(tt -> !tt.isTaken())
         .forEach(tt -> tt.highlight(player, callback));
+
+    tokenArea.getChildren()
+        .stream()
+        .filter(SpecialAction.class::isInstance)
+        .map(SpecialAction.class::cast)
+        .forEach(a -> a.tryHighlight(player, callback));
   }
 
   public void highlightFederations(Player activePlayer, CallBack callback) {
@@ -189,6 +216,12 @@ public class PlayerBoardController extends GridPane {
         .map(MiniTechTile.class::cast)
         .filter(MiniTechTile::isAction)
         .forEach(MiniTechTile::clearHighlighting);
+
+    tokenArea.getChildren()
+        .stream()
+        .filter(SpecialAction.class::isInstance)
+        .map(SpecialAction.class::cast)
+        .forEach(SpecialAction::clearHighlighting);
   }
 
   public void clearFederationHighlighting() {

@@ -19,7 +19,7 @@ final class GuiUtils {
   static void exceptionDialog(Throwable e) {
     Alert alert = new Alert(AlertType.ERROR);
     alert.setTitle("Exception dialog");
-    alert.setHeaderText("Cribbage Game encountered an unexpected exception!");
+    alert.setHeaderText("Game encountered an unexpected exception!");
 
     StringWriter sw = new StringWriter();
     PrintWriter pw = new PrintWriter(sw);

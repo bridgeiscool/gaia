@@ -189,6 +189,13 @@
 	-fx-stroke-width: 1;
 }
 
+.specialActionHighlighted {
+	-fx-fill: orange;
+	-fx-stroke: white;
+	-fx-stroke-type: inside;
+	-fx-stroke-width: 2;
+}
+
 .takenAction {
 	-fx-fill: gray;
 	-fx-stroke: black;

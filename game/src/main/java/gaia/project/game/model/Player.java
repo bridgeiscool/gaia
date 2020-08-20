@@ -784,6 +784,8 @@ public class Player implements Serializable {
     rlIncome.get(researchLabs.size()).removeFrom(currentIncome);
     if (ka) {
       Util.plus(currentIncome.getResearchIncome(), kaIncome);
+    } else {
+      specialActions.put(PlayerBoardAction.GAIN_QIC, false);
     }
   }
 
@@ -800,6 +802,11 @@ public class Player implements Serializable {
     } else {
       Util.minus(bin3, 1);
     }
+  }
+
+  public void takeSpecialAction(PlayerBoardAction specialAction) {
+    specialAction.updatePlayer(this);
+    specialActions.put(specialAction, true);
   }
 
   // END GAME

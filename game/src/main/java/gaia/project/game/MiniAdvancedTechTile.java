@@ -5,8 +5,8 @@ import java.util.function.Consumer;
 
 import javax.annotation.Nullable;
 
+import gaia.project.game.model.AdvancedTechTile;
 import gaia.project.game.model.Player;
-import gaia.project.game.model.TechTile;
 import javafx.collections.MapChangeListener;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
@@ -14,14 +14,14 @@ import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
-public class MiniTechTile extends HBox {
-  private static final String NORMAL = "techTile";
-  private static final String HIGHLIGHTED = "techTileHighlighted";
-  private final TechTile techTile;
+public class MiniAdvancedTechTile extends HBox {
+  private static final String NORMAL = "advTechTile";
+  private static final String HIGHLIGHTED = "advTechTileHighlighted";
+  private final AdvancedTechTile techTile;
   @Nullable
   private Action action;
 
-  public MiniTechTile(Player player, TechTile techTile) {
+  public MiniAdvancedTechTile(Player player, AdvancedTechTile techTile) {
     this.techTile = techTile;
     if (techTile.isAction()) {
       this.action = new Action(20.0, techTile.display(), "specialAction");
@@ -46,20 +46,20 @@ public class MiniTechTile extends HBox {
     getStyleClass().add(NORMAL);
   }
 
-  public TechTile getTechTile() {
+  public AdvancedTechTile getTechTile() {
     return techTile;
   }
 
-  public void highlight(Player activePlayer, Consumer<Serializable> callBack, boolean takingAction) {
-    getStyleClass().clear();
-    getStyleClass().add(HIGHLIGHTED);
-    this.setOnMouseClicked(me -> {
-      if (takingAction) {
+  public void highlight(Player activePlayer, Consumer<Serializable> callBack) {
+    if (techTile.isAction()) {
+      getStyleClass().clear();
+      getStyleClass().add(HIGHLIGHTED);
+      this.setOnMouseClicked(me -> {
         techTile.onAction(activePlayer);
         this.action.setTaken(true);
-      }
-      callBack.accept(techTile);
-    });
+        callBack.accept(techTile);
+      });
+    }
   }
 
   public void clearHighlighting() {

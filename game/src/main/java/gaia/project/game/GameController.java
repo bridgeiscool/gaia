@@ -38,6 +38,7 @@ import gaia.project.game.model.PlayerBoardAction;
 import gaia.project.game.model.PlayerEnum;
 import gaia.project.game.model.Race;
 import gaia.project.game.model.Round;
+import gaia.project.game.model.TechTile;
 import gaia.project.game.model.Util;
 import javafx.application.Platform;
 import javafx.beans.property.IntegerProperty;
@@ -529,7 +530,22 @@ public class GameController extends BorderPane {
     techTracks.highlightTechTiles(activePlayer, this::finishTechTileGain, () -> {
       techTracks.clearTechtileHighlighting();
       activateTechTracks(true);
-    });
+    }, this::highlightUserTechTiles);
+  }
+
+  void highlightUserTechTiles() {
+    techTracks.clearTechtileHighlighting();
+    playerBoards.get(game.getActivePlayer()).highlightTechTiles(this::finishTechTileCover);
+  }
+
+  void finishTechTileCover(Serializable selected) {
+    playerBoards.get(game.getActivePlayer()).clearHighlighting();
+    Player activePlayer = game.getPlayers().get(game.getActivePlayer());
+    TechTile covered = (TechTile) selected;
+    activePlayer.getTechTiles().remove(covered);
+    activePlayer.getCoveredTechTiles().add(covered);
+    covered.removeFrom(activePlayer);
+    activateTechTracks(true);
   }
 
   private void finishTechTileGain() {

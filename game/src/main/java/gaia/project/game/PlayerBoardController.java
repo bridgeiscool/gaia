@@ -7,6 +7,7 @@ import java.util.function.Consumer;
 
 import com.google.common.base.Preconditions;
 
+import gaia.project.game.model.AdvancedTechTile;
 import gaia.project.game.model.Coords;
 import gaia.project.game.model.Player;
 import gaia.project.game.model.Player.FedToken;
@@ -149,7 +150,22 @@ public class PlayerBoardController extends GridPane {
     // Tech Tiles
     player.getTechTiles().forEach(tt -> tokenArea.getChildren().add(new MiniTechTile(player, tt)));
     player.getTechTiles().addListener((SetChangeListener<TechTile>) change -> {
-      tokenArea.getChildren().add(new MiniTechTile(player, change.getElementAdded()));
+      if (change.wasAdded()) {
+        tokenArea.getChildren().add(new MiniTechTile(player, change.getElementAdded()));
+      } else {
+        tokenArea.getChildren()
+            .removeIf(
+                node -> node instanceof MiniTechTile
+                    && ((MiniTechTile) node).getTechTile() == change.getElementRemoved());
+      }
+    });
+
+    // Advanced tech tiles
+    player.getAdvTechTiles().forEach(tt -> tokenArea.getChildren().add(new MiniAdvancedTechTile(player, tt)));
+    player.getAdvTechTiles().addListener((SetChangeListener<AdvancedTechTile>) change -> {
+      if (change.wasAdded()) {
+        tokenArea.getChildren().add(new MiniAdvancedTechTile(player, change.getElementAdded()));
+      }
     });
 
     player.getFederationTiles().forEach(ft -> {
@@ -193,6 +209,14 @@ public class PlayerBoardController extends GridPane {
         .map(MiniTechTile.class::cast)
         .filter(MiniTechTile::isAction)
         .filter(tt -> !tt.isTaken())
+        .forEach(tt -> tt.highlight(player, callback, true));
+
+    tokenArea.getChildren()
+        .stream()
+        .filter(MiniAdvancedTechTile.class::isInstance)
+        .map(MiniAdvancedTechTile.class::cast)
+        .filter(MiniAdvancedTechTile::isAction)
+        .filter(tt -> !tt.isTaken())
         .forEach(tt -> tt.highlight(player, callback));
 
     tokenArea.getChildren()
@@ -210,13 +234,26 @@ public class PlayerBoardController extends GridPane {
         .forEach(ft -> ft.highlightForCopy(activePlayer, callback));
   }
 
+  public void highlightTechTiles(Consumer<Serializable> callback) {
+    tokenArea.getChildren()
+        .stream()
+        .filter(MiniTechTile.class::isInstance)
+        .map(MiniTechTile.class::cast)
+        .forEach(tt -> tt.highlight(player, callback, false));
+  }
+
   public void clearHighlighting() {
     tokenArea.getChildren()
         .stream()
         .filter(MiniTechTile.class::isInstance)
         .map(MiniTechTile.class::cast)
-        .filter(MiniTechTile::isAction)
         .forEach(MiniTechTile::clearHighlighting);
+
+    tokenArea.getChildren()
+        .stream()
+        .filter(MiniAdvancedTechTile.class::isInstance)
+        .map(MiniAdvancedTechTile.class::cast)
+        .forEach(MiniAdvancedTechTile::clearHighlighting);
 
     tokenArea.getChildren()
         .stream()

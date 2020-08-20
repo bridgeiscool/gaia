@@ -498,6 +498,10 @@ public class Player implements Serializable {
       this.roundBooster.getValue().removeIncome(currentIncome);
     }
 
+    for (AdvancedTechTile tt : advTechTiles) {
+      tt.addVps(this);
+    }
+
     // Add new income
     roundBooster.addIncome(currentIncome);
     this.roundBooster.setValue(roundBooster);
@@ -537,6 +541,14 @@ public class Player implements Serializable {
 
   public int getFedPower() {
     return fedPower;
+  }
+
+  public ObservableSet<AdvancedTechTile> getAdvTechTiles() {
+    return advTechTiles;
+  }
+
+  public ObservableSet<TechTile> getCoveredTechTiles() {
+    return coveredTechTiles;
   }
 
   // Utility methods
@@ -944,6 +956,7 @@ public class Player implements Serializable {
     setupTechBonuses();
     // Re-add listeners from tech tiles
     techTiles.stream().filter(TechTile::addsListener).forEach(tt -> tt.addTo(this));
+    advTechTiles.stream().filter(AdvancedTechTile::addsListener).forEach(tt -> tt.updatePlayer(this));
   }
 
   public static class FedToken implements Serializable {

@@ -146,6 +146,14 @@ public class TechTracks extends GridPane {
 
   private List<TechTileHBox> techTiles;
 
+  // Advanced tech tiles
+  private AdvancedTechTileHBox terraTech;
+  private AdvancedTechTileHBox navTech;
+  private AdvancedTechTileHBox aiTech;
+  private AdvancedTechTileHBox gaiaTech;
+  private AdvancedTechTileHBox econTech;
+  private AdvancedTechTileHBox knowledgeTech;
+
   public TechTracks(Game game) {
     Preconditions.checkArgument(game.getAdvancedTechTiles().size() == 6);
 
@@ -199,13 +207,18 @@ public class TechTracks extends GridPane {
 
     // Initialize the adv tech tiles - map is linked hash map so
     Iterator<Entry<AdvancedTechTile, Boolean>> iterator = game.getAdvancedTechTiles().entrySet().iterator();
-
-    terraAdvTech.getChildren().add(new AdvancedTechTileHBox(iterator.next()));
-    navAdvTech.getChildren().add(new AdvancedTechTileHBox(iterator.next()));
-    aiAdvTech.getChildren().add(new AdvancedTechTileHBox(iterator.next()));
-    gaiaAdvTech.getChildren().add(new AdvancedTechTileHBox(iterator.next()));
-    econAdvTech.getChildren().add(new AdvancedTechTileHBox(iterator.next()));
-    knowledgeAdvTech.getChildren().add(new AdvancedTechTileHBox(iterator.next()));
+    this.terraTech = new AdvancedTechTileHBox(iterator.next());
+    this.navTech = new AdvancedTechTileHBox(iterator.next());
+    this.aiTech = new AdvancedTechTileHBox(iterator.next());
+    this.gaiaTech = new AdvancedTechTileHBox(iterator.next());
+    this.econTech = new AdvancedTechTileHBox(iterator.next());
+    this.knowledgeTech = new AdvancedTechTileHBox(iterator.next());
+    terraAdvTech.getChildren().add(terraTech);
+    navAdvTech.getChildren().add(navTech);
+    aiAdvTech.getChildren().add(aiTech);
+    gaiaAdvTech.getChildren().add(gaiaTech);
+    econAdvTech.getChildren().add(econTech);
+    knowledgeAdvTech.getChildren().add(knowledgeTech);
 
   }
 
@@ -254,7 +267,7 @@ public class TechTracks extends GridPane {
     hbox.setOnMouseClicked(null);
   }
 
-  void highlightTechTiles(Player activePlayer, CallBack callback, CallBack wildCallback) {
+  void highlightTechTiles(Player activePlayer, CallBack callback, CallBack wildCallback, CallBack advCallback) {
     techTiles.get(TERRA).highlight(activePlayer, callback, Optional.of(p -> {
       if (p.getTerraformingLevel().getValue() < 4
           || (p.getTerraformingLevel().getValue() == 4
@@ -304,11 +317,41 @@ public class TechTracks extends GridPane {
     });
 
     // Advanced tech tiles
+    if (activePlayer.hasFlippableFederationTile()) {
+      if (!terraTech.isTaken() && activePlayer.getTerraformingLevel().get() > 3) {
+        terraTech.highlight(activePlayer, advCallback);
+      }
 
+      if (!navTech.isTaken() && activePlayer.getNavLevel().get() > 3) {
+        navTech.highlight(activePlayer, advCallback);
+      }
+
+      if (!aiTech.isTaken() && activePlayer.getAiLevel().get() > 3) {
+        aiTech.highlight(activePlayer, advCallback);
+      }
+
+      if (!gaiaTech.isTaken() && activePlayer.getGaiaformingLevel().get() > 3) {
+        gaiaTech.highlight(activePlayer, advCallback);
+      }
+
+      if (!econTech.isTaken() && activePlayer.getEconLevel().get() > 3) {
+        econTech.highlight(activePlayer, advCallback);
+      }
+
+      if (!knowledgeTech.isTaken() && activePlayer.getKnowledgeLevel().get() > 3) {
+        knowledgeTech.highlight(activePlayer, advCallback);
+      }
+    }
   }
 
   void clearTechtileHighlighting() {
     techTiles.forEach(tt -> tt.clearHighlighting());
+    terraTech.clearHighlighting();
+    navTech.clearHighlighting();
+    aiTech.clearHighlighting();
+    gaiaTech.clearHighlighting();
+    econTech.clearHighlighting();
+    knowledgeTech.clearHighlighting();
   }
 
   private static class ProcessTrackBump implements ChangeListener<Number> {

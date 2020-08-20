@@ -1,11 +1,15 @@
 package gaia.project.game.board;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
+import javax.annotation.Nullable;
+
+import gaia.project.game.PlanetType;
 import gaia.project.game.model.Coords;
 import gaia.project.game.model.Player;
 import gaia.project.game.model.PlayerEnum;
@@ -16,6 +20,9 @@ import javafx.scene.layout.VBox;
 public class EmptyHex extends Hex {
   private Set<PlayerEnum> satellites = new HashSet<>();
   private VBox satelliteBox;
+  private boolean hasLostPlanet;
+  @Nullable
+  private PlayerEnum builder;
 
   public EmptyHex(Coords coords, int sectorId) {
     super(coords, sectorId);
@@ -27,6 +34,22 @@ public class EmptyHex extends Hex {
   @Override
   public boolean isEmpty() {
     return true;
+  }
+
+  // Methods that are only necessary for lost planet...
+  @Override
+  public boolean hasBuilding() {
+    return hasLostPlanet;
+  }
+
+  @Override
+  public Optional<PlayerEnum> getBuilder() {
+    return Optional.ofNullable(builder);
+  }
+
+  @Override
+  public int getPower() {
+    return hasLostPlanet ? 1 : 0;
   }
 
   @Override
@@ -41,17 +64,18 @@ public class EmptyHex extends Hex {
   public static Predicate<EmptyHex> possibleSatellite(Player player, Set<Coords> currentBuildings) {
     return h -> currentBuildings.stream().anyMatch(c -> h.isWithinRangeOf(c, 1))
         && !h.hasSatellite(player.getPlayerEnum());
-
   }
 
   public void highlight(Player activePlayer, BiConsumer<EmptyHex, Player> toExecute, Consumer<EmptyHex> callBack) {
-    ObservableList<String> styleClass = getPolygon().getStyleClass();
-    styleClass.clear();
-    styleClass.add("highlightedHex");
-    this.setOnMouseClicked(me -> {
-      toExecute.accept(this, activePlayer);
-      callBack.accept(this);
-    });
+    if (!hasLostPlanet) {
+      ObservableList<String> styleClass = getPolygon().getStyleClass();
+      styleClass.clear();
+      styleClass.add("highlightedHex");
+      this.setOnMouseClicked(me -> {
+        toExecute.accept(this, activePlayer);
+        callBack.accept(this);
+      });
+    }
   }
 
   public void clearHighlighting() {
@@ -68,5 +92,12 @@ public class EmptyHex extends Hex {
 
   public void addSatelliteUI(Satellite satellite) {
     satelliteBox.getChildren().add(satellite);
+  }
+
+  public void addLostPlanet(Player player) {
+    this.builder = player.getPlayerEnum();
+    getChildren().remove(satelliteBox);
+    getChildren().add(new Planet(getCoords().getCenterX(), getCoords().getCenterY(), PlanetType.LOST));
+    getChildren().add(new Mine(this, player.getRace().getColor(), player.getPlayerEnum()));
   }
 }

@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import com.google.common.base.Preconditions;
@@ -13,6 +14,7 @@ import com.google.common.base.Preconditions;
 import gaia.project.game.model.AdvancedTechTile;
 import gaia.project.game.model.Game;
 import gaia.project.game.model.Player;
+import gaia.project.game.model.Player.FedToken;
 import gaia.project.game.model.PlayerEnum;
 import gaia.project.game.model.Util;
 import javafx.beans.property.IntegerProperty;
@@ -154,7 +156,9 @@ public class TechTracks extends GridPane {
   private AdvancedTechTileHBox econTech;
   private AdvancedTechTileHBox knowledgeTech;
 
-  public TechTracks(Game game) {
+  private Consumer<Player> lostPlanetCallback;
+
+  public TechTracks(Game game, Consumer<Player> lostPlanetCallback) {
     Preconditions.checkArgument(game.getAdvancedTechTiles().size() == 6);
 
     FXMLLoader loader = new FXMLLoader(TechTracks.class.getResource("TechTracks.fxml"));
@@ -165,6 +169,8 @@ public class TechTracks extends GridPane {
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
+
+    this.lostPlanetCallback = lostPlanetCallback;
 
     terraTrack = Arrays.asList(terra0, terra1, terra2, terra3, terra4, terra5);
     navTrack = Arrays.asList(nav0, nav1, nav2, nav3, nav4, nav5);
@@ -191,7 +197,9 @@ public class TechTracks extends GridPane {
     }
 
     // Add the randomly chosen fed tile to terra track
-    terra5StackPane.getChildren().add(0, FederationTokenPane.regular(game.getTerraBonus()));
+    if (!game.getPlayers().values().stream().anyMatch(p -> p.getTerraformingLevel().get() == 5)) {
+      terra5StackPane.getChildren().add(0, FederationTokenPane.regular(game.getTerraBonus()));
+    }
 
     // Initialize the tech tiles
     techTiles = game.getTechTiles().stream().map(TechTileHBox::new).collect(Collectors.toList());
@@ -273,6 +281,12 @@ public class TechTracks extends GridPane {
           || (p.getTerraformingLevel().getValue() == 4
               && terra5.getChildren().isEmpty()
               && p.hasFlippableFederationTile())) {
+        if (p.getTerraformingLevel().get() == 4) {
+          FederationTokenPane federation =
+              (FederationTokenPane) terra5StackPane.getChildren().remove(terra5StackPane.getChildren().size() - 1);
+          p.getFederationTiles()
+              .add(new FedToken(federation.getFederationTile(), federation.getFederationTile().isFlippable()));
+        }
         Util.plus(p.getTerraformingLevel(), 1);
       }
     }));
@@ -280,6 +294,7 @@ public class TechTracks extends GridPane {
       if (p.getNavLevel().getValue() < 4
           || (p.getNavLevel().getValue() == 4 && nav5.getChildren().isEmpty() && p.hasFlippableFederationTile())) {
         Util.plus(p.getNavLevel(), 1);
+        lostPlanetCallback.accept(p);
       }
     }));
     techTiles.get(AI).highlight(activePlayer, callback, Optional.of(p -> {

@@ -34,6 +34,10 @@ public class FederationTokenPane extends StackPane {
     children.add(new Label(federationTile.getText()));
   }
 
+  public FederationTile getFederationTile() {
+    return federationTile;
+  }
+
   public void flip() {
     shape.getStyleClass().clear();
     shape.getStyleClass().add("grayFedToken");

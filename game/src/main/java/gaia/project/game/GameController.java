@@ -19,6 +19,8 @@ import java.util.TreeMap;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import com.google.common.collect.Iterables;
+
 import gaia.project.game.board.Academy;
 import gaia.project.game.board.EmptyHex;
 import gaia.project.game.board.Gaiaformer;
@@ -121,7 +123,7 @@ public class GameController extends BorderPane {
     }
 
     // Init tech tracks
-    techTracks = new TechTracks(game);
+    techTracks = new TechTracks(game, this::findLostPlanet);
     powerActionsController = new PowerActionsController(this);
 
     HBox roundBoosterBox = new HBox(2);
@@ -229,6 +231,14 @@ public class GameController extends BorderPane {
             .filter(h -> h.getCoords().equals(s))
             .forEach(h -> h.addSatelliteUI(new Satellite(h, p.getRace().getColor(), p.getPlayerEnum())));
       });
+    });
+
+    game.getPlayers().values().forEach(p -> {
+      if (!p.getLostPlanet().isEmpty()) {
+        gameBoard.emptyHexes()
+            .filter(h -> h.getCoords().equals(Iterables.getOnlyElement(p.getLostPlanet())))
+            .forEach(h -> h.addLostPlanet(p));
+      }
     });
   }
 
@@ -553,7 +563,7 @@ public class GameController extends BorderPane {
     finishAction();
   }
 
-  private void checkForLeech(HexWithPlanet hex) {
+  private void checkForLeech(Hex hex) {
     Collection<Hex> withinRange = hex.getHexesWithinRange(gameBoard.hexes(), 2);
     Map<PlayerEnum, HexWithPlanet> powerMap = withinRange.stream()
         .filter(h -> !h.isEmpty())
@@ -607,8 +617,9 @@ public class GameController extends BorderPane {
 
   // Recursively checks all adjacent hexes to see if they should be added too
   private void checkAdjacentHexes(Player activePlayer, Hex builtOn) {
-    HexWithPlanet.fromHexes(builtOn.getHexesWithinRange(gameBoard.hexes(), 1).stream())
-        .filter(HexWithPlanet::hasBuilding)
+    builtOn.getHexesWithinRange(gameBoard.hexes(), 1)
+        .stream()
+        .filter(Hex::hasBuilding)
         .filter(h -> !currentFederation.contains(h.getCoords()))
         .filter(h -> h.getBuilder().get() == game.getActivePlayer())
         .forEach(h -> {
@@ -667,6 +678,7 @@ public class GameController extends BorderPane {
 
   void selectFederationTile(Player activePlayer) {
     activePlayer.getFederations().add(new HashSet<>(currentFederation));
+    Util.plus(activePlayer.getBuildingsInFeds(), currentFederation.size());
     federationTokens.highlight(activePlayer, this::finishFederationTileSelection);
   }
 
@@ -729,6 +741,23 @@ public class GameController extends BorderPane {
     }
 
     playerBoards.get(game.getActivePlayer()).highlightActions(this::finishSpecialAction);
+  }
+
+  private void findLostPlanet(Player activePlayer) {
+    gameBoard.highlightEmptyHexes(
+        activePlayer,
+        hex -> !game.getPlayers().keySet().stream().anyMatch(p -> hex.hasSatellite(p)),
+        (hex, player) -> {
+          hex.addLostPlanet(player);
+          player.addLostPlanet(hex);
+        },
+        this::finishLostPlanet);
+  }
+
+  private void finishLostPlanet(EmptyHex hex) {
+    gameBoard.clearHighlighting();
+    checkForLeech(hex);
+    finishAction();
   }
 
   private void finishSpecialAction(Serializable action) {

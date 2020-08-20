@@ -7,12 +7,15 @@ import static gaia.project.game.board.BoardUtils.TWO_ROOT_3;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 
 import gaia.project.game.model.Coords;
+import gaia.project.game.model.PlayerEnum;
+import javafx.collections.ObservableList;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Polygon;
 
@@ -51,6 +54,12 @@ public abstract class Hex extends StackPane {
   }
 
   public abstract boolean isEmpty();
+
+  public abstract boolean hasBuilding();
+
+  public abstract Optional<PlayerEnum> getBuilder();
+
+  public abstract int getPower();
 
   @Nullable
   public abstract Planet getPlanet();
@@ -98,6 +107,12 @@ public abstract class Hex extends StackPane {
     return getPlanet() != null
         && other.getPlanet() != null
         && getPlanet().getPlanetType() == other.getPlanet().getPlanetType();
+  }
+
+  public void highlightGreen() {
+    ObservableList<String> styleClass = getPolygon().getStyleClass();
+    styleClass.clear();
+    styleClass.add("highlightedGreenHex");
   }
 
   @Override

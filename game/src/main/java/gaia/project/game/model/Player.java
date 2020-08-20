@@ -98,6 +98,7 @@ public class Player implements Serializable {
   private transient ObservableSet<Coords> ka = FXCollections.observableSet();
   private transient ObservableSet<Coords> qa = FXCollections.observableSet();
   private transient ObservableSet<Coords> gaiaformers = FXCollections.observableSet();
+  private transient ObservableSet<Coords> lostPlanet = FXCollections.observableSet();
 
   // Income related
   private final List<IncomeUpdater> tpIncome;
@@ -170,7 +171,7 @@ public class Player implements Serializable {
           break;
         case 5:
           exhaustFederationTile();
-          System.out.println("Implement gaining federationToken!");
+          // Handled by TechTracks.java
           break;
       }
     });
@@ -192,7 +193,7 @@ public class Player implements Serializable {
         case 5:
           exhaustFederationTile();
           navRange.setValue(4);
-          System.out.println("Implement gaining lonely planet!");
+          // Lost planet handled via UI
           break;
       }
     });
@@ -438,6 +439,10 @@ public class Player implements Serializable {
 
   public ObservableSet<Coords> getQa() {
     return qa;
+  }
+
+  public ObservableSet<Coords> getLostPlanet() {
+    return lostPlanet;
   }
 
   public IntegerProperty getAvailableGaiaformers() {
@@ -838,6 +843,15 @@ public class Player implements Serializable {
             + (credits.intValue() + ore.intValue() + research.intValue() + qic.intValue() + bin3.intValue()) / 3);
   }
 
+  public void addLostPlanet(EmptyHex hex) {
+    lostPlanet.add(hex.getCoords());
+
+    // Update planet counts
+    builtOn.add(PlanetType.LOST);
+    Util.plus(totalBuildings, 1);
+    sectors.add(hex.getSectorId());
+  }
+
   // Serialization
   private void writeObject(ObjectOutputStream oos) throws IOException {
     oos.defaultWriteObject();
@@ -885,6 +899,7 @@ public class Player implements Serializable {
     oos.writeObject(new HashSet<>(qa));
     oos.writeObject(new HashSet<>(gaiaformers));
     oos.writeObject(new HashSet<>(federationTiles));
+    oos.writeObject(new HashSet<>(lostPlanet));
 
     // Scoring related
     oos.writeObject(new HashSet<>(sectors));
@@ -947,6 +962,7 @@ public class Player implements Serializable {
     qa = FXCollections.observableSet((Set<Coords>) ois.readObject());
     gaiaformers = FXCollections.observableSet((Set<Coords>) ois.readObject());
     federationTiles = FXCollections.observableSet((Set<FedToken>) ois.readObject());
+    lostPlanet = FXCollections.observableSet((Set<Coords>) ois.readObject());
 
     // Scoring related
     sectors = FXCollections.observableSet((Set<Integer>) ois.readObject());

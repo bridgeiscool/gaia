@@ -52,10 +52,12 @@ public class HexWithPlanet extends Hex {
     return building != null && (building == Building.ACADEMY || building == Building.RESEARCH_LAB);
   }
 
+  @Override
   public Optional<PlayerEnum> getBuilder() {
     return Optional.ofNullable(builder);
   }
 
+  @Override
   public int getPower() {
     return building == null ? 0 : building.getPower();
   }
@@ -238,12 +240,6 @@ public class HexWithPlanet extends Hex {
   public void switchBuildingUI(Node newBuilding) {
     getChildren().remove(getChildren().size() - 1);
     getChildren().add(newBuilding);
-  }
-
-  public void highlightGreen() {
-    ObservableList<String> styleClass = getPolygon().getStyleClass();
-    styleClass.clear();
-    styleClass.add("highlightedGreenHex");
   }
 
   @Override

@@ -155,6 +155,12 @@ public enum PlanetType {
       }
     }
   },
+  LOST(Color.PINK) {
+    @Override
+    public int numDigsTo(PlanetType other) {
+      throw new IllegalStateException("Not in planet cycle");
+    }
+  },
   NONE(null) {
     @Override
     public int numDigsTo(PlanetType other) {

@@ -154,6 +154,8 @@ public class Player implements Serializable {
     this.gaiaformingLevel.setValue(race.getStartingGaiaformingLevel());
     this.econLevel.setValue(race.getStartingEconLevel());
     this.knowledgeLevel.setValue(race.getStartingKnowledgeLevel());
+
+    addAdditionalListeners();
   }
 
   private void setupTechBonuses() {
@@ -291,6 +293,12 @@ public class Player implements Serializable {
           break;
       }
     });
+  }
+
+  protected void addAdditionalListeners() {
+    // Re-add listeners from tech tiles, override for race-specific abilities
+    techTiles.stream().filter(TechTile::addsListener).forEach(tt -> tt.addTo(this));
+    advTechTiles.stream().filter(AdvancedTechTile::addsListener).forEach(tt -> tt.updatePlayer(this));
   }
 
   public Race getRace() {
@@ -974,9 +982,7 @@ public class Player implements Serializable {
     fedPower = 7;
 
     setupTechBonuses();
-    // Re-add listeners from tech tiles
-    techTiles.stream().filter(TechTile::addsListener).forEach(tt -> tt.addTo(this));
-    advTechTiles.stream().filter(AdvancedTechTile::addsListener).forEach(tt -> tt.updatePlayer(this));
+    addAdditionalListeners();
   }
 
   public static class FedToken implements Serializable {

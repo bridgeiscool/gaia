@@ -2,6 +2,12 @@
 	-fx-background-color: #696969;
 }
 
+.turnMarker {
+  -fx-stroke: lime;
+  -fx-stroke-type: inside;
+  -fx-stroke-width: 2;
+}
+
 .hexStyle {
 	-fx-fill: black;
 	-fx-stroke: white;
@@ -343,6 +349,7 @@
 .biglabel {
 	-fx-font-size: 20.0pt;
 	-fx-alignment: center;
+	-fx-text-fill: white;
 }
 
 .table-results {

@@ -26,6 +26,8 @@ import javafx.beans.property.Property;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 public class Game implements Serializable {
   private static final long serialVersionUID = -3521179457356267066L;
@@ -66,9 +68,9 @@ public class Game implements Serializable {
 
   // Game state
   private transient Property<Round> currentRound;
-  private final List<PlayerEnum> currentPlayerOrder;
-  private final List<PlayerEnum> passedPlayers;
-  private PlayerEnum activePlayer;
+  private transient ObservableList<PlayerEnum> currentPlayerOrder;
+  private transient ObservableList<PlayerEnum> passedPlayers;
+  private transient Property<PlayerEnum> activePlayer;
 
   public static Game generateGame() {
     return generateGame(System.currentTimeMillis());
@@ -139,9 +141,9 @@ public class Game implements Serializable {
     this.knowledgeFederations = new SimpleIntegerProperty(terraBonus == FederationTile.RESEARCH ? 2 : 3);
 
     this.currentRound = new SimpleObjectProperty<>(Round.SETUP);
-    this.currentPlayerOrder = new ArrayList<>(Arrays.asList(PlayerEnum.values()));
-    this.passedPlayers = new ArrayList<>();
-    this.activePlayer = PlayerEnum.PLAYER1;
+    this.currentPlayerOrder = FXCollections.observableArrayList(Arrays.asList(PlayerEnum.values()));
+    this.passedPlayers = FXCollections.observableArrayList();
+    this.activePlayer = new SimpleObjectProperty<>(PlayerEnum.PLAYER1);
   }
 
   public List<RoundBooster> getRoundBoosters() {
@@ -180,15 +182,19 @@ public class Game implements Serializable {
     return currentRound;
   }
 
-  public List<PlayerEnum> getCurrentPlayerOrder() {
+  public ObservableList<PlayerEnum> getCurrentPlayerOrder() {
     return currentPlayerOrder;
   }
 
-  public List<PlayerEnum> getPassedPlayers() {
+  public ObservableList<PlayerEnum> getPassedPlayers() {
     return passedPlayers;
   }
 
   public PlayerEnum getActivePlayer() {
+    return activePlayer.getValue();
+  }
+
+  public Property<PlayerEnum> getActivePlayerProperty() {
     return activePlayer;
   }
 
@@ -266,7 +272,7 @@ public class Game implements Serializable {
 
   public void newRound() {
     currentRound.setValue(currentRound.getValue().nextRound());
-    activePlayer = currentPlayerOrder.get(0);
+    activePlayer.setValue(currentPlayerOrder.get(0));
     k3ActionTaken.setValue(false);
     doubleTfActionTaken.setValue(false);
     oreActionTaken.setValue(false);
@@ -283,12 +289,12 @@ public class Game implements Serializable {
     Preconditions.checkArgument(passedPlayers.size() != currentPlayerOrder.size());
 
     // Keep cycling until we hit a player who has not passed...
-    int currentIdx = currentPlayerOrder.indexOf(activePlayer);
+    int currentIdx = currentPlayerOrder.indexOf(activePlayer.getValue());
     do {
       currentIdx = (currentIdx + 1) % currentPlayerOrder.size();
     } while (passedPlayers.contains(currentPlayerOrder.get(currentIdx)));
 
-    this.activePlayer = currentPlayerOrder.get(currentIdx);
+    this.activePlayer.setValue(currentPlayerOrder.get(currentIdx));
   }
 
   public boolean allPlayersPassed() {
@@ -361,8 +367,13 @@ public class Game implements Serializable {
     oos.writeInt(oreFederations.get());
     oos.writeInt(creditFederations.get());
     oos.writeInt(knowledgeFederations.get());
+
+    oos.writeObject(new ArrayList<>(currentPlayerOrder));
+    oos.writeObject(new ArrayList<>(passedPlayers));
+    oos.writeObject(activePlayer.getValue());
   }
 
+  @SuppressWarnings("unchecked")
   private void readObject(ObjectInputStream ois) throws ClassNotFoundException, IOException {
     ois.defaultReadObject();
     currentRound = new SimpleObjectProperty<>(Round.valueOf(ois.readUTF()));
@@ -383,5 +394,9 @@ public class Game implements Serializable {
     oreFederations = new SimpleIntegerProperty(ois.readInt());
     creditFederations = new SimpleIntegerProperty(ois.readInt());
     knowledgeFederations = new SimpleIntegerProperty(ois.readInt());
+
+    currentPlayerOrder = FXCollections.observableList((ArrayList<PlayerEnum>) ois.readObject());
+    passedPlayers = FXCollections.observableList((ArrayList<PlayerEnum>) ois.readObject());
+    activePlayer = new SimpleObjectProperty<>((PlayerEnum) ois.readObject());
   }
 }

@@ -15,7 +15,7 @@
 
   <top>
     <VBox alignment="CENTER">
-      <Label text="SCORING" style="fx-font-size:28; -fx-text-fill:white;" />
+      <Label text="SCORING" style="-fx-text-fill: white; -fx-font-size:14pt;" />
       <Separator />
     </VBox>
   </top>
@@ -66,6 +66,27 @@
         
         <Label fx:id="p3Scoring1" GridPane.rowIndex="3" GridPane.columnIndex="0" />
         <Label fx:id="p3Scoring2" GridPane.rowIndex="3" GridPane.columnIndex="1" />
+      </GridPane>
+      <GridPane hgap="5" vgap="5" prefWidth="170" styleClass="endScoring">
+        <padding>
+          <Insets left="10" right="10" top="10" bottom="10" />
+        </padding>
+        <columnConstraints>
+          <ColumnConstraints halignment="CENTER" prefWidth="85" />
+          <ColumnConstraints halignment="CENTER" prefWidth="85" />
+        </columnConstraints>
+        
+        <Label text="This" GridPane.rowIndex="0" GridPane.columnIndex="0" />
+        <Label text="Next" GridPane.rowIndex="0" GridPane.columnIndex="1" />
+        
+        <HBox fx:id="p1" alignment="CENTER" GridPane.rowIndex="1" GridPane.columnIndex="0" />
+        <HBox fx:id="nextp1" alignment="CENTER" GridPane.rowIndex="1" GridPane.columnIndex="1" />
+        
+        <HBox fx:id="p2" alignment="CENTER" GridPane.rowIndex="2" GridPane.columnIndex="0" />
+        <HBox fx:id="nextp2" alignment="CENTER" GridPane.rowIndex="2" GridPane.columnIndex="1" />
+        
+        <HBox fx:id="p3" alignment="CENTER" GridPane.rowIndex="3" GridPane.columnIndex="0" />
+        <HBox fx:id="nextp3" alignment="CENTER" GridPane.rowIndex="3" GridPane.columnIndex="1" />
       </GridPane>
     </VBox>
   </right>

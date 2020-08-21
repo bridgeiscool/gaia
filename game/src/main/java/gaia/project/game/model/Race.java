@@ -103,6 +103,10 @@ public enum Race {
       return new GeodensPlayer(playerEnum);
     }
 
+    @Override
+    public int getStartingTerraformingLevel() {
+      return 1;
+    }
   };
 
   private final String raceName;

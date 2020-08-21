@@ -57,6 +57,17 @@
 	-fx-font-size: 14.0pt;
 }
 
+.orangeRace {
+	-fx-background-color: orange;
+	-fx-border-width: 2;
+	-fx-border-color: black;
+}
+
+.orangeRace VBox Label {
+	-fx-text-fill: black;
+	-fx-font-size: 14.0pt;
+}
+
 .blueRace {
 	-fx-background-color: blue;
 	-fx-border-width: 2;

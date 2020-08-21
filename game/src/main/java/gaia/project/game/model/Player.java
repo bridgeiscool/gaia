@@ -358,6 +358,8 @@ public class Player implements Serializable {
 
   public void takeIncome() {
     currentIncome.updatePlayer(this);
+    // Remove this so it doesn't show up for next turn's predicted income
+    this.roundBooster.getValue().removeIncome(currentIncome);
   }
 
   // Getters for properties
@@ -512,7 +514,6 @@ public class Player implements Serializable {
   public void setRoundBooster(RoundBooster roundBooster) {
     if (this.roundBooster.getValue() != null) {
       this.roundBooster.getValue().addVps(this);
-      this.roundBooster.getValue().removeIncome(currentIncome);
     }
 
     for (AdvancedTechTile tt : advTechTiles) {

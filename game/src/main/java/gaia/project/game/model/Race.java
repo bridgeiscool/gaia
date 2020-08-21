@@ -95,6 +95,14 @@ public enum Race {
       // TODO: Implement, leaving this here since logic in GameController for setup
       return new Player(Race.IVITS, playerEnum);
     }
+  },
+  GEODENS("Geodens", "orangeRace", Color.ORANGE, PlanetType.ORANGE) {
+
+    @Override
+    public Player getPlayer(PlayerEnum playerEnum) {
+      return new GeodensPlayer(playerEnum);
+    }
+
   };
 
   private final String raceName;

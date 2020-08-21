@@ -68,6 +68,7 @@ public class Game implements Serializable {
 
   // Game state
   private transient Property<Round> currentRound;
+  private int turn;
   private transient ObservableList<PlayerEnum> currentPlayerOrder;
   private transient ObservableList<PlayerEnum> passedPlayers;
   private transient Property<PlayerEnum> activePlayer;
@@ -182,6 +183,10 @@ public class Game implements Serializable {
     return currentRound;
   }
 
+  public int getTurn() {
+    return turn;
+  }
+
   public ObservableList<PlayerEnum> getCurrentPlayerOrder() {
     return currentPlayerOrder;
   }
@@ -272,6 +277,7 @@ public class Game implements Serializable {
 
   public void newRound() {
     currentRound.setValue(currentRound.getValue().nextRound());
+    turn = 0;
     activePlayer.setValue(currentPlayerOrder.get(0));
     k3ActionTaken.setValue(false);
     doubleTfActionTaken.setValue(false);
@@ -295,6 +301,7 @@ public class Game implements Serializable {
     } while (passedPlayers.contains(currentPlayerOrder.get(currentIdx)));
 
     this.activePlayer.setValue(currentPlayerOrder.get(currentIdx));
+    this.turn++;
   }
 
   public boolean allPlayersPassed() {

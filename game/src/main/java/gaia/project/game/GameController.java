@@ -60,8 +60,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 public class GameController extends BorderPane {
-  private static final File PREV_TURN_START = new File("temp.gp");
-
   @FXML
   private BorderPane mainPane;
 
@@ -301,10 +299,14 @@ public class GameController extends BorderPane {
   @FXML
   private void resetTurn() {
     try {
-      parent.loadGame(PREV_TURN_START);
+      parent.loadGame(new File(getFilename()));
     } catch (IOException | ClassNotFoundException e) {
       new Alert(AlertType.ERROR, "Could not load previous turn: " + e.getMessage(), ButtonType.OK).showAndWait();
     }
+  }
+
+  private String getFilename() {
+    return "r" + game.getCurrentRound().getValue().display() + "t" + game.getTurn() + ".gp";
   }
 
   // SETUP METHODS
@@ -392,14 +394,13 @@ public class GameController extends BorderPane {
 
   // MAIN ACTION METHODS
   private void startGame() {
-    System.out.println("Starting game!");
     resetTurn.setDisable(false);
     newRound();
   }
 
   private void newRound() {
     game.newRound();
-    new Alert(AlertType.INFORMATION, "Starting round " + game.getCurrentRound().getValue()).showAndWait();
+    new Alert(AlertType.INFORMATION, "Starting Round " + game.getCurrentRound().getValue().display()).showAndWait();
     takeIncome();
     gaiaPhase();
     promptPlayerAction();
@@ -783,7 +784,6 @@ public class GameController extends BorderPane {
   }
 
   private void finishRound() {
-    System.out.println("Round over!");
     roundBoosters.forEach(RoundBoosterTile::clearAction);
     game.getPlayers().values().forEach(Player::clearSpecialActions);
 
@@ -805,7 +805,7 @@ public class GameController extends BorderPane {
   }
 
   private void saveState() {
-    try (FileOutputStream fos = new FileOutputStream(PREV_TURN_START);
+    try (FileOutputStream fos = new FileOutputStream(new File(getFilename()));
         ObjectOutputStream oos = new ObjectOutputStream(fos)) {
       oos.writeObject(game);
     } catch (IOException e) {

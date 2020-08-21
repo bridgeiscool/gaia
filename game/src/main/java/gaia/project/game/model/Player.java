@@ -620,21 +620,18 @@ public class Player implements Serializable {
     for (Coords coords : mines) {
       if (!inFederation(coords)) {
         totalPower += 1;
-        System.out.println("1");
       }
     }
 
     for (Coords coords : Sets.union(tradingPosts, researchLabs)) {
       if (!inFederation(coords)) {
         totalPower += 2;
-        System.out.println("2");
       }
     }
 
     for (Coords coords : Sets.union(Sets.union(pi, qa), ka)) {
       if (!inFederation(coords)) {
         totalPower += bigBuildingPower.intValue();
-        System.out.println("3");
       }
     }
 

@@ -231,12 +231,12 @@ public class TechTracks extends GridPane {
   }
 
   void highlightTracks(Player activePlayer, CallBack callBack, boolean free) {
-    activateHBox(activePlayer, callBack, terraTrack, activePlayer.getTerraformingLevel(), free);
-    activateHBox(activePlayer, callBack, navTrack, activePlayer.getNavLevel(), free);
-    activateHBox(activePlayer, callBack, aiTrack, activePlayer.getAiLevel(), free);
-    activateHBox(activePlayer, callBack, gaiaTrack, activePlayer.getGaiaformingLevel(), free);
-    activateHBox(activePlayer, callBack, econTrack, activePlayer.getEconLevel(), free);
-    activateHBox(activePlayer, callBack, knowledgeTrack, activePlayer.getKnowledgeLevel(), free);
+    activateHBox(activePlayer, callBack, terraTrack, activePlayer.getTerraformingLevel(), free, true, false);
+    activateHBox(activePlayer, callBack, navTrack, activePlayer.getNavLevel(), free, false, true);
+    activateHBox(activePlayer, callBack, aiTrack, activePlayer.getAiLevel(), free, false, false);
+    activateHBox(activePlayer, callBack, gaiaTrack, activePlayer.getGaiaformingLevel(), free, false, false);
+    activateHBox(activePlayer, callBack, econTrack, activePlayer.getEconLevel(), free, false, false);
+    activateHBox(activePlayer, callBack, knowledgeTrack, activePlayer.getKnowledgeLevel(), free, false, false);
   }
 
   private void activateHBox(
@@ -244,7 +244,9 @@ public class TechTracks extends GridPane {
       CallBack callBack,
       List<HBox> track,
       IntegerProperty toUpdate,
-      boolean free) {
+      boolean free,
+      boolean terra,
+      boolean nav) {
     for (HBox hbox : track) {
       if (hbox.getChildren().stream().anyMatch(n -> ((TechMarker) n).player == activePlayer.getPlayerEnum())) {
         int idx = track.indexOf(hbox);
@@ -254,7 +256,17 @@ public class TechTracks extends GridPane {
           hbox.setOnMouseClicked(me -> {
             activePlayer.advanceTech(toUpdate, free);
             clearActivation();
-            callBack.call();
+            if (terra && idx == 4) {
+              FederationTokenPane federation =
+                  (FederationTokenPane) terra5StackPane.getChildren().remove(terra5StackPane.getChildren().size() - 1);
+              activePlayer.getFederationTiles()
+                  .add(new FedToken(federation.getFederationTile(), federation.getFederationTile().isFlippable()));
+            }
+            if (nav && idx == 4) {
+              lostPlanetCallback.accept(activePlayer);
+            } else {
+              callBack.call();
+            }
           });
         }
       }
@@ -294,7 +306,9 @@ public class TechTracks extends GridPane {
       if (p.getNavLevel().getValue() < 4
           || (p.getNavLevel().getValue() == 4 && nav5.getChildren().isEmpty() && p.hasFlippableFederationTile())) {
         Util.plus(p.getNavLevel(), 1);
-        lostPlanetCallback.accept(p);
+        if (p.getNavLevel().get() == 5) {
+          lostPlanetCallback.accept(p);
+        }
       }
     }));
     techTiles.get(AI).highlight(activePlayer, callback, Optional.of(p -> {

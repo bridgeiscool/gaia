@@ -394,6 +394,7 @@ public class GameController extends BorderPane {
 
   // MAIN ACTION METHODS
   private void startGame() {
+    new SelectVPsDialog(game).showAndWait();
     resetTurn.setDisable(false);
     newRound();
   }

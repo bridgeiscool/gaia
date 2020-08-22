@@ -221,6 +221,27 @@ public class TechTracks extends GridPane {
     this.gaiaTech = new AdvancedTechTileHBox(iterator.next());
     this.econTech = new AdvancedTechTileHBox(iterator.next());
     this.knowledgeTech = new AdvancedTechTileHBox(iterator.next());
+
+    // Add listeners to update the game when these are taken
+    terraTech.getTaken().addListener((o, oldValue, newValue) -> {
+      game.getAdvancedTechTiles().put(terraTech.getTechTile(), Boolean.TRUE);
+    });
+    navTech.getTaken().addListener((o, oldValue, newValue) -> {
+      game.getAdvancedTechTiles().put(navTech.getTechTile(), Boolean.TRUE);
+    });
+    aiTech.getTaken().addListener((o, oldValue, newValue) -> {
+      game.getAdvancedTechTiles().put(aiTech.getTechTile(), Boolean.TRUE);
+    });
+    gaiaTech.getTaken().addListener((o, oldValue, newValue) -> {
+      game.getAdvancedTechTiles().put(gaiaTech.getTechTile(), Boolean.TRUE);
+    });
+    econTech.getTaken().addListener((o, oldValue, newValue) -> {
+      game.getAdvancedTechTiles().put(econTech.getTechTile(), Boolean.TRUE);
+    });
+    knowledgeTech.getTaken().addListener((o, oldValue, newValue) -> {
+      game.getAdvancedTechTiles().put(knowledgeTech.getTechTile(), Boolean.TRUE);
+    });
+
     terraAdvTech.getChildren().add(terraTech);
     navAdvTech.getChildren().add(navTech);
     aiAdvTech.getChildren().add(aiTech);

@@ -4,6 +4,8 @@ import java.util.Map.Entry;
 
 import gaia.project.game.model.AdvancedTechTile;
 import gaia.project.game.model.Player;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
@@ -13,12 +15,12 @@ public class AdvancedTechTileHBox extends HBox {
   private static final String NORMAL = "advTechTile";
   private static final String HIGHLIGHTED = "advTechTileHighlighted";
   private final AdvancedTechTile techTile;
-  private boolean taken;
+  private BooleanProperty taken;
 
   public AdvancedTechTileHBox(Entry<AdvancedTechTile, Boolean> entry) {
     this.techTile = entry.getKey();
-    this.taken = entry.getValue();
-    if (!taken) {
+    this.taken = new SimpleBooleanProperty(entry.getValue());
+    if (!taken.get()) {
       if (techTile.isAction()) {
         Action action = new Action(20.0, techTile.display(), "specialAction");
         action.setTaken(false);
@@ -35,12 +37,20 @@ public class AdvancedTechTileHBox extends HBox {
     getStyleClass().add(NORMAL);
   }
 
-  boolean isTaken() {
+  public AdvancedTechTile getTechTile() {
+    return techTile;
+  }
+
+  public BooleanProperty getTaken() {
     return taken;
   }
 
+  boolean isTaken() {
+    return taken.get();
+  }
+
   void setTaken() {
-    this.taken = true;
+    this.taken.setValue(true);
     getChildren().clear();
   }
 
@@ -51,6 +61,7 @@ public class AdvancedTechTileHBox extends HBox {
       activePlayer.getAdvTechTiles().add(techTile);
       techTile.updatePlayer(activePlayer);
       activePlayer.exhaustFederationTile();
+      setTaken();
       callBack.call();
     });
   }

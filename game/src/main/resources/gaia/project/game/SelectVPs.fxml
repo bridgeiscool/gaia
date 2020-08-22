@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.input.*?>
+<?import javafx.event.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.geometry.*?>
+
+<VBox styleClass="vbox-padded" xmlns:fx="http://javafx.com/fxml" prefWidth="150" >
+  <stylesheets>
+    <URL value="@app.css" />
+  </stylesheets>
+
+  <GridPane  hgap="3" vgap="3">
+    <columnConstraints>
+      <ColumnConstraints halignment="CENTER" />
+      <ColumnConstraints halignment="CENTER" />
+      <ColumnConstraints halignment="CENTER" />
+      <ColumnConstraints halignment="CENTER" />
+    </columnConstraints>
+    
+    <Label text="P1" GridPane.rowIndex="0" GridPane.columnIndex="0" />
+    <Button text="+" onAction="#addP1VP" GridPane.rowIndex="0" GridPane.columnIndex="1" />
+    <Button text="-" onAction="#subtractP1VP" GridPane.rowIndex="0" GridPane.columnIndex="2" />
+    <Label fx:id="p1Vps" GridPane.rowIndex="0" GridPane.columnIndex="3" />
+    
+    <Label text="P2" GridPane.rowIndex="1" GridPane.columnIndex="0" />
+    <Button text="+" onAction="#addP2VP" GridPane.rowIndex="1" GridPane.columnIndex="1" />
+    <Button text="-" onAction="#subtractP2VP" GridPane.rowIndex="1" GridPane.columnIndex="2" />
+    <Label fx:id="p2Vps" GridPane.rowIndex="1" GridPane.columnIndex="3" />
+    
+    <Label text="P3" GridPane.rowIndex="2" GridPane.columnIndex="0" />
+    <Button text="+" onAction="#addP3VP" GridPane.rowIndex="2" GridPane.columnIndex="1" />
+    <Button text="-" onAction="#subtractP3VP" GridPane.rowIndex="2" GridPane.columnIndex="2" />
+    <Label fx:id="p3Vps" GridPane.rowIndex="2" GridPane.columnIndex="3" />
+  </GridPane>
+</VBox>

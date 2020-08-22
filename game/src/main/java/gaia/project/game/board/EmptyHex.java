@@ -96,6 +96,7 @@ public class EmptyHex extends Hex {
 
   public void addLostPlanet(Player player) {
     this.builder = player.getPlayerEnum();
+    hasLostPlanet = true;
     getChildren().remove(satelliteBox);
     getChildren().add(new Planet(getCoords().getCenterX(), getCoords().getCenterY(), PlanetType.LOST));
     getChildren().add(new Mine(this, player.getRace().getColor(), player.getPlayerEnum()));

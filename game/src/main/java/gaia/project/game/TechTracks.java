@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 import com.google.common.base.Preconditions;
 
 import gaia.project.game.model.AdvancedTechTile;
+import gaia.project.game.model.FederationTile;
 import gaia.project.game.model.Game;
 import gaia.project.game.model.Player;
 import gaia.project.game.model.Player.FedToken;
@@ -278,10 +279,11 @@ public class TechTracks extends GridPane {
             activePlayer.advanceTech(toUpdate, free);
             clearActivation();
             if (terra && idx == 4) {
-              FederationTokenPane federation =
-                  (FederationTokenPane) terra5StackPane.getChildren().remove(terra5StackPane.getChildren().size() - 1);
-              activePlayer.getFederationTiles()
-                  .add(new FedToken(federation.getFederationTile(), federation.getFederationTile().isFlippable()));
+              // Federation token is on the bottom...
+              FederationTile federationTile =
+                  ((FederationTokenPane) terra5StackPane.getChildren().remove(0)).getFederationTile();
+              federationTile.updatePlayer(activePlayer);
+              activePlayer.getFederationTiles().add(new FedToken(federationTile, federationTile.isFlippable()));
             }
             if (nav && idx == 4) {
               lostPlanetCallback.accept(activePlayer);
@@ -315,10 +317,11 @@ public class TechTracks extends GridPane {
               && terra5.getChildren().isEmpty()
               && p.hasFlippableFederationTile())) {
         if (p.getTerraformingLevel().get() == 4) {
-          FederationTokenPane federation =
-              (FederationTokenPane) terra5StackPane.getChildren().remove(terra5StackPane.getChildren().size() - 1);
-          p.getFederationTiles()
-              .add(new FedToken(federation.getFederationTile(), federation.getFederationTile().isFlippable()));
+          // Federation token is on the bottom...
+          FederationTile federationTile =
+              ((FederationTokenPane) terra5StackPane.getChildren().remove(0)).getFederationTile();
+          federationTile.updatePlayer(activePlayer);
+          activePlayer.getFederationTiles().add(new FedToken(federationTile, federationTile.isFlippable()));
         }
         Util.plus(p.getTerraformingLevel(), 1);
       }

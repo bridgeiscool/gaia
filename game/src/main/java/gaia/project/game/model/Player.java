@@ -710,7 +710,19 @@ public class Player implements Serializable {
       Util.minus(credits, 2);
     }
 
-    // TODO: Add logic to check if it adds onto a previous federation
+    for (Set<Coords> federation : federations) {
+      if (federation.stream().anyMatch(c -> hex.isWithinRangeOf(c, 1))) {
+        federation.add(hex.getCoords());
+      }
+    }
+
+    for (Coords sat : satellites) {
+      if (hex.isWithinRangeOf(sat, 1)) {
+        // Just add to the first possible fed for now. Shouldn't matter
+        // TODO: Check and add logic to check which fed later
+        federations.iterator().next().add(hex.getCoords());
+      }
+    }
   }
 
   public void addGaiaformer(HexWithPlanet hex) {

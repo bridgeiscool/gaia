@@ -25,7 +25,8 @@ public class MiniAdvancedTechTile extends HBox {
     this.techTile = techTile;
     if (techTile.isAction()) {
       this.action = new Action(20.0, techTile.display(), "specialAction");
-      action.setTaken(player.getSpecialActions().get(techTile));
+      action.setTaken(
+          player.getSpecialActions().containsKey(techTile) ? player.getSpecialActions().get(techTile) : false);
       getChildren().add(action);
 
       // Bind state UI to used status

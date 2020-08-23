@@ -7,7 +7,6 @@ import javax.annotation.Nullable;
 
 import gaia.project.game.model.Player;
 import gaia.project.game.model.TechTile;
-import javafx.collections.MapChangeListener;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
@@ -25,15 +24,11 @@ public class MiniTechTile extends HBox {
     this.techTile = techTile;
     if (techTile.isAction()) {
       this.action = new Action(20.0, techTile.display(), "specialAction");
-      action.setTaken(player.getSpecialActions().get(techTile));
+      action.setTaken(player.getSpecialActions().get(techTile).get());
       getChildren().add(action);
 
       // Bind state UI to used status
-      player.getSpecialActions().addListener((MapChangeListener<? super Serializable, ? super Boolean>) listener -> {
-        if (listener.getKey() == techTile) {
-          action.setTaken(listener.getValueAdded());
-        }
-      });
+      player.getSpecialActions().get(techTile).addListener((o, oldValue, newValue) -> action.setTaken(newValue));
     } else {
       Label label = new Label(techTile.display());
       label.setTextFill(Color.WHITE);

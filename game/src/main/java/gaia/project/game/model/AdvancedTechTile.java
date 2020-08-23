@@ -1,5 +1,6 @@
 package gaia.project.game.model;
 
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.SetChangeListener;
 
 public enum AdvancedTechTile {
@@ -11,7 +12,7 @@ public enum AdvancedTechTile {
 
     @Override
     public void updatePlayer(Player player) {
-      player.getSpecialActions().put(this, false);
+      player.getSpecialActions().put(this, new SimpleBooleanProperty(false));
     }
 
     @Override
@@ -22,7 +23,7 @@ public enum AdvancedTechTile {
     @Override
     public void onAction(Player player) {
       Util.plus(player.getResearch(), 3);
-      player.getSpecialActions().put(this, true);
+      player.getSpecialActions().get(this).setValue(true);
     }
   },
   ORE_ACTION {
@@ -33,7 +34,7 @@ public enum AdvancedTechTile {
 
     @Override
     public void updatePlayer(Player player) {
-      player.getSpecialActions().put(this, false);
+      player.getSpecialActions().put(this, new SimpleBooleanProperty(false));
     }
 
     @Override
@@ -44,7 +45,7 @@ public enum AdvancedTechTile {
     @Override
     public void onAction(Player player) {
       Util.plus(player.getOre(), 3);
-      player.getSpecialActions().put(this, true);
+      player.getSpecialActions().get(this).setValue(true);
     }
   },
   Q_C_ACTION {
@@ -55,7 +56,7 @@ public enum AdvancedTechTile {
 
     @Override
     public void updatePlayer(Player player) {
-      player.getSpecialActions().put(this, false);
+      player.getSpecialActions().put(this, new SimpleBooleanProperty(false));
     }
 
     @Override
@@ -67,7 +68,7 @@ public enum AdvancedTechTile {
     public void onAction(Player player) {
       Util.plus(player.getQic(), 1);
       Util.plus(player.getCredits(), 5);
-      player.getSpecialActions().put(this, true);
+      player.getSpecialActions().get(this).setValue(true);
     }
   },
   SECTOR_SCORING {

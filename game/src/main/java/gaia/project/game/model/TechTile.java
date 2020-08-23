@@ -1,5 +1,6 @@
 package gaia.project.game.model;
 
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
 
 public enum TechTile {
@@ -17,12 +18,12 @@ public enum TechTile {
     @Override
     public void onAction(Player player) {
       player.chargePower(4);
-      player.getSpecialActions().put(this, true);
+      player.getSpecialActions().get(this).setValue(true);
     }
 
     @Override
     public void addTo(Player player) {
-      player.getSpecialActions().put(this, false);
+      player.getSpecialActions().put(this, new SimpleBooleanProperty(false));
     }
   },
   POWER_ORE() {

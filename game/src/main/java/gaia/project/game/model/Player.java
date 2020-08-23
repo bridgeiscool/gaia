@@ -4,11 +4,11 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableSet;
@@ -79,7 +79,7 @@ public class Player implements Serializable {
   private transient ObservableSet<PlanetType> builtOn = FXCollections.observableSet();
   private transient IntegerProperty gaiaPlanets = new SimpleIntegerProperty(0);
   // Boolean indicates whether the action has been used this round
-  private transient ObservableMap<Serializable, Boolean> specialActions = FXCollections.observableHashMap();
+  private transient ObservableMap<Serializable, BooleanProperty> specialActions = FXCollections.observableHashMap();
   private transient ObservableSet<AdvancedTechTile> advTechTiles = FXCollections.observableSet();
   private transient ObservableSet<TechTile> coveredTechTiles = FXCollections.observableSet();
 
@@ -553,7 +553,7 @@ public class Player implements Serializable {
     return buildingsInFeds;
   }
 
-  public ObservableMap<Serializable, Boolean> getSpecialActions() {
+  public ObservableMap<Serializable, BooleanProperty> getSpecialActions() {
     return specialActions;
   }
 
@@ -607,7 +607,7 @@ public class Player implements Serializable {
 
   public void clearSpecialActions() {
     // Should set each value to false
-    specialActions.keySet().forEach(k -> specialActions.put(k, false));
+    specialActions.keySet().forEach(k -> specialActions.get(k).setValue(false));
   }
 
   public int getPowerGain(HexWithPlanet hex) {
@@ -814,7 +814,7 @@ public class Player implements Serializable {
     if (ka) {
       Util.plus(currentIncome.getResearchIncome(), kaIncome);
     } else {
-      specialActions.put(PlayerBoardAction.GAIN_QIC, false);
+      specialActions.put(PlayerBoardAction.GAIN_QIC, new SimpleBooleanProperty(false));
     }
   }
 
@@ -835,7 +835,8 @@ public class Player implements Serializable {
 
   public void takeSpecialAction(UpdatePlayer specialAction) {
     specialAction.updatePlayer(this);
-    specialActions.put(specialAction, true);
+
+    specialActions.get(specialAction).setValue(true);
   }
 
   // END GAME
@@ -889,7 +890,9 @@ public class Player implements Serializable {
     oos.writeObject(new HashSet<>(builtOn));
     oos.writeInt(gaiaPlanets.get());
     oos.writeObject(new HashSet<>(techTiles));
-    oos.writeObject(new HashMap<>(specialActions));
+    oos.writeObject(
+        // Turn it into a Map<Serializable, Boolean> for serialization
+        specialActions.entrySet().stream().collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue().getValue())));
     oos.writeObject(new HashSet<>(coveredTechTiles));
     oos.writeObject(new HashSet<>(advTechTiles));
 
@@ -952,7 +955,11 @@ public class Player implements Serializable {
     builtOn = FXCollections.observableSet((Set<PlanetType>) ois.readObject());
     gaiaPlanets = new SimpleIntegerProperty(ois.readInt());
     techTiles = FXCollections.observableSet((Set<TechTile>) ois.readObject());
-    specialActions = FXCollections.observableMap((Map<Serializable, Boolean>) ois.readObject());
+    Map<Serializable, Boolean> readMap = (Map<Serializable, Boolean>) ois.readObject();
+    specialActions = FXCollections.observableMap(
+        readMap.entrySet()
+            .stream()
+            .collect(Collectors.toMap(e -> e.getKey(), e -> new SimpleBooleanProperty(e.getValue()))));
     coveredTechTiles = FXCollections.observableSet((Set<TechTile>) ois.readObject());
     advTechTiles = FXCollections.observableSet((Set<AdvancedTechTile>) ois.readObject());
 

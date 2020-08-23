@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import gaia.project.game.model.Game;
 import gaia.project.game.model.Player;
+import javafx.beans.property.BooleanProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -76,7 +77,7 @@ public class ActionChoiceDialog extends Dialog<Actions> {
             && player.getQic().intValue() < game.getCheapestQicAction());
     specialAction.setDisable(
         !(player.getRoundBooster().isAction() && !player.roundBoosterUsed())
-            && !(player.getSpecialActions().containsValue(false)));
+            && !(player.getSpecialActions().values().stream().map(BooleanProperty::get).anyMatch(b -> !b)));
   }
 
   @FXML

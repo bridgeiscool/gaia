@@ -13,7 +13,7 @@ import gaia.project.game.model.Player;
 import gaia.project.game.model.Player.FedToken;
 import gaia.project.game.model.PlayerBoardAction;
 import gaia.project.game.model.TechTile;
-import javafx.collections.MapChangeListener;
+import javafx.beans.property.BooleanProperty;
 import javafx.collections.SetChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -185,21 +185,21 @@ public class PlayerBoardController extends GridPane {
     });
 
     // Special actions
-    for (Entry<Serializable, Boolean> entry : player.getSpecialActions().entrySet()) {
+    for (Entry<Serializable, BooleanProperty> entry : player.getSpecialActions().entrySet()) {
       if (entry.getKey() instanceof PlayerBoardAction) {
         PlayerBoardAction key = (PlayerBoardAction) entry.getKey();
         tokenArea.getChildren().add(new SpecialAction(key, key.display(), entry.getValue()));
       }
     }
 
-    player.getSpecialActions().addListener((MapChangeListener<Serializable, Boolean>) change -> {
-      if (change.getKey() instanceof PlayerBoardAction) {
-        if (!change.getValueAdded()) {
-          PlayerBoardAction key = (PlayerBoardAction) change.getKey();
-          tokenArea.getChildren().add(new SpecialAction(key, key.display()));
-        }
-      }
-    });
+    // player.getSpecialActions().addListener((MapChangeListener<Serializable, Boolean>) change -> {
+    // if (change.getKey() instanceof PlayerBoardAction) {
+    // if (!change.getValueAdded()) {
+    // PlayerBoardAction key = (PlayerBoardAction) change.getKey();
+    // tokenArea.getChildren().add(new SpecialAction(key, key.display()));
+    // }
+    // }
+    // });
   }
 
   public void highlightActions(Consumer<Serializable> callback) {

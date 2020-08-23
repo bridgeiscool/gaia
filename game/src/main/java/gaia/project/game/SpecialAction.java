@@ -5,6 +5,7 @@ import java.util.function.Consumer;
 
 import gaia.project.game.model.Player;
 import gaia.project.game.model.UpdatePlayer;
+import javafx.beans.property.BooleanProperty;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -22,15 +23,12 @@ public class SpecialAction extends StackPane {
   private boolean taken;
   private final UpdatePlayer specialAction;
 
-  public SpecialAction(UpdatePlayer specialAction, String display) {
-    this(specialAction, display, false);
-  }
-
-  public SpecialAction(UpdatePlayer specialAction, String display, boolean taken) {
+  public SpecialAction(UpdatePlayer specialAction, String display, BooleanProperty taken) {
     ObservableList<Node> children = getChildren();
     this.octagon = new Octagon();
     this.specialAction = specialAction;
-    setTaken(taken);
+    setTaken(taken.get());
+    taken.addListener((o, oldValue, newValue) -> setTaken(newValue));
     children.add(octagon);
     Label label = new Label(display);
     label.getStyleClass().add("actionLabel");

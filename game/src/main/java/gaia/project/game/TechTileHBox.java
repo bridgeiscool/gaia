@@ -5,6 +5,7 @@ import java.util.Optional;
 import gaia.project.game.model.Player;
 import gaia.project.game.model.TechTile;
 import gaia.project.game.model.UpdatePlayer;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
@@ -18,8 +19,8 @@ public class TechTileHBox extends HBox {
   public TechTileHBox(TechTile techTile) {
     this.techTile = techTile;
     if (techTile.isAction()) {
-      SpecialAction action = new SpecialAction(techTile::onAction, techTile.display());
-      action.setTaken(false);
+      SpecialAction action =
+          new SpecialAction(techTile::onAction, techTile.display(), new SimpleBooleanProperty(false));
       getChildren().add(action);
     } else {
       Label label = new Label(techTile.display());

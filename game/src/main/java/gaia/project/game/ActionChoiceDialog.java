@@ -70,7 +70,7 @@ public class ActionChoiceDialog extends Dialog<Actions> {
             || player.getBin1().intValue() + player.getBin2().intValue() + player.getBin3().intValue() < player
                 .getGaiaformerCost());
     upgradeBuilding.setDisable(player.getOre().intValue() < 2 || player.getCredits().intValue() < 3);
-    federate.setDisable(player.getExcessBuildingPower() < 7);
+    federate.setDisable(player.getExcessBuildingPower() < player.getFedPower());
     advanceTech.setDisable(player.getResearch().getValue() < 4);
     powerAction.setDisable(
         player.getBin3().intValue() < game.getCheapestPowerAction()

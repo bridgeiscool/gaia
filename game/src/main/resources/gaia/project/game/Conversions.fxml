@@ -15,7 +15,7 @@
     <URL value="@app.css" />
   </stylesheets>
 
-  <GridPane>
+  <GridPane fx:id="gridPane">
     <columnConstraints>
       <ColumnConstraints halignment="CENTER" />
       <ColumnConstraints halignment="CENTER" prefWidth="40" />

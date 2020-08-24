@@ -107,6 +107,33 @@ public enum Race {
     public int getStartingTerraformingLevel() {
       return 1;
     }
+  },
+
+  ITARS("Itars", "whiteRace", Color.WHITE, PlanetType.WHITE) {
+    @Override
+    public Player getPlayer(PlayerEnum playerEnum) {
+      return new ItarsPlayer(playerEnum);
+    }
+
+    @Override
+    public int getStartingOre() {
+      return 5;
+    }
+
+    @Override
+    public int getStartingPtIncome() {
+      return 1;
+    }
+
+    @Override
+    public int getKaIncome() {
+      return 3;
+    }
+
+    @Override
+    public int getStartingBin1() {
+      return 4;
+    }
   };
 
   private final String raceName;

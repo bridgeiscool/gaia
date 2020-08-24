@@ -88,6 +88,7 @@ public class GameController extends BorderPane {
   // For federations
   private final Set<Coords> currentFederation = new HashSet<>();
   private final IntegerProperty fedPower = new SimpleIntegerProperty();
+  private boolean itarGaiaPhase;
 
   public GameController(GaiaProjectController parent, Game game, boolean load) {
     FXMLLoader loader = new FXMLLoader(GameController.class.getResource("GameMain.fxml"));
@@ -404,7 +405,9 @@ public class GameController extends BorderPane {
     new Alert(AlertType.INFORMATION, "Starting Round " + game.getCurrentRound().getValue().display()).showAndWait();
     takeIncome();
     gaiaPhase();
-    promptPlayerAction();
+    if (!itarGaiaPhase) {
+      promptPlayerAction();
+    }
   }
 
   private void takeIncome() {
@@ -420,6 +423,37 @@ public class GameController extends BorderPane {
           h.getPlanet().transdimToGaia();
           game.getGaiaformed().add(h.getCoords());
         });
+
+    // Handle ITARs ability
+    Optional<Player> maybeItars = game.getPlayers().values().stream().filter(p -> p.getRace() == Race.ITARS).findAny();
+    if (maybeItars.isPresent() && maybeItars.get().getGaiaBin().get() > 3) {
+      Player itars = maybeItars.get();
+
+      Optional<ButtonType> dialog =
+          new Alert(AlertType.CONFIRMATION, "Sac 4 power for a tech tile?", ButtonType.YES, ButtonType.NO)
+              .showAndWait();
+      if (dialog.get().equals(ButtonType.YES)) {
+        itarGaiaPhase = true;
+        Util.minus(itars.getGaiaBin(), 4);
+        techTracks.highlightTechTiles(itars, this::finishTechTileGain, () -> {
+          techTracks.clearTechtileHighlighting();
+          activateTechTracks(true);
+        }, this::highlightUserTechTiles);
+      } else {
+        finishGaiaPhase();
+      }
+    }
+  }
+
+  private Player activePlayer() {
+    if (itarGaiaPhase) {
+      return game.getPlayers().values().stream().filter(p -> p.getRace() == Race.ITARS).findAny().get();
+    }
+
+    return game.getPlayers().get(game.getActivePlayer());
+  }
+
+  private void finishGaiaPhase() {
     game.getPlayers().values().forEach(Player::gaiaPhase);
   }
 
@@ -432,8 +466,7 @@ public class GameController extends BorderPane {
 
   private void selectNewRoundBooster() {
     if (game.getCurrentRound().getValue() != Round.ROUND6) {
-      roundBoosters
-          .forEach(rb -> rb.highlight(game.getPlayers().get(game.getActivePlayer()), this::newRoundBoosterSelected));
+      roundBoosters.forEach(rb -> rb.highlight(activePlayer(), this::newRoundBoosterSelected));
       roundBoosters.forEach(rb -> rb.clearToken(game.getActivePlayer()));
     } else {
       game.getPassedPlayers().add(game.getActivePlayer());
@@ -448,34 +481,41 @@ public class GameController extends BorderPane {
   }
 
   private void activateTechTracks(boolean free) {
-    techTracks.highlightTracks(game.getPlayers().get(game.getActivePlayer()), this::finishTrackBump, free);
+    techTracks.highlightTracks(activePlayer(), this::finishTrackBump, free);
   }
 
   private void finishTrackBump() {
     techTracks.clearActivation();
-    finishAction();
+
+    // We might be here during the Itars ability or on a normal action
+    if (itarGaiaPhase) {
+      finishGaiaPhase();
+      itarGaiaPhase = false;
+      promptPlayerAction();
+    } else {
+      finishAction();
+    }
   }
 
   void selectMineBuild() {
-    Player activePlayer = game.getPlayers().get(game.getActivePlayer());
-    gameBoard.highlightPlanetaryHexes(activePlayer, possibleMineBuilds(activePlayer), (hex, player) -> {
+    gameBoard.highlightPlanetaryHexes(activePlayer(), possibleMineBuilds(), (hex, player) -> {
       player.buildMine(hex);
     }, this::finishMineBuild);
   }
 
-  private Predicate<HexWithPlanet> possibleMineBuilds(Player activePlayer) {
+  private Predicate<HexWithPlanet> possibleMineBuilds() {
     return hex -> {
       if (hex.hasGaiaformer()
           && hex.getPlanet().getPlanetType() == PlanetType.GAIA
-          && hex.getBuilder().get() == activePlayer.getPlayerEnum()) {
+          && hex.getBuilder().get() == activePlayer().getPlayerEnum()) {
         return true;
       }
-      for (Coords coords : activePlayer.allBuildingLocations()) {
+      for (Coords coords : activePlayer().allBuildingLocations()) {
         if (!hex.hasBuilding()
             && hex.isWithinRangeOf(
                 coords,
-                activePlayer.getNavRange().intValue() + activePlayer.getTempNavRange().intValue())
-            && activePlayer.canDigTo(hex)) {
+                activePlayer().getNavRange().intValue() + activePlayer().getTempNavRange().intValue())
+            && activePlayer().canDigTo(hex)) {
           return true;
         }
       }
@@ -491,20 +531,19 @@ public class GameController extends BorderPane {
   }
 
   private void selectGaiaProject() {
-    Player activePlayer = game.getPlayers().get(game.getActivePlayer());
-    gameBoard.highlightPlanetaryHexes(activePlayer, possibleGaiaProjects(activePlayer), (hex, player) -> {
+    gameBoard.highlightPlanetaryHexes(activePlayer(), possibleGaiaProjects(), (hex, player) -> {
       player.addGaiaformer(hex);
     }, this::finishGaiaProject);
   }
 
-  private Predicate<HexWithPlanet> possibleGaiaProjects(Player activePlayer) {
+  private Predicate<HexWithPlanet> possibleGaiaProjects() {
     return hex -> {
-      for (Coords coords : activePlayer.allBuildingLocations()) {
+      for (Coords coords : activePlayer().allBuildingLocations()) {
         if (hex.getPlanet().getPlanetType() == PlanetType.TRANSDIM
             && !hex.hasGaiaformer()
             && hex.isWithinRangeOf(
                 coords,
-                activePlayer.getNavRange().intValue() + activePlayer.getTempNavRange().intValue())) {
+                activePlayer().getNavRange().intValue() + activePlayer().getTempNavRange().intValue())) {
           return true;
         }
       }
@@ -519,10 +558,9 @@ public class GameController extends BorderPane {
   }
 
   private void selectBuildingUpgrade() {
-    Player activePlayer = game.getPlayers().get(game.getActivePlayer());
     gameBoard.highlightPlanetaryHexes(
-        activePlayer,
-        h -> h.canUpgrade(activePlayer, gameBoard),
+        activePlayer(),
+        h -> h.canUpgrade(activePlayer(), gameBoard),
         (hex, player) -> hex.upgradeBuilding(player, gameBoard),
         this::finishBuildingUpgrade);
   }
@@ -538,8 +576,7 @@ public class GameController extends BorderPane {
   }
 
   void highlightTechTiles() {
-    Player activePlayer = game.getPlayers().get(game.getActivePlayer());
-    techTracks.highlightTechTiles(activePlayer, this::finishTechTileGain, () -> {
+    techTracks.highlightTechTiles(activePlayer(), this::finishTechTileGain, () -> {
       techTracks.clearTechtileHighlighting();
       activateTechTracks(true);
     }, this::highlightUserTechTiles);
@@ -547,22 +584,29 @@ public class GameController extends BorderPane {
 
   void highlightUserTechTiles() {
     techTracks.clearTechtileHighlighting();
-    playerBoards.get(game.getActivePlayer()).highlightTechTiles(this::finishTechTileCover);
+    playerBoards.get(activePlayer().getPlayerEnum()).highlightTechTiles(this::finishTechTileCover);
   }
 
   void finishTechTileCover(Serializable selected) {
-    playerBoards.get(game.getActivePlayer()).clearHighlighting();
-    Player activePlayer = game.getPlayers().get(game.getActivePlayer());
+    playerBoards.get(activePlayer().getPlayerEnum()).clearHighlighting();
     TechTile covered = (TechTile) selected;
-    activePlayer.getTechTiles().remove(covered);
-    activePlayer.getCoveredTechTiles().add(covered);
-    covered.removeFrom(activePlayer);
+    activePlayer().getTechTiles().remove(covered);
+    activePlayer().getCoveredTechTiles().add(covered);
+    covered.removeFrom(activePlayer());
     activateTechTracks(true);
   }
 
   private void finishTechTileGain() {
     techTracks.clearTechtileHighlighting();
-    finishAction();
+
+    // We might be here during the Itars ability or on a normal action
+    if (itarGaiaPhase) {
+      finishGaiaPhase();
+      itarGaiaPhase = false;
+      promptPlayerAction();
+    } else {
+      finishAction();
+    }
   }
 
   private void checkForLeech(Hex hex) {
@@ -594,31 +638,29 @@ public class GameController extends BorderPane {
   void selectFederation() {
     fedPower.setValue(0);
     currentFederation.clear();
-    Player activePlayer = game.getPlayers().get(game.getActivePlayer());
     gameBoard.highlightPlanetaryHexes(
-        activePlayer,
-        h -> h.getBuilder().orElse(null) == game.getActivePlayer() && !activePlayer.inFederation(h.getCoords()),
+        activePlayer(),
+        h -> h.getBuilder().orElse(null) == game.getActivePlayer() && !activePlayer().inFederation(h.getCoords()),
         (hex, player) -> hex.highlightGreen(),
         this::checkIfSatellitesNeeded);
   }
 
   void checkIfSatellitesNeeded(HexWithPlanet hex) {
-    Player activePlayer = game.getPlayers().get(game.getActivePlayer());
     // Add adjacent hexes
     currentFederation.add(hex.getCoords());
-    Util.plus(fedPower, hex.getPower() == 3 ? activePlayer.getBigBuildingPower().intValue() : hex.getPower());
-    checkAdjacentHexes(activePlayer, hex);
+    Util.plus(fedPower, hex.getPower() == 3 ? activePlayer().getBigBuildingPower().intValue() : hex.getPower());
+    checkAdjacentHexes(hex);
 
-    if (fedPower.get() < activePlayer.getFedPower()) {
+    if (fedPower.get() < activePlayer().getFedPower()) {
       startSelectSatellites();
     } else {
       gameBoard.clearHighlighting();
-      selectFederationTile(activePlayer);
+      selectFederationTile();
     }
   }
 
   // Recursively checks all adjacent hexes to see if they should be added too
-  private void checkAdjacentHexes(Player activePlayer, Hex builtOn) {
+  private void checkAdjacentHexes(Hex builtOn) {
     builtOn.getHexesWithinRange(gameBoard.hexes(), 1)
         .stream()
         .filter(Hex::hasBuilding)
@@ -626,14 +668,14 @@ public class GameController extends BorderPane {
         .filter(h -> h.getBuilder().get() == game.getActivePlayer())
         .forEach(h -> {
           h.highlightGreen();
-          Util.plus(fedPower, h.getPower() == 3 ? activePlayer.getBigBuildingPower().intValue() : h.getPower());
+          Util.plus(fedPower, h.getPower() == 3 ? activePlayer().getBigBuildingPower().intValue() : h.getPower());
           currentFederation.add(h.getCoords());
-          checkAdjacentHexes(activePlayer, h);
+          checkAdjacentHexes(h);
         });
   }
 
   void startSelectSatellites() {
-    Player activePlayer = game.getPlayers().get(game.getActivePlayer());
+    Player activePlayer = activePlayer();
     // TODO: Disallow placing next to existing federations
     if (activePlayer.getBin1().get() + activePlayer.getBin2().get() + activePlayer.getBin3().get() > 0) {
       gameBoard.highlightEmptyHexes(
@@ -650,11 +692,10 @@ public class GameController extends BorderPane {
 
   void finishSatellite(EmptyHex hex) {
     hex.clearHighlighting();
-    Player activePlayer = game.getPlayers().get(game.getActivePlayer());
-    checkAdjacentHexes(activePlayer, hex);
-    if (fedPower.get() >= activePlayer.getFedPower()) {
+    checkAdjacentHexes(hex);
+    if (fedPower.get() >= activePlayer().getFedPower()) {
       gameBoard.clearHighlighting();
-      selectFederationTile(activePlayer);
+      selectFederationTile();
     } else {
       addMoreSatellites(hex);
     }
@@ -678,10 +719,10 @@ public class GameController extends BorderPane {
     }
   }
 
-  void selectFederationTile(Player activePlayer) {
-    activePlayer.getFederations().add(new HashSet<>(currentFederation));
-    Util.plus(activePlayer.getBuildingsInFeds(), currentFederation.size());
-    federationTokens.highlight(activePlayer, this::finishFederationTileSelection);
+  void selectFederationTile() {
+    activePlayer().getFederations().add(new HashSet<>(currentFederation));
+    Util.plus(activePlayer().getBuildingsInFeds(), currentFederation.size());
+    federationTokens.highlight(activePlayer(), this::finishFederationTileSelection);
   }
 
   void finishFederationTileSelection(FederationTile chosen) {
@@ -710,18 +751,16 @@ public class GameController extends BorderPane {
   }
 
   void highlightUserFeds() {
-    Player activePlayer = game.getPlayers().get(game.getActivePlayer());
-    playerBoards.get(activePlayer.getPlayerEnum()).highlightFederations(activePlayer, this::finishQ3Action);
+    playerBoards.get(activePlayer().getPlayerEnum()).highlightFederations(activePlayer(), this::finishQ3Action);
   }
 
   void finishQ3Action() {
-    Player activePlayer = game.getPlayers().get(game.getActivePlayer());
-    playerBoards.get(activePlayer.getPlayerEnum()).clearFederationHighlighting();
+    playerBoards.get(activePlayer().getPlayerEnum()).clearFederationHighlighting();
     finishAction();
   }
 
   private void highlightPowerActions() {
-    powerActionsController.highlightActions(game.getPlayers().get(game.getActivePlayer()), this::finishPowerAction);
+    powerActionsController.highlightActions(activePlayer(), this::finishPowerAction);
   }
 
   void finishPowerAction() {
@@ -730,13 +769,12 @@ public class GameController extends BorderPane {
   }
 
   private void highlightSpecialActions() {
-    Player activePlayer = game.getPlayers().get(game.getActivePlayer());
-    if (activePlayer.getRoundBooster().isAction() && !activePlayer.roundBoosterUsed()) {
+    if (activePlayer().getRoundBooster().isAction() && !activePlayer().roundBoosterUsed()) {
       roundBoosters.stream()
-          .filter(rb -> rb.getRoundBooster() == activePlayer.getRoundBooster())
+          .filter(rb -> rb.getRoundBooster() == activePlayer().getRoundBooster())
           .findFirst()
           .get()
-          .highlightSpecialAction(activePlayer, () -> {
+          .highlightSpecialAction(activePlayer(), () -> {
             clearSpecialActionHighlighting();
             selectMineBuild();
           });

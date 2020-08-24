@@ -90,6 +90,17 @@
 	-fx-font-size: 14.0pt;
 }
 
+.whiteRace {
+	-fx-background-color: white;
+	-fx-border-width: 2;
+	-fx-border-color: black;
+}
+
+.whiteRace VBox Label {
+	-fx-text-fill: black;
+	-fx-font-size: 14.0pt;	
+}
+
 .terraTrack {
 	-fx-background-color: maroon;
 	-fx-border-width: 1;

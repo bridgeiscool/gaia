@@ -4,6 +4,8 @@ import java.util.function.Consumer;
 
 import gaia.project.game.model.FederationTile;
 import gaia.project.game.model.Player;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -18,18 +20,22 @@ public class FederationTokenPane extends StackPane {
   private final Shape shape;
 
   public static FederationTokenPane regular(FederationTile federationTile) {
-    return new FederationTokenPane(federationTile, Size.REGULAR);
+    return new FederationTokenPane(
+        federationTile,
+        Size.REGULAR,
+        new SimpleBooleanProperty(federationTile.isFlippable()));
   }
 
-  public static FederationTokenPane mini(FederationTile federationTile) {
-    return new FederationTokenPane(federationTile, Size.MINI);
+  public static FederationTokenPane mini(FederationTile federationTile, BooleanProperty flippable) {
+    return new FederationTokenPane(federationTile, Size.MINI, flippable);
   }
 
-  public FederationTokenPane(FederationTile federationTile, Size size) {
+  public FederationTokenPane(FederationTile federationTile, Size size, BooleanProperty flippable) {
     this.federationTile = federationTile;
     getStyleClass().add(size.styleClass);
+    this.shape = new Shape(size.scaling, flippable.get() ? "greenFedToken" : "grayFedToken");
+    flippable.addListener((o, oldValue, newValue) -> flip());
     ObservableList<Node> children = getChildren();
-    this.shape = new Shape(size.scaling, federationTile.isFlippable() ? "greenFedToken" : "grayFedToken");
     children.add(shape);
     children.add(new Label(federationTile.getText()));
   }

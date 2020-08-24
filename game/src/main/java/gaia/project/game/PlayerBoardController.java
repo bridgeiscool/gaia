@@ -5,12 +5,10 @@ import java.io.Serializable;
 import java.util.Map.Entry;
 import java.util.function.Consumer;
 
-import com.google.common.base.Preconditions;
-
 import gaia.project.game.model.AdvancedTechTile;
 import gaia.project.game.model.Coords;
+import gaia.project.game.model.FederationTile;
 import gaia.project.game.model.Player;
-import gaia.project.game.model.Player.FedToken;
 import gaia.project.game.model.PlayerBoardAction;
 import gaia.project.game.model.TechTile;
 import javafx.beans.property.BooleanProperty;
@@ -169,20 +167,12 @@ public class PlayerBoardController extends GridPane {
       }
     });
 
-    player.getFederationTiles().forEach(ft -> {
-      FederationTokenPane mini = FederationTokenPane.mini(ft.getFederationTile());
-      if (!ft.getFlippable().get()) {
-        mini.flip();
-      } else {
-        ft.getFlippable().addListener((o, oldValue, newValue) -> {
-          mini.flip();
-        });
-      }
-      tokenArea.getChildren().add(mini);
-    });
-    player.getFederationTiles().addListener((SetChangeListener<FedToken>) change -> {
-      Preconditions.checkArgument(change.wasAdded());
-      tokenArea.getChildren().add(FederationTokenPane.mini(change.getElementAdded().getFederationTile()));
+    for (Entry<FederationTile, BooleanProperty> entry : player.getFederationTiles().entrySet()) {
+      tokenArea.getChildren().add(FederationTokenPane.mini(entry.getKey(), entry.getValue()));
+    }
+
+    player.getFederationTiles().addListener((MapChangeListener<FederationTile, BooleanProperty>) change -> {
+      tokenArea.getChildren().add(FederationTokenPane.mini(change.getKey(), change.getValueAdded()));
     });
 
     // Special actions

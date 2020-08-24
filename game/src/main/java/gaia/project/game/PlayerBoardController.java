@@ -14,6 +14,7 @@ import gaia.project.game.model.Player.FedToken;
 import gaia.project.game.model.PlayerBoardAction;
 import gaia.project.game.model.TechTile;
 import javafx.beans.property.BooleanProperty;
+import javafx.collections.MapChangeListener;
 import javafx.collections.SetChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -192,14 +193,12 @@ public class PlayerBoardController extends GridPane {
       }
     }
 
-    // player.getSpecialActions().addListener((MapChangeListener<Serializable, Boolean>) change -> {
-    // if (change.getKey() instanceof PlayerBoardAction) {
-    // if (!change.getValueAdded()) {
-    // PlayerBoardAction key = (PlayerBoardAction) change.getKey();
-    // tokenArea.getChildren().add(new SpecialAction(key, key.display()));
-    // }
-    // }
-    // });
+    player.getSpecialActions().addListener((MapChangeListener<Serializable, BooleanProperty>) change -> {
+      if (change.getKey() instanceof PlayerBoardAction) {
+        PlayerBoardAction key = (PlayerBoardAction) change.getKey();
+        tokenArea.getChildren().add(new SpecialAction(key, key.display(), change.getValueAdded()));
+      }
+    });
   }
 
   public void highlightActions(Consumer<Serializable> callback) {

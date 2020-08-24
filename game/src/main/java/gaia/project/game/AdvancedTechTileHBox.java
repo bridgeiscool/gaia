@@ -58,8 +58,8 @@ public class AdvancedTechTileHBox extends HBox {
     getStyleClass().clear();
     getStyleClass().add(HIGHLIGHTED);
     this.setOnMouseClicked(me -> {
-      activePlayer.getAdvTechTiles().add(techTile);
       techTile.updatePlayer(activePlayer);
+      activePlayer.getAdvTechTiles().add(techTile);
       activePlayer.exhaustFederationTile();
       setTaken();
       callBack.call();

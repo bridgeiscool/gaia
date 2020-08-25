@@ -507,24 +507,10 @@ public class GameController extends BorderPane {
   }
 
   private Predicate<HexWithPlanet> possibleMineBuilds() {
-    return hex -> {
-      if (hex.hasGaiaformer()
-          && hex.getPlanet().getPlanetType() == PlanetType.GAIA
-          && hex.getBuilder().get() == activePlayer().getPlayerEnum()) {
-        return true;
-      }
-      for (Coords coords : activePlayer().allBuildingLocations()) {
-        if (!hex.hasBuilding()
-            && hex.isWithinRangeOf(
-                coords,
-                activePlayer().getNavRange().intValue() + activePlayer().getTempNavRange().intValue())
-            && activePlayer().canDigTo(hex)) {
-          return true;
-        }
-      }
-
-      return false;
-    };
+    return hex -> (hex.hasGaiaformer()
+        && hex.getPlanet().getPlanetType() == PlanetType.GAIA
+        && hex.getBuilder().get() == activePlayer().getPlayerEnum())
+        || (!hex.hasBuilding() && isWithinRange(activePlayer(), hex) && activePlayer().canDigTo(hex));
   }
 
   private void finishMineBuild(HexWithPlanet hex) {
@@ -540,19 +526,9 @@ public class GameController extends BorderPane {
   }
 
   private Predicate<HexWithPlanet> possibleGaiaProjects() {
-    return hex -> {
-      for (Coords coords : activePlayer().allBuildingLocations()) {
-        if (hex.getPlanet().getPlanetType() == PlanetType.TRANSDIM
-            && !hex.hasGaiaformer()
-            && hex.isWithinRangeOf(
-                coords,
-                activePlayer().getNavRange().intValue() + activePlayer().getTempNavRange().intValue())) {
-          return true;
-        }
-      }
-
-      return false;
-    };
+    return hex -> hex.getPlanet().getPlanetType() == PlanetType.TRANSDIM
+        && !hex.hasGaiaformer()
+        && isWithinRange(activePlayer(), hex);
   }
 
   public void finishGaiaProject(Hex hex) {
@@ -790,12 +766,25 @@ public class GameController extends BorderPane {
   private void findLostPlanet(Player activePlayer) {
     gameBoard.highlightEmptyHexes(
         activePlayer,
-        hex -> !game.getPlayers().keySet().stream().anyMatch(p -> hex.hasSatellite(p)),
+        hex -> (!game.getPlayers().keySet().stream().anyMatch(p -> hex.hasSatellite(p))
+            && isWithinRange(activePlayer, hex)),
         (hex, player) -> {
           hex.addLostPlanet(player);
           player.addLostPlanet(hex);
         },
         this::finishLostPlanet);
+  }
+
+  private boolean isWithinRange(Player activevPlayer, Hex hex) {
+    for (Coords coords : activePlayer().allBuildingLocations()) {
+      if (hex.isWithinRangeOf(
+          coords,
+          activePlayer().getNavRange().intValue() + activePlayer().getTempNavRange().intValue())) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   private void finishLostPlanet(EmptyHex hex) {

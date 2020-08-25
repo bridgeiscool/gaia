@@ -19,6 +19,7 @@ import java.util.TreeMap;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.Iterables;
 
 import gaia.project.game.board.Academy;
@@ -34,6 +35,7 @@ import gaia.project.game.board.Satellite;
 import gaia.project.game.board.TradingPost;
 import gaia.project.game.model.Coords;
 import gaia.project.game.model.FederationTile;
+import gaia.project.game.model.FiraksPlayer;
 import gaia.project.game.model.Game;
 import gaia.project.game.model.Player;
 import gaia.project.game.model.PlayerBoardAction;
@@ -491,6 +493,7 @@ public class GameController extends BorderPane {
     if (itarGaiaPhase) {
       finishGaiaPhase();
       itarGaiaPhase = false;
+      finishGaiaPhase();
       promptPlayerAction();
     } else {
       finishAction();
@@ -603,6 +606,7 @@ public class GameController extends BorderPane {
     if (itarGaiaPhase) {
       finishGaiaPhase();
       itarGaiaPhase = false;
+      finishGaiaPhase();
       promptPlayerAction();
     } else {
       finishAction();
@@ -805,7 +809,16 @@ public class GameController extends BorderPane {
 
     // Hooks for special actions that require game board interaction
     if (action == PlayerBoardAction.RL_TO_TP) {
-      System.out.println("Woo!");
+      Preconditions.checkArgument(activePlayer() instanceof FiraksPlayer);
+      // Firaks special action
+      gameBoard.highlightPlanetaryHexes(
+          activePlayer(),
+          h -> activePlayer().getResearchLabs().contains(h.getCoords()),
+          (hex, player) -> {
+            FiraksPlayer cast = (FiraksPlayer) player;
+            cast.piAction(hex);
+          },
+          this::finishFiraksPiAction);
     } else {
       finishAction();
     }
@@ -814,6 +827,11 @@ public class GameController extends BorderPane {
   private void clearSpecialActionHighlighting() {
     roundBoosters.forEach(rb -> rb.clearHighlighting());
     playerBoards.get(game.getActivePlayer()).clearHighlighting();
+  }
+
+  private void finishFiraksPiAction(Hex hex) {
+    gameBoard.clearHighlighting();
+    activateTechTracks(true);
   }
 
   private void finishAction() {

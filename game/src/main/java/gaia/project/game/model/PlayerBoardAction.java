@@ -22,7 +22,7 @@ public enum PlayerBoardAction implements UpdatePlayer {
 
     @Override
     public void updatePlayer(Player player) {
-      // TODO: Implement for Firaks
+      // Intentionally does nothing...
     }
 
   };

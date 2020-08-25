@@ -101,6 +101,17 @@
 	-fx-font-size: 14.0pt;	
 }
 
+.grayRace {
+	-fx-background-color: gray;
+	-fx-border-width: 2;
+	-fx-border-color: black;
+}
+
+.grayRace VBox Label {
+	-fx-text-fill: black;
+	-fx-font-size: 14.0pt;		
+}
+
 .terraTrack {
 	-fx-background-color: maroon;
 	-fx-border-width: 1;

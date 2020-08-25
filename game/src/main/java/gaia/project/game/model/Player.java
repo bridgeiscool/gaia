@@ -512,6 +512,14 @@ public class Player implements Serializable {
     return currentDigs;
   }
 
+  public List<IncomeUpdater> getTpIncome() {
+    return tpIncome;
+  }
+
+  public List<IncomeUpdater> getRlIncome() {
+    return rlIncome;
+  }
+
   public void setRoundBooster(RoundBooster roundBooster) {
     if (this.roundBooster.getValue() != null) {
       this.roundBooster.getValue().addVps(this);

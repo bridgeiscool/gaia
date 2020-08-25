@@ -134,6 +134,28 @@ public enum Race {
     public int getStartingBin1() {
       return 4;
     }
+  },
+  FIRAKS("Firaks", "grayRace", Color.GRAY, PlanetType.GRAY) {
+
+    @Override
+    public Player getPlayer(PlayerEnum playerEnum) {
+      return new FiraksPlayer(playerEnum);
+    }
+
+    @Override
+    public int getStartingKnowledge() {
+      return 2;
+    }
+
+    @Override
+    public int getStartingOre() {
+      return 3;
+    }
+
+    @Override
+    public int getStartingResearchIncome() {
+      return 2;
+    }
   };
 
   private final String raceName;

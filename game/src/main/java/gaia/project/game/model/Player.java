@@ -107,7 +107,7 @@ public class Player implements Serializable {
   private final IncomeUpdater piIncome;
   private final int kaIncome;
 
-  // Scoring Related
+  // End Scoring Related
   private transient ObservableSet<Integer> sectors = FXCollections.observableSet();
   private transient IntegerProperty totalBuildings = new SimpleIntegerProperty(0);
   private transient IntegerProperty buildingsInFeds = new SimpleIntegerProperty(0);
@@ -578,6 +578,11 @@ public class Player implements Serializable {
     return coveredTechTiles;
   }
 
+  // Override for Firaks downgrade to TP
+  public boolean ignoreTpRoundBonus() {
+    return false;
+  }
+
   // Utility methods
   public Set<Coords> allBuildingLocations() {
     return ImmutableSet.<Coords> builder()
@@ -750,7 +755,7 @@ public class Player implements Serializable {
         Util.minus(bin2, remainingPower);
       } else {
         remainingPower = remainingPower - bin2.get();
-        bin3.setValue(0);
+        bin2.setValue(0);
         Util.minus(bin3, remainingPower);
       }
     }

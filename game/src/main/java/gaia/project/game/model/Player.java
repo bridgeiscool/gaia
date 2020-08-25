@@ -592,6 +592,7 @@ public class Player implements Serializable {
         .addAll(pi)
         .addAll(ka)
         .addAll(qa)
+        .addAll(lostPlanet)
         .build();
   }
 

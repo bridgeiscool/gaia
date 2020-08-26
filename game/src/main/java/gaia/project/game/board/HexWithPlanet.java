@@ -165,9 +165,7 @@ public class HexWithPlanet extends Hex {
 
   private boolean hasNeighbor(GameBoard gameBoard) {
     return getHexesWithinRange(gameBoard.hexes(), 2).stream()
-        .filter(h -> !h.isEmpty())
-        .map(HexWithPlanet.class::cast)
-        .anyMatch(h -> h.builder != null && h.builder != builder);
+        .anyMatch(h -> h.getBuilder().isPresent() && h.getBuilder().get() != builder);
   }
 
   public void upgradeBuilding(Player player, GameBoard gameBoard) {

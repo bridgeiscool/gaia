@@ -67,7 +67,7 @@ public class ConversionDialog extends Dialog<Void> {
     Button creditsToOre = new Button(">");
     creditsToOre.setOnAction(e -> {
       Util.minus(activePlayer.getCredits(), 3);
-      Util.plus(activePlayer.getResearch(), 1);
+      Util.plus(activePlayer.getOre(), 1);
     });
     gridPane.add(creditsToOre, 1, 13);
     gridPane.add(new Label("o"), 2, 13);

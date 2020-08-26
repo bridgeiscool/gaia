@@ -633,7 +633,7 @@ public class Player implements Serializable {
   public int getExcessBuildingPower() {
     int totalPower = 0;
 
-    for (Coords coords : mines) {
+    for (Coords coords : Sets.union(mines, lostPlanet)) {
       if (!inFederation(coords)) {
         totalPower += 1;
       }

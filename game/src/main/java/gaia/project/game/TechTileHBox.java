@@ -34,7 +34,7 @@ public class TechTileHBox extends HBox {
   }
 
   public void highlight(Player activePlayer, CallBack callBack, Optional<UpdatePlayer> techBump) {
-    if (!activePlayer.getTechTiles().contains(techTile)) {
+    if (!activePlayer.getTechTiles().contains(techTile) && !activePlayer.getCoveredTechTiles().contains(techTile)) {
       getStyleClass().clear();
       getStyleClass().add(HIGHLIGHTED);
       this.setOnMouseClicked(me -> {

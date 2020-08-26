@@ -38,7 +38,6 @@ public class SelectVPsDialog extends Dialog<Void> {
       throw new RuntimeException(e);
     }
 
-    setTitle("Select starting VPs");
     getDialogPane().getButtonTypes().add(DONE);
 
     p1Score = game.getPlayers().get(PlayerEnum.PLAYER1).getScore();

@@ -15,11 +15,11 @@
     <URL value="@app.css" />
   </stylesheets>
 
-  <GridPane fx:id="gridPane">
+  <GridPane fx:id="gridPane" vgap="5" hgap="2" >
     <columnConstraints>
       <ColumnConstraints halignment="CENTER" />
       <ColumnConstraints halignment="CENTER" prefWidth="40" />
-      <ColumnConstraints halignment="RIGHT" />
+      <ColumnConstraints halignment="CENTER" />
     </columnConstraints>
 
     <Label text="+2 NAV" GridPane.rowIndex="0" GridPane.columnIndex="1" GridPane.columnSpan="2"/>

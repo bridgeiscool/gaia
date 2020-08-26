@@ -3,7 +3,6 @@ package gaia.project.game;
 import java.io.IOException;
 
 import gaia.project.game.model.Player;
-import gaia.project.game.model.Race;
 import gaia.project.game.model.Util;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -36,8 +35,14 @@ public class ConversionDialog extends Dialog<Void> {
     setResultConverter(button -> null);
     getDialogPane().getButtonTypes().add(DONE);
 
-    if (activePlayer.getRace() == Race.HADSCH_HALLAS && !activePlayer.getPi().isEmpty()) {
-      addHHContent();
+    switch (activePlayer.getRace()) {
+      case HADSCH_HALLAS:
+        if (!activePlayer.getPi().isEmpty()) {
+          addHHContent();
+        }
+        break;
+      default:
+        // Most races do nothing...
     }
   }
 

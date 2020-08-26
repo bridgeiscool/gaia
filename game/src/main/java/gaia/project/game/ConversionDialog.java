@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import gaia.project.game.model.Player;
 import gaia.project.game.model.Util;
+import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -20,6 +21,26 @@ public class ConversionDialog extends Dialog<Void> {
 
   @FXML
   private GridPane gridPane;
+  @FXML
+  private Button qicToNav;
+  @FXML
+  private Button powerToQic;
+  @FXML
+  private Button qicToOre;
+  @FXML
+  private Button powerToOre;
+  @FXML
+  private Button powerToKnowledge;
+  @FXML
+  private Button knowledgeToCredits;
+  @FXML
+  private Button powerToCredits;
+  @FXML
+  private Button oreToCredits;
+  @FXML
+  private Button oreToPower;
+  @FXML
+  private Button sacPower;
 
   ConversionDialog(Player activePlayer) {
     this.activePlayer = activePlayer;
@@ -34,6 +55,18 @@ public class ConversionDialog extends Dialog<Void> {
 
     setResultConverter(button -> null);
     getDialogPane().getButtonTypes().add(DONE);
+
+    // Disable buttons when they can't be used...
+    qicToNav.disableProperty().bind(Bindings.lessThan(activePlayer.getQic(), 1));
+    powerToQic.disableProperty().bind(Bindings.lessThan(activePlayer.getBin3(), 1));
+    qicToOre.disableProperty().bind(Bindings.lessThan(activePlayer.getQic(), 1));
+    powerToOre.disableProperty().bind(Bindings.lessThan(activePlayer.getBin3(), 3));
+    powerToKnowledge.disableProperty().bind(Bindings.lessThan(activePlayer.getBin3(), 4));
+    knowledgeToCredits.disableProperty().bind(Bindings.lessThan(activePlayer.getResearch(), 1));
+    powerToCredits.disableProperty().bind(Bindings.lessThan(activePlayer.getBin3(), 1));
+    oreToCredits.disableProperty().bind(Bindings.lessThan(activePlayer.getOre(), 1));
+    oreToPower.disableProperty().bind(Bindings.lessThan(activePlayer.getOre(), 1));
+    sacPower.disableProperty().bind(Bindings.lessThan(activePlayer.getBin2(), 2));
 
     switch (activePlayer.getRace()) {
       case HADSCH_HALLAS:

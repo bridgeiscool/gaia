@@ -24,37 +24,37 @@
 
     <Label text="+2 NAV" GridPane.rowIndex="0" GridPane.columnIndex="1" GridPane.columnSpan="2"/>
     
-    <Button text="^" onAction="#qicToNav" GridPane.rowIndex="1" GridPane.columnIndex="2" />
+    <Button fx:id="qicToNav" text="^" onAction="#qicToNav" GridPane.rowIndex="1" GridPane.columnIndex="2" />
     
     <Label text="4p" GridPane.rowIndex="2" GridPane.columnIndex="0" />
-    <Button text=">" onAction="#powerToQic" GridPane.rowIndex="2" GridPane.columnIndex="1" />
+    <Button fx:id="powerToQic" text=">" onAction="#powerToQic" GridPane.rowIndex="2" GridPane.columnIndex="1" />
     <Label text="1q" GridPane.rowIndex="2" GridPane.columnIndex="2" />
     
-    <Button text="v" onAction="#qicToOre" GridPane.rowIndex="3" GridPane.columnIndex="2" />
+    <Button fx:id="qicToOre" text="v" onAction="#qicToOre" GridPane.rowIndex="3" GridPane.columnIndex="2" />
     
     <Label text="3p" GridPane.rowIndex="4" GridPane.columnIndex="0" />
-    <Button text=">" onAction="#powerToOre" GridPane.rowIndex="4" GridPane.columnIndex="1" />  
+    <Button fx:id="powerToOre" text=">" onAction="#powerToOre" GridPane.rowIndex="4" GridPane.columnIndex="1" />  
     <Label text="1o" GridPane.rowIndex="4" GridPane.columnIndex="2" /> 
   
     <Label text="4p" GridPane.rowIndex="5" GridPane.columnIndex="0" />
-    <Button text=">" onAction="#powerToKnowledge" GridPane.rowIndex="5" GridPane.columnIndex="1" />  
+    <Button fx:id="powerToKnowledge" text=">" onAction="#powerToKnowledge" GridPane.rowIndex="5" GridPane.columnIndex="1" />  
     <Label text="1k" GridPane.rowIndex="5" GridPane.columnIndex="2" />
   
-    <Button text="v" onAction="#knowledgeToCredits" GridPane.rowIndex="6" GridPane.columnIndex="2" />
+    <Button fx:id="knowledgeToCredits" text="v" onAction="#knowledgeToCredits" GridPane.rowIndex="6" GridPane.columnIndex="2" />
   
     <Label text="1p" GridPane.rowIndex="7" GridPane.columnIndex="0" />
-    <Button text=">" onAction="#powerToCredits" GridPane.rowIndex="7" GridPane.columnIndex="1" />  
+    <Button fx:id="powerToCredits" text=">" onAction="#powerToCredits" GridPane.rowIndex="7" GridPane.columnIndex="1" />  
     <Label text="1c" GridPane.rowIndex="7" GridPane.columnIndex="2" />
   
     <Label text="1o" GridPane.rowIndex="8" GridPane.columnIndex="0" />
-    <Button text=">" onAction="#oreToCredits" GridPane.rowIndex="8" GridPane.columnIndex="1" />  
+    <Button fx:id="oreToCredits" text=">" onAction="#oreToCredits" GridPane.rowIndex="8" GridPane.columnIndex="1" />  
     <Label text="1c" GridPane.rowIndex="8" GridPane.columnIndex="2" />
   
   
     <Label text="1o" GridPane.rowIndex="9" GridPane.columnIndex="0" />
-    <Button text=">" onAction="#oreToPower" GridPane.rowIndex="9" GridPane.columnIndex="1" />  
+    <Button fx:id="oreToPower" text=">" onAction="#oreToPower" GridPane.rowIndex="9" GridPane.columnIndex="1" />  
     <Label text="1pt" GridPane.rowIndex="9" GridPane.columnIndex="2" />
     
-    <Button text="Sac power" onAction="#sacPower" GridPane.rowIndex="10" GridPane.columnIndex="0" GridPane.columnSpan="3" />
+    <Button fx:id="sacPower" text="Sac power" onAction="#sacPower" GridPane.rowIndex="10" GridPane.columnIndex="0" GridPane.columnSpan="3" />
   </GridPane>
 </VBox>

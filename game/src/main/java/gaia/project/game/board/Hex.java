@@ -109,10 +109,10 @@ public abstract class Hex extends StackPane {
         && getPlanet().getPlanetType() == other.getPlanet().getPlanetType();
   }
 
-  public void highlightGreen() {
+  public void highlightCyan() {
     ObservableList<String> styleClass = getPolygon().getStyleClass();
     styleClass.clear();
-    styleClass.add("highlightedGreenHex");
+    styleClass.add("highlightedCyanHex");
   }
 
   @Override

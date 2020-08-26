@@ -17,14 +17,14 @@
 
 .highlightedHex {
 	-fx-fill: black;
-	-fx-stroke: white;
+	-fx-stroke: lime;
 	-fx-stroke-type: inside;
 	-fx-stroke-width: 3;
 }
 
-.highlightedGreenHex {
+.highlightedCyanHex {
 	-fx-fill: black;
-	-fx-stroke: lime;
+	-fx-stroke: cyan;
 	-fx-stroke-type: inside;
 	-fx-stroke-width: 3;
 }
@@ -163,8 +163,8 @@
 
 .techTileHighlighted {
 	-fx-background-color: black;
-	-fx-border-color: white;
-	-fx-border-width: 2;
+	-fx-border-color: lime;
+	-fx-border-width: 1;
 	-fx-font-size: 14.0pt;
 }
 
@@ -177,8 +177,8 @@
 
 .miniTechTileHighlighted {
 	-fx-background-color: black;
-	-fx-border-color: white;
-	-fx-border-width: 2;
+	-fx-border-color: lime;
+	-fx-border-width: 1;
 	-fx-font-size: 10.0pt;
 }
 
@@ -191,8 +191,8 @@
 
 .advTechTileHighlighted {
 	-fx-background-color: navy;
-	-fx-border-color: white;
-	-fx-border-width: 2;
+	-fx-border-color: lime;
+	-fx-border-width: 1;
 	-fx-font-size: 12.0pt;
 }
 
@@ -209,9 +209,9 @@
 
 .powerActionHighlighted {
 	-fx-fill: purple;
-	-fx-stroke: white;
+	-fx-stroke: lime;
 	-fx-stroke-type: outside;
-	-fx-stroke-width: 2;
+	-fx-stroke-width: 1;
 }
 
 .qicAction {
@@ -223,9 +223,9 @@
 
 .qicActionHighlighted {
 	-fx-fill: green;
-	-fx-stroke: white;
+	-fx-stroke: lime;
 	-fx-stroke-type: outside;
-	-fx-stroke-width: 2
+	-fx-stroke-width: 1;
 }
 
 .specialAction {
@@ -237,9 +237,9 @@
 
 .specialActionHighlighted {
 	-fx-fill: orange;
-	-fx-stroke: white;
-	-fx-stroke-type: inside;
-	-fx-stroke-width: 2;
+	-fx-stroke: lime;
+	-fx-stroke-type: outside;
+	-fx-stroke-width: 1;
 }
 
 .takenAction {
@@ -285,9 +285,9 @@
 
 .greenFedTokenHighlighted {
 	-fx-fill: darkgreen;
-	-fx-stroke: white;
-	-fx-stroke-type: inside;
-	-fx-stroke-width: 2;
+	-fx-stroke: lime;
+	-fx-stroke-type: outside;
+	-fx-stroke-width: 1;
 	-fx-font-size: 14.0pt;
 }
 
@@ -301,9 +301,9 @@
 
 .grayFedTokenHighlighted {
 	-fx-fill: gray;
-	-fx-stroke: white;
-	-fx-stroke-type: inside;
-	-fx-stroke-width: 2;
+	-fx-stroke: lime;
+	-fx-stroke-type: outside;
+	-fx-stroke-width: 1;
 	-fx-font-size: 14.0pt;
 }
 

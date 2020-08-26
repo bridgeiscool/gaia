@@ -621,7 +621,7 @@ public class GameController extends BorderPane {
     gameBoard.highlightPlanetaryHexes(
         activePlayer(),
         h -> h.getBuilder().orElse(null) == game.getActivePlayer() && !activePlayer().inFederation(h.getCoords()),
-        (hex, player) -> hex.highlightGreen(),
+        (hex, player) -> hex.highlightCyan(),
         this::checkIfSatellitesNeeded);
   }
 
@@ -647,7 +647,7 @@ public class GameController extends BorderPane {
         .filter(h -> !currentFederation.contains(h.getCoords()))
         .filter(h -> h.getBuilder().get() == game.getActivePlayer())
         .forEach(h -> {
-          h.highlightGreen();
+          h.highlightCyan();
           Util.plus(fedPower, h.getPower() == 3 ? activePlayer().getBigBuildingPower().intValue() : h.getPower());
           currentFederation.add(h.getCoords());
           checkAdjacentHexes(h);

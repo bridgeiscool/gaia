@@ -841,7 +841,7 @@ public class Player implements Serializable {
     if (ka) {
       Util.plus(currentIncome.getResearchIncome(), kaIncome);
     } else {
-      specialActions.put(PlayerBoardAction.GAIN_QIC, new SimpleBooleanProperty(false));
+      specialActions.put(race.getQaAction(), new SimpleBooleanProperty(false));
     }
   }
 

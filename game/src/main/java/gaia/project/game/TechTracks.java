@@ -16,6 +16,7 @@ import gaia.project.game.model.FederationTile;
 import gaia.project.game.model.Game;
 import gaia.project.game.model.Player;
 import gaia.project.game.model.PlayerEnum;
+import gaia.project.game.model.Race;
 import gaia.project.game.model.Util;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -254,7 +255,9 @@ public class TechTracks extends GridPane {
 
   void highlightTracks(Player activePlayer, CallBack callBack, boolean free) {
     activateHBox(activePlayer, callBack, terraTrack, activePlayer.getTerraformingLevel(), free, true, false);
-    activateHBox(activePlayer, callBack, navTrack, activePlayer.getNavLevel(), free, false, true);
+    if (activePlayer.getRace() != Race.BALTAKS || !activePlayer.getPi().isEmpty()) {
+      activateHBox(activePlayer, callBack, navTrack, activePlayer.getNavLevel(), free, false, true);
+    }
     activateHBox(activePlayer, callBack, aiTrack, activePlayer.getAiLevel(), free, false, false);
     activateHBox(activePlayer, callBack, gaiaTrack, activePlayer.getGaiaformingLevel(), free, false, false);
     activateHBox(activePlayer, callBack, econTrack, activePlayer.getEconLevel(), free, false, false);
@@ -328,15 +331,25 @@ public class TechTracks extends GridPane {
         Util.plus(p.getTerraformingLevel(), 1);
       }
     }));
-    techTiles.get(NAV).highlight(activePlayer, callback, Optional.of(p -> {
-      if (p.getNavLevel().getValue() < 4
-          || (p.getNavLevel().getValue() == 4 && nav5.getChildren().isEmpty() && p.hasFlippableFederationTile())) {
-        Util.plus(p.getNavLevel(), 1);
-        if (p.getNavLevel().get() == 5) {
-          lostPlanetCallback.accept(p);
-        }
-      }
-    }));
+    techTiles.get(NAV)
+        .highlight(
+            activePlayer,
+            callback,
+            Optional.of(
+                p -> {
+                  // Special functionality to prevent tech bump for BALTAKS
+                  if (p.getRace() != Race.BALTAKS || !p.getPi().isEmpty()) {
+                    if (p.getNavLevel().getValue() < 4
+                        || (p.getNavLevel().getValue() == 4
+                            && nav5.getChildren().isEmpty()
+                            && p.hasFlippableFederationTile())) {
+                      Util.plus(p.getNavLevel(), 1);
+                      if (p.getNavLevel().get() == 5) {
+                        lostPlanetCallback.accept(p);
+                      }
+                    }
+                  }
+                }));
     techTiles.get(AI).highlight(activePlayer, callback, Optional.of(p -> {
       if (p.getAiLevel().getValue() < 4
           || (p.getAiLevel().getValue() == 4 && ai5.getChildren().isEmpty() && p.hasFlippableFederationTile())) {

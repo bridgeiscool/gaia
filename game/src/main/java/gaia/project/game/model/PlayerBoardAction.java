@@ -13,6 +13,18 @@ public enum PlayerBoardAction implements UpdatePlayer {
       Util.plus(player.getQic(), 1);
     }
   },
+  GAIN_4C {
+    @Override
+    public String display() {
+      return "+4c";
+    }
+
+    @Override
+    public void updatePlayer(Player player) {
+      Util.plus(player.getCredits(), 4);
+    }
+  },
+
   RL_TO_TP {
 
     @Override

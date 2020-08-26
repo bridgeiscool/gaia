@@ -109,6 +109,29 @@ public enum Race {
     }
   },
 
+  BALTAKS("Bal Taks", "orangeRace", Color.ORANGE, PlanetType.ORANGE) {
+    @Override
+    public Player getPlayer(PlayerEnum playerEnum) {
+      return new BalTaksPlayer(playerEnum);
+    }
+
+    @Override
+    public PlayerBoardAction getQaAction() {
+      // TODO Auto-generated method stub
+      return super.getQaAction();
+    }
+
+    @Override
+    public int getStartingGaiaformingLevel() {
+      return 1;
+    }
+
+    @Override
+    public int getStartingBin2() {
+      return 2;
+    }
+  },
+
   ITARS("Itars", "whiteRace", Color.WHITE, PlanetType.WHITE) {
     @Override
     public Player getPlayer(PlayerEnum playerEnum) {
@@ -258,6 +281,10 @@ public enum Race {
 
   public int getStartingKnowledgeLevel() {
     return 0;
+  }
+
+  public PlayerBoardAction getQaAction() {
+    return PlayerBoardAction.GAIN_QIC;
   }
 
   public List<IncomeUpdater> getTpIncome() {

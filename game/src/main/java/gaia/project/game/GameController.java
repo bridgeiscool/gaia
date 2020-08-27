@@ -286,7 +286,7 @@ public class GameController extends BorderPane {
 
   @FXML
   private void showConversions() {
-    new ConversionDialog(game.getPlayers().get(game.getActivePlayer())).showAndWait();
+    ConversionDialog.create(game.getPlayers().get(game.getActivePlayer())).showAndWait();
   }
 
   @FXML

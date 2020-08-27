@@ -625,6 +625,7 @@ public class Player implements Serializable {
   public void clearSpecialActions() {
     // Should set each value to false
     specialActions.keySet().forEach(k -> specialActions.get(k).setValue(false));
+    roundBoosterUsed = false;
   }
 
   public int getPowerGain(HexWithPlanet hex) {

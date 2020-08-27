@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import gaia.project.game.model.Game;
 import gaia.project.game.model.Player;
+import gaia.project.game.model.Race;
 import gaia.project.game.model.Util;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -73,21 +74,21 @@ public class PowerActionsController extends GridPane {
   }
 
   public void highlightActions(Player activePlayer, CallBack callback) {
-    if (activePlayer.getBin3().intValue() >= 7) {
+    if (activePlayer.getBin3().intValue() >= (nevlasPi(activePlayer) ? 4 : 7)) {
       k3.tryHighlight(activePlayer, p -> {
         Util.plus(activePlayer.getResearch(), 3);
-        p.spendPower(7);
+        p.spendPower((nevlasPi(activePlayer) ? 4 : 7));
         gameController.getGame().getK3ActionTaken().setValue(true);
       }, callback);
     }
 
-    if (activePlayer.getBin3().intValue() >= 5
+    if (activePlayer.getBin3().intValue() >= (nevlasPi(activePlayer) ? 3 : 5)
         && activePlayer.getMines().size() < 8
         && activePlayer.getOre().intValue() > 0
         && activePlayer.getCredits().intValue() > 1) {
       doubleTf.tryHighlight(activePlayer, p -> {
         Util.plus(activePlayer.getCurrentDigs(), 2);
-        p.spendPower(5);
+        p.spendPower((nevlasPi(activePlayer) ? 3 : 5));
         gameController.getGame().getDoubleTfActionTaken().setValue(true);
       }, () -> {
         gameController.selectMineBuild();
@@ -95,37 +96,37 @@ public class PowerActionsController extends GridPane {
       });
     }
 
-    if (activePlayer.getBin3().intValue() >= 4) {
+    if (activePlayer.getBin3().intValue() >= (nevlasPi(activePlayer) ? 2 : 4)) {
       ore.tryHighlight(activePlayer, p -> {
         Util.plus(activePlayer.getOre(), 2);
-        p.spendPower(4);
+        p.spendPower((nevlasPi(activePlayer) ? 2 : 4));
         gameController.getGame().getOreActionTaken().setValue(true);
       }, callback);
     }
 
-    if (activePlayer.getBin3().intValue() >= 4) {
+    if (activePlayer.getBin3().intValue() >= (nevlasPi(activePlayer) ? 2 : 4)) {
       credits.tryHighlight(activePlayer, p -> {
         Util.plus(activePlayer.getCredits(), 7);
-        p.spendPower(4);
+        p.spendPower((nevlasPi(activePlayer) ? 2 : 4));
         gameController.getGame().getCreditsActionTaken().setValue(true);
       }, callback);
     }
 
-    if (activePlayer.getBin3().intValue() >= 4) {
+    if (activePlayer.getBin3().intValue() >= (nevlasPi(activePlayer) ? 2 : 4)) {
       k2.tryHighlight(activePlayer, p -> {
         Util.plus(activePlayer.getResearch(), 2);
-        p.spendPower(4);
+        p.spendPower((nevlasPi(activePlayer) ? 2 : 4));
         gameController.getGame().getK2ActionTaken().setValue(true);
       }, callback);
     }
 
-    if (activePlayer.getBin3().intValue() >= 3
+    if (activePlayer.getBin3().intValue() >= (nevlasPi(activePlayer) ? 2 : 3)
         && activePlayer.getMines().size() < 8
         && activePlayer.getOre().intValue() > 0
         && activePlayer.getCredits().intValue() > 1) {
       tf.tryHighlight(activePlayer, p -> {
         Util.plus(activePlayer.getCurrentDigs(), 1);
-        p.spendPower(3);
+        p.spendPower((nevlasPi(activePlayer) ? 2 : 3));
         gameController.getGame().getTfActionTaken().setValue(true);
       }, () -> {
         gameController.selectMineBuild();
@@ -133,11 +134,11 @@ public class PowerActionsController extends GridPane {
       });
     }
 
-    if (activePlayer.getBin3().intValue() >= 3) {
+    if (activePlayer.getBin3().intValue() >= (nevlasPi(activePlayer) ? 2 : 3)) {
       pt.tryHighlight(activePlayer, p -> {
         Util.plus(activePlayer.getBin1(), 2);
         gameController.getGame().getPtActionTaken().setValue(true);
-        p.spendPower(3);
+        p.spendPower((nevlasPi(activePlayer) ? 2 : 3));
       }, callback);
     }
 
@@ -168,6 +169,10 @@ public class PowerActionsController extends GridPane {
         gameController.getGame().getQ2ActionTaken().setValue(true);
       }, callback);
     }
+  }
+
+  private boolean nevlasPi(Player activePlayer) {
+    return activePlayer.getRace() == Race.NEVLAS && !activePlayer.getPi().isEmpty();
   }
 
   public void clearHighlighting() {

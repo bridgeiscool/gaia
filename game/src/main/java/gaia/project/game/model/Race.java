@@ -167,6 +167,29 @@ public enum Race {
       return 4;
     }
   },
+  NEVLAS("Nevlas", "whiteRace", Color.WHITE, PlanetType.WHITE) {
+
+    @Override
+    public Player getPlayer(PlayerEnum playerEnum) {
+      return new NevlasPlayer(playerEnum);
+    }
+
+    @Override
+    public int getStartingKnowledgeLevel() {
+      return 1;
+    }
+
+    @Override
+    public int getStartingKnowledge() {
+      return 2;
+    }
+
+    @Override
+    public List<IncomeUpdater> getRlIncome() {
+      return ImmutableList.of(new PowerIncome(2), new PowerIncome(2), new PowerIncome(2));
+    }
+  },
+
   FIRAKS("Firaks", "grayRace", Color.GRAY, PlanetType.GRAY) {
 
     @Override

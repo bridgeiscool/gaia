@@ -872,9 +872,9 @@ public class Player implements Serializable {
       sacPower(bin2.intValue() / 2);
     }
 
-    score.setValue(
-        score.getValue()
-            + (credits.intValue() + ore.intValue() + research.intValue() + qic.intValue() + bin3.intValue()) / 3);
+    Util.plus(
+        score,
+        (credits.intValue() + ore.intValue() + research.intValue() + qic.intValue() + bin3.intValue()) / 3);
   }
 
   public void addLostPlanet(EmptyHex hex) {

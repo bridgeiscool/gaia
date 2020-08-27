@@ -117,8 +117,7 @@ public enum Race {
 
     @Override
     public PlayerBoardAction getQaAction() {
-      // TODO Auto-generated method stub
-      return super.getQaAction();
+      return PlayerBoardAction.GAIN_4C;
     }
 
     @Override

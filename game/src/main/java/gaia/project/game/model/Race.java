@@ -24,22 +24,32 @@ public enum Race {
       return new XenosPlayer(playerEnum);
     }
   },
-  // GLEENS("Gleens", "yellowRace", Color.YELLOW, PlanetType.YELLOW) {
-  // @Override
-  // public int getStartingQic() {
-  // return 0;
-  // }
-  //
-  // @Override
-  // public int getStartingNavLevel() {
-  // return 1;
-  // }
-  //
-  // @Override
-  // public IncomeUpdater getPiIncome() {
-  // return new CompoundIncome(new PowerIncome(4), new OreIncome(1));
-  // }
-  // },
+  GLEENS("Gleens", "yellowRace", Color.YELLOW, PlanetType.YELLOW) {
+    @Override
+    public Player getPlayer(PlayerEnum playerEnum) {
+      return new GleensPlayer(playerEnum);
+    }
+
+    @Override
+    public int getStartingQic() {
+      return 0;
+    }
+
+    @Override
+    public int getStartingNavLevel() {
+      return 1;
+    }
+
+    @Override
+    public IncomeUpdater getPiIncome() {
+      return new CompoundIncome(new PowerIncome(4), new OreIncome(1));
+    }
+
+    @Override
+    public UpdatePlayer gaiaTerraformCost() {
+      return new OneOre();
+    }
+  },
   TERRANS("Terrans", "blueRace", Color.BLUE, PlanetType.BLUE) {
     @Override
     public int getStartingBin1() {
@@ -282,6 +292,10 @@ public enum Race {
     return 0;
   }
 
+  public UpdatePlayer gaiaTerraformCost() {
+    return new OneQic();
+  }
+
   public PlayerBoardAction getQaAction() {
     return PlayerBoardAction.GAIN_QIC;
   }
@@ -300,5 +314,23 @@ public enum Race {
 
   public int getKaIncome() {
     return 2;
+  }
+
+  private static class OneQic implements UpdatePlayer {
+    private static final long serialVersionUID = -304948874042749436L;
+
+    @Override
+    public void updatePlayer(Player player) {
+      Util.minus(player.getQic(), 1);
+    }
+  }
+
+  private static class OneOre implements UpdatePlayer {
+    private static final long serialVersionUID = 4405543174181017949L;
+
+    @Override
+    public void updatePlayer(Player player) {
+      Util.minus(player.getOre(), 1);
+    }
   }
 }

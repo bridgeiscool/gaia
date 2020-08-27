@@ -710,7 +710,7 @@ public class Player implements Serializable {
         if (gaiaformed(hex)) {
           gaiaformers.remove(hex.getCoords());
         } else {
-          Util.minus(qic, 1);
+          race.gaiaTerraformCost().updatePlayer(this);
         }
       } else {
         if (race.getHomePlanet().numDigsTo(planetType) > currentDigs.intValue()) {

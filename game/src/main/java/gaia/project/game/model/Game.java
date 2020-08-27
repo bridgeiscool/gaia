@@ -86,7 +86,7 @@ public class Game implements Serializable {
     Collections.shuffle(techTiles, random);
     List<AdvancedTechTile> advTechTiles = new ArrayList<>(Arrays.asList(AdvancedTechTile.values()));
     Collections.shuffle(advTechTiles, random);
-    List<FederationTile> federationTiles = new ArrayList<>(Arrays.asList(FederationTile.values()));
+    List<FederationTile> federationTiles = new ArrayList<>(FederationTile.normalFederations());
     Collections.shuffle(federationTiles, random);
     List<RoundScoringBonus> roundScoringBonuses = new ArrayList<>(Arrays.asList(RoundScoringBonus.values()));
     Collections.shuffle(roundScoringBonuses);

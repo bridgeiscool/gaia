@@ -1,5 +1,8 @@
 package gaia.project.game.model;
 
+import com.google.common.base.Preconditions;
+
+import gaia.project.game.PlanetType;
 import gaia.project.game.board.HexWithPlanet;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -24,6 +27,20 @@ public class GleensPlayer extends Player {
         });
       }
     });
+  }
+
+  public boolean canDigTo(HexWithPlanet hex) {
+    Preconditions.checkArgument(!hex.isEmpty());
+    PlanetType planetType = hex.getPlanet().getPlanetType();
+    if (planetType == PlanetType.TRANSDIM) {
+      return false;
+    }
+
+    if (planetType == PlanetType.GAIA) {
+      return getOre().get() > 1;
+    }
+
+    return super.canDigTo(hex);
   }
 
   @Override

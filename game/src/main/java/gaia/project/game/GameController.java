@@ -444,7 +444,13 @@ public class GameController extends BorderPane {
       } else {
         finishGaiaPhase();
       }
+    } else {
+      finishGaiaPhase();
     }
+  }
+
+  private void finishGaiaPhase() {
+    game.getPlayers().values().forEach(Player::gaiaPhase);
   }
 
   private Player activePlayer() {
@@ -453,10 +459,6 @@ public class GameController extends BorderPane {
     }
 
     return game.getPlayers().get(game.getActivePlayer());
-  }
-
-  private void finishGaiaPhase() {
-    game.getPlayers().values().forEach(Player::gaiaPhase);
   }
 
   private void promptPlayerAction() {
@@ -725,6 +727,8 @@ public class GameController extends BorderPane {
       case RESEARCH:
         Util.minus(game.getKnowledgeFederations(), 1);
         break;
+      default:
+        throw new IllegalStateException("Gleens Fed should never be selected!");
     }
     federationTokens.clearHighlighting();
     finishAction();

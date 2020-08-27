@@ -147,6 +147,9 @@ public class Player implements Serializable {
     this.piIncome = race.getPiIncome();
     this.kaIncome = race.getKaIncome();
 
+    // This has to be run before setting up tech bonuses so that Gleens QIC gets transformed
+    addAdditionalListeners();
+
     // We set up tech bonuses so that when we add race starting techs we get the bonus
     setupTechBonuses();
     this.terraformingLevel.setValue(race.getStartingTerraformingLevel());
@@ -156,7 +159,6 @@ public class Player implements Serializable {
     this.econLevel.setValue(race.getStartingEconLevel());
     this.knowledgeLevel.setValue(race.getStartingKnowledgeLevel());
 
-    addAdditionalListeners();
   }
 
   private void setupTechBonuses() {

@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 import com.google.common.base.Preconditions;
 
 import gaia.project.game.model.AdvancedTechTile;
+import gaia.project.game.model.BescodsPlayer;
 import gaia.project.game.model.FederationTile;
 import gaia.project.game.model.Game;
 import gaia.project.game.model.Player;
@@ -251,6 +252,28 @@ public class TechTracks extends GridPane {
     econAdvTech.getChildren().add(econTech);
     knowledgeAdvTech.getChildren().add(knowledgeTech);
 
+  }
+
+  void highlightLowestTracks(BescodsPlayer bescodsPlayer, CallBack callBack) {
+    int lowestLevel = bescodsPlayer.lowestTechLevel();
+    if (bescodsPlayer.getTerraformingLevel().get() == lowestLevel) {
+      activateHBox(bescodsPlayer, callBack, terraTrack, bescodsPlayer.getTerraformingLevel(), true, true, false);
+    }
+    if (bescodsPlayer.getNavLevel().get() == lowestLevel) {
+      activateHBox(bescodsPlayer, callBack, navTrack, bescodsPlayer.getNavLevel(), true, false, true);
+    }
+    if (bescodsPlayer.getAiLevel().get() == lowestLevel) {
+      activateHBox(bescodsPlayer, callBack, aiTrack, bescodsPlayer.getAiLevel(), true, false, false);
+    }
+    if (bescodsPlayer.getGaiaformingLevel().get() == lowestLevel) {
+      activateHBox(bescodsPlayer, callBack, gaiaTrack, bescodsPlayer.getGaiaformingLevel(), true, false, false);
+    }
+    if (bescodsPlayer.getEconLevel().get() == lowestLevel) {
+      activateHBox(bescodsPlayer, callBack, econTrack, bescodsPlayer.getEconLevel(), true, false, false);
+    }
+    if (bescodsPlayer.getKnowledgeLevel().get() == lowestLevel) {
+      activateHBox(bescodsPlayer, callBack, knowledgeTrack, bescodsPlayer.getKnowledgeLevel(), true, false, false);
+    }
   }
 
   void highlightTracks(Player activePlayer, CallBack callBack, boolean free) {

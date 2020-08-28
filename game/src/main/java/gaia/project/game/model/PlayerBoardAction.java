@@ -50,6 +50,18 @@ public enum PlayerBoardAction implements UpdatePlayer {
       return "M<->PI";
     }
 
+  },
+
+  BUMP_LOWEST_TECH {
+    @Override
+    public void updatePlayer(Player player) {
+      // Intentionally does nothing...
+    }
+
+    @Override
+    public String display() {
+      return "+TECH";
+    }
   };
 
   public abstract String display();

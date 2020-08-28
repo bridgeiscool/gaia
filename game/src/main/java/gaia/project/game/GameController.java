@@ -34,6 +34,7 @@ import gaia.project.game.board.ResearchLab;
 import gaia.project.game.board.Satellite;
 import gaia.project.game.board.TradingPost;
 import gaia.project.game.model.AmbasPlayer;
+import gaia.project.game.model.BescodsPlayer;
 import gaia.project.game.model.Coords;
 import gaia.project.game.model.FederationTile;
 import gaia.project.game.model.FiraksPlayer;
@@ -866,6 +867,8 @@ public class GameController extends BorderPane {
                 gameBoard.planetaryHexes().filter(h -> ambas.getPi().contains(h.getCoords())).findFirst().get());
           },
           this::finishAmbasPiAction);
+    } else if (action == PlayerBoardAction.BUMP_LOWEST_TECH) {
+      techTracks.highlightLowestTracks((BescodsPlayer) activePlayer(), this::finishTrackBump);
     } else {
       finishAction();
     }

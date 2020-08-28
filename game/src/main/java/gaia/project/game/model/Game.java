@@ -97,8 +97,8 @@ public class Game implements Serializable {
 
     Map<PlayerEnum, Player> players = new HashMap<>();
     players.put(PlayerEnum.PLAYER1, Race.BALTAKS.getPlayer(PlayerEnum.PLAYER1));
-    players.put(PlayerEnum.PLAYER2, Race.NEVLAS.getPlayer(PlayerEnum.PLAYER2));
-    players.put(PlayerEnum.PLAYER3, Race.AMBAS.getPlayer(PlayerEnum.PLAYER3));
+    players.put(PlayerEnum.PLAYER2, Race.TERRANS.getPlayer(PlayerEnum.PLAYER2));
+    players.put(PlayerEnum.PLAYER3, Race.BESCODS.getPlayer(PlayerEnum.PLAYER3));
 
     return new Game(
         gameBoard,

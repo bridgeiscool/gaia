@@ -212,6 +212,39 @@ public enum Race {
       return 2;
     }
   },
+  BESCODS("Bescods", "grayRace", Color.GRAY, PlanetType.GRAY) {
+    @Override
+    public Player getPlayer(PlayerEnum playerEnum) {
+      return new BescodsPlayer(playerEnum);
+    }
+
+    @Override
+    public List<IncomeUpdater> getTpIncome() {
+      return ImmutableList
+          .of(new ResearchIncome(1), new ResearchIncome(1), new ResearchIncome(1), new ResearchIncome(1));
+    }
+
+    @Override
+    public List<IncomeUpdater> getRlIncome() {
+      return ImmutableList.of(new CreditIncome(3), new CreditIncome(4), new CreditIncome(5));
+    }
+
+    @Override
+    public IncomeUpdater getPiIncome() {
+      return new CompoundIncome(new PowerIncome(4), new TokenIncome(2));
+    }
+
+    @Override
+    public int getStartingKnowledge() {
+      return 1;
+    }
+
+    @Override
+    public int getStartingResearchIncome() {
+      return 0;
+    }
+  },
+
   AMBAS("Ambas", "brownRace", Color.TAN, PlanetType.BROWN) {
     @Override
     public Player getPlayer(PlayerEnum playerEnum) {

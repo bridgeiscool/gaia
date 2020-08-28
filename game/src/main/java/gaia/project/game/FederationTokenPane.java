@@ -4,6 +4,7 @@ import java.util.function.Consumer;
 
 import gaia.project.game.model.FederationTile;
 import gaia.project.game.model.Player;
+import gaia.project.game.model.Player.FedToken;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.ObservableList;
@@ -26,8 +27,8 @@ public class FederationTokenPane extends StackPane {
         new SimpleBooleanProperty(federationTile.isFlippable()));
   }
 
-  public static FederationTokenPane mini(FederationTile federationTile, BooleanProperty flippable) {
-    return new FederationTokenPane(federationTile, Size.MINI, flippable);
+  public static FederationTokenPane mini(FedToken token) {
+    return new FederationTokenPane(token.getFederationTile(), Size.MINI, token.getFlippable());
   }
 
   public FederationTokenPane(FederationTile federationTile, Size size, BooleanProperty flippable) {

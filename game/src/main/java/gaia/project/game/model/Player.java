@@ -7,7 +7,6 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -87,8 +86,8 @@ public class Player implements Serializable {
   // Federation related
   private transient ObservableSet<Set<Coords>> federations = FXCollections.observableSet(new HashSet<>());
   private transient ObservableSet<Coords> satellites = FXCollections.observableSet();
-  // Map of tile and whether not it still can be flipped...
-  private transient ObservableMap<FederationTile, BooleanProperty> federationTiles = FXCollections.observableHashMap();
+  // Set of objects with the tile and whether not it still can be flipped...
+  private transient ObservableSet<FedToken> federationTiles = FXCollections.observableSet();
   private int fedPower = 7;
 
   // Buildings, etc
@@ -315,7 +314,7 @@ public class Player implements Serializable {
   // Major functionality methods
   public void addFederationTile(FederationTile federationTile) {
     federationTile.updatePlayer(this);
-    federationTiles.put(federationTile, new SimpleBooleanProperty(federationTile.isFlippable()));
+    federationTiles.add(new FedToken(federationTile, federationTile.isFlippable()));
   }
 
   public void leechPower(int power) {
@@ -403,14 +402,14 @@ public class Player implements Serializable {
   }
 
   public boolean hasFlippableFederationTile() {
-    return federationTiles.values().stream().anyMatch(b -> b.get());
+    return federationTiles.stream().anyMatch(ft -> ft.getFlippable().get());
   }
 
   public Income getCurrentIncome() {
     return currentIncome;
   }
 
-  public ObservableMap<FederationTile, BooleanProperty> getFederationTiles() {
+  public ObservableSet<FedToken> getFederationTiles() {
     return federationTiles;
   }
 
@@ -671,9 +670,9 @@ public class Player implements Serializable {
 
   public void exhaustFederationTile() {
     Preconditions.checkArgument(hasFlippableFederationTile());
-    for (Entry<FederationTile, BooleanProperty> entry : federationTiles.entrySet()) {
-      if (entry.getValue().get()) {
-        entry.getValue().setValue(false);
+    for (FedToken fedToken : federationTiles) {
+      if (fedToken.getFlippable().get()) {
+        fedToken.getFlippable().setValue(false);
         break;
       }
     }
@@ -937,8 +936,7 @@ public class Player implements Serializable {
     oos.writeObject(new HashSet<>(ka));
     oos.writeObject(new HashSet<>(qa));
     oos.writeObject(new HashSet<>(gaiaformers));
-    oos.writeObject(
-        federationTiles.entrySet().stream().collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue().getValue())));
+    oos.writeObject(new HashSet<>(federationTiles));
     oos.writeObject(new HashSet<>(lostPlanet));
 
     // Scoring related
@@ -1005,11 +1003,7 @@ public class Player implements Serializable {
     ka = FXCollections.observableSet((Set<Coords>) ois.readObject());
     qa = FXCollections.observableSet((Set<Coords>) ois.readObject());
     gaiaformers = FXCollections.observableSet((Set<Coords>) ois.readObject());
-    Map<FederationTile, Boolean> fedMap = (Map<FederationTile, Boolean>) ois.readObject();
-    federationTiles = FXCollections.observableMap(
-        fedMap.entrySet()
-            .stream()
-            .collect(Collectors.toMap(e -> e.getKey(), e -> new SimpleBooleanProperty(e.getValue()))));
+    federationTiles = FXCollections.observableSet((Set<FedToken>) ois.readObject());
     lostPlanet = FXCollections.observableSet((Set<Coords>) ois.readObject());
 
     // Scoring related
@@ -1023,5 +1017,34 @@ public class Player implements Serializable {
 
     setupTechBonuses();
     addAdditionalListeners();
+  }
+
+  public static class FedToken implements Serializable {
+    private static final long serialVersionUID = -8311628199705003018L;
+    private final FederationTile federationTile;
+    private transient BooleanProperty flippable;
+
+    public FedToken(FederationTile federationTile, boolean flippable) {
+      this.federationTile = federationTile;
+      this.flippable = new SimpleBooleanProperty(flippable);
+    }
+
+    public FederationTile getFederationTile() {
+      return federationTile;
+    }
+
+    public BooleanProperty getFlippable() {
+      return flippable;
+    }
+
+    private void writeObject(ObjectOutputStream oos) throws IOException {
+      oos.defaultWriteObject();
+      oos.writeBoolean(flippable.get());
+    }
+
+    private void readObject(ObjectInputStream ois) throws ClassNotFoundException, IOException {
+      ois.defaultReadObject();
+      flippable = new SimpleBooleanProperty(ois.readBoolean());
+    }
   }
 }

@@ -7,8 +7,8 @@ import java.util.function.Consumer;
 
 import gaia.project.game.model.AdvancedTechTile;
 import gaia.project.game.model.Coords;
-import gaia.project.game.model.FederationTile;
 import gaia.project.game.model.Player;
+import gaia.project.game.model.Player.FedToken;
 import gaia.project.game.model.PlayerBoardAction;
 import gaia.project.game.model.TechTile;
 import javafx.beans.property.BooleanProperty;
@@ -167,12 +167,10 @@ public class PlayerBoardController extends GridPane {
       }
     });
 
-    for (Entry<FederationTile, BooleanProperty> entry : player.getFederationTiles().entrySet()) {
-      tokenArea.getChildren().add(FederationTokenPane.mini(entry.getKey(), entry.getValue()));
-    }
+    player.getFederationTiles().forEach(ft -> tokenArea.getChildren().add(FederationTokenPane.mini(ft)));
 
-    player.getFederationTiles().addListener((MapChangeListener<FederationTile, BooleanProperty>) change -> {
-      tokenArea.getChildren().add(FederationTokenPane.mini(change.getKey(), change.getValueAdded()));
+    player.getFederationTiles().addListener((SetChangeListener<FedToken>) change -> {
+      tokenArea.getChildren().add(FederationTokenPane.mini(change.getElementAdded()));
     });
 
     // Special actions

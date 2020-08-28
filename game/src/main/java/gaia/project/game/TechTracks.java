@@ -15,11 +15,11 @@ import gaia.project.game.model.AdvancedTechTile;
 import gaia.project.game.model.FederationTile;
 import gaia.project.game.model.Game;
 import gaia.project.game.model.Player;
+import gaia.project.game.model.Player.FedToken;
 import gaia.project.game.model.PlayerEnum;
 import gaia.project.game.model.Race;
 import gaia.project.game.model.Util;
 import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
@@ -286,8 +286,7 @@ public class TechTracks extends GridPane {
               FederationTile federationTile =
                   ((FederationTokenPane) terra5StackPane.getChildren().remove(0)).getFederationTile();
               federationTile.updatePlayer(activePlayer);
-              activePlayer.getFederationTiles()
-                  .put(federationTile, new SimpleBooleanProperty(federationTile.isFlippable()));
+              activePlayer.getFederationTiles().add(new FedToken(federationTile, federationTile.isFlippable()));
             }
             if (nav && idx == 4) {
               lostPlanetCallback.accept(activePlayer);
@@ -325,8 +324,7 @@ public class TechTracks extends GridPane {
           FederationTile federationTile =
               ((FederationTokenPane) terra5StackPane.getChildren().remove(0)).getFederationTile();
           federationTile.updatePlayer(activePlayer);
-          activePlayer.getFederationTiles()
-              .put(federationTile, new SimpleBooleanProperty(federationTile.isFlippable()));
+          activePlayer.getFederationTiles().add(new FedToken(federationTile, federationTile.isFlippable()));
         }
         Util.plus(p.getTerraformingLevel(), 1);
       }

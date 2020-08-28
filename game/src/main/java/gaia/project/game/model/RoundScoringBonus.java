@@ -1,9 +1,8 @@
 package gaia.project.game.model;
 
-import javafx.beans.property.BooleanProperty;
+import gaia.project.game.model.Player.FedToken;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.Property;
-import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableSet;
 import javafx.collections.SetChangeListener;
 
@@ -88,7 +87,7 @@ public enum RoundScoringBonus {
           .values()
           // These should never be removed so changes should be all additions...
           .forEach(p -> {
-            p.getFederationTiles().addListener((MapChangeListener<FederationTile, BooleanProperty>) change -> {
+            p.getFederationTiles().addListener((SetChangeListener<FedToken>) change -> {
               if (game.getCurrentRound().getValue() == round) {
                 p.getScore().setValue(p.getScore().getValue() + 5);
               }

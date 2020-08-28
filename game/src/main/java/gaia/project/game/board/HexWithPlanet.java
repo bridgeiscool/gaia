@@ -26,6 +26,8 @@ public class HexWithPlanet extends Hex {
   private Building building;
   @Nullable
   private PlayerEnum builder;
+  @Nullable
+  private Node buildingUI;
   private boolean hasGaiaformer;
 
   public HexWithPlanet(Coords coords, int sectorId, Planet planet) {
@@ -55,11 +57,6 @@ public class HexWithPlanet extends Hex {
   @Override
   public Optional<PlayerEnum> getBuilder() {
     return Optional.ofNullable(builder);
-  }
-
-  @Override
-  public int getPower() {
-    return building == null ? 0 : building.getPower();
   }
 
   public boolean hasGaiaformer() {
@@ -94,13 +91,14 @@ public class HexWithPlanet extends Hex {
   public void addMine(Mine mine) {
     // Remove a gaiaformer if it's there
     if (hasGaiaformer) {
-      getChildren().remove(getChildren().size() - 1);
+      getChildren().remove(buildingUI);
       hasGaiaformer = false;
     } else {
       builder = mine.getPlayer();
     }
     getChildren().add(mine);
     building = Building.MINE;
+    buildingUI = mine;
   }
 
   // For reloading game
@@ -108,30 +106,35 @@ public class HexWithPlanet extends Hex {
     getChildren().add(tradingPost);
     building = Building.TRADING_POST;
     builder = tradingPost.getPlayer();
+    buildingUI = tradingPost;
   }
 
   public void addResearchLab(ResearchLab researchLab) {
     getChildren().add(researchLab);
     building = Building.RESEARCH_LAB;
     builder = researchLab.getPlayer();
+    buildingUI = researchLab;
   }
 
   public void addPi(PlanetaryInstitute pi) {
     getChildren().add(pi);
     building = Building.PLANETARY_INSTITUTE;
     builder = pi.getPlayer();
+    buildingUI = pi;
   }
 
   public void addAcademy(Academy academy) {
     getChildren().add(academy);
     building = Building.ACADEMY;
     builder = academy.getPlayer();
+    buildingUI = academy;
   }
 
   public void addGaiaformer(Gaiaformer gaiaformer) {
     getChildren().add(gaiaformer);
     hasGaiaformer = true;
     builder = gaiaformer.getPlayer();
+    buildingUI = gaiaformer;
   }
 
   public boolean canUpgrade(Player activePlayer, GameBoard gameBoard) {
@@ -235,9 +238,15 @@ public class HexWithPlanet extends Hex {
     return response.get().getButtonData().equals(ButtonData.LEFT);
   }
 
+  @Nullable
+  public Node getBuildingNode() {
+    return buildingUI;
+  }
+
   public void switchBuildingUI(Node newBuilding) {
-    getChildren().remove(getChildren().size() - 1);
+    getChildren().remove(buildingUI);
     getChildren().add(newBuilding);
+    buildingUI = newBuilding;
   }
 
   @Override

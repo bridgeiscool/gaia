@@ -33,6 +33,7 @@ import gaia.project.game.board.PlanetaryInstitute;
 import gaia.project.game.board.ResearchLab;
 import gaia.project.game.board.Satellite;
 import gaia.project.game.board.TradingPost;
+import gaia.project.game.model.AmbasPlayer;
 import gaia.project.game.model.Coords;
 import gaia.project.game.model.FederationTile;
 import gaia.project.game.model.FiraksPlayer;
@@ -594,15 +595,24 @@ public class GameController extends BorderPane {
   }
 
   private void checkForLeech(Hex hex) {
+    Map<PlayerEnum, Integer> powerMap = game.getPlayers()
+        .keySet()
+        .stream()
+        .filter(p -> p != game.getActivePlayer())
+        .collect(Collectors.toMap(p -> p, p -> 0));
     Collection<Hex> withinRange = hex.getHexesWithinRange(gameBoard.hexes(), 2);
-    Map<PlayerEnum, HexWithPlanet> powerMap = withinRange.stream()
-        .filter(h -> !h.isEmpty())
-        .map(HexWithPlanet.class::cast)
-        .filter(h -> h.hasBuilding())
-        .filter(h -> h.getBuilder().get() != game.getActivePlayer())
-        .collect(
-            Collectors.toMap(h -> h.getBuilder().get(), h -> h, (h1, h2) -> h1.getPower() > h2.getPower() ? h1 : h2));
-    for (Entry<PlayerEnum, HexWithPlanet> entry : powerMap.entrySet()) {
+
+    for (Hex maybeLeech : withinRange) {
+      if (maybeLeech.getBuilder().isPresent() && powerMap.containsKey(maybeLeech.getBuilder().get())) {
+        PlayerEnum builder = maybeLeech.getBuilder().get();
+        int power = game.getPlayers().get(builder).getPower(maybeLeech);
+        if (power > powerMap.get(builder)) {
+          powerMap.put(builder, power);
+        }
+      }
+    }
+
+    for (Entry<PlayerEnum, Integer> entry : powerMap.entrySet()) {
       Player player = game.getPlayers().get(entry.getKey());
       int powerToGain = player.getPowerGain(entry.getValue());
       if (powerToGain == 1) {
@@ -632,7 +642,7 @@ public class GameController extends BorderPane {
   void checkIfSatellitesNeeded(HexWithPlanet hex) {
     // Add adjacent hexes
     currentFederation.add(hex.getCoords());
-    Util.plus(fedPower, hex.getPower() == 3 ? activePlayer().getBigBuildingPower().intValue() : hex.getPower());
+    Util.plus(fedPower, activePlayer().getPower(hex));
     checkAdjacentHexes(hex);
 
     if (fedPower.get() < activePlayer().getFedPower()) {
@@ -652,7 +662,7 @@ public class GameController extends BorderPane {
         .filter(h -> h.getBuilder().get() == game.getActivePlayer())
         .forEach(h -> {
           h.highlightCyan();
-          Util.plus(fedPower, h.getPower() == 3 ? activePlayer().getBigBuildingPower().intValue() : h.getPower());
+          Util.plus(fedPower, activePlayer().getPower(h));
           currentFederation.add(h.getCoords());
           checkAdjacentHexes(h);
         });
@@ -842,6 +852,20 @@ public class GameController extends BorderPane {
             cast.piAction(hex);
           },
           this::finishFiraksPiAction);
+    } else if (action == PlayerBoardAction.MOVE_PI) {
+      Preconditions.checkArgument(activePlayer() instanceof AmbasPlayer);
+      // Ambas special action
+      gameBoard.highlightPlanetaryHexes(
+          activePlayer(),
+          h -> activePlayer().getMines().contains(h.getCoords()),
+          (hex, player) -> {
+            AmbasPlayer ambas = (AmbasPlayer) activePlayer();
+            ambas.piAction(
+                hex,
+                // Find the PI...
+                gameBoard.planetaryHexes().filter(h -> ambas.getPi().contains(h.getCoords())).findFirst().get());
+          },
+          this::finishAmbasPiAction);
     } else {
       finishAction();
     }
@@ -855,6 +879,11 @@ public class GameController extends BorderPane {
   private void finishFiraksPiAction(Hex hex) {
     gameBoard.clearHighlighting();
     activateTechTracks(true);
+  }
+
+  private void finishAmbasPiAction(Hex hex) {
+    gameBoard.clearHighlighting();
+    finishAction();
   }
 
   private void finishAction() {

@@ -211,6 +211,27 @@ public enum Race {
     public int getStartingResearchIncome() {
       return 2;
     }
+  },
+  AMBAS("Ambas", "brownRace", Color.TAN, PlanetType.BROWN) {
+    @Override
+    public Player getPlayer(PlayerEnum playerEnum) {
+      return new AmbasPlayer(playerEnum);
+    }
+
+    @Override
+    public int getStartingNavLevel() {
+      return 1;
+    }
+
+    @Override
+    public int getStartingOreIncome() {
+      return 2;
+    }
+
+    @Override
+    public IncomeUpdater getPiIncome() {
+      return new CompoundIncome(new PowerIncome(4), new TokenIncome(2));
+    }
   };
 
   private final String raceName;

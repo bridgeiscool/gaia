@@ -36,6 +36,19 @@ public enum PlayerBoardAction implements UpdatePlayer {
     public void updatePlayer(Player player) {
       // Intentionally does nothing...
     }
+  },
+
+  MOVE_PI {
+
+    @Override
+    public void updatePlayer(Player player) {
+      // Intentionally does nothing...
+    }
+
+    @Override
+    public String display() {
+      return "M<->PI";
+    }
 
   };
 

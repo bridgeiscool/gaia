@@ -59,8 +59,6 @@ public abstract class Hex extends StackPane {
 
   public abstract Optional<PlayerEnum> getBuilder();
 
-  public abstract int getPower();
-
   @Nullable
   public abstract Planet getPlanet();
 

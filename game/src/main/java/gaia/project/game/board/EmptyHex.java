@@ -48,11 +48,6 @@ public class EmptyHex extends Hex {
   }
 
   @Override
-  public int getPower() {
-    return hasLostPlanet ? 1 : 0;
-  }
-
-  @Override
   public Planet getPlanet() {
     return null;
   }

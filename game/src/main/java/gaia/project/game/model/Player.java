@@ -584,6 +584,11 @@ public class Player implements Serializable {
     return false;
   }
 
+  // Override for Ambas PI switch ability
+  public boolean ignorePiAndMineBonuses() {
+    return false;
+  }
+
   // Utility methods
   public Set<Coords> allBuildingLocations() {
     return ImmutableSet.<Coords> builder()
@@ -636,9 +641,24 @@ public class Player implements Serializable {
     roundBoosterUsed = false;
   }
 
-  public int getPowerGain(HexWithPlanet hex) {
-    Preconditions.checkArgument(hex.getPower() > 0);
-    return Math.min(hex.getPower() == 3 ? bigBuildingPower.intValue() : hex.getPower(), canCharge());
+  public int getPower(Hex hex) {
+    if (Sets.union(mines, lostPlanet).contains(hex.getCoords())) {
+      return 1;
+    }
+
+    if (Sets.union(tradingPosts, researchLabs).contains(hex.getCoords())) {
+      return 2;
+    }
+
+    if (Sets.union(Sets.union(pi, qa), ka).contains(hex.getCoords())) {
+      return bigBuildingPower.intValue();
+    }
+
+    throw new IllegalStateException("No power!");
+  }
+
+  public int getPowerGain(Integer maybeLeech) {
+    return Math.min(maybeLeech, canCharge());
   }
 
   public int getExcessBuildingPower() {

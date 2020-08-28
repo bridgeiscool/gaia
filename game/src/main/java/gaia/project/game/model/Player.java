@@ -612,6 +612,15 @@ public class Player implements Serializable {
         / terraCost.intValue();
   }
 
+  public boolean canBuildMine() {
+    return mines.size() < 8 && ore.get() > 0 && credits.get() > 1;
+  }
+
+  public boolean canGaiaform() {
+    return availableGaiaformers.get() > gaiaformers.size()
+        && bin1.get() + bin2.get() + bin3.get() >= gaiaformerCost.get();
+  }
+
   private boolean gaiaformed(Hex hex) {
     return gaiaformers.stream().anyMatch(c -> hex.getCoords().equals(c));
   }

@@ -42,6 +42,7 @@ import gaia.project.game.model.PlayerBoardAction;
 import gaia.project.game.model.PlayerEnum;
 import gaia.project.game.model.Race;
 import gaia.project.game.model.Round;
+import gaia.project.game.model.RoundBooster;
 import gaia.project.game.model.TechTile;
 import gaia.project.game.model.Util;
 import javafx.application.Platform;
@@ -55,6 +56,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Separator;
 import javafx.scene.layout.BorderPane;
@@ -760,11 +762,39 @@ public class GameController extends BorderPane {
           .get()
           .highlightSpecialAction(activePlayer(), () -> {
             clearSpecialActionHighlighting();
-            selectMineBuild();
+            if (activePlayer().getRoundBooster() == RoundBooster.JUMP) {
+              jumpAction();
+            } else {
+              selectMineBuild();
+            }
           });
     }
 
     playerBoards.get(game.getActivePlayer()).highlightActions(this::finishSpecialAction);
+  }
+
+  private void jumpAction() {
+    // Alternative being gaiaform...
+    boolean buildMine;
+    Player activePlayer = activePlayer();
+    if (activePlayer.canBuildMine() && activePlayer.canGaiaform()) {
+      Optional<ButtonType> response;
+      ButtonType mine = new ButtonType("Build Mine", ButtonData.LEFT);
+      ButtonType gf = new ButtonType("Gaiaform", ButtonData.RIGHT);
+      do {
+        response = new Alert(AlertType.CONFIRMATION, "Research lab or PI?", mine, gf).showAndWait();
+      } while (response.isEmpty());
+
+      buildMine = response.get().getButtonData().equals(ButtonData.LEFT);
+    } else {
+      buildMine = activePlayer.canBuildMine();
+    }
+
+    if (buildMine) {
+      selectMineBuild();
+    } else {
+      selectGaiaProject();
+    }
   }
 
   private void findLostPlanet(Player activePlayer) {

@@ -64,12 +64,8 @@ public class ActionChoiceDialog extends Dialog<Actions> {
   private void toggleButtonEnable() {
     Player player = game.getPlayers().get(game.getActivePlayer());
 
-    buildMine.setDisable(
-        player.getMines().size() == 8 || player.getCredits().getValue() < 2 || player.getOre().intValue() < 1);
-    startGaiaProject.setDisable(
-        player.getAvailableGaiaformers().intValue() == player.getGaiaformers().size()
-            || player.getBin1().intValue() + player.getBin2().intValue() + player.getBin3().intValue() < player
-                .getGaiaformerCost());
+    buildMine.setDisable(!player.canBuildMine());
+    startGaiaProject.setDisable(!player.canGaiaform());
     upgradeBuilding.setDisable(player.getOre().intValue() < 2 || player.getCredits().intValue() < 3);
     federate.setDisable(player.getExcessBuildingPower() < player.getFedPower());
     advanceTech.setDisable(player.getResearch().getValue() < 4);

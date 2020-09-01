@@ -55,9 +55,16 @@ public abstract class Hex extends StackPane {
 
   public abstract boolean isEmpty();
 
+  /**
+   * This means it has a building or a the mine on the lost planet. Does not count space stations.
+   * 
+   * @return
+   */
   public abstract boolean hasBuilding();
 
   public abstract Optional<PlayerEnum> getBuilder();
+
+  public abstract boolean hasSpaceStation();
 
   @Nullable
   public abstract Planet getPlanet();

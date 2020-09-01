@@ -26,7 +26,6 @@ public enum PlayerBoardAction implements UpdatePlayer {
   },
 
   RL_TO_TP {
-
     @Override
     public String display() {
       return "RL>TP";
@@ -39,7 +38,6 @@ public enum PlayerBoardAction implements UpdatePlayer {
   },
 
   MOVE_PI {
-
     @Override
     public void updatePlayer(Player player) {
       // Intentionally does nothing...
@@ -62,6 +60,20 @@ public enum PlayerBoardAction implements UpdatePlayer {
     public String display() {
       return "+TECH";
     }
+  },
+
+  SPACE_STATION {
+
+    @Override
+    public void updatePlayer(Player player) {
+      // Intentionally does nothing...
+    }
+
+    @Override
+    public String display() {
+      return "SS";
+    }
+
   };
 
   public abstract String display();

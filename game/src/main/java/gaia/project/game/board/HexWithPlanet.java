@@ -42,6 +42,10 @@ public class HexWithPlanet extends Hex {
     return false;
   }
 
+  public boolean hasSpaceStation() {
+    return false;
+  }
+
   public Planet getPlanet() {
     return planet;
   }

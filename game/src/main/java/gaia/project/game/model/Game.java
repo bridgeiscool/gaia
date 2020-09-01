@@ -96,7 +96,7 @@ public class Game implements Serializable {
     Collections.shuffle(allBoosters, random);
 
     Map<PlayerEnum, Player> players = new HashMap<>();
-    players.put(PlayerEnum.PLAYER1, Race.BALTAKS.getPlayer(PlayerEnum.PLAYER1));
+    players.put(PlayerEnum.PLAYER1, Race.IVITS.getPlayer(PlayerEnum.PLAYER1));
     players.put(PlayerEnum.PLAYER2, Race.TERRANS.getPlayer(PlayerEnum.PLAYER2));
     players.put(PlayerEnum.PLAYER3, Race.BESCODS.getPlayer(PlayerEnum.PLAYER3));
 

@@ -32,6 +32,7 @@ import gaia.project.game.board.Mine;
 import gaia.project.game.board.PlanetaryInstitute;
 import gaia.project.game.board.ResearchLab;
 import gaia.project.game.board.Satellite;
+import gaia.project.game.board.SpaceStation;
 import gaia.project.game.board.TradingPost;
 import gaia.project.game.model.AmbasPlayer;
 import gaia.project.game.model.BescodsPlayer;
@@ -39,6 +40,7 @@ import gaia.project.game.model.Coords;
 import gaia.project.game.model.FederationTile;
 import gaia.project.game.model.FiraksPlayer;
 import gaia.project.game.model.Game;
+import gaia.project.game.model.IvitsPlayer;
 import gaia.project.game.model.Player;
 import gaia.project.game.model.PlayerBoardAction;
 import gaia.project.game.model.PlayerEnum;
@@ -244,6 +246,13 @@ public class GameController extends BorderPane {
             .filter(h -> h.getCoords().equals(Iterables.getOnlyElement(p.getLostPlanet())))
             .forEach(h -> h.addLostPlanet(p));
       }
+    });
+
+    game.getPlayers().values().stream().filter(p -> p.getRace() == Race.IVITS).forEach(p -> {
+      IvitsPlayer ivits = (IvitsPlayer) p;
+      gameBoard.emptyHexes()
+          .filter(h -> ivits.getSpaceStations().contains(h.getCoords()))
+          .forEach(h -> h.addSpaceStation(new SpaceStation(h, p.getPlayerEnum())));
     });
   }
 
@@ -604,7 +613,7 @@ public class GameController extends BorderPane {
     Collection<Hex> withinRange = hex.getHexesWithinRange(gameBoard.hexes(), 2);
 
     for (Hex maybeLeech : withinRange) {
-      if (maybeLeech.getBuilder().isPresent() && powerMap.containsKey(maybeLeech.getBuilder().get())) {
+      if (maybeLeech.hasBuilding() && powerMap.containsKey(maybeLeech.getBuilder().get())) {
         PlayerEnum builder = maybeLeech.getBuilder().get();
         int power = game.getPlayers().get(builder).getPower(maybeLeech);
         if (power > powerMap.get(builder)) {
@@ -631,13 +640,25 @@ public class GameController extends BorderPane {
   }
 
   void selectFederation() {
-    fedPower.setValue(0);
-    currentFederation.clear();
-    gameBoard.highlightPlanetaryHexes(
-        activePlayer(),
-        h -> h.getBuilder().orElse(null) == game.getActivePlayer() && !activePlayer().inFederation(h.getCoords()),
-        (hex, player) -> hex.highlightCyan(),
-        this::checkIfSatellitesNeeded);
+    if (activePlayer().getRace() != Race.IVITS || activePlayer().getFederations().isEmpty()) {
+      fedPower.setValue(0);
+      currentFederation.clear();
+      gameBoard.highlightPlanetaryHexes(
+          activePlayer(),
+          h -> h.getBuilder().orElse(null) == game.getActivePlayer() && !activePlayer().inFederation(h.getCoords()),
+          (hex, player) -> hex.highlightCyan(),
+          this::checkIfSatellitesNeeded);
+    } else {
+      // IVITS after their first federation...
+      Preconditions.checkArgument(activePlayer().getRace() == Race.IVITS);
+      IvitsPlayer ivits = (IvitsPlayer) activePlayer();
+      if (ivits.totalFederationPower() >= ivits.nextFederationPower()) {
+        federationTokens.highlight(activePlayer(), this::finishFederationTileSelection);
+      } else {
+        startSelectSatellitesIvits(ivits);
+      }
+
+    }
   }
 
   void checkIfSatellitesNeeded(HexWithPlanet hex) {
@@ -658,7 +679,8 @@ public class GameController extends BorderPane {
   private void checkAdjacentHexes(Hex builtOn) {
     builtOn.getHexesWithinRange(gameBoard.hexes(), 1)
         .stream()
-        .filter(Hex::hasBuilding)
+        // Space stations count as a building...
+        .filter(h -> h.hasBuilding() || h.hasSpaceStation())
         .filter(h -> !currentFederation.contains(h.getCoords()))
         .filter(h -> h.getBuilder().get() == game.getActivePlayer())
         .forEach(h -> {
@@ -672,7 +694,7 @@ public class GameController extends BorderPane {
   void startSelectSatellites() {
     Player activePlayer = activePlayer();
     // TODO: Disallow placing next to existing federations
-    if (activePlayer.getBin1().get() + activePlayer.getBin2().get() + activePlayer.getBin3().get() > 0) {
+    if (activePlayer.canBuildSatellite()) {
       gameBoard.highlightEmptyHexes(
           activePlayer,
           EmptyHex.possibleSatellite(activePlayer, currentFederation),
@@ -682,6 +704,23 @@ public class GameController extends BorderPane {
           this::finishSatellite);
     } else {
       new Alert(AlertType.WARNING, "You do not have enough power tokens", ButtonType.OK);
+    }
+  }
+
+  void startSelectSatellitesIvits(IvitsPlayer ivits) {
+    // TODO: Disallow placing next to existing federations
+    currentFederation.addAll(Iterables.getOnlyElement(ivits.getFederations()));
+    gameBoard.hexes().forEach(h -> {
+      if (currentFederation.contains(h.getCoords())) {
+        h.highlightCyan();
+      }
+    });
+    if (ivits.canBuildSatellite()) {
+      gameBoard.highlightEmptyHexes(ivits, EmptyHex.possibleSatellite(ivits, currentFederation), (hex, player) -> {
+        hex.addSatellite(ivits);
+      }, this::finishSatelliteIvits);
+    } else {
+      new Alert(AlertType.WARNING, "You do not have enough QIC to build another satellite.", ButtonType.OK);
     }
   }
 
@@ -696,11 +735,24 @@ public class GameController extends BorderPane {
     }
   }
 
+  void finishSatelliteIvits(EmptyHex hex) {
+    IvitsPlayer ivits = (IvitsPlayer) activePlayer();
+    hex.clearHighlighting();
+    checkAdjacentHexes(hex);
+    Iterables.getOnlyElement(ivits.getFederations()).addAll(currentFederation);
+    if (ivits.totalFederationPower() >= ivits.nextFederationPower()) {
+      gameBoard.clearHighlighting();
+      selectFederationTile();
+    } else {
+      addMoreSatellitesIvits(hex);
+    }
+  }
+
   void addMoreSatellites(EmptyHex lastAdded) {
     Player activePlayer = game.getPlayers().get(game.getActivePlayer());
     // TODO: Disallow placing next to existing federations
 
-    if (activePlayer.getBin1().get() + activePlayer.getBin2().get() + activePlayer.getBin3().get() > 0) {
+    if (activePlayer.canBuildSatellite()) {
       gameBoard.highlightEmptyHexes(
           activePlayer,
           EmptyHex.possibleSatellite(activePlayer, currentFederation)
@@ -711,6 +763,24 @@ public class GameController extends BorderPane {
           this::finishSatellite);
     } else {
       new Alert(AlertType.WARNING, "You do not have enough power tokens", ButtonType.OK);
+    }
+  }
+
+  void addMoreSatellitesIvits(EmptyHex lastAdded) {
+    Player activePlayer = game.getPlayers().get(game.getActivePlayer());
+    // TODO: Disallow placing next to existing federations
+
+    if (activePlayer.canBuildSatellite()) {
+      gameBoard.highlightEmptyHexes(
+          activePlayer,
+          EmptyHex.possibleSatellite(activePlayer, currentFederation)
+              .or(h -> h.isWithinRangeOf(lastAdded.getCoords(), 1)),
+          (hex, player) -> {
+            hex.addSatellite(activePlayer);
+          },
+          this::finishSatelliteIvits);
+    } else {
+      new Alert(AlertType.WARNING, "You do not have enough QIC to build another satellite.", ButtonType.OK);
     }
   }
 
@@ -869,9 +939,20 @@ public class GameController extends BorderPane {
           this::finishAmbasPiAction);
     } else if (action == PlayerBoardAction.BUMP_LOWEST_TECH) {
       techTracks.highlightLowestTracks((BescodsPlayer) activePlayer(), this::finishTrackBump);
+    } else if (action == PlayerBoardAction.SPACE_STATION) {
+      gameBoard.highlightEmptyHexes(activePlayer(), possibleSpaceStations(), (hex, player) -> {
+        ((IvitsPlayer) player).buildSpaceStation(hex);
+      }, this::finishIvitsPiAction);
     } else {
       finishAction();
     }
+  }
+
+  private Predicate<EmptyHex> possibleSpaceStations() {
+    return hex -> !hex.hasSpaceStation()
+        && !hex.hasBuilding()
+        && !hex.hasSatellite(game.getActivePlayer())
+        && isWithinRange(activePlayer(), hex);
   }
 
   private void clearSpecialActionHighlighting() {
@@ -885,6 +966,11 @@ public class GameController extends BorderPane {
   }
 
   private void finishAmbasPiAction(Hex hex) {
+    gameBoard.clearHighlighting();
+    finishAction();
+  }
+
+  private void finishIvitsPiAction(Hex hex) {
     gameBoard.clearHighlighting();
     finishAction();
   }

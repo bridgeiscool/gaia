@@ -1,5 +1,8 @@
 package gaia.project.game.model;
 
+import static gaia.project.game.board.BoardUtils.HEX_SIZE;
+import static gaia.project.game.board.BoardUtils.TWO_ROOT_3;
+
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -27,6 +30,10 @@ public class Coords implements Serializable {
 
   public double distanceTo(Coords other) {
     return Math.sqrt(Math.pow(centerX - other.centerX, 2) + Math.pow(centerY - other.centerY, 2));
+  }
+
+  public boolean isWithinRangeOf(Coords coords, int range) {
+    return distanceTo(coords) < TWO_ROOT_3 * HEX_SIZE * range + 1.0;
   }
 
   @Override

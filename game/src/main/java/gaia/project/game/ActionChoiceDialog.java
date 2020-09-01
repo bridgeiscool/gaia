@@ -67,7 +67,7 @@ public class ActionChoiceDialog extends Dialog<Actions> {
     buildMine.setDisable(!player.canBuildMine());
     startGaiaProject.setDisable(!player.canGaiaform());
     upgradeBuilding.setDisable(player.getOre().intValue() < 2 || player.getCredits().intValue() < 3);
-    federate.setDisable(player.getExcessBuildingPower() < player.getFedPower());
+    federate.setDisable(!player.couldFederate());
     advanceTech.setDisable(player.getResearch().getValue() < 4);
     powerAction.setDisable(
         (nevlasPi(player) ? player.getBin3().get() * 2 : player.getBin3().get()) < game.getCheapestPowerAction()

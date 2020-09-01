@@ -654,14 +654,22 @@ public class Player implements Serializable {
       return bigBuildingPower.intValue();
     }
 
-    throw new IllegalStateException("No power!");
+    return 0;
   }
 
   public int getPowerGain(Integer maybeLeech) {
     return Math.min(maybeLeech, canCharge());
   }
 
-  public int getExcessBuildingPower() {
+  public boolean canBuildSatellite() {
+    return bin1.get() + bin2.get() + bin3.get() > 0;
+  }
+
+  public boolean couldFederate() {
+    return getExcessBuildingPower() >= getFedPower();
+  }
+
+  protected int getExcessBuildingPower() {
     int totalPower = 0;
 
     for (Coords coords : Sets.union(mines, lostPlanet)) {
@@ -769,6 +777,30 @@ public class Player implements Serializable {
         federations.iterator().next().add(hex.getCoords());
       }
     }
+
+    // We might have added something that causes more additions to an existing federation
+    recheckAllBuildingsInFederations();
+  }
+
+  protected void recheckAllBuildingsInFederations() {
+    Set<Coords> toAdd = new HashSet<>();
+    do {
+      toAdd.clear();
+      for (Coords building : allBuildingLocations()) {
+        if (!inFederation(building)) {
+          for (Set<Coords> federation : getFederations()) {
+            for (Coords coords : federation) {
+              if (building.isWithinRangeOf(coords, 1)) {
+                toAdd.add(building);
+              }
+            }
+          }
+        }
+      }
+
+      // TODO: Add to first federation - is this ok?!?
+      getFederations().iterator().next().addAll(toAdd);
+    } while (!toAdd.isEmpty());
   }
 
   public void addGaiaformer(HexWithPlanet hex) {

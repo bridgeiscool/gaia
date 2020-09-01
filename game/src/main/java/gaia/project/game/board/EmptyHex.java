@@ -23,6 +23,8 @@ public class EmptyHex extends Hex {
   private boolean hasLostPlanet;
   @Nullable
   private PlayerEnum builder;
+  @Nullable
+  private SpaceStation spaceStation;
 
   public EmptyHex(Coords coords, int sectorId) {
     super(coords, sectorId);
@@ -54,6 +56,11 @@ public class EmptyHex extends Hex {
 
   public boolean hasSatellite(PlayerEnum player) {
     return satellites.contains(player);
+  }
+
+  @Override
+  public boolean hasSpaceStation() {
+    return spaceStation != null;
   }
 
   public static Predicate<EmptyHex> possibleSatellite(Player player, Set<Coords> currentBuildings) {
@@ -95,5 +102,11 @@ public class EmptyHex extends Hex {
     getChildren().remove(satelliteBox);
     getChildren().add(new Planet(getCoords().getCenterX(), getCoords().getCenterY(), PlanetType.LOST));
     getChildren().add(new Mine(this, player.getRace().getColor(), player.getPlayerEnum()));
+  }
+
+  public void addSpaceStation(SpaceStation spaceStation) {
+    satelliteBox.getChildren().add(spaceStation);
+    this.spaceStation = spaceStation;
+    this.builder = spaceStation.getPlayer();
   }
 }

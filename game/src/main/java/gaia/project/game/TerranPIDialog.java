@@ -55,6 +55,12 @@ public class TerranPIDialog extends Dialog<Void> {
 
     setTitle("Terran PI Ability");
     getDialogPane().getButtonTypes().add(DONE);
+    getDialogPane().lookupButton(DONE).setDisable(true);
+    setOnCloseRequest(e -> {
+      if (powerToSpend.get() != 0) {
+        e.consume();
+      }
+    });
 
     powerToSpend.addListener((o, oldValue, newValue) -> {
       getDialogPane().lookupButton(DONE).setDisable(newValue.intValue() != 0);

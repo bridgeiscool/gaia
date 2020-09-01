@@ -142,7 +142,7 @@ public class Player implements Serializable {
     this.qic = new SimpleIntegerProperty(race.getStartingQic());
     this.availableGaiaformers = new SimpleIntegerProperty(this.gaiaformingLevel.get());
     this.currentIncome = new Income(race);
-    this.score = new SimpleIntegerProperty(10);
+    this.score = new SimpleIntegerProperty(0);
     this.tpIncome = race.getTpIncome();
     this.rlIncome = race.getRlIncome();
     this.piIncome = race.getPiIncome();
@@ -159,7 +159,6 @@ public class Player implements Serializable {
     this.gaiaformingLevel.setValue(race.getStartingGaiaformingLevel());
     this.econLevel.setValue(race.getStartingEconLevel());
     this.knowledgeLevel.setValue(race.getStartingKnowledgeLevel());
-
   }
 
   private void setupTechBonuses() {

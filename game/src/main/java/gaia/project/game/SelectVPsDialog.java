@@ -3,9 +3,9 @@ package gaia.project.game;
 import java.io.IOException;
 
 import gaia.project.game.model.Game;
-import gaia.project.game.model.PlayerEnum;
 import gaia.project.game.model.Util;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -40,16 +40,13 @@ public class SelectVPsDialog extends Dialog<Void> {
 
     getDialogPane().getButtonTypes().add(DONE);
 
-    p1Score = game.getPlayers().get(PlayerEnum.PLAYER1).getScore();
-    p2Score = game.getPlayers().get(PlayerEnum.PLAYER2).getScore();
-    p3Score = game.getPlayers().get(PlayerEnum.PLAYER3).getScore();
+    p1Score = new SimpleIntegerProperty(10);
+    p2Score = new SimpleIntegerProperty(10);
+    p3Score = new SimpleIntegerProperty(10);
 
-    p1Vps.textProperty()
-        .bindBidirectional(game.getPlayers().get(PlayerEnum.PLAYER1).getScore(), new NumberStringConverter());
-    p2Vps.textProperty()
-        .bindBidirectional(game.getPlayers().get(PlayerEnum.PLAYER2).getScore(), new NumberStringConverter());
-    p3Vps.textProperty()
-        .bindBidirectional(game.getPlayers().get(PlayerEnum.PLAYER3).getScore(), new NumberStringConverter());
+    p1Vps.textProperty().bindBidirectional(p1Score, new NumberStringConverter());
+    p2Vps.textProperty().bindBidirectional(p2Score, new NumberStringConverter());
+    p3Vps.textProperty().bindBidirectional(p3Score, new NumberStringConverter());
 
   }
 
@@ -83,4 +80,15 @@ public class SelectVPsDialog extends Dialog<Void> {
     Util.minus(p3Score, 1);
   }
 
+  public int getP1Score() {
+    return p1Score.get();
+  }
+
+  public int getP2Score() {
+    return p2Score.get();
+  }
+
+  public int getP3Score() {
+    return p3Score.get();
+  }
 }

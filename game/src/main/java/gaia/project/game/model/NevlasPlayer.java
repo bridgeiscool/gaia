@@ -13,12 +13,12 @@ public class NevlasPlayer extends Player {
       sacPower(getBin2().intValue() / 2);
     }
 
-    Util.plus(
-        getScore(),
+    updateScore(
         (getCredits().intValue()
             + getOre().intValue()
             + getResearch().intValue()
             + getQic().intValue()
-            + getBin3().intValue() * 2) / 3);
+            + getBin3().intValue() * 2) / 3,
+        "Resources");
   }
 }

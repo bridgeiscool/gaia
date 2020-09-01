@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -111,6 +112,7 @@ public class Player implements Serializable {
   private transient IntegerProperty totalBuildings = new SimpleIntegerProperty(0);
   private transient IntegerProperty buildingsInFeds = new SimpleIntegerProperty(0);
   private transient IntegerProperty projectedTechScoring = new SimpleIntegerProperty(0);
+  private Map<String, Integer> scoreLog = new HashMap<>();
 
   public Player(Race race, PlayerEnum playerEnum) {
     this.race = race;
@@ -241,7 +243,7 @@ public class Player implements Serializable {
           break;
         case 5:
           exhaustFederationTile();
-          score.setValue(score.getValue() + 4 + gaiaPlanets.getValue());
+          updateScore(4 + gaiaPlanets.getValue(), "GF Level 5");
           break;
       }
     });
@@ -319,7 +321,7 @@ public class Player implements Serializable {
 
   public void leechPower(int power) {
     chargePower(power);
-    Util.minus(score, power - 1);
+    updateScore(power - 1, "Leech");
   }
 
   public int canCharge() {
@@ -399,6 +401,15 @@ public class Player implements Serializable {
 
   public IntegerProperty getScore() {
     return score;
+  }
+
+  public Map<String, Integer> getScoreLog() {
+    return scoreLog;
+  }
+
+  public void updateScore(int update, String source) {
+    Util.plus(score, update);
+    scoreLog.merge(source, update, (a, b) -> a + b);
   }
 
   public boolean hasFlippableFederationTile() {
@@ -933,9 +944,9 @@ public class Player implements Serializable {
       sacPower(bin2.intValue() / 2);
     }
 
-    Util.plus(
-        score,
-        (credits.intValue() + ore.intValue() + research.intValue() + qic.intValue() + bin3.intValue()) / 3);
+    updateScore(
+        (credits.intValue() + ore.intValue() + research.intValue() + qic.intValue() + bin3.intValue()) / 3,
+        "Resources");
   }
 
   public void addLostPlanet(EmptyHex hex) {

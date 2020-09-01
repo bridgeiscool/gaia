@@ -7,32 +7,32 @@ import javafx.collections.ObservableSet;
 import javafx.collections.SetChangeListener;
 
 public enum RoundScoringBonus {
-  MINE("Mine -> 2") {
+  MINE("M -> 2") {
     @Override
     public void addListeners(Game game, Round round) {
       game.getPlayers().values().forEach(p -> p.getMines().addListener((SetChangeListener<Coords>) change -> {
         if (game.getCurrentRound().getValue() == round && change.wasAdded()) {
-          p.getScore().setValue(p.getScore().getValue() + 2);
+          p.updateScore(2, "R" + game.getCurrentRound().getValue().display() + " " + getText());
         }
       }));
     }
   },
-  MINE_GP3("GP Mine -> 3") {
+  MINE_GP3("GP M -> 3") {
     @Override
     public void addListeners(Game game, Round round) {
       game.getPlayers().values().forEach(p -> p.getGaiaPlanets().addListener((o, oldValue, newValue) -> {
         if (game.getCurrentRound().getValue() == round) {
-          p.getScore().setValue(p.getScore().getValue() + 3);
+          p.updateScore(3, "R" + game.getCurrentRound().getValue().display() + " " + getText());
         }
       }));
     }
   },
-  MINE_GP4("GP Mine -> 4") {
+  MINE_GP4("GP M -> 4") {
     @Override
     public void addListeners(Game game, Round round) {
       game.getPlayers().values().forEach(p -> p.getGaiaPlanets().addListener((o, oldValue, newValue) -> {
         if (game.getCurrentRound().getValue() == round) {
-          p.getScore().setValue(p.getScore().getValue() + 4);
+          p.updateScore(4, "R" + game.getCurrentRound().getValue().display() + " " + getText());
         }
       }));
     }
@@ -42,7 +42,7 @@ public enum RoundScoringBonus {
     public void addListeners(Game game, Round round) {
       game.getPlayers().values().forEach(p -> p.getTradingPosts().addListener((SetChangeListener<Coords>) change -> {
         if (game.getCurrentRound().getValue() == round && change.wasAdded() && !p.ignoreTpRoundBonus()) {
-          p.getScore().setValue(p.getScore().getValue() + 3);
+          p.updateScore(3, "R" + game.getCurrentRound().getValue().display() + " " + getText());
         }
       }));
     }
@@ -52,17 +52,17 @@ public enum RoundScoringBonus {
     public void addListeners(Game game, Round round) {
       game.getPlayers().values().forEach(p -> p.getTradingPosts().addListener((SetChangeListener<Coords>) change -> {
         if (game.getCurrentRound().getValue() == round && change.wasAdded()) {
-          p.getScore().setValue(p.getScore().getValue() + 4);
+          p.updateScore(4, "R" + game.getCurrentRound().getValue().display() + " " + getText());
         }
       }));
     }
   },
-  DIG("DIG -> 2") {
+  DIG("TF -> 2") {
     @Override
     public void addListeners(Game game, Round round) {
       game.getPlayers().values().forEach(p -> p.getCurrentDigs().addListener((o, oldValue, newValue) -> {
         if (game.getCurrentRound().getValue() == round && newValue.intValue() > oldValue.intValue()) {
-          Util.plus(p.getScore(), 2 * (newValue.intValue() - oldValue.intValue()));
+          p.updateScore(2, "R" + game.getCurrentRound().getValue().display() + " " + getText());
         }
       }));
     }
@@ -71,12 +71,12 @@ public enum RoundScoringBonus {
     @Override
     public void addListeners(Game game, Round round) {
       game.getPlayers().values().forEach(p -> {
-        addTechTrackListener(p.getTerraformingLevel(), game.getCurrentRound(), p.getScore(), round);
-        addTechTrackListener(p.getNavLevel(), game.getCurrentRound(), p.getScore(), round);
-        addTechTrackListener(p.getAiLevel(), game.getCurrentRound(), p.getScore(), round);
-        addTechTrackListener(p.getGaiaformingLevel(), game.getCurrentRound(), p.getScore(), round);
-        addTechTrackListener(p.getEconLevel(), game.getCurrentRound(), p.getScore(), round);
-        addTechTrackListener(p.getKnowledgeLevel(), game.getCurrentRound(), p.getScore(), round);
+        addTechTrackListener(p.getTerraformingLevel(), game.getCurrentRound(), p, getText(), round);
+        addTechTrackListener(p.getNavLevel(), game.getCurrentRound(), p, getText(), round);
+        addTechTrackListener(p.getAiLevel(), game.getCurrentRound(), p, getText(), round);
+        addTechTrackListener(p.getGaiaformingLevel(), game.getCurrentRound(), p, getText(), round);
+        addTechTrackListener(p.getEconLevel(), game.getCurrentRound(), p, getText(), round);
+        addTechTrackListener(p.getKnowledgeLevel(), game.getCurrentRound(), p, getText(), round);
       });
     }
   },
@@ -89,7 +89,7 @@ public enum RoundScoringBonus {
           .forEach(p -> {
             p.getFederationTiles().addListener((SetChangeListener<FedToken>) change -> {
               if (game.getCurrentRound().getValue() == round) {
-                p.getScore().setValue(p.getScore().getValue() + 5);
+                p.updateScore(5, "R" + game.getCurrentRound().getValue().display() + " " + getText());
               }
             });
           });
@@ -100,9 +100,9 @@ public enum RoundScoringBonus {
     @Override
     public void addListeners(Game game, Round round) {
       game.getPlayers().values().forEach(p -> {
-        addBigBuildingListener(p.getPi(), game.getCurrentRound(), p.getScore(), round);
-        addBigBuildingListener(p.getQa(), game.getCurrentRound(), p.getScore(), round);
-        addBigBuildingListener(p.getKa(), game.getCurrentRound(), p.getScore(), round);
+        addBigBuildingListener(p.getPi(), game.getCurrentRound(), p, getText(), round);
+        addBigBuildingListener(p.getQa(), game.getCurrentRound(), p, getText(), round);
+        addBigBuildingListener(p.getKa(), game.getCurrentRound(), p, getText(), round);
       });
     }
   },
@@ -110,9 +110,9 @@ public enum RoundScoringBonus {
     @Override
     public void addListeners(Game game, Round round) {
       game.getPlayers().values().forEach(p -> {
-        addBigBuildingListener(p.getPi(), game.getCurrentRound(), p.getScore(), round);
-        addBigBuildingListener(p.getQa(), game.getCurrentRound(), p.getScore(), round);
-        addBigBuildingListener(p.getKa(), game.getCurrentRound(), p.getScore(), round);
+        addBigBuildingListener(p.getPi(), game.getCurrentRound(), p, getText(), round);
+        addBigBuildingListener(p.getQa(), game.getCurrentRound(), p, getText(), round);
+        addBigBuildingListener(p.getKa(), game.getCurrentRound(), p, getText(), round);
       });
     }
   };
@@ -132,11 +132,12 @@ public enum RoundScoringBonus {
   private static void addTechTrackListener(
       IntegerProperty techTrack,
       Property<Round> currentRound,
-      IntegerProperty score,
+      Player player,
+      String display,
       Round round) {
     techTrack.addListener((o, oldValue, newValue) -> {
       if (currentRound.getValue() == round) {
-        score.setValue(score.getValue() + 2);
+        player.updateScore(2, "R" + currentRound.getValue().display() + " " + display);
       }
     });
   }
@@ -144,11 +145,12 @@ public enum RoundScoringBonus {
   private static <T> void addBigBuildingListener(
       ObservableSet<T> bigBuilding,
       Property<Round> currentRound,
-      IntegerProperty score,
+      Player player,
+      String display,
       Round round) {
     bigBuilding.addListener((SetChangeListener<T>) change -> {
       if (currentRound.getValue() == round) {
-        score.setValue(score.getValue() + 5);
+        player.updateScore(2, "R" + currentRound.getValue().display() + " " + display);
       }
     });
   }

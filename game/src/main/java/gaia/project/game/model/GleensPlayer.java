@@ -16,7 +16,7 @@ public class GleensPlayer extends Player {
   @Override
   protected void addAdditionalListeners() {
     super.addAdditionalListeners();
-    getGaiaPlanets().addListener((o, oldValue, newValue) -> Util.plus(getScore(), 2));
+    getGaiaPlanets().addListener((o, oldValue, newValue) -> updateScore(2, "Race ability"));
     getQic().addListener((o, oldValue, newValue) -> {
       if (getQa().isEmpty()) {
         // If the QA hasn't been built, change the QIC into an ore

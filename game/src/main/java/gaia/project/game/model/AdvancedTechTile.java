@@ -79,7 +79,7 @@ public enum AdvancedTechTile {
 
     @Override
     public void updatePlayer(Player player) {
-      Util.plus(player.getScore(), player.getSectors().size() * 2);
+      player.updateScore(player.getSectors().size() * 2, "ATT " + display());
     }
   },
   SECTOR_ORE {
@@ -101,7 +101,7 @@ public enum AdvancedTechTile {
 
     @Override
     public void updatePlayer(Player player) {
-      Util.plus(player.getScore(), player.getTradingPosts().size() * 4);
+      player.updateScore(player.getTradingPosts().size() * 4, "ATT " + display());
     }
   },
   M_SCORING {
@@ -112,7 +112,7 @@ public enum AdvancedTechTile {
 
     @Override
     public void updatePlayer(Player player) {
-      Util.plus(player.getScore(), player.getMines().size() * 2);
+      player.updateScore(player.getMines().size() * 2, "ATT " + display());
     }
   },
   GP_SCORING {
@@ -123,7 +123,7 @@ public enum AdvancedTechTile {
 
     @Override
     public void updatePlayer(Player player) {
-      Util.plus(player.getScore(), player.getGaiaPlanets().get() * 2);
+      player.updateScore(player.getGaiaPlanets().get() * 2, "ATT " + display());
     }
   },
   FED_SCORING {
@@ -134,7 +134,7 @@ public enum AdvancedTechTile {
 
     @Override
     public void updatePlayer(Player player) {
-      Util.plus(player.getScore(), player.getFederationTiles().size() * 5);
+      player.updateScore(player.getFederationTiles().size() * 5, "ATT " + display());
     }
   },
   FED_EOT_SCORING {
@@ -150,7 +150,7 @@ public enum AdvancedTechTile {
 
     @Override
     public void addVps(Player player) {
-      Util.plus(player.getScore(), player.getFederationTiles().size() * 3);
+      player.updateScore(player.getFederationTiles().size() * 3, "ATT " + display());
     }
   },
   RL_EOT_SCORING {
@@ -166,7 +166,7 @@ public enum AdvancedTechTile {
 
     @Override
     public void addVps(Player player) {
-      Util.plus(player.getScore(), player.getResearchLabs().size() * 3);
+      player.updateScore(player.getResearchLabs().size() * 3, "ATT " + display());
     }
   },
   PLANETS_EOT_SCORING {
@@ -182,7 +182,7 @@ public enum AdvancedTechTile {
 
     @Override
     public void addVps(Player player) {
-      Util.plus(player.getScore(), player.getBuiltOn().size() * 3);
+      player.updateScore(player.getBuiltOn().size() * 3, "ATT " + display());
     }
   },
   BUILD_MINE {
@@ -195,7 +195,7 @@ public enum AdvancedTechTile {
     public void updatePlayer(Player player) {
       player.getMines().addListener((SetChangeListener<Coords>) change -> {
         if (change.wasAdded()) {
-          Util.plus(player.getScore(), 3);
+          player.updateScore(3, "ATT " + display());
         }
       });
     }
@@ -215,8 +215,8 @@ public enum AdvancedTechTile {
     @Override
     public void updatePlayer(Player player) {
       player.getTradingPosts().addListener((SetChangeListener<Coords>) change -> {
-        if (change.wasAdded()) {
-          Util.plus(player.getScore(), 3);
+        if (change.wasAdded() && !player.ignoreTpRoundBonus()) {
+          player.updateScore(3, "ATT " + display());
         }
       });
     }
@@ -235,22 +235,22 @@ public enum AdvancedTechTile {
     @Override
     public void updatePlayer(Player player) {
       player.getTerraformingLevel().addListener((o, oldValue, newValue) -> {
-        Util.plus(player.getScore(), 2);
+        player.updateScore(2, "ATT " + display());
       });
       player.getNavLevel().addListener((o, oldValue, newValue) -> {
-        Util.plus(player.getScore(), 2);
+        player.updateScore(2, "ATT " + display());
       });
       player.getAiLevel().addListener((o, oldValue, newValue) -> {
-        Util.plus(player.getScore(), 2);
+        player.updateScore(2, "ATT " + display());
       });
       player.getGaiaformingLevel().addListener((o, oldValue, newValue) -> {
-        Util.plus(player.getScore(), 2);
+        player.updateScore(2, "ATT " + display());
       });
       player.getEconLevel().addListener((o, oldValue, newValue) -> {
-        Util.plus(player.getScore(), 2);
+        player.updateScore(2, "ATT " + display());
       });
       player.getKnowledgeLevel().addListener((o, oldValue, newValue) -> {
-        Util.plus(player.getScore(), 2);
+        player.updateScore(2, "ATT " + display());
       });
     }
 

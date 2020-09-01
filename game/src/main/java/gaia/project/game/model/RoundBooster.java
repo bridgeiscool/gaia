@@ -5,12 +5,12 @@ public enum RoundBooster {
 
     @Override
     public void addIncome(Income addTo) {
-      addTo.getCreditIncome().setValue(addTo.getCreditIncome().getValue() + 2);
+      Util.plus(addTo.getCreditIncome(), 2);
     }
 
     @Override
     public void removeIncome(Income removeFrom) {
-      removeFrom.getCreditIncome().setValue(removeFrom.getCreditIncome().getValue() - 2);
+      Util.minus(removeFrom.getCreditIncome(), 2);
     }
 
     @Override
@@ -26,12 +26,12 @@ public enum RoundBooster {
   JUMP("NAV", "(+2p)") {
     @Override
     public void addIncome(Income addTo) {
-      addTo.getChargeIncome().setValue(addTo.getChargeIncome().getValue() + 2);
+      Util.plus(addTo.getChargeIncome(), 2);
     }
 
     @Override
     public void removeIncome(Income removeFrom) {
-      removeFrom.getChargeIncome().setValue(removeFrom.getChargeIncome().getValue() - 2);
+      Util.minus(removeFrom.getChargeIncome(), 2);
     }
 
     @Override
@@ -48,14 +48,14 @@ public enum RoundBooster {
 
     @Override
     public void addIncome(Income addTo) {
-      addTo.getOreIncome().setValue(addTo.getOreIncome().getValue() + 1);
-      addTo.getResearchIncome().setValue(addTo.getResearchIncome().getValue() + 1);
+      Util.plus(addTo.getOreIncome(), 1);
+      Util.plus(addTo.getResearchIncome(), 1);
     }
 
     @Override
     public void removeIncome(Income removeFrom) {
-      removeFrom.getOreIncome().setValue(removeFrom.getOreIncome().getValue() - 1);
-      removeFrom.getResearchIncome().setValue(removeFrom.getResearchIncome().getValue() - 1);
+      Util.minus(removeFrom.getOreIncome(), 1);
+      Util.minus(removeFrom.getResearchIncome(), 1);
     }
 
   },
@@ -63,14 +63,14 @@ public enum RoundBooster {
 
     @Override
     public void addIncome(Income addTo) {
-      addTo.getQicIncome().setValue(addTo.getQicIncome().getValue() + 1);
-      addTo.getCreditIncome().setValue(addTo.getCreditIncome().getValue() + 2);
+      Util.plus(addTo.getQicIncome(), 1);
+      Util.plus(addTo.getCreditIncome(), 2);
     }
 
     @Override
     public void removeIncome(Income removeFrom) {
-      removeFrom.getQicIncome().setValue(removeFrom.getQicIncome().getValue() - 1);
-      removeFrom.getCreditIncome().setValue(removeFrom.getCreditIncome().getValue() - 2);
+      Util.minus(removeFrom.getQicIncome(), 1);
+      Util.minus(removeFrom.getCreditIncome(), 2);
     }
 
   },
@@ -78,100 +78,99 @@ public enum RoundBooster {
 
     @Override
     public void addIncome(Income addTo) {
-      addTo.getOreIncome().setValue(addTo.getOreIncome().getValue() + 1);
-      addTo.getPowerIncome().setValue(addTo.getPowerIncome().getValue() + 2);
+      Util.plus(addTo.getOreIncome(), 1);
+      Util.plus(addTo.getPowerIncome(), 2);
     }
 
     @Override
     public void removeIncome(Income removeFrom) {
-      removeFrom.getOreIncome().setValue(removeFrom.getOreIncome().getValue() - 1);
-      removeFrom.getPowerIncome().setValue(removeFrom.getPowerIncome().getValue() - 2);
+      Util.minus(removeFrom.getOreIncome(), 1);
+      Util.minus(removeFrom.getPowerIncome(), 2);
     }
 
   },
   GAIA_PLANETS("[]: GP", "(+4c)") {
     @Override
     public void addIncome(Income addTo) {
-      addTo.getCreditIncome().setValue(addTo.getCreditIncome().getValue() + 4);
+      Util.plus(addTo.getCreditIncome(), 4);
     }
 
     @Override
     public void removeIncome(Income removeFrom) {
-      removeFrom.getCreditIncome().setValue(removeFrom.getCreditIncome().getValue() - 4);
+      Util.minus(removeFrom.getCreditIncome(), 4);
     }
 
     @Override
     public void addVps(Player player) {
-      player.getScore().setValue(player.getScore().getValue() + player.getGaiaPlanets().getValue());
+      player.updateScore(player.getGaiaPlanets().getValue(), "RB " + getTopText());
     }
   },
   MINES("[]:M", "(+1o)") {
 
     @Override
     public void addIncome(Income addTo) {
-      addTo.getOreIncome().setValue(addTo.getOreIncome().getValue() + 1);
+      Util.plus(addTo.getOreIncome(), 1);
     }
 
     @Override
     public void removeIncome(Income removeFrom) {
-      removeFrom.getOreIncome().setValue(removeFrom.getOreIncome().getValue() - 1);
+      Util.minus(removeFrom.getOreIncome(), 1);
     }
 
     @Override
     public void addVps(Player player) {
-      player.getScore().setValue(player.getScore().getValue() + player.getMines().size());
+      player.updateScore(player.getMines().size(), "RB " + getTopText());
     }
   },
   TPS("[]:TP", "(+1o)") {
     @Override
     public void addIncome(Income addTo) {
-      addTo.getOreIncome().setValue(addTo.getOreIncome().getValue() + 1);
+      Util.plus(addTo.getOreIncome(), 1);
     }
 
     @Override
     public void removeIncome(Income removeFrom) {
-      removeFrom.getOreIncome().setValue(removeFrom.getOreIncome().getValue() - 1);
+      Util.minus(removeFrom.getOreIncome(), 1);
     }
 
     @Override
     public void addVps(Player player) {
-      player.getScore().setValue(player.getScore().getValue() + 2 * player.getTradingPosts().size());
+      player.updateScore(2 * player.getTradingPosts().size(), "RB " + getTopText());
     }
   },
   RLS("[]:RL", "(+1k)") {
 
     @Override
     public void addIncome(Income addTo) {
-      addTo.getResearchIncome().setValue(addTo.getResearchIncome().getValue() + 1);
+      Util.plus(addTo.getResearchIncome(), 1);
     }
 
     @Override
     public void removeIncome(Income removeFrom) {
-      removeFrom.getResearchIncome().setValue(removeFrom.getResearchIncome().getValue() - 1);
+      Util.minus(removeFrom.getResearchIncome(), 1);
     }
 
     @Override
     public void addVps(Player player) {
-      player.getScore().setValue(player.getScore().getValue() + 3 * player.getResearchLabs().size());
+      player.updateScore(3 * player.getResearchLabs().size(), "RB " + getTopText());
     }
   },
   BIGS("[]:BB", "(+4p)") {
     @Override
     public void addIncome(Income addTo) {
-      addTo.getChargeIncome().setValue(addTo.getChargeIncome().getValue() + 4);
+      Util.plus(addTo.getChargeIncome(), 4);
     }
 
     @Override
     public void removeIncome(Income removeFrom) {
-      removeFrom.getChargeIncome().setValue(removeFrom.getChargeIncome().getValue() - 4);
+      Util.minus(removeFrom.getChargeIncome(), 4);
     }
 
     @Override
     public void addVps(Player player) {
-      player.getScore()
-          .setValue(
-              player.getScore().getValue()
-                  + 4 * (player.getPi().size() + player.getKa().size() + player.getQa().size()));
+      player.updateScore(
+          4 * (player.getPi().size() + player.getKa().size() + player.getQa().size()),
+          "RB " + getTopText());
     }
   };
 

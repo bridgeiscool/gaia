@@ -164,7 +164,7 @@ public class PowerActionsController extends GridPane {
 
     if (activePlayer.getQic().intValue() >= 2) {
       q2.tryHighlight(activePlayer, p -> {
-        Util.plus(p.getScore(), 3 + p.getBuiltOn().size());
+        p.updateScore(3 + p.getBuiltOn().size(), "2 QIC Action");
         Util.minus(p.getQic(), 2);
         gameController.getGame().getQ2ActionTaken().setValue(true);
       }, callback);

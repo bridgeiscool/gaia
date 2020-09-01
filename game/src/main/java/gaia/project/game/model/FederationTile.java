@@ -41,31 +41,31 @@ public enum FederationTile implements UpdatePlayer {
 
   private static class EnumUtil {
     private static final UpdatePlayer RESEARCH_BONUS = p -> {
-      Util.plus(p.getScore(), 6);
+      p.updateScore(6, "Federation");
       Util.plus(p.getResearch(), 2);
     };
 
     private static final UpdatePlayer CREDIT_BONUS = p -> {
-      Util.plus(p.getScore(), 7);
+      p.updateScore(7, "Federation");
       Util.plus(p.getCredits(), 6);
     };
 
     private static final UpdatePlayer ORE_BONUS = p -> {
-      Util.plus(p.getScore(), 7);
+      p.updateScore(7, "Federation");
       Util.plus(p.getOre(), 2);
     };
 
     private static final UpdatePlayer QIC_BONUS = p -> {
-      Util.plus(p.getScore(), 8);
+      p.updateScore(8, "Federation");
       Util.plus(p.getQic(), 1);
     };
 
     private static final UpdatePlayer POWER_BONUS = p -> {
-      Util.plus(p.getScore(), 8);
+      p.updateScore(8, "Federation");
       Util.plus(p.getBin1(), 2);
     };
 
-    private static final UpdatePlayer VP_BONUS = p -> Util.plus(p.getScore(), 12);
+    private static final UpdatePlayer VP_BONUS = p -> p.updateScore(12, "Federation");;
 
     private static final UpdatePlayer GLEENS_BONUS = p -> {
       Util.plus(p.getOre(), 1);

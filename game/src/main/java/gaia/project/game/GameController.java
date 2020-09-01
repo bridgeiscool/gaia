@@ -410,7 +410,14 @@ public class GameController extends BorderPane {
 
   // MAIN ACTION METHODS
   private void startGame() {
-    new SelectVPsDialog(game).showAndWait();
+    SelectVPsDialog selectVPsDialog = new SelectVPsDialog(game);
+    selectVPsDialog.showAndWait();
+
+    // TODO: Update for 4 players
+    game.getPlayers().get(PlayerEnum.PLAYER1).updateScore(selectVPsDialog.getP1Score(), "Starting Score");
+    game.getPlayers().get(PlayerEnum.PLAYER2).updateScore(selectVPsDialog.getP2Score(), "Starting Score");
+    game.getPlayers().get(PlayerEnum.PLAYER3).updateScore(selectVPsDialog.getP3Score(), "Starting Score");
+
     resetTurn.setDisable(false);
     newRound();
   }
@@ -1000,7 +1007,7 @@ public class GameController extends BorderPane {
   void endGame() {
     game.endGameScoring();
 
-    System.out.println("Game is over!");
+    new ScoreDialog(game).show();
   }
 
   private void saveState() {

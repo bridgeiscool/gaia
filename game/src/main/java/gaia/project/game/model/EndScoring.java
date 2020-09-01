@@ -110,34 +110,34 @@ public enum EndScoring {
     // TODO: Update for 4Ps
     if (getCategoryScore().apply(sorted.get(0)) > getCategoryScore().apply(sorted.get(1))) {
       // Clean win for P1
-      addToScore(sorted.get(0), 18);
+      addToScore(sorted.get(0), 18, displayText);
 
       if (getCategoryScore().apply(sorted.get(1)) > getCategoryScore().apply(sorted.get(2))) {
         // Clean 2nd
-        addToScore(sorted.get(1), 12);
-        addToScore(sorted.get(2), 6);
+        addToScore(sorted.get(1), 12, displayText);
+        addToScore(sorted.get(2), 6, displayText);
       } else {
         // Tied for 2-3
-        addToScore(sorted.get(1), 9);
-        addToScore(sorted.get(2), 9);
+        addToScore(sorted.get(1), 9, displayText);
+        addToScore(sorted.get(2), 9, displayText);
       }
 
     } else {
       if (getCategoryScore().apply(sorted.get(1)) > getCategoryScore().apply(sorted.get(2))) {
         // 1-2 tie
-        addToScore(sorted.get(0), 15);
-        addToScore(sorted.get(1), 15);
-        addToScore(sorted.get(2), 6);
+        addToScore(sorted.get(0), 15, displayText);
+        addToScore(sorted.get(1), 15, displayText);
+        addToScore(sorted.get(2), 6, displayText);
       } else {
         // 3-way tie
-        addToScore(sorted.get(0), 12);
-        addToScore(sorted.get(1), 12);
-        addToScore(sorted.get(2), 12);
+        addToScore(sorted.get(0), 12, displayText);
+        addToScore(sorted.get(1), 12, displayText);
+        addToScore(sorted.get(2), 12, displayText);
       }
     }
   }
 
-  private static void addToScore(Player player, int toAdd) {
-    player.getScore().setValue(player.getScore().getValue() + toAdd);
+  private static void addToScore(Player player, int toAdd, String message) {
+    player.updateScore(toAdd, message);
   }
 }

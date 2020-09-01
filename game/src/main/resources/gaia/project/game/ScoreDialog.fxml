@@ -15,21 +15,25 @@
     <URL value="@cribbageApp.css" />
   </stylesheets>
 
-  <GridPane fx:id="count1" styleClass="table-results">
+  <GridPane fx:id="top" styleClass="table-results">
     <columnConstraints>
       <ColumnConstraints halignment="center" />
       <ColumnConstraints halignment="center" />
-      <ColumnConstraints halignment="center" prefWidth="75" />
-      <ColumnConstraints halignment="center" prefWidth="75" />
+      <ColumnConstraints halignment="center" />
+      <ColumnConstraints halignment="center" />
+      <ColumnConstraints halignment="center" />
+      <ColumnConstraints halignment="center" />
     </columnConstraints>
   </GridPane>
   <Separator />
-  <GridPane fx:id="count2" styleClass="table-results">
+  <GridPane fx:id="bottom" styleClass="table-results">
     <columnConstraints>
       <ColumnConstraints halignment="center" />
       <ColumnConstraints halignment="center" />
-      <ColumnConstraints halignment="center" prefWidth="75" />
-      <ColumnConstraints halignment="center" prefWidth="75" />
+      <ColumnConstraints halignment="center" />
+      <ColumnConstraints halignment="center" />
+      <ColumnConstraints halignment="center" />
+      <ColumnConstraints halignment="center" />
     </columnConstraints>
   </GridPane>
   <Separator />

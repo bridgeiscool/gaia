@@ -13,7 +13,7 @@ public class FiraksPlayer extends Player {
   }
 
   public void piAction(HexWithPlanet hex) {
-    TradingPost tp = new TradingPost(hex, getRace().getColor(), getPlayerEnum());
+    TradingPost tp = new TradingPost(hex, Race.FIRAKS.getColor(), getPlayerEnum());
     hex.switchBuildingUI(tp);
 
     ignoreTpRoundBonus = true;
@@ -22,8 +22,8 @@ public class FiraksPlayer extends Player {
     ignoreTpRoundBonus = false;
 
     // Update income
-    getTpIncome().get(getTradingPosts().size() - 1).addTo(getCurrentIncome());
-    getRlIncome().get(getResearchLabs().size()).removeFrom(getCurrentIncome());
+    Race.FIRAKS.getTpIncome().get(getTradingPosts().size() - 1).addTo(getCurrentIncome());
+    Race.FIRAKS.getRlIncome().get(getResearchLabs().size()).removeFrom(getCurrentIncome());
   }
 
   @Override

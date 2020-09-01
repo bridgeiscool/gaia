@@ -207,23 +207,52 @@ public class HexWithPlanet extends Hex {
 
   public void upgradeBuilding(Player player, GameBoard gameBoard) {
     Preconditions.checkArgument(building != null);
+
+    if (player.getRace() == Race.BESCODS) {
+      upgradeBuildingBescods(player, gameBoard);
+    } else {
+      switch (building) {
+        case MINE:
+          player.buildTradingPost(this, hasNeighbor(gameBoard));
+          building = Building.TRADING_POST;
+          break;
+        case TRADING_POST:
+          building = getTpUpgradeTo(player);
+          if (building == Building.RESEARCH_LAB) {
+            player.buildResearchLab(this);
+          } else {
+            // PI
+            player.buildPI(this);
+          }
+          break;
+        case RESEARCH_LAB:
+          building = Building.ACADEMY;
+          player.buildAcademy(this, knowledgeAcademy(player));
+          break;
+        default:
+          throw new IllegalStateException("Can't upgrade building: " + building);
+      }
+    }
+  }
+
+  public void upgradeBuildingBescods(Player player, GameBoard gameBoard) {
     switch (building) {
       case MINE:
         player.buildTradingPost(this, hasNeighbor(gameBoard));
         building = Building.TRADING_POST;
         break;
       case TRADING_POST:
-        building = getTpUpgradeTo(player);
+        building = getTpUpgradeBescods(player);
         if (building == Building.RESEARCH_LAB) {
           player.buildResearchLab(this);
         } else {
+          player.buildAcademy(this, knowledgeAcademy(player));
           // PI
-          player.buildPI(this);
         }
         break;
       case RESEARCH_LAB:
-        building = Building.ACADEMY;
-        player.buildAcademy(this, knowledgeAcademy(player));
+        building = Building.PLANETARY_INSTITUTE;
+        player.buildPI(this);
         break;
       default:
         throw new IllegalStateException("Can't upgrade building: " + building);

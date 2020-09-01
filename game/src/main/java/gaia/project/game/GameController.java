@@ -487,6 +487,7 @@ public class GameController extends BorderPane {
       roundBoosters.forEach(rb -> rb.clearToken(game.getActivePlayer()));
     } else {
       game.getPassedPlayers().add(game.getActivePlayer());
+      activePlayer().roundBoosterVps();
       finishAction();
     }
   }

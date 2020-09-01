@@ -513,15 +513,15 @@ public class Player implements Serializable {
     return currentDigs;
   }
 
-  public List<IncomeUpdater> getTpIncome() {
-    return tpIncome;
-  }
-
-  public List<IncomeUpdater> getRlIncome() {
-    return rlIncome;
-  }
-
   public void setRoundBooster(RoundBooster roundBooster) {
+    roundBoosterVps();
+
+    // Add new income
+    roundBooster.addIncome(currentIncome);
+    this.roundBooster.setValue(roundBooster);
+  }
+
+  public void roundBoosterVps() {
     if (this.roundBooster.getValue() != null) {
       this.roundBooster.getValue().addVps(this);
     }
@@ -529,10 +529,6 @@ public class Player implements Serializable {
     for (AdvancedTechTile tt : advTechTiles) {
       tt.addVps(this);
     }
-
-    // Add new income
-    roundBooster.addIncome(currentIncome);
-    this.roundBooster.setValue(roundBooster);
   }
 
   public RoundBooster getRoundBooster() {
@@ -762,45 +758,47 @@ public class Player implements Serializable {
       // Pay mine cost
       Util.minus(ore, 1);
       Util.minus(credits, 2);
-    }
 
-    for (Set<Coords> federation : federations) {
-      if (federation.stream().anyMatch(c -> hex.isWithinRangeOf(c, 1))) {
-        federation.add(hex.getCoords());
+      for (Set<Coords> federation : federations) {
+        if (federation.stream().anyMatch(c -> hex.isWithinRangeOf(c, 1))) {
+          federation.add(hex.getCoords());
+        }
       }
-    }
 
-    for (Coords sat : satellites) {
-      if (hex.isWithinRangeOf(sat, 1)) {
-        // Just add to the first possible fed for now. Shouldn't matter
-        // TODO: Check and add logic to check which fed later
-        federations.iterator().next().add(hex.getCoords());
+      for (Coords sat : satellites) {
+        if (hex.isWithinRangeOf(sat, 1)) {
+          // Just add to the first possible fed for now. Shouldn't matter
+          // TODO: Check and add logic to check which fed later
+          federations.iterator().next().add(hex.getCoords());
+        }
       }
-    }
 
-    // We might have added something that causes more additions to an existing federation
-    recheckAllBuildingsInFederations();
+      // We might have added something that causes more additions to an existing federation
+      recheckAllBuildingsInFederations();
+    }
   }
 
   protected void recheckAllBuildingsInFederations() {
-    Set<Coords> toAdd = new HashSet<>();
-    do {
-      toAdd.clear();
-      for (Coords building : allBuildingLocations()) {
-        if (!inFederation(building)) {
-          for (Set<Coords> federation : getFederations()) {
-            for (Coords coords : federation) {
-              if (building.isWithinRangeOf(coords, 1)) {
-                toAdd.add(building);
+    if (!federations.isEmpty()) {
+      Set<Coords> toAdd = new HashSet<>();
+      do {
+        toAdd.clear();
+        for (Coords building : allBuildingLocations()) {
+          if (!inFederation(building)) {
+            for (Set<Coords> federation : getFederations()) {
+              for (Coords coords : federation) {
+                if (building.isWithinRangeOf(coords, 1)) {
+                  toAdd.add(building);
+                }
               }
             }
           }
         }
-      }
 
-      // TODO: Add to first federation - is this ok?!?
-      getFederations().iterator().next().addAll(toAdd);
-    } while (!toAdd.isEmpty());
+        // TODO: Add to first federation - is this ok?!?
+        getFederations().iterator().next().addAll(toAdd);
+      } while (!toAdd.isEmpty());
+    }
   }
 
   public void addGaiaformer(HexWithPlanet hex) {

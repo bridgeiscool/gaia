@@ -8,8 +8,10 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 
 import gaia.project.game.PlanetType;
+import gaia.project.game.board.Academy;
 import gaia.project.game.board.Hex;
 import gaia.project.game.board.HexWithPlanet;
+import gaia.project.game.board.PlanetaryInstitute;
 import javafx.beans.property.SimpleBooleanProperty;
 
 public class BescodsPlayer extends Player {
@@ -83,6 +85,43 @@ public class BescodsPlayer extends Player {
     }
 
     return totalPower;
+  }
+
+  @Override
+  public void buildPI(HexWithPlanet hex) {
+    PlanetaryInstitute pi = new PlanetaryInstitute(hex, Race.BESCODS.getColor(), getPlayerEnum());
+    hex.switchBuildingUI(pi);
+    getPi().add(hex.getCoords());
+    getResearchLabs().remove(hex.getCoords());
+
+    Util.minus(getOre(), 4);
+    Util.minus(getCredits(), 6);
+
+    // Update income
+    Race.BESCODS.getRlIncome().get(getResearchLabs().size()).removeFrom(getCurrentIncome());
+    Race.BESCODS.getPiIncome().addTo(getCurrentIncome());
+  }
+
+  public void buildAcademy(HexWithPlanet hex, boolean ka) {
+    Academy academy = new Academy(hex, Race.BESCODS.getColor(), getPlayerEnum());
+    hex.switchBuildingUI(academy);
+    if (ka) {
+      getKa().add(hex.getCoords());
+    } else {
+      getQa().add(hex.getCoords());
+    }
+    getTradingPosts().remove(hex.getCoords());
+
+    Util.minus(getOre(), 6);
+    Util.minus(getCredits(), 6);
+
+    // Update Income
+    Race.BESCODS.getTpIncome().get(getTradingPosts().size()).removeFrom(getCurrentIncome());
+    if (ka) {
+      Util.plus(getCurrentIncome().getResearchIncome(), getRace().getKaIncome());
+    } else {
+      getSpecialActions().put(Race.BESCODS.getQaAction(), new SimpleBooleanProperty(false));
+    }
   }
 
   private boolean extraPower(Coords coords) {

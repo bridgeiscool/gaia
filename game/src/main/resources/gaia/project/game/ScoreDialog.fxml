@@ -17,23 +17,23 @@
 
   <GridPane fx:id="top" styleClass="table-results">
     <columnConstraints>
-      <ColumnConstraints halignment="center" prefWidth="150"/>
-      <ColumnConstraints halignment="center" prefWidth="50" />
-      <ColumnConstraints halignment="center" prefWidth="150"/>
-      <ColumnConstraints halignment="center" prefWidth="50"/>
-      <ColumnConstraints halignment="center" prefWidth="150"/>
-      <ColumnConstraints halignment="center" prefWidth="50"/>
+      <ColumnConstraints halignment="LEFT" prefWidth="130"/>
+      <ColumnConstraints halignment="RIGHT" prefWidth="30" />
+      <ColumnConstraints halignment="LEFT" prefWidth="130"/>
+      <ColumnConstraints halignment="RIGHT" prefWidth="30"/>
+      <ColumnConstraints halignment="LEFT" prefWidth="130"/>
+      <ColumnConstraints halignment="RIGHT" prefWidth="30"/>
     </columnConstraints>
   </GridPane>
   <Separator />
   <GridPane fx:id="bottom" styleClass="table-results">
     <columnConstraints>
-      <ColumnConstraints halignment="center" prefWidth="150"/>
-      <ColumnConstraints halignment="center" prefWidth="50"/>
-      <ColumnConstraints halignment="center" prefWidth="150"/>
-      <ColumnConstraints halignment="center" prefWidth="50"/>
-      <ColumnConstraints halignment="center" prefWidth="150"/>
-      <ColumnConstraints halignment="center" prefWidth="50"/>
+      <ColumnConstraints halignment="LEFT" prefWidth="130"/>
+      <ColumnConstraints halignment="RIGHT" prefWidth="30"/>
+      <ColumnConstraints halignment="LEFT" prefWidth="130"/>
+      <ColumnConstraints halignment="RIGHT" prefWidth="30"/>
+      <ColumnConstraints halignment="LEFT" prefWidth="130"/>
+      <ColumnConstraints halignment="RIGHT" prefWidth="30"/>
     </columnConstraints>
   </GridPane>
 </VBox>

@@ -95,10 +95,13 @@ public class Game implements Serializable {
     List<RoundBooster> allBoosters = new ArrayList<>(Arrays.asList(RoundBooster.values()));
     Collections.shuffle(allBoosters, random);
 
+    List<Race> races = new ArrayList<>(Arrays.asList(Race.values()));
+    Collections.shuffle(races, random);
+
     Map<PlayerEnum, Player> players = new HashMap<>();
-    players.put(PlayerEnum.PLAYER1, Race.IVITS.getPlayer(PlayerEnum.PLAYER1));
-    players.put(PlayerEnum.PLAYER2, Race.TERRANS.getPlayer(PlayerEnum.PLAYER2));
-    players.put(PlayerEnum.PLAYER3, Race.BESCODS.getPlayer(PlayerEnum.PLAYER3));
+    players.put(PlayerEnum.PLAYER1, races.get(0).getPlayer(PlayerEnum.PLAYER1));
+    players.put(PlayerEnum.PLAYER2, races.get(1).getPlayer(PlayerEnum.PLAYER2));
+    players.put(PlayerEnum.PLAYER3, races.get(2).getPlayer(PlayerEnum.PLAYER3));
 
     return new Game(
         gameBoard,

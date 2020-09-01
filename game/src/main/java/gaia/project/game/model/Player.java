@@ -320,7 +320,7 @@ public class Player implements Serializable {
 
   public void leechPower(int power) {
     chargePower(power);
-    updateScore(power - 1, "Leech");
+    updateScore(-1 * (power - 1), "Leech");
   }
 
   public int canCharge() {

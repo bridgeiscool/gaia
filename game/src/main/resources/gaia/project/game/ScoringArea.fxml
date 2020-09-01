@@ -46,9 +46,9 @@
   </center>
   <right>
     <VBox alignment="CENTER">
-      <GridPane hgap="5" vgap="5" prefWidth="170" styleClass="endScoring">
+      <GridPane hgap="5" vgap="5" prefWidth="180" styleClass="endScoring">
         <padding>
-          <Insets left="10" right="10" top="10" bottom="10" />
+          <Insets left="8" right="8" top="10" bottom="10" />
         </padding>
         <columnConstraints>
           <ColumnConstraints halignment="CENTER" prefWidth="85" />
@@ -67,9 +67,9 @@
         <Label fx:id="p3Scoring1" GridPane.rowIndex="3" GridPane.columnIndex="0" />
         <Label fx:id="p3Scoring2" GridPane.rowIndex="3" GridPane.columnIndex="1" />
       </GridPane>
-      <GridPane hgap="5" vgap="5" prefWidth="170" styleClass="endScoring">
+      <GridPane hgap="5" vgap="5" prefWidth="180" styleClass="endScoring">
         <padding>
-          <Insets left="10" right="10" top="10" bottom="10" />
+          <Insets left="8" right="8" top="10" bottom="10" />
         </padding>
         <columnConstraints>
           <ColumnConstraints halignment="CENTER" prefWidth="85" />

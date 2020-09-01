@@ -13,6 +13,7 @@ import com.google.common.base.Preconditions;
 import gaia.project.game.model.Coords;
 import gaia.project.game.model.Player;
 import gaia.project.game.model.PlayerEnum;
+import gaia.project.game.model.Race;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
@@ -146,25 +147,54 @@ public class HexWithPlanet extends Hex {
       return false;
     }
 
+    if (activePlayer.getRace() == Race.BESCODS) {
+      return canUpgradeBescods(activePlayer, gameBoard);
+    }
+
     switch (building) {
       case PLANETARY_INSTITUTE:
       case ACADEMY:
         return false;
       case MINE:
         return activePlayer.getTradingPosts().size() < 4
-            && activePlayer.getOre().intValue() >= 2
-            && activePlayer.getCredits().intValue() >= (hasNeighbor(gameBoard) ? 3 : 6);
+            && activePlayer.getOre().get() >= 2
+            && activePlayer.getCredits().get() >= (hasNeighbor(gameBoard) ? 3 : 6);
       case TRADING_POST:
         return (activePlayer.getResearchLabs().size() < 3
-            && activePlayer.getOre().intValue() >= 3
-            && activePlayer.getCredits().intValue() >= 5)
+            && activePlayer.getOre().get() >= 3
+            && activePlayer.getCredits().get() >= 5)
             || (activePlayer.getPi().isEmpty()
-                && activePlayer.getOre().intValue() >= 4
-                && activePlayer.getCredits().intValue() >= 6);
+                && activePlayer.getOre().get() >= 4
+                && activePlayer.getCredits().get() >= 6);
       case RESEARCH_LAB:
         return (activePlayer.getKa().isEmpty() || activePlayer.getQa().isEmpty())
-            && activePlayer.getOre().intValue() >= 6
-            && activePlayer.getCredits().intValue() >= 6;
+            && activePlayer.getOre().get() >= 6
+            && activePlayer.getCredits().get() >= 6;
+      default:
+        throw new IllegalStateException("whaaaa");
+    }
+  }
+
+  public boolean canUpgradeBescods(Player activePlayer, GameBoard gameBoard) {
+    switch (building) {
+      case PLANETARY_INSTITUTE:
+      case ACADEMY:
+        return false;
+      case MINE:
+        return activePlayer.getTradingPosts().size() < 4
+            && activePlayer.getOre().get() >= 2
+            && activePlayer.getCredits().get() >= (hasNeighbor(gameBoard) ? 3 : 6);
+      case TRADING_POST:
+        return (activePlayer.getResearchLabs().size() < 3
+            && activePlayer.getOre().get() >= 3
+            && activePlayer.getCredits().get() >= 5)
+            || ((activePlayer.getQa().isEmpty() || activePlayer.getKa().isEmpty())
+                && activePlayer.getOre().get() >= 6
+                && activePlayer.getCredits().get() >= 6);
+      case RESEARCH_LAB:
+        return activePlayer.getPi().isEmpty()
+            && activePlayer.getOre().get() >= 4
+            && activePlayer.getCredits().get() >= 6;
       default:
         throw new IllegalStateException("whaaaa");
     }
@@ -201,12 +231,16 @@ public class HexWithPlanet extends Hex {
   }
 
   private Building getTpUpgradeTo(Player player) {
+    if (player.getRace() == Race.BESCODS) {
+      return getTpUpgradeBescods(player);
+    }
+
     Preconditions.checkArgument(player.getResearchLabs().size() < 3 || player.getPi().isEmpty());
     if (player.getResearchLabs().size() == 3) {
       return Building.PLANETARY_INSTITUTE;
     }
 
-    if (!player.getPi().isEmpty()) {
+    if (!player.getPi().isEmpty() || player.getOre().get() < 4 || player.getCredits().get() < 6) {
       return Building.RESEARCH_LAB;
     }
 
@@ -220,6 +254,29 @@ public class HexWithPlanet extends Hex {
     return response.get().getButtonData().equals(ButtonData.LEFT)
         ? Building.RESEARCH_LAB
         : Building.PLANETARY_INSTITUTE;
+  }
+
+  private Building getTpUpgradeBescods(Player player) {
+    Preconditions
+        .checkArgument(player.getResearchLabs().size() < 3 || player.getQa().isEmpty() || player.getKa().isEmpty());
+    if (player.getResearchLabs().size() == 3) {
+      return Building.ACADEMY;
+    }
+
+    if ((!player.getKa().isEmpty() && !player.getQa().isEmpty())
+        || player.getOre().get() < 6
+        || player.getCredits().get() < 6) {
+      return Building.RESEARCH_LAB;
+    }
+
+    Optional<ButtonType> response;
+    ButtonType rl = new ButtonType("Research Lab", ButtonData.LEFT);
+    ButtonType academy = new ButtonType("Academy", ButtonData.RIGHT);
+    do {
+      response = new Alert(AlertType.CONFIRMATION, "Research lab or PI?", rl, academy).showAndWait();
+    } while (response.isEmpty());
+
+    return response.get().getButtonData().equals(ButtonData.LEFT) ? Building.RESEARCH_LAB : Building.ACADEMY;
   }
 
   private boolean knowledgeAcademy(Player player) {

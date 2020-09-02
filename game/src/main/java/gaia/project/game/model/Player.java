@@ -111,7 +111,6 @@ public class Player implements Serializable {
   private transient ObservableSet<Integer> sectors = FXCollections.observableSet();
   private transient IntegerProperty totalBuildings = new SimpleIntegerProperty(0);
   private transient IntegerProperty buildingsInFeds = new SimpleIntegerProperty(0);
-  private transient IntegerProperty projectedTechScoring = new SimpleIntegerProperty(0);
   private Map<String, Integer> scoreLog = new HashMap<>();
 
   public Player(Race race, PlayerEnum playerEnum) {
@@ -505,10 +504,6 @@ public class Player implements Serializable {
 
   public IntegerProperty getGaiaPlanets() {
     return gaiaPlanets;
-  }
-
-  public IntegerProperty getProjectedTechScoring() {
-    return projectedTechScoring;
   }
 
   public IntegerProperty getNavRange() {
@@ -1023,7 +1018,6 @@ public class Player implements Serializable {
     oos.writeObject(new HashSet<>(satellites));
     oos.writeInt(totalBuildings.get());
     oos.writeInt(buildingsInFeds.get());
-    oos.writeInt(projectedTechScoring.get());
   }
 
   @SuppressWarnings("unchecked")
@@ -1090,7 +1084,6 @@ public class Player implements Serializable {
     satellites = FXCollections.observableSet((Set<Coords>) ois.readObject());
     totalBuildings = new SimpleIntegerProperty(ois.readInt());
     buildingsInFeds = new SimpleIntegerProperty(ois.readInt());
-    projectedTechScoring = new SimpleIntegerProperty(ois.readInt());
 
     fedPower = 7;
 

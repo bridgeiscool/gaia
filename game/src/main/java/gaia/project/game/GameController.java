@@ -167,8 +167,11 @@ public class GameController extends BorderPane {
       }
     }
 
+  }
+
+  void activate() {
     // If a new game or reloading during setup, call setupGame; otherwise prompt player for action
-    if (!load || game.getCurrentRound().getValue() == Round.SETUP) {
+    if (game.getCurrentRound().getValue() == Round.SETUP) {
       setupGame();
     } else {
       promptPlayerAction();
@@ -329,6 +332,15 @@ public class GameController extends BorderPane {
   private void setupGame() {
     // Save at the beginning of the setup - will have to reset whole setup if anything goes wrong...
     saveState();
+
+    SelectVPsDialog selectVPsDialog = new SelectVPsDialog(game);
+    selectVPsDialog.showAndWait();
+
+    // TODO: Update for 4 players
+    game.getPlayers().get(PlayerEnum.PLAYER1).updateScore(selectVPsDialog.getP1Score(), "Starting Score");
+    game.getPlayers().get(PlayerEnum.PLAYER2).updateScore(selectVPsDialog.getP2Score(), "Starting Score");
+    game.getPlayers().get(PlayerEnum.PLAYER3).updateScore(selectVPsDialog.getP3Score(), "Starting Score");
+
     List<PlayerEnum> order = getPlacementOrder(game.getPlayers());
     for (PlayerEnum toPrompt : order) {
       Player activePlayer = game.getPlayers().get(toPrompt);
@@ -410,14 +422,6 @@ public class GameController extends BorderPane {
 
   // MAIN ACTION METHODS
   private void startGame() {
-    SelectVPsDialog selectVPsDialog = new SelectVPsDialog(game);
-    selectVPsDialog.showAndWait();
-
-    // TODO: Update for 4 players
-    game.getPlayers().get(PlayerEnum.PLAYER1).updateScore(selectVPsDialog.getP1Score(), "Starting Score");
-    game.getPlayers().get(PlayerEnum.PLAYER2).updateScore(selectVPsDialog.getP2Score(), "Starting Score");
-    game.getPlayers().get(PlayerEnum.PLAYER3).updateScore(selectVPsDialog.getP3Score(), "Starting Score");
-
     resetTurn.setDisable(false);
     newRound();
   }

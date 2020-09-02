@@ -37,6 +37,7 @@ public class GaiaProjectController {
 
     GameController gameController = new GameController(this, game, false);
     primaryStage.setScene(new Scene(new MenuPane(gameController)));
+    gameController.activate();
   }
 
   public void loadGame() {
@@ -55,6 +56,7 @@ public class GaiaProjectController {
       Game game = (Game) ois.readObject();
       GameController gameController = new GameController(this, game, true);
       primaryStage.setScene(new Scene(new MenuPane(gameController)));
+      gameController.activate();
     }
   }
 

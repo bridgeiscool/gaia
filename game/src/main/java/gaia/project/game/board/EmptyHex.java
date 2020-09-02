@@ -15,6 +15,7 @@ import gaia.project.game.model.Player;
 import gaia.project.game.model.PlayerEnum;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
+import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 
 public class EmptyHex extends Hex {
@@ -26,10 +27,23 @@ public class EmptyHex extends Hex {
   @Nullable
   private SpaceStation spaceStation;
 
-  public EmptyHex(Coords coords, int sectorId) {
+  public static EmptyHex centerHex(Coords coords, int sectorId) {
+    return new EmptyHex(coords, sectorId, true);
+  }
+
+  public static EmptyHex normal(Coords coords, int sectorId) {
+    return new EmptyHex(coords, sectorId, false);
+  }
+
+  private EmptyHex(Coords coords, int sectorId, boolean center) {
     super(coords, sectorId);
     satelliteBox = new VBox(2.0);
     satelliteBox.setAlignment(Pos.CENTER);
+    if (center) {
+      Label label = new Label(String.format("%d", sectorId));
+      label.getStyleClass().add("centerHex");
+      getChildren().add(label);
+    }
     getChildren().add(satelliteBox);
   }
 

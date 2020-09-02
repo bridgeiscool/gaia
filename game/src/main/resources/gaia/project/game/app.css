@@ -372,6 +372,11 @@
 	-fx-background-color: #656565;
 }
 
+.centerHex {
+	-fx-text-fill: white;
+	-fx-font-size: 30.0pt;
+}
+
 .blackLabel {
 	-fx-text-fill: black;
 	-fx-font-size: 14.0pt;

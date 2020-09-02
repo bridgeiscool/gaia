@@ -53,8 +53,9 @@ public class Sector extends Group implements Iterable<Hex> {
   private void initHexes(double centerX, double centerY, List<PlanetType> planetTypes) {
     Preconditions.checkArgument(planetTypes.size() == 19);
 
-    // Center Hex
-    containedHexes.add(getHex(centerX, centerY, planetTypes.get(9)));
+    // Center Hex never has a planet - always the label for the sector
+    Preconditions.checkArgument(planetTypes.get(9) == PlanetType.NONE);
+    containedHexes.add(centerHex(centerX, centerY));
 
     // Inner Ring
     // Top hex
@@ -99,8 +100,12 @@ public class Sector extends Group implements Iterable<Hex> {
 
   private Hex getHex(double centerX, double centerY, PlanetType planetType) {
     return planetType == PlanetType.NONE
-        ? new EmptyHex(new Coords(centerX, centerY), sectorId)
+        ? EmptyHex.normal(new Coords(centerX, centerY), sectorId)
         : new HexWithPlanet(new Coords(centerX, centerY), sectorId, new Planet(centerX, centerY, planetType));
+  }
+
+  private Hex centerHex(double centerX, double centerY) {
+    return EmptyHex.centerHex(new Coords(centerX, centerY), sectorId);
   }
 
   @Override

@@ -13,8 +13,8 @@
     <URL value="@app.css" />
   </stylesheets>
   <columnConstraints>
-    <ColumnConstraints percentWidth="60.0" halignment="LEFT" />
-    <ColumnConstraints percentWidth="40.0" halignment="LEFT" />
+    <ColumnConstraints percentWidth="55.0" halignment="LEFT" />
+    <ColumnConstraints percentWidth="45.0" halignment="LEFT" />
   </columnConstraints>
   
 

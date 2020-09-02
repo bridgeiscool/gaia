@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
@@ -96,7 +97,11 @@ public class Game implements Serializable {
     Collections.shuffle(allBoosters, random);
 
     List<Race> races = new ArrayList<>(Arrays.asList(Race.values()));
-    Collections.shuffle(races, random);
+
+    // TODO: Update for 4 players
+    do {
+      Collections.shuffle(races, random);
+    } while (races.subList(0, 3).stream().map(Race::getHomePlanet).collect(Collectors.toSet()).size() < 3);
 
     Map<PlayerEnum, Player> players = new HashMap<>();
     players.put(PlayerEnum.PLAYER1, races.get(0).getPlayer(PlayerEnum.PLAYER1));

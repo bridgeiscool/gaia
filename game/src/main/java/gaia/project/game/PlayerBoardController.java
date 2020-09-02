@@ -110,14 +110,12 @@ public class PlayerBoardController extends GridPane {
     qicLabel.textProperty().bindBidirectional(player.getQic(), StringConverters.numberWithPostfix("q"));
     qicIncome.textProperty().bindBidirectional(player.getCurrentIncome().getQicIncome(), StringConverters.income());
 
-    gaiaBin.textProperty().bindBidirectional(player.getGaiaBin(), StringConverters.numberWithPrefix("Gaia Bin: "));
+    gaiaBin.textProperty().bindBidirectional(player.getGaiaBin(), StringConverters.numberWithPrefix("G: "));
     bin1.textProperty().bindBidirectional(player.getBin1(), StringConverters.numberWithPrefix("I: "));
     bin2.textProperty().bindBidirectional(player.getBin2(), StringConverters.numberWithPrefix("II: "));
+    ptIncome.textProperty().bindBidirectional(player.getCurrentIncome().getPowerIncome(), StringConverters.income());
     bin3.textProperty().bindBidirectional(player.getBin3(), StringConverters.numberWithPrefix("III: "));
-    ptIncome.textProperty()
-        .bindBidirectional(player.getCurrentIncome().getPowerIncome(), StringConverters.numberWithPrefix("+PT: "));
-    pIncome.textProperty()
-        .bindBidirectional(player.getCurrentIncome().getChargeIncome(), StringConverters.numberWithPrefix("+P: "));
+    pIncome.textProperty().bindBidirectional(player.getCurrentIncome().getChargeIncome(), StringConverters.income());
 
     mines.setText(player.getMines().size() + " / 8");
     player.getMines()

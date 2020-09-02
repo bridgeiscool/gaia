@@ -13,9 +13,12 @@
     <URL value="@app.css" />
   </stylesheets>
   <columnConstraints>
-    <ColumnConstraints percentWidth="55.0" halignment="LEFT" />
-    <ColumnConstraints percentWidth="45.0" halignment="LEFT" />
+    <ColumnConstraints percentWidth="50.0" hgrow="ALWAYS" halignment="LEFT" />
+    <ColumnConstraints percentWidth="50.0" hgrow="NEVER" halignment="LEFT" />
   </columnConstraints>
+  <padding>
+    <Insets top="2" bottom="2" left="2" right="2" />
+  </padding>
   
 
   <VBox GridPane.rowIndex="0" GridPane.columnIndex="0">
@@ -34,17 +37,53 @@
         <Label fx:id="qicLabel" />
         <Label fx:id="qicIncome" />
       </HBox>
-      <HBox prefHeight="25" prefWidth="300" spacing="7">
-        <Label fx:id="gaiaBin" />
-        <Label fx:id="bin1" />
-        <Label fx:id="bin2" />
-        <Label fx:id="bin3" />
-        <Label fx:id="ptIncome" />
-        <Label fx:id="pIncome" />
+      <HBox prefHeight="25" prefWidth="300" spacing="45" alignment="CENTER">
+        <BorderPane>
+          <top>
+            <HBox alignment="CENTER">
+              <Label fx:id="bin2" />
+            </HBox>
+          </top>
+          <right>
+            <HBox>
+              <padding>
+                <Insets left="25" />
+              </padding>
+              <Label fx:id="bin3" />
+              <Label fx:id="pIncome" />
+            </HBox>
+          </right>
+          <bottom>
+            <HBox alignment="CENTER">
+              <Label fx:id="bin1" />
+              <Label fx:id="ptIncome" />
+            </HBox>
+          </bottom>
+          <left>
+            <HBox>
+              <padding>
+                <Insets right="25" />
+              </padding>
+              <Label fx:id="gaiaBin" />
+            </HBox>
+          </left>
+        </BorderPane>
+        <HBox alignment="CENTER">
+          <GridPane hgap="10" vgap="1">
+            <columnConstraints>
+              <ColumnConstraints halignment="CENTER"/>
+            </columnConstraints>
+            
+            <Label text="GF" GridPane.rowIndex="0" GridPane.columnIndex="0" />
+            <HBox spacing="0" GridPane.rowIndex="1" GridPane.columnIndex="0">
+              <Label fx:id="gaiaformers" />
+              <Label fx:id="availableGaiaformers" />
+            </HBox>
+          </GridPane>
+        </HBox>
       </HBox>
       <GridPane hgap="10" vgap="1">
         <columnConstraints>
-          <ColumnConstraints halignment="CENTER"/>
           <ColumnConstraints halignment="CENTER"/>
           <ColumnConstraints halignment="CENTER"/>
           <ColumnConstraints halignment="CENTER"/>
@@ -60,7 +99,6 @@
         <Label text="PI" GridPane.rowIndex="0" GridPane.columnIndex="3" />
         <Label text="KA" GridPane.rowIndex="0" GridPane.columnIndex="4" />
         <Label text="QA" GridPane.rowIndex="0" GridPane.columnIndex="5" />
-        <Label text="GF" GridPane.rowIndex="0" GridPane.columnIndex="6" />
         
         <!-- Value row -->
         <Label fx:id="mines" GridPane.rowIndex="1" GridPane.columnIndex="0" />
@@ -69,10 +107,6 @@
         <Label fx:id="planetaryInstitute" GridPane.rowIndex="1" GridPane.columnIndex="3" />
         <Label fx:id="knowledgeAcademy" GridPane.rowIndex="1" GridPane.columnIndex="4" />
         <Label fx:id="qicAcademy" GridPane.rowIndex="1" GridPane.columnIndex="5" />
-        <HBox spacing="0" GridPane.rowIndex="1" GridPane.columnIndex="6">
-          <Label fx:id="gaiaformers" />
-          <Label fx:id="availableGaiaformers" />
-        </HBox>
       </GridPane>
     </children>
   </VBox>

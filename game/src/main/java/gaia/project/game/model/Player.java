@@ -611,7 +611,7 @@ public class Player implements Serializable {
     }
 
     if (planetType == PlanetType.GAIA) {
-      return qic.get() > 0;
+      return qic.get() > 0 && !(hex.hasGaiaformer() && hex.getBuilder().get() != playerEnum);
     }
 
     return race.getHomePlanet().numDigsTo(planetType) - currentDigs.intValue() <= (ore.intValue() - 1)

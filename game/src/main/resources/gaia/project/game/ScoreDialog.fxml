@@ -17,23 +17,23 @@
 
   <GridPane fx:id="top" styleClass="table-results">
     <columnConstraints>
-      <ColumnConstraints halignment="LEFT" prefWidth="130"/>
-      <ColumnConstraints halignment="RIGHT" prefWidth="30" />
-      <ColumnConstraints halignment="LEFT" prefWidth="130"/>
-      <ColumnConstraints halignment="RIGHT" prefWidth="30"/>
-      <ColumnConstraints halignment="LEFT" prefWidth="130"/>
-      <ColumnConstraints halignment="RIGHT" prefWidth="30"/>
+      <ColumnConstraints halignment="LEFT" prefWidth="140"/>
+      <ColumnConstraints halignment="RIGHT" prefWidth="40" />
+      <ColumnConstraints halignment="LEFT" prefWidth="140"/>
+      <ColumnConstraints halignment="RIGHT" prefWidth="40"/>
+      <ColumnConstraints halignment="LEFT" prefWidth="140"/>
+      <ColumnConstraints halignment="RIGHT" prefWidth="40"/>
     </columnConstraints>
   </GridPane>
   <Separator />
   <GridPane fx:id="bottom" styleClass="table-results">
     <columnConstraints>
-      <ColumnConstraints halignment="LEFT" prefWidth="130"/>
-      <ColumnConstraints halignment="RIGHT" prefWidth="30"/>
-      <ColumnConstraints halignment="LEFT" prefWidth="130"/>
-      <ColumnConstraints halignment="RIGHT" prefWidth="30"/>
-      <ColumnConstraints halignment="LEFT" prefWidth="130"/>
-      <ColumnConstraints halignment="RIGHT" prefWidth="30"/>
+      <ColumnConstraints halignment="LEFT" prefWidth="140"/>
+      <ColumnConstraints halignment="RIGHT" prefWidth="40"/>
+      <ColumnConstraints halignment="LEFT" prefWidth="140"/>
+      <ColumnConstraints halignment="RIGHT" prefWidth="40"/>
+      <ColumnConstraints halignment="LEFT" prefWidth="140"/>
+      <ColumnConstraints halignment="RIGHT" prefWidth="40"/>
     </columnConstraints>
   </GridPane>
 </VBox>

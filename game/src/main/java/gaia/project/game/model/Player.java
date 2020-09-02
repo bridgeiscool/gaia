@@ -845,9 +845,6 @@ public class Player implements Serializable {
     if (!free) {
       research.setValue(research.getValue() - 4);
     }
-    if (techTrack.getValue() > 2) {
-      projectedTechScoring.setValue(projectedTechScoring.getValue() + 4);
-    }
   }
 
   public void buildTradingPost(HexWithPlanet hex, boolean cheap) {
@@ -946,6 +943,19 @@ public class Player implements Serializable {
     updateScore(
         (credits.intValue() + ore.intValue() + research.intValue() + qic.intValue() + bin3.intValue()) / 3,
         "Resources");
+  }
+
+  public void techScoring() {
+    int points = 0;
+
+    points += terraformingLevel.get() > 2 ? 4 * (terraformingLevel.get() - 2) : 0;
+    points += navLevel.get() > 2 ? 4 * (navLevel.get() - 2) : 0;
+    points += aiLevel.get() > 2 ? 4 * (aiLevel.get() - 2) : 0;
+    points += gaiaformingLevel.get() > 2 ? 4 * (gaiaformingLevel.get() - 2) : 0;
+    points += econLevel.get() > 2 ? 4 * (econLevel.get() - 2) : 0;
+    points += knowledgeLevel.get() > 2 ? 4 * (knowledgeLevel.get() - 2) : 0;
+
+    updateScore(points, "Tech Scoring");
   }
 
   public void addLostPlanet(EmptyHex hex) {

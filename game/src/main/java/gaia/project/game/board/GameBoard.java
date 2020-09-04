@@ -53,6 +53,11 @@ public class GameBoard extends Group implements Iterable<Sector> {
     return maybeValid;
   }
 
+  // This has to be done separately to prevent JavaFX calls during the GameBoard creation subroutine
+  public void addCenterLabels() {
+    sectors.forEach(Sector::addCenterLabel);
+  }
+
   public List<Hex> hexes() {
     return sectors.stream().flatMap(s -> StreamSupport.stream(s.spliterator(), false)).collect(Collectors.toList());
   }

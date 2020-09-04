@@ -112,6 +112,7 @@ public class GameController extends BorderPane {
     this.parent = parent;
     this.game = game;
     this.gameBoard = new GameBoard(game.getGameBoard());
+    gameBoard.addCenterLabels();
     gameBoard.planetaryHexes().forEach(hex -> {
       if (game.getGaiaformed().contains(hex.getCoords())) {
         hex.getPlanet().transdimToGaia();
@@ -179,6 +180,7 @@ public class GameController extends BorderPane {
   }
 
   private void resetGameBoard(Game game) {
+
     game.getPlayers().values().forEach(p -> {
       p.getMines().forEach(m -> {
         gameBoard.planetaryHexes()

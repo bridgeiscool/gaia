@@ -27,24 +27,21 @@ public class EmptyHex extends Hex {
   @Nullable
   private SpaceStation spaceStation;
 
-  public static EmptyHex centerHex(Coords coords, int sectorId) {
-    return new EmptyHex(coords, sectorId, true);
-  }
-
   public static EmptyHex normal(Coords coords, int sectorId) {
-    return new EmptyHex(coords, sectorId, false);
+    return new EmptyHex(coords, sectorId);
   }
 
-  private EmptyHex(Coords coords, int sectorId, boolean center) {
+  private EmptyHex(Coords coords, int sectorId) {
     super(coords, sectorId);
     satelliteBox = new VBox(2.0);
     satelliteBox.setAlignment(Pos.CENTER);
-    if (center) {
-      Label label = new Label(String.format("%d", sectorId));
-      label.getStyleClass().add("centerHex");
-      getChildren().add(label);
-    }
     getChildren().add(satelliteBox);
+  }
+
+  public void addCenterLabel(int sectorId) {
+    Label label = new Label(String.format("%d", sectorId));
+    label.getStyleClass().add("centerHex");
+    getChildren().add(1, label);
   }
 
   @Override

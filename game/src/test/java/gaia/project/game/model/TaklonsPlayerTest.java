@@ -7,11 +7,13 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import gaia.project.game.model.TaklonsPlayer.Bin;
 
 public class TaklonsPlayerTest {
+  @Ignore
   @Test
   public void testSerialization() throws IOException, ClassNotFoundException {
     TaklonsPlayer player = new TaklonsPlayer(PlayerEnum.PLAYER1);

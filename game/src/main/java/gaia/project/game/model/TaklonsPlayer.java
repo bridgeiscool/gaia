@@ -60,6 +60,7 @@ public class TaklonsPlayer extends Player {
       } else {
         // Still more power to charge after bin1 is empty...
         powerLeft -= getBin1().get();
+        Util.plus(getBin2(), getBin1().get());
         getBin1().setValue(0);
 
         if (brainStone.getValue() == Bin.II) {

@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import gaia.project.game.model.Game;
 import gaia.project.game.model.Player;
-import gaia.project.game.model.Race;
 import javafx.beans.property.BooleanProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -70,15 +69,11 @@ public class ActionChoiceDialog extends Dialog<Actions> {
     federate.setDisable(!player.couldFederate());
     advanceTech.setDisable(player.getResearch().getValue() < 4);
     powerAction.setDisable(
-        (nevlasPi(player) ? player.getBin3().get() * 2 : player.getBin3().get()) < game.getCheapestPowerAction()
+        player.spendablePower() < game.getCheapestPowerAction()
             && player.getQic().intValue() < game.getCheapestQicAction());
     specialAction.setDisable(
         !(player.getRoundBooster().isAction() && !player.roundBoosterUsed())
             && !(player.getSpecialActions().values().stream().map(BooleanProperty::get).anyMatch(b -> !b)));
-  }
-
-  private boolean nevlasPi(Player activePlayer) {
-    return activePlayer.getRace() == Race.NEVLAS && !activePlayer.getPi().isEmpty();
   }
 
   @FXML

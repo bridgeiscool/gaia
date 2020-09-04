@@ -21,4 +21,9 @@ public class NevlasPlayer extends Player {
             + getBin3().intValue() * 2) / 3,
         "Resources");
   }
+
+  @Override
+  public int spendablePower() {
+    return getPi().isEmpty() ? getBin3().get() : getBin3().get() * 2;
+  }
 }

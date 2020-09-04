@@ -10,6 +10,8 @@ import gaia.project.game.model.Coords;
 import gaia.project.game.model.Player;
 import gaia.project.game.model.Player.FedToken;
 import gaia.project.game.model.PlayerBoardAction;
+import gaia.project.game.model.TaklonsPlayer;
+import gaia.project.game.model.TaklonsPlayer.Bin;
 import gaia.project.game.model.TechTile;
 import javafx.beans.property.BooleanProperty;
 import javafx.collections.MapChangeListener;
@@ -19,6 +21,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.util.converter.NumberStringConverter;
 
 public class PlayerBoardController extends GridPane {
@@ -61,6 +66,14 @@ public class PlayerBoardController extends GridPane {
   private Label ptIncome;
   @FXML
   private Label pIncome;
+  @FXML
+  private HBox bin1Box;
+  @FXML
+  private HBox bin2Box;
+  @FXML
+  private HBox bin3Box;
+  @FXML
+  private HBox gaiaBox;
 
   // Buildings bar
   @FXML
@@ -82,6 +95,9 @@ public class PlayerBoardController extends GridPane {
 
   @FXML
   private FlowPane tokenArea;
+
+  // Only used for Taklons
+  private Circle brainstone = new Circle(8.0, Color.PURPLE);
 
   public PlayerBoardController(Player player) {
     FXMLLoader loader = new FXMLLoader(PlayerBoardController.class.getResource("PlayerBoard.fxml"));
@@ -185,6 +201,30 @@ public class PlayerBoardController extends GridPane {
         tokenArea.getChildren().add(new SpecialAction(key, key.display(), change.getValueAdded()));
       }
     });
+
+    if (player instanceof TaklonsPlayer) {
+      TaklonsPlayer taklons = (TaklonsPlayer) player;
+      getBox(taklons.getBrainStone().getValue()).getChildren().add(1, brainstone);
+      taklons.getBrainStone().addListener((o, oldValue, newValue) -> {
+        getBox(oldValue).getChildren().remove(brainstone);
+        getBox(newValue).getChildren().add(1, brainstone);
+      });
+    }
+  }
+
+  private HBox getBox(Bin bin) {
+    switch (bin) {
+      case I:
+        return bin1Box;
+      case II:
+        return bin2Box;
+      case III:
+        return bin3Box;
+      case GAIA:
+        return gaiaBox;
+    }
+
+    throw new IllegalStateException("No such bin!");
   }
 
   public void highlightActions(Consumer<Serializable> callback) {

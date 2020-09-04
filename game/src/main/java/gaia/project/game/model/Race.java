@@ -264,6 +264,13 @@ public enum Race {
     public IncomeUpdater getPiIncome() {
       return new CompoundIncome(new PowerIncome(4), new TokenIncome(2));
     }
+  },
+
+  TAKLONS("Taklons", "brownRace", Color.TAN, PlanetType.BROWN) {
+    @Override
+    public Player getPlayer(PlayerEnum playerEnum) {
+      return new TaklonsPlayer(playerEnum);
+    }
   };
 
   private final String raceName;

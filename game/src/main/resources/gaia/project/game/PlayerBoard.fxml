@@ -40,12 +40,12 @@
       <HBox prefHeight="25" prefWidth="300" spacing="45" alignment="CENTER">
         <BorderPane>
           <top>
-            <HBox alignment="CENTER">
+            <HBox alignment="CENTER" fx:id="bin2Box">
               <Label fx:id="bin2" />
             </HBox>
           </top>
           <right>
-            <HBox>
+            <HBox fx:id="bin3Box">
               <padding>
                 <Insets left="25" />
               </padding>
@@ -54,13 +54,13 @@
             </HBox>
           </right>
           <bottom>
-            <HBox alignment="CENTER">
+            <HBox alignment="CENTER" fx:id="bin1Box">
               <Label fx:id="bin1" />
               <Label fx:id="ptIncome" />
             </HBox>
           </bottom>
           <left>
-            <HBox>
+            <HBox fx:id="gaiaBox">
               <padding>
                 <Insets right="25" />
               </padding>

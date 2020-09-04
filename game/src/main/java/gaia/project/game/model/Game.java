@@ -101,7 +101,8 @@ public class Game implements Serializable {
     // TODO: Update for 4 players
     do {
       Collections.shuffle(races, random);
-    } while (races.subList(0, 3).stream().map(Race::getHomePlanet).collect(Collectors.toSet()).size() < 3);
+    } while (races.subList(0, 3).stream().map(Race::getHomePlanet).collect(Collectors.toSet()).size() < 3
+        || !races.subList(0, 3).contains(Race.TAKLONS));
 
     Map<PlayerEnum, Player> players = new HashMap<>();
     players.put(PlayerEnum.PLAYER1, races.get(0).getPlayer(PlayerEnum.PLAYER1));

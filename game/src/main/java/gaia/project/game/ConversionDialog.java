@@ -5,6 +5,8 @@ import java.io.IOException;
 import gaia.project.game.model.BalTaksPlayer;
 import gaia.project.game.model.Player;
 import gaia.project.game.model.Race;
+import gaia.project.game.model.TaklonsPlayer;
+import gaia.project.game.model.TaklonsPlayer.Bin;
 import gaia.project.game.model.Util;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
@@ -16,6 +18,8 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 
 public class ConversionDialog extends Dialog<Void> {
   private static final ButtonType DONE = new ButtonType("Done", ButtonData.OK_DONE);
@@ -29,6 +33,8 @@ public class ConversionDialog extends Dialog<Void> {
         return new BalTaksDialog(activePlayer);
       case NEVLAS:
         return new NevlasDialog(activePlayer);
+      case TAKLONS:
+        return new TaklonsDialog(activePlayer);
       default:
         return new ConversionDialog(activePlayer);
     }
@@ -73,10 +79,10 @@ public class ConversionDialog extends Dialog<Void> {
 
     // Disable buttons when they can't be used...
     qicToNav.disableProperty().bind(Bindings.lessThan(activePlayer.getQic(), 1));
-    powerToQic.disableProperty().bind(Bindings.lessThan(activePlayer.getBin3(), nevlasPi(activePlayer) ? 2 : 4));
+    powerToQic.disableProperty().bind(Bindings.lessThan(activePlayer.getBin3(), actualPower(4)));
     qicToOre.disableProperty().bind(Bindings.lessThan(activePlayer.getQic(), 1));
-    powerToOre.disableProperty().bind(Bindings.lessThan(activePlayer.getBin3(), nevlasPi(activePlayer) ? 2 : 3));
-    powerToKnowledge.disableProperty().bind(Bindings.lessThan(activePlayer.getBin3(), nevlasPi(activePlayer) ? 2 : 4));
+    powerToOre.disableProperty().bind(Bindings.lessThan(activePlayer.getBin3(), actualPower(3)));
+    powerToKnowledge.disableProperty().bind(Bindings.lessThan(activePlayer.getBin3(), actualPower(4)));
     knowledgeToCredits.disableProperty().bind(Bindings.lessThan(activePlayer.getResearch(), 1));
     powerToCredits.disableProperty().bind(Bindings.lessThan(activePlayer.getBin3(), 1));
     oreToCredits.disableProperty().bind(Bindings.lessThan(activePlayer.getOre(), 1));
@@ -86,7 +92,20 @@ public class ConversionDialog extends Dialog<Void> {
     additionalContent();
   }
 
-  private boolean nevlasPi(Player activePlayer) {
+  private int actualPower(int normalPower) {
+    if (nevlasPi()) {
+      return normalPower / 2 + normalPower % 2;
+    }
+
+    if (activePlayer instanceof TaklonsPlayer) {
+      TaklonsPlayer taklonsPlayer = (TaklonsPlayer) activePlayer;
+      return taklonsPlayer.getBrainStone().getValue() == Bin.III ? normalPower - 3 : normalPower;
+    }
+
+    return normalPower;
+  }
+
+  private boolean nevlasPi() {
     return activePlayer.getRace() == Race.NEVLAS && !activePlayer.getPi().isEmpty();
   }
 
@@ -102,7 +121,7 @@ public class ConversionDialog extends Dialog<Void> {
 
   @FXML
   private void powerToQic() {
-    activePlayer.spendPower(nevlasPi(activePlayer) ? 2 : 4);
+    activePlayer.spendPower(actualPower(4));
     Util.plus(activePlayer.getQic(), 1);
   }
 
@@ -114,13 +133,13 @@ public class ConversionDialog extends Dialog<Void> {
 
   @FXML
   private void powerToOre() {
-    activePlayer.spendPower((nevlasPi(activePlayer) ? 2 : 3));
+    activePlayer.spendPower(actualPower(3));
     Util.plus(activePlayer.getOre(), 1);
   }
 
   @FXML
   private void powerToKnowledge() {
-    activePlayer.spendPower(nevlasPi(activePlayer) ? 2 : 4);
+    activePlayer.spendPower(actualPower(4));
     Util.plus(activePlayer.getResearch(), 1);
   }
 
@@ -133,7 +152,7 @@ public class ConversionDialog extends Dialog<Void> {
   @FXML
   private void powerToCredits() {
     activePlayer.spendPower(1);
-    Util.plus(activePlayer.getCredits(), nevlasPi(activePlayer) ? 2 : 1);
+    Util.plus(activePlayer.getCredits(), nevlasPi() ? 2 : 1);
   }
 
   @FXML
@@ -240,6 +259,44 @@ public class ConversionDialog extends Dialog<Void> {
       powerToGaiaForK.disableProperty().bind(Bindings.lessThan(activePlayer.getBin3(), 1));
       gridPane.add(powerToGaiaForK, 1, 11);
       gridPane.add(new Label("k"), 2, 11);
+    }
+  }
+
+  private static class TaklonsDialog extends ConversionDialog {
+
+    TaklonsDialog(Player activePlayer) {
+      super(activePlayer);
+    }
+
+    @Override
+    protected void additionalContent() {
+      TaklonsPlayer taklons = (TaklonsPlayer) activePlayer;
+
+      // Brainstone -> 3c
+      gridPane.add(new Circle(8, Color.PURPLE), 0, 11);
+      Button bsTo3c = new Button(">");
+      bsTo3c.setOnAction(e -> {
+        taklons.getBrainStone().setValue(Bin.I);
+        Util.plus(taklons.getCredits(), 3);
+      });
+
+      bsTo3c.setDisable(taklons.getBrainStone().getValue() != Bin.III);
+      taklons.getBrainStone().addListener((o, oldValue, newValue) -> bsTo3c.setDisable(newValue != Bin.III));
+      gridPane.add(bsTo3c, 1, 11);
+      gridPane.add(new Label("3c"), 2, 11);
+
+      // Brainstone -> o
+      gridPane.add(new Circle(8, Color.PURPLE), 0, 12);
+      Button bsToOre = new Button(">");
+      bsToOre.setOnAction(e -> {
+        taklons.getBrainStone().setValue(Bin.I);
+        Util.plus(taklons.getOre(), 1);
+      });
+
+      bsToOre.setDisable(taklons.getBrainStone().getValue() != Bin.III);
+      taklons.getBrainStone().addListener((o, oldValue, newValue) -> bsToOre.setDisable(newValue != Bin.III));
+      gridPane.add(bsToOre, 1, 12);
+      gridPane.add(new Label("o"), 2, 12);
     }
   }
 }

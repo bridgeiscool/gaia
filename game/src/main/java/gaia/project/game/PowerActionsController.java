@@ -74,7 +74,7 @@ public class PowerActionsController extends GridPane {
   }
 
   public void highlightActions(Player activePlayer, CallBack callback) {
-    if (activePlayer.getBin3().intValue() >= (nevlasPi(activePlayer) ? 4 : 7)) {
+    if (activePlayer.spendablePower() >= 7) {
       k3.tryHighlight(activePlayer, p -> {
         Util.plus(activePlayer.getResearch(), 3);
         p.spendPower((nevlasPi(activePlayer) ? 4 : 7));
@@ -82,7 +82,7 @@ public class PowerActionsController extends GridPane {
       }, callback);
     }
 
-    if (activePlayer.getBin3().intValue() >= (nevlasPi(activePlayer) ? 3 : 5)
+    if (activePlayer.spendablePower() >= 5
         && activePlayer.getMines().size() < 8
         && activePlayer.getOre().intValue() > 0
         && activePlayer.getCredits().intValue() > 1) {
@@ -96,7 +96,7 @@ public class PowerActionsController extends GridPane {
       });
     }
 
-    if (activePlayer.getBin3().intValue() >= (nevlasPi(activePlayer) ? 2 : 4)) {
+    if (activePlayer.spendablePower() >= 4) {
       ore.tryHighlight(activePlayer, p -> {
         Util.plus(activePlayer.getOre(), 2);
         p.spendPower((nevlasPi(activePlayer) ? 2 : 4));
@@ -104,7 +104,7 @@ public class PowerActionsController extends GridPane {
       }, callback);
     }
 
-    if (activePlayer.getBin3().intValue() >= (nevlasPi(activePlayer) ? 2 : 4)) {
+    if (activePlayer.spendablePower() >= 4) {
       credits.tryHighlight(activePlayer, p -> {
         Util.plus(activePlayer.getCredits(), 7);
         p.spendPower((nevlasPi(activePlayer) ? 2 : 4));
@@ -112,7 +112,7 @@ public class PowerActionsController extends GridPane {
       }, callback);
     }
 
-    if (activePlayer.getBin3().intValue() >= (nevlasPi(activePlayer) ? 2 : 4)) {
+    if (activePlayer.spendablePower() >= 4) {
       k2.tryHighlight(activePlayer, p -> {
         Util.plus(activePlayer.getResearch(), 2);
         p.spendPower((nevlasPi(activePlayer) ? 2 : 4));
@@ -120,7 +120,7 @@ public class PowerActionsController extends GridPane {
       }, callback);
     }
 
-    if (activePlayer.getBin3().intValue() >= (nevlasPi(activePlayer) ? 2 : 3)
+    if (activePlayer.spendablePower() >= 3
         && activePlayer.getMines().size() < 8
         && activePlayer.getOre().intValue() > 0
         && activePlayer.getCredits().intValue() > 1) {
@@ -134,7 +134,7 @@ public class PowerActionsController extends GridPane {
       });
     }
 
-    if (activePlayer.getBin3().intValue() >= (nevlasPi(activePlayer) ? 2 : 3)) {
+    if (activePlayer.spendablePower() >= 3) {
       pt.tryHighlight(activePlayer, p -> {
         Util.plus(activePlayer.getBin1(), 2);
         gameController.getGame().getPtActionTaken().setValue(true);

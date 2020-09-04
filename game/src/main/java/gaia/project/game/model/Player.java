@@ -662,6 +662,10 @@ public class Player implements Serializable {
     return Math.min(maybeLeech, canCharge());
   }
 
+  public int spendablePower() {
+    return bin3.get();
+  }
+
   public boolean canBuildSatellite() {
     return bin1.get() + bin2.get() + bin3.get() > 0;
   }
@@ -963,7 +967,7 @@ public class Player implements Serializable {
   }
 
   // Serialization
-  private void writeObject(ObjectOutputStream oos) throws IOException {
+  protected void writeObject(ObjectOutputStream oos) throws IOException {
     oos.defaultWriteObject();
     oos.writeInt(gaiaBin.get());
     oos.writeInt(bin1.get());
@@ -1021,7 +1025,7 @@ public class Player implements Serializable {
   }
 
   @SuppressWarnings("unchecked")
-  private void readObject(ObjectInputStream ois) throws ClassNotFoundException, IOException {
+  protected void readObject(ObjectInputStream ois) throws ClassNotFoundException, IOException {
     ois.defaultReadObject();
     gaiaBin = new SimpleIntegerProperty(ois.readInt());
     bin1 = new SimpleIntegerProperty(ois.readInt());

@@ -1002,6 +1002,7 @@ public class Player {
     json.name(JsonUtil.SCORE).value(score.get());
     if (roundBooster.getValue() != null) {
       json.name(JsonUtil.ROUND_BOOSTER).value(roundBooster.getValue().name());
+      json.name(JsonUtil.ROUND_BOOSTER_USED).value(roundBoosterUsed);
     }
 
     // Tech track
@@ -1031,7 +1032,9 @@ public class Player {
     // Federations
     json.name(JsonUtil.FEDERATIONS).beginArray();
     for (Set<Coords> federation : federations) {
+      json.beginObject();
       JsonUtil.writeCoordsCollection(json, JsonUtil.FED, federation);
+      json.endObject();
     }
     json.endArray();
     json.name(JsonUtil.FED_TILES).beginArray();
@@ -1123,6 +1126,9 @@ public class Player {
           break;
         case JsonUtil.ROUND_BOOSTER:
           p.roundBooster.setValue(RoundBooster.valueOf(json.nextString()));
+          break;
+        case JsonUtil.ROUND_BOOSTER_USED:
+          p.roundBoosterUsed = json.nextBoolean();
           break;
         case JsonUtil.TERRA_LEVEL:
           p.terraformingLevel.setValue(json.nextInt());

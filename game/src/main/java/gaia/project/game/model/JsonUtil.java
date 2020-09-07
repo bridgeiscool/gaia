@@ -36,6 +36,7 @@ public class JsonUtil {
   public static final String CURRENT_INCOME = "currentIncome";
   public static final String SCORE = "score";
   public static final String ROUND_BOOSTER = "roundBooster";
+  public static final String ROUND_BOOSTER_USED = "roundBoosterUsed";
 
   // Tech
   public static final String TERRA_LEVEL = "terraformingLevel";
@@ -176,15 +177,17 @@ public class JsonUtil {
     json.beginArray();
     while (json.hasNext()) {
       Set<Coords> federation = new HashSet<>();
+      json.beginObject();
       json.nextName();
       json.beginArray();
       while (json.hasNext()) {
-        json.beginObject();
+        json.beginArray();
         federation.add(new Coords(json.nextDouble(), json.nextDouble()));
-        json.endObject();
+        json.endArray();
       }
       json.endArray();
       sets.add(federation);
+      json.endObject();
     }
 
     json.endArray();

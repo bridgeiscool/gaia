@@ -11,6 +11,7 @@ import com.google.common.collect.Sets;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
+import gaia.project.game.PlanetType;
 import gaia.project.game.board.EmptyHex;
 import gaia.project.game.board.Hex;
 import gaia.project.game.board.HexWithPlanet;
@@ -46,6 +47,8 @@ public final class IvitsPlayer extends Player {
 
     // Add action
     getSpecialActions().put(PlayerBoardAction.SPACE_STATION, new SimpleBooleanProperty(false));
+
+    getBuiltOn().add(PlanetType.RED);
   }
 
   public Set<Coords> getSpaceStations() {

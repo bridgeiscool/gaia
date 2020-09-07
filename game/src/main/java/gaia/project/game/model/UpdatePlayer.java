@@ -1,8 +1,6 @@
 package gaia.project.game.model;
 
-import java.io.Serializable;
-
 @FunctionalInterface
-public interface UpdatePlayer extends Serializable {
+public interface UpdatePlayer {
   void updatePlayer(Player player);
 }

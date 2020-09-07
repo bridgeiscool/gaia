@@ -20,14 +20,24 @@ public enum Race {
     }
 
     @Override
-    public Player getPlayer(PlayerEnum playerEnum) {
-      return new XenosPlayer(playerEnum);
+    public Player newPlayer(PlayerEnum playerEnum) {
+      return XenosPlayer.createNew(playerEnum);
+    }
+
+    @Override
+    public Player emptyPlayer() {
+      return XenosPlayer.empty();
     }
   },
   GLEENS("Gleens", "yellowRace", Color.YELLOW, PlanetType.YELLOW) {
     @Override
-    public Player getPlayer(PlayerEnum playerEnum) {
-      return new GleensPlayer(playerEnum);
+    public Player newPlayer(PlayerEnum playerEnum) {
+      return GleensPlayer.createNew(playerEnum);
+    }
+
+    @Override
+    public Player emptyPlayer() {
+      return GleensPlayer.empty();
     }
 
     @Override
@@ -62,8 +72,13 @@ public enum Race {
     }
 
     @Override
-    public Player getPlayer(PlayerEnum playerEnum) {
-      return new TerranPlayer(playerEnum);
+    public Player newPlayer(PlayerEnum playerEnum) {
+      return TerranPlayer.createNew(playerEnum);
+    }
+
+    @Override
+    public Player emptyPlayer() {
+      return TerranPlayer.empty();
     }
   },
   // LANTIDS("Lantids", "blueRace", Color.BLUE, PlanetType.BLUE) {
@@ -89,9 +104,14 @@ public enum Race {
     }
 
     @Override
-    public Player getPlayer(PlayerEnum playerEnum) {
+    public Player newPlayer(PlayerEnum playerEnum) {
       // HH have no player-level anything, only the conversions once PI is built
-      return new Player(this, playerEnum);
+      return Player.create(this, playerEnum);
+    }
+
+    @Override
+    public Player emptyPlayer() {
+      return Player.empty();
     }
   },
   IVITS("Ivits", "redRace", Color.RED, PlanetType.RED) {
@@ -101,15 +121,25 @@ public enum Race {
     }
 
     @Override
-    public Player getPlayer(PlayerEnum playerEnum) {
-      return new IvitsPlayer(playerEnum);
+    public Player newPlayer(PlayerEnum playerEnum) {
+      return IvitsPlayer.createNew(playerEnum);
+    }
+
+    @Override
+    public Player emptyPlayer() {
+      return IvitsPlayer.empty();
     }
   },
   GEODENS("Geodens", "orangeRace", Color.ORANGE, PlanetType.ORANGE) {
 
     @Override
-    public Player getPlayer(PlayerEnum playerEnum) {
-      return new GeodensPlayer(playerEnum);
+    public Player newPlayer(PlayerEnum playerEnum) {
+      return GeodensPlayer.createNew(playerEnum);
+    }
+
+    @Override
+    public Player emptyPlayer() {
+      return GeodensPlayer.empty();
     }
 
     @Override
@@ -120,8 +150,13 @@ public enum Race {
 
   BALTAKS("Bal Taks", "orangeRace", Color.ORANGE, PlanetType.ORANGE) {
     @Override
-    public Player getPlayer(PlayerEnum playerEnum) {
-      return new BalTaksPlayer(playerEnum);
+    public Player newPlayer(PlayerEnum playerEnum) {
+      return BalTaksPlayer.createNew(playerEnum);
+    }
+
+    @Override
+    public Player emptyPlayer() {
+      return BalTaksPlayer.empty();
     }
 
     @Override
@@ -142,8 +177,13 @@ public enum Race {
 
   ITARS("Itars", "whiteRace", Color.WHITE, PlanetType.WHITE) {
     @Override
-    public Player getPlayer(PlayerEnum playerEnum) {
-      return new ItarsPlayer(playerEnum);
+    public Player newPlayer(PlayerEnum playerEnum) {
+      return ItarsPlayer.createNew(playerEnum);
+    }
+
+    @Override
+    public Player emptyPlayer() {
+      return ItarsPlayer.empty();
     }
 
     @Override
@@ -169,8 +209,13 @@ public enum Race {
   NEVLAS("Nevlas", "whiteRace", Color.WHITE, PlanetType.WHITE) {
 
     @Override
-    public Player getPlayer(PlayerEnum playerEnum) {
-      return new NevlasPlayer(playerEnum);
+    public Player newPlayer(PlayerEnum playerEnum) {
+      return NevlasPlayer.createNew(playerEnum);
+    }
+
+    @Override
+    public Player emptyPlayer() {
+      return NevlasPlayer.empty();
     }
 
     @Override
@@ -192,8 +237,13 @@ public enum Race {
   FIRAKS("Firaks", "grayRace", Color.GRAY, PlanetType.GRAY) {
 
     @Override
-    public Player getPlayer(PlayerEnum playerEnum) {
-      return new FiraksPlayer(playerEnum);
+    public Player newPlayer(PlayerEnum playerEnum) {
+      return FiraksPlayer.createNew(playerEnum);
+    }
+
+    @Override
+    public Player emptyPlayer() {
+      return FiraksPlayer.empty();
     }
 
     @Override
@@ -213,8 +263,13 @@ public enum Race {
   },
   BESCODS("Bescods", "grayRace", Color.GRAY, PlanetType.GRAY) {
     @Override
-    public Player getPlayer(PlayerEnum playerEnum) {
-      return new BescodsPlayer(playerEnum);
+    public Player newPlayer(PlayerEnum playerEnum) {
+      return BescodsPlayer.createNew(playerEnum);
+    }
+
+    @Override
+    public Player emptyPlayer() {
+      return BescodsPlayer.empty();
     }
 
     @Override
@@ -246,8 +301,13 @@ public enum Race {
 
   AMBAS("Ambas", "brownRace", Color.TAN, PlanetType.BROWN) {
     @Override
-    public Player getPlayer(PlayerEnum playerEnum) {
-      return new AmbasPlayer(playerEnum);
+    public Player newPlayer(PlayerEnum playerEnum) {
+      return AmbasPlayer.createNew(playerEnum);
+    }
+
+    @Override
+    public Player emptyPlayer() {
+      return AmbasPlayer.empty();
     }
 
     @Override
@@ -268,8 +328,13 @@ public enum Race {
 
   TAKLONS("Taklons", "brownRace", Color.TAN, PlanetType.BROWN) {
     @Override
-    public Player getPlayer(PlayerEnum playerEnum) {
-      return new TaklonsPlayer(playerEnum);
+    public Player newPlayer(PlayerEnum playerEnum) {
+      return TaklonsPlayer.createNew(playerEnum);
+    }
+
+    @Override
+    public Player emptyPlayer() {
+      return TaklonsPlayer.empty();
     }
   };
 
@@ -285,7 +350,9 @@ public enum Race {
     this.homePlanet = homePlanet;
   }
 
-  public abstract Player getPlayer(PlayerEnum playerEnum);
+  public abstract Player newPlayer(PlayerEnum playerEnum);
+
+  public abstract Player emptyPlayer();
 
   public String getRaceName() {
     return raceName;
@@ -400,8 +467,6 @@ public enum Race {
   }
 
   private static class OneQic implements UpdatePlayer {
-    private static final long serialVersionUID = -304948874042749436L;
-
     @Override
     public void updatePlayer(Player player) {
       Util.minus(player.getQic(), 1);
@@ -409,8 +474,6 @@ public enum Race {
   }
 
   private static class OneOre implements UpdatePlayer {
-    private static final long serialVersionUID = 4405543174181017949L;
-
     @Override
     public void updatePlayer(Player player) {
       Util.minus(player.getOre(), 1);

@@ -1,21 +1,23 @@
 package gaia.project.game.model;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.StringReader;
+import java.io.StringWriter;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import com.google.gson.Gson;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
 
 public class PlayerTest {
   private Player player;
 
   @Before
   public void before() {
-    player = new Player(Race.XENOS, PlayerEnum.PLAYER1);
+    player = Player.create(Race.XENOS, PlayerEnum.PLAYER1);
   }
 
   // Charge power tests (Gleens start with 0-4-2 in bins 1-2-3)
@@ -65,19 +67,46 @@ public class PlayerTest {
     player.chargePower(0);
   }
 
-  @Test
-  public void testSerialization() throws IOException, ClassNotFoundException {
-    Player player = new Player(Race.TERRANS, PlayerEnum.PLAYER1);
-    player.getMines().add(new Coords(0.0, 0.1));
-    player.setRoundBooster(RoundBooster.BIGS);
-    try (ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ObjectOutputStream oos = new ObjectOutputStream(baos)) {
-      oos.writeObject(player);
-      try (ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
-          ObjectInputStream ois = new ObjectInputStream(bais)) {
-        Player reRead = (Player) ois.readObject();
+  private static final Gson GSON = new Gson();
 
-      }
-    }
+  @Test
+  public void testSerialization() throws IOException {
+    Player player = Player.create(Race.AMBAS, PlayerEnum.PLAYER1);
+    StringWriter writer = new StringWriter();
+    JsonWriter newJsonWriter = GSON.newJsonWriter(writer);
+
+    player.write(newJsonWriter);
+
+    String text = writer.toString();
+    System.out.println(text);
+
+    JsonReader reader = GSON.newJsonReader(new StringReader(writer.toString()));
+
+    Player reRead = Player.read(Player.empty(), reader);
+
+    // Juat testing one random thing for now.
+    Assert.assertEquals(player.getAiLevel().get(), reRead.getAiLevel().get());
+  }
+
+  @Test
+  public void testCoordsSerialization() throws IOException {
+    Player player = Player.create(Race.AMBAS, PlayerEnum.PLAYER1);
+    player.getMines().add(new Coords(1.0, -1.0));
+    player.getMines().add(new Coords(2.0, -2.0));
+    StringWriter writer = new StringWriter();
+    JsonWriter newJsonWriter = GSON.newJsonWriter(writer);
+
+    player.write(newJsonWriter);
+
+    String text = writer.toString();
+    System.out.println(text);
+
+    JsonReader reader = GSON.newJsonReader(new StringReader(writer.toString()));
+
+    Player reRead = Player.read(Player.empty(), reader);
+
+    // Juat testing one random thing for now.
+    Assert.assertTrue(reRead.getMines().contains(new Coords(1.0, -1.0)));
+    Assert.assertTrue(reRead.getMines().contains(new Coords(2.0, -2.0)));
   }
 }

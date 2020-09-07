@@ -4,13 +4,21 @@ import gaia.project.game.board.HexWithPlanet;
 import gaia.project.game.board.TradingPost;
 import javafx.beans.property.SimpleBooleanProperty;
 
-public class FiraksPlayer extends Player {
-  private static final long serialVersionUID = 3937559742818721321L;
+public final class FiraksPlayer extends Player {
   private transient boolean ignoreTpRoundBonus;
 
-  public FiraksPlayer(PlayerEnum playerEnum) {
-    super(Race.FIRAKS, playerEnum);
+  public static FiraksPlayer createNew(PlayerEnum playerEnum) {
+    FiraksPlayer player = new FiraksPlayer();
+    player.fromRace(Race.FIRAKS, playerEnum);
+
+    return player;
   }
+
+  public static FiraksPlayer empty() {
+    return new FiraksPlayer();
+  }
+
+  private FiraksPlayer() {}
 
   public void piAction(HexWithPlanet hex) {
     TradingPost tp = new TradingPost(hex, Race.FIRAKS.getColor(), getPlayerEnum());

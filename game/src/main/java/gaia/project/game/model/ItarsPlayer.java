@@ -1,11 +1,18 @@
 package gaia.project.game.model;
 
-public class ItarsPlayer extends Player {
-  private static final long serialVersionUID = 3937559742818721321L;
+public final class ItarsPlayer extends Player {
+  public static ItarsPlayer createNew(PlayerEnum playerEnum) {
+    ItarsPlayer p = new ItarsPlayer();
+    p.fromRace(Race.ITARS, playerEnum);
 
-  public ItarsPlayer(PlayerEnum playerEnum) {
-    super(Race.ITARS, playerEnum);
+    return p;
   }
+
+  public static ItarsPlayer empty() {
+    return new ItarsPlayer();
+  }
+
+  private ItarsPlayer() {}
 
   @Override
   public void sacPower(int numTimes) {

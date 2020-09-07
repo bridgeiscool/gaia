@@ -1,10 +1,8 @@
 package gaia.project.game;
 
-import java.io.Serializable;
 import java.util.function.Consumer;
 
 import gaia.project.game.model.Player;
-import gaia.project.game.model.UpdatePlayer;
 import javafx.beans.property.BooleanProperty;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
@@ -21,9 +19,9 @@ public class SpecialAction extends StackPane {
 
   private final Octagon octagon;
   private boolean taken;
-  private final UpdatePlayer specialAction;
+  private final Enum<?> specialAction;
 
-  public SpecialAction(UpdatePlayer specialAction, String display, BooleanProperty taken) {
+  public SpecialAction(Enum<?> specialAction, String display, BooleanProperty taken) {
     ObservableList<Node> children = getChildren();
     this.octagon = new Octagon();
     this.specialAction = specialAction;
@@ -45,7 +43,7 @@ public class SpecialAction extends StackPane {
     octagon.getStyleClass().add(taken ? TAKEN_ACTION : NORMAL);
   }
 
-  public void tryHighlight(Player activePlayer, Consumer<Serializable> callBack) {
+  public void tryHighlight(Player activePlayer, Consumer<Enum<?>> callBack) {
     if (!taken) {
       octagon.getStyleClass().clear();
       octagon.getStyleClass().add(HIGHLIGHTED);

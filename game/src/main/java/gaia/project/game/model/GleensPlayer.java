@@ -6,12 +6,18 @@ import gaia.project.game.PlanetType;
 import gaia.project.game.board.HexWithPlanet;
 import javafx.application.Platform;
 
-public class GleensPlayer extends Player {
-  private static final long serialVersionUID = -5023045450134206874L;
-
-  public GleensPlayer(PlayerEnum playerEnum) {
-    super(Race.GLEENS, playerEnum);
+public final class GleensPlayer extends Player {
+  public static GleensPlayer createNew(PlayerEnum playerEnum) {
+    GleensPlayer p = new GleensPlayer();
+    p.fromRace(Race.GLEENS, playerEnum);
+    return p;
   }
+
+  public static GleensPlayer empty() {
+    return new GleensPlayer();
+  }
+
+  private GleensPlayer() {}
 
   @Override
   protected void addAdditionalListeners() {

@@ -1,11 +1,15 @@
 package gaia.project.game.model;
 
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
 
 import gaia.project.game.PlanetType;
 import gaia.project.game.board.Academy;
@@ -14,16 +18,21 @@ import gaia.project.game.board.HexWithPlanet;
 import gaia.project.game.board.PlanetaryInstitute;
 import javafx.beans.property.SimpleBooleanProperty;
 
-public class BescodsPlayer extends Player {
-  private static final long serialVersionUID = 2663152509950065941L;
-
+public final class BescodsPlayer extends Player {
   private final Set<Coords> grayPlanets = new HashSet<>();
 
-  public BescodsPlayer(PlayerEnum playerEnum) {
-    super(Race.BESCODS, playerEnum);
-
-    getSpecialActions().put(PlayerBoardAction.BUMP_LOWEST_TECH, new SimpleBooleanProperty(false));
+  public static BescodsPlayer createNew(PlayerEnum playerEnum) {
+    BescodsPlayer p = new BescodsPlayer();
+    p.fromRace(Race.BESCODS, playerEnum);
+    p.getSpecialActions().put(PlayerBoardAction.BUMP_LOWEST_TECH, new SimpleBooleanProperty(false));
+    return p;
   }
+
+  public static BescodsPlayer empty() {
+    return new BescodsPlayer();
+  }
+
+  private BescodsPlayer() {}
 
   @Override
   public void buildMine(HexWithPlanet hex) {
@@ -141,5 +150,16 @@ public class BescodsPlayer extends Player {
             getGaiaformingLevel().get(),
             getEconLevel().get(),
             getKnowledgeLevel().get())).first();
+  }
+
+  @Override
+  protected void writeExtraContent(JsonWriter json) throws IOException {
+    JsonUtil.writeCoordsCollection(json, JsonUtil.GRAY_PLANETS, grayPlanets);
+  }
+
+  @Override
+  protected void handleAdditionalContent(String name, JsonReader json) throws IOException {
+    Preconditions.checkArgument(JsonUtil.GRAY_PLANETS.contentEquals(name));
+    JsonUtil.readCoordsArray(grayPlanets, json);
   }
 }

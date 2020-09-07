@@ -188,7 +188,7 @@ public class PlayerBoardController extends GridPane {
     });
 
     // Special actions
-    for (Entry<Serializable, BooleanProperty> entry : player.getSpecialActions().entrySet()) {
+    for (Entry<Enum<?>, BooleanProperty> entry : player.getSpecialActions().entrySet()) {
       if (entry.getKey() instanceof PlayerBoardAction) {
         PlayerBoardAction key = (PlayerBoardAction) entry.getKey();
         tokenArea.getChildren().add(new SpecialAction(key, key.display(), entry.getValue()));
@@ -227,7 +227,7 @@ public class PlayerBoardController extends GridPane {
     throw new IllegalStateException("No such bin!");
   }
 
-  public void highlightActions(Consumer<Serializable> callback) {
+  public void highlightActions(Consumer<Enum<?>> callback) {
     tokenArea.getChildren()
         .stream()
         .filter(MiniTechTile.class::isInstance)
@@ -259,7 +259,7 @@ public class PlayerBoardController extends GridPane {
         .forEach(ft -> ft.highlightForCopy(activePlayer, callback));
   }
 
-  public void highlightTechTiles(Consumer<Serializable> callback) {
+  public void highlightTechTiles(Consumer<Enum<?>> callback) {
     tokenArea.getChildren()
         .stream()
         .filter(MiniTechTile.class::isInstance)

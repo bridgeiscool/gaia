@@ -1,28 +1,53 @@
 package gaia.project.game.model;
 
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
 public class Income implements UpdatePlayer {
-  private static final long serialVersionUID = 5922169349684403967L;
+  private final IntegerProperty oreIncome;
+  private final IntegerProperty creditIncome;
+  private final IntegerProperty researchIncome;
+  private final IntegerProperty qicIncome;
+  private final IntegerProperty powerIncome;
+  private final IntegerProperty chargeIncome;
 
-  private transient IntegerProperty oreIncome;
-  private transient IntegerProperty creditIncome;
-  private transient IntegerProperty researchIncome;
-  private transient IntegerProperty qicIncome;
-  private transient IntegerProperty powerIncome;
-  private transient IntegerProperty chargeIncome;
+  public static Income fromRace(Race race) {
+    Income i = new Income();
+    i.oreIncome.setValue(race.getStartingOreIncome());
+    i.creditIncome.setValue(race.getStartingCreditIncome());
+    i.researchIncome.setValue(race.getStartingResearchIncome());
+    i.qicIncome.setValue(race.getStartingQicIncome());
+    i.powerIncome.setValue(race.getStartingPtIncome());
+    i.chargeIncome.setValue(0);
+    return i;
+  }
 
-  public Income(Race race) {
-    this.oreIncome = new SimpleIntegerProperty(race.getStartingOreIncome());
-    this.creditIncome = new SimpleIntegerProperty(race.getStartingCreditIncome());
-    this.researchIncome = new SimpleIntegerProperty(race.getStartingResearchIncome());
-    this.qicIncome = new SimpleIntegerProperty(race.getStartingQicIncome());
-    this.powerIncome = new SimpleIntegerProperty(race.getStartingPtIncome());
+  private Income(
+      int oreIncome,
+      int creditIncome,
+      int researchIncome,
+      int qicIncome,
+      int powerIncome,
+      int chargeIncome) {
+    this.oreIncome = new SimpleIntegerProperty(oreIncome);
+    this.creditIncome = new SimpleIntegerProperty(creditIncome);
+    this.researchIncome = new SimpleIntegerProperty(researchIncome);
+    this.qicIncome = new SimpleIntegerProperty(qicIncome);
+    this.powerIncome = new SimpleIntegerProperty(powerIncome);
+    this.chargeIncome = new SimpleIntegerProperty(chargeIncome);
+  }
+
+  private Income() {
+    this.oreIncome = new SimpleIntegerProperty();
+    this.creditIncome = new SimpleIntegerProperty();
+    this.researchIncome = new SimpleIntegerProperty();
+    this.qicIncome = new SimpleIntegerProperty();
+    this.powerIncome = new SimpleIntegerProperty();
     this.chargeIncome = new SimpleIntegerProperty();
   }
 
@@ -72,21 +97,48 @@ public class Income implements UpdatePlayer {
     }
   }
 
-  private void writeObject(ObjectOutputStream oos) throws IOException {
-    oos.writeInt(oreIncome.get());
-    oos.writeInt(creditIncome.get());
-    oos.writeInt(researchIncome.get());
-    oos.writeInt(qicIncome.get());
-    oos.writeInt(powerIncome.get());
-    oos.writeInt(chargeIncome.get());
+  public void write(JsonWriter json) throws IOException {
+    json.beginObject();
+
+    json.name(JsonUtil.ORE).value(oreIncome.get());
+    json.name(JsonUtil.CREDITS).value(creditIncome.get());
+    json.name(JsonUtil.RESEARCH).value(researchIncome.get());
+    json.name(JsonUtil.QIC).value(qicIncome.get());
+    json.name(JsonUtil.CHARGE).value(chargeIncome.get());
+    json.name(JsonUtil.POWER).value(powerIncome.get());
+
+    json.endObject();
   }
 
-  private void readObject(ObjectInputStream ois) throws ClassNotFoundException, IOException {
-    oreIncome = new SimpleIntegerProperty(ois.readInt());
-    creditIncome = new SimpleIntegerProperty(ois.readInt());
-    researchIncome = new SimpleIntegerProperty(ois.readInt());
-    qicIncome = new SimpleIntegerProperty(ois.readInt());
-    powerIncome = new SimpleIntegerProperty(ois.readInt());
-    chargeIncome = new SimpleIntegerProperty(ois.readInt());
+  public static Income read(JsonReader reader) throws IOException {
+    Income i = new Income();
+    reader.beginObject();
+    while (reader.hasNext()) {
+      switch (reader.nextName()) {
+        case JsonUtil.ORE:
+          i.oreIncome.setValue(reader.nextInt());
+          break;
+        case JsonUtil.CREDITS:
+          i.creditIncome.setValue(reader.nextInt());
+          break;
+        case JsonUtil.RESEARCH:
+          i.researchIncome.setValue(reader.nextInt());
+          break;
+        case JsonUtil.QIC:
+          i.qicIncome.setValue(reader.nextInt());
+          break;
+        case JsonUtil.POWER:
+          i.powerIncome.setValue(reader.nextInt());
+          break;
+        case JsonUtil.CHARGE:
+          i.chargeIncome.setValue(reader.nextInt());
+          break;
+        default:
+          throw new IllegalStateException();
+      }
+    }
+
+    reader.endObject();
+    return i;
   }
 }

@@ -1,19 +1,17 @@
 package gaia.project.game.model;
 
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
 
 import gaia.project.game.PlanetType;
 import gaia.project.game.board.Academy;
@@ -37,128 +35,115 @@ import javafx.collections.ObservableMap;
 import javafx.collections.ObservableSet;
 
 // Backing bean to store player's information
-public class Player implements Serializable {
-  private static final long serialVersionUID = -5027584264184182306L;
+public class Player {
+  private Race race;
+  private PlayerEnum playerEnum;
+  private IntegerProperty gaiaBin = new SimpleIntegerProperty();
+  private IntegerProperty bin1 = new SimpleIntegerProperty();
+  private IntegerProperty bin2 = new SimpleIntegerProperty();
+  private IntegerProperty bin3 = new SimpleIntegerProperty();
 
-  private final Race race;
-  private final PlayerEnum playerEnum;
-  private transient IntegerProperty gaiaBin;
-  private transient IntegerProperty bin1;
-  private transient IntegerProperty bin2;
-  private transient IntegerProperty bin3;
+  private IntegerProperty ore = new SimpleIntegerProperty();
+  private IntegerProperty credits = new SimpleIntegerProperty();
+  private IntegerProperty research = new SimpleIntegerProperty();
+  private IntegerProperty qic = new SimpleIntegerProperty();
 
-  private transient IntegerProperty ore;
-  private transient IntegerProperty credits;
-  private transient IntegerProperty research;
-  private transient IntegerProperty qic;
+  private IntegerProperty availableGaiaformers = new SimpleIntegerProperty();
 
-  private transient IntegerProperty availableGaiaformers;
+  private Income currentIncome;
 
-  private final Income currentIncome;
+  private IntegerProperty score = new SimpleIntegerProperty();
 
-  private transient IntegerProperty score;
-
-  private transient Property<RoundBooster> roundBooster = new SimpleObjectProperty<>();
+  private Property<RoundBooster> roundBooster = new SimpleObjectProperty<>();
   private boolean roundBoosterUsed;
 
   // Tech track related
-  private transient IntegerProperty terraformingLevel = new SimpleIntegerProperty(0);
-  private transient IntegerProperty navLevel = new SimpleIntegerProperty(0);
-  private transient IntegerProperty aiLevel = new SimpleIntegerProperty(0);
-  private transient IntegerProperty gaiaformingLevel = new SimpleIntegerProperty(0);
-  private transient IntegerProperty econLevel = new SimpleIntegerProperty(0);
-  private transient IntegerProperty knowledgeLevel = new SimpleIntegerProperty(0);
-  private transient IntegerProperty terraCost = new SimpleIntegerProperty(3);
-  private transient IntegerProperty navRange = new SimpleIntegerProperty(1);
-  private transient IntegerProperty gaiaformerCost = new SimpleIntegerProperty(50);
-  private transient IntegerProperty tempNavRange = new SimpleIntegerProperty(0);
-  private transient IntegerProperty currentDigs = new SimpleIntegerProperty(0);
+  private IntegerProperty terraformingLevel = new SimpleIntegerProperty(0);
+  private IntegerProperty navLevel = new SimpleIntegerProperty(0);
+  private IntegerProperty aiLevel = new SimpleIntegerProperty(0);
+  private IntegerProperty gaiaformingLevel = new SimpleIntegerProperty(0);
+  private IntegerProperty econLevel = new SimpleIntegerProperty(0);
+  private IntegerProperty knowledgeLevel = new SimpleIntegerProperty(0);
+  private IntegerProperty terraCost = new SimpleIntegerProperty(3);
+  private IntegerProperty navRange = new SimpleIntegerProperty(1);
+  private IntegerProperty gaiaformerCost = new SimpleIntegerProperty(50);
+  private IntegerProperty tempNavRange = new SimpleIntegerProperty(0);
+  private IntegerProperty currentDigs = new SimpleIntegerProperty(0);
 
   // Tech tile related
-  private transient ObservableSet<TechTile> techTiles = FXCollections.observableSet();
-  private transient IntegerProperty bigBuildingPower = new SimpleIntegerProperty(3);
-  private transient ObservableSet<PlanetType> builtOn = FXCollections.observableSet();
-  private transient IntegerProperty gaiaPlanets = new SimpleIntegerProperty(0);
+  private ObservableSet<TechTile> techTiles = FXCollections.observableSet();
+  private IntegerProperty bigBuildingPower = new SimpleIntegerProperty(3);
+  private ObservableSet<PlanetType> builtOn = FXCollections.observableSet();
+  private IntegerProperty gaiaPlanets = new SimpleIntegerProperty(0);
+
   // Boolean indicates whether the action has been used this round
-  private transient ObservableMap<Serializable, BooleanProperty> specialActions = FXCollections.observableHashMap();
-  private transient ObservableSet<AdvancedTechTile> advTechTiles = FXCollections.observableSet();
-  private transient ObservableSet<TechTile> coveredTechTiles = FXCollections.observableSet();
+  private ObservableMap<Enum<?>, BooleanProperty> specialActions = FXCollections.observableHashMap();
+  private ObservableSet<AdvancedTechTile> advTechTiles = FXCollections.observableSet();
+  private ObservableSet<TechTile> coveredTechTiles = FXCollections.observableSet();
 
   // Federation related
-  private transient ObservableSet<Set<Coords>> federations = FXCollections.observableSet(new HashSet<>());
-  private transient ObservableSet<Coords> satellites = FXCollections.observableSet();
+  private ObservableSet<Set<Coords>> federations = FXCollections.observableSet(new HashSet<>());
+  private ObservableSet<Coords> satellites = FXCollections.observableSet();
   // Set of objects with the tile and whether not it still can be flipped...
-  private transient ObservableSet<FedToken> federationTiles = FXCollections.observableSet();
+  private ObservableSet<FedToken> federationTiles = FXCollections.observableSet();
   private int fedPower = 7;
 
   // Buildings, etc
-  private transient ObservableSet<Coords> mines = FXCollections.observableSet();
-  private transient ObservableSet<Coords> tradingPosts = FXCollections.observableSet();
-  private transient ObservableSet<Coords> researchLabs = FXCollections.observableSet();
-  private transient ObservableSet<Coords> pi = FXCollections.observableSet();
-  private transient ObservableSet<Coords> ka = FXCollections.observableSet();
-  private transient ObservableSet<Coords> qa = FXCollections.observableSet();
-  private transient ObservableSet<Coords> gaiaformers = FXCollections.observableSet();
-  private transient ObservableSet<Coords> lostPlanet = FXCollections.observableSet();
-
-  // Income related
-  private final List<IncomeUpdater> tpIncome;
-  private final List<IncomeUpdater> rlIncome;
-  private final IncomeUpdater piIncome;
-  private final int kaIncome;
+  private ObservableSet<Coords> mines = FXCollections.observableSet();
+  private ObservableSet<Coords> tradingPosts = FXCollections.observableSet();
+  private ObservableSet<Coords> researchLabs = FXCollections.observableSet();
+  private ObservableSet<Coords> pi = FXCollections.observableSet();
+  private ObservableSet<Coords> ka = FXCollections.observableSet();
+  private ObservableSet<Coords> qa = FXCollections.observableSet();
+  private ObservableSet<Coords> gaiaformers = FXCollections.observableSet();
+  private ObservableSet<Coords> lostPlanet = FXCollections.observableSet();
 
   // End Scoring Related
-  private transient ObservableSet<Integer> sectors = FXCollections.observableSet();
-  private transient IntegerProperty totalBuildings = new SimpleIntegerProperty(0);
-  private transient IntegerProperty buildingsInFeds = new SimpleIntegerProperty(0);
+  private ObservableSet<Integer> sectors = FXCollections.observableSet();
+  private IntegerProperty totalBuildings = new SimpleIntegerProperty(0);
+  private IntegerProperty buildingsInFeds = new SimpleIntegerProperty(0);
   private Map<String, Integer> scoreLog = new HashMap<>();
 
-  public Player(Race race, PlayerEnum playerEnum) {
+  public static Player create(Race race, PlayerEnum playerEnum) {
+    Player p = new Player();
+    p.fromRace(race, playerEnum);
+
+    return p;
+  }
+
+  public static Player empty() {
+    return new Player();
+  }
+
+  protected void fromRace(Race race, PlayerEnum playerEnum) {
     this.race = race;
     this.playerEnum = playerEnum;
-    this.gaiaBin = new SimpleIntegerProperty(0);
-    this.bin1 = new SimpleIntegerProperty(race.getStartingBin1());
-    this.bin2 = new SimpleIntegerProperty(race.getStartingBin2());
-    this.bin3 = new SimpleIntegerProperty(race.getStartingBin3());
-    this.ore = new SimpleIntegerProperty(race.getStartingOre());
-    this.ore.addListener((o, oldValue, newValue) -> {
-      if (newValue.intValue() > 15) {
-        this.ore.setValue(15);
-      }
-    });
-    this.credits = new SimpleIntegerProperty(race.getStartingCredits());
-    this.credits.addListener((o, oldValue, newValue) -> {
-      if (newValue.intValue() > 30) {
-        this.credits.setValue(30);
-      }
-    });
-    this.research = new SimpleIntegerProperty(race.getStartingKnowledge());
-    this.research.addListener((o, oldValue, newValue) -> {
-      if (newValue.intValue() > 15) {
-        this.research.setValue(15);
-      }
-    });
-    this.qic = new SimpleIntegerProperty(race.getStartingQic());
-    this.availableGaiaformers = new SimpleIntegerProperty(this.gaiaformingLevel.get());
-    this.currentIncome = new Income(race);
-    this.score = new SimpleIntegerProperty(0);
-    this.tpIncome = race.getTpIncome();
-    this.rlIncome = race.getRlIncome();
-    this.piIncome = race.getPiIncome();
-    this.kaIncome = race.getKaIncome();
+    gaiaBin.setValue(0);
+    bin1.setValue(race.getStartingBin1());
+    bin2.setValue(race.getStartingBin2());
+    bin3.setValue(race.getStartingBin3());
+    ore.setValue(race.getStartingOre());
+    credits.setValue(race.getStartingCredits());
+    research.setValue(race.getStartingKnowledge());
+    qic.setValue(race.getStartingQic());
+    availableGaiaformers.setValue(gaiaformingLevel.get());
+    currentIncome = Income.fromRace(race);
+    score.setValue(0);
 
     // This has to be run before setting up tech bonuses so that Gleens QIC gets transformed
     addAdditionalListeners();
 
     // We set up tech bonuses so that when we add race starting techs we get the bonus
     setupTechBonuses();
-    this.terraformingLevel.setValue(race.getStartingTerraformingLevel());
-    this.navLevel.setValue(race.getStartingNavLevel());
-    this.aiLevel.setValue(race.getStartingAiLevel());
-    this.gaiaformingLevel.setValue(race.getStartingGaiaformingLevel());
-    this.econLevel.setValue(race.getStartingEconLevel());
-    this.knowledgeLevel.setValue(race.getStartingKnowledgeLevel());
+    terraformingLevel.setValue(race.getStartingTerraformingLevel());
+    navLevel.setValue(race.getStartingNavLevel());
+    aiLevel.setValue(race.getStartingAiLevel());
+    gaiaformingLevel.setValue(race.getStartingGaiaformingLevel());
+    econLevel.setValue(race.getStartingEconLevel());
+    knowledgeLevel.setValue(race.getStartingKnowledgeLevel());
   }
+
+  protected Player() {}
 
   private void setupTechBonuses() {
     terraformingLevel.addListener((o, oldValue, newValue) -> {
@@ -298,6 +283,36 @@ public class Player implements Serializable {
   }
 
   protected void addAdditionalListeners() {
+    ore.addListener((o, oldValue, newValue) -> {
+      if (newValue.intValue() > 15) {
+        ore.setValue(15);
+      }
+
+      if (newValue.intValue() < 0) {
+        throw new IllegalStateException("Ore < 0");
+      }
+    });
+
+    credits.addListener((o, oldValue, newValue) -> {
+      if (newValue.intValue() > 30) {
+        credits.setValue(30);
+      }
+
+      if (newValue.intValue() < 0) {
+        throw new IllegalStateException("Credits < 0");
+      }
+    });
+
+    research.addListener((o, oldValue, newValue) -> {
+      if (newValue.intValue() > 15) {
+        research.setValue(15);
+      }
+
+      if (newValue.intValue() < 0) {
+        throw new IllegalStateException("Research < 0");
+      }
+    });
+
     // Re-add listeners from tech tiles, override for race-specific abilities
     techTiles.stream().filter(TechTile::addsListener).forEach(tt -> tt.addTo(this));
     advTechTiles.stream().filter(AdvancedTechTile::addsListener).forEach(tt -> tt.updatePlayer(this));
@@ -564,7 +579,7 @@ public class Player implements Serializable {
     return buildingsInFeds;
   }
 
-  public ObservableMap<Serializable, BooleanProperty> getSpecialActions() {
+  public ObservableMap<Enum<?>, BooleanProperty> getSpecialActions() {
     return specialActions;
   }
 
@@ -859,7 +874,7 @@ public class Player implements Serializable {
     if (mines.size() != 2) {
       Util.minus(currentIncome.getOreIncome(), 1);
     }
-    tpIncome.get(tradingPosts.size() - 1).addTo(currentIncome);
+    race.getTpIncome().get(tradingPosts.size() - 1).addTo(currentIncome);
   }
 
   public void buildResearchLab(HexWithPlanet hex) {
@@ -872,8 +887,8 @@ public class Player implements Serializable {
     Util.minus(credits, 5);
 
     // Update Income
-    tpIncome.get(tradingPosts.size()).removeFrom(currentIncome);
-    rlIncome.get(researchLabs.size() - 1).addTo(currentIncome);
+    race.getTpIncome().get(tradingPosts.size()).removeFrom(currentIncome);
+    race.getRlIncome().get(researchLabs.size() - 1).addTo(currentIncome);
   }
 
   public void buildPI(HexWithPlanet hex) {
@@ -886,8 +901,8 @@ public class Player implements Serializable {
     Util.minus(credits, 6);
 
     // Update income
-    tpIncome.get(tradingPosts.size()).removeFrom(currentIncome);
-    piIncome.addTo(currentIncome);
+    race.getTpIncome().get(tradingPosts.size()).removeFrom(currentIncome);
+    race.getPiIncome().addTo(currentIncome);
   }
 
   public void buildAcademy(HexWithPlanet hex, boolean ka) {
@@ -904,9 +919,9 @@ public class Player implements Serializable {
     Util.minus(credits, 6);
 
     // Update Income
-    rlIncome.get(researchLabs.size()).removeFrom(currentIncome);
+    race.getRlIncome().get(researchLabs.size()).removeFrom(currentIncome);
     if (ka) {
-      Util.plus(currentIncome.getResearchIncome(), kaIncome);
+      Util.plus(currentIncome.getResearchIncome(), race.getKaIncome());
     } else {
       specialActions.put(race.getQaAction(), new SimpleBooleanProperty(false));
     }
@@ -927,8 +942,8 @@ public class Player implements Serializable {
     }
   }
 
-  public void takeSpecialAction(UpdatePlayer specialAction) {
-    specialAction.updatePlayer(this);
+  public void takeSpecialAction(Enum<?> specialAction) {
+    ((UpdatePlayer) specialAction).updatePlayer(this);
 
     specialActions.get(specialAction).setValue(true);
   }
@@ -967,138 +982,259 @@ public class Player implements Serializable {
   }
 
   // Serialization
-  protected void writeObject(ObjectOutputStream oos) throws IOException {
-    oos.defaultWriteObject();
-    oos.writeInt(gaiaBin.get());
-    oos.writeInt(bin1.get());
-    oos.writeInt(bin2.get());
-    oos.writeInt(bin3.get());
-    oos.writeInt(ore.get());
-    oos.writeInt(credits.get());
-    oos.writeInt(research.get());
-    oos.writeInt(qic.get());
-    oos.writeInt(availableGaiaformers.get());
-    oos.writeInt(score.get());
-    oos.writeUTF(roundBooster.getValue() == null ? "NONE" : roundBooster.getValue().name());
+  public final void write(JsonWriter json) throws IOException {
+    json.beginObject();
+
+    json.name(JsonUtil.RACE).value(race.name());
+    json.name(JsonUtil.PLAYER_ENUM).value(playerEnum.name());
+
+    json.name(JsonUtil.GAIA_BIN).value(gaiaBin.get());
+    json.name(JsonUtil.BIN1).value(bin1.get());
+    json.name(JsonUtil.BIN2).value(bin2.get());
+    json.name(JsonUtil.BIN3).value(bin3.get());
+    json.name(JsonUtil.ORE).value(ore.get());
+    json.name(JsonUtil.CREDITS).value(credits.get());
+    json.name(JsonUtil.RESEARCH).value(research.get());
+    json.name(JsonUtil.QIC).value(qic.get());
+    json.name(JsonUtil.AVAILABLE_GAIAFORMERS).value(availableGaiaformers.get());
+    json.name(JsonUtil.CURRENT_INCOME);
+    currentIncome.write(json);
+    json.name(JsonUtil.SCORE).value(score.get());
+    if (roundBooster.getValue() != null) {
+      json.name(JsonUtil.ROUND_BOOSTER).value(roundBooster.getValue().name());
+    }
 
     // Tech track
-    oos.writeInt(terraformingLevel.get());
-    oos.writeInt(navLevel.get());
-    oos.writeInt(aiLevel.get());
-    oos.writeInt(gaiaformingLevel.get());
-    oos.writeInt(econLevel.get());
-    oos.writeInt(knowledgeLevel.get());
-    oos.writeInt(terraCost.get());
-    oos.writeInt(navRange.get());
-    oos.writeInt(gaiaformerCost.get());
+    json.name(JsonUtil.TERRA_LEVEL).value(terraformingLevel.get());
+    json.name(JsonUtil.NAV_LEVEL).value(navLevel.get());
+    json.name(JsonUtil.AI_LEVEL).value(aiLevel.get());
+    json.name(JsonUtil.GAIA_LEVEL).value(gaiaformingLevel.get());
+    json.name(JsonUtil.ECON_LEVEL).value(econLevel.get());
+    json.name(JsonUtil.K_LEVEL).value(knowledgeLevel.get());
+    json.name(JsonUtil.TERRA_COST).value(terraCost.get());
+    json.name(JsonUtil.NAV_RANGE).value(navRange.get());
+    json.name(JsonUtil.GAIA_COST).value(gaiaformerCost.get());
 
     // Tech tile
-    oos.writeInt(bigBuildingPower.get());
-    oos.writeObject(new HashSet<>(builtOn));
-    oos.writeInt(gaiaPlanets.get());
-    oos.writeObject(new HashSet<>(techTiles));
-    oos.writeObject(
-        // Turn it into a Map<Serializable, Boolean> for serialization
-        specialActions.entrySet().stream().collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue().getValue())));
-    oos.writeObject(new HashSet<>(coveredTechTiles));
-    oos.writeObject(new HashSet<>(advTechTiles));
+    json.name(JsonUtil.BB_POWER).value(bigBuildingPower.get());
+    JsonUtil.writeCollection(json, JsonUtil.BUILT_ON, builtOn, PlanetType::name);
+    json.name(JsonUtil.GAIA_PLANETS).value(gaiaPlanets.get());
+    JsonUtil.writeCollection(json, JsonUtil.TECH_TILES, techTiles, TechTile::name);
+    JsonUtil.writeCollection(json, JsonUtil.COVERED_TECH_TILES, coveredTechTiles, TechTile::name);
+    JsonUtil.writeCollection(json, JsonUtil.ADV_TECH_TILES, advTechTiles, AdvancedTechTile::name);
+    json.name(JsonUtil.SPECIAL_ACTIONS).beginObject();
+    for (Entry<Enum<?>, BooleanProperty> entry : specialActions.entrySet()) {
+      json.name(entry.getKey().name()).value(entry.getValue().get());
+    }
+    json.endObject();
 
     // Federations
-    oos.writeObject(new HashSet<>(federations));
-
-    // Buildings etc
-    oos.writeObject(new HashSet<>(mines));
-    oos.writeObject(new HashSet<>(tradingPosts));
-    oos.writeObject(new HashSet<>(researchLabs));
-    oos.writeObject(new HashSet<>(pi));
-    oos.writeObject(new HashSet<>(ka));
-    oos.writeObject(new HashSet<>(qa));
-    oos.writeObject(new HashSet<>(gaiaformers));
-    oos.writeObject(new HashSet<>(federationTiles));
-    oos.writeObject(new HashSet<>(lostPlanet));
-
-    // Scoring related
-    oos.writeObject(new HashSet<>(sectors));
-    oos.writeObject(new HashSet<>(satellites));
-    oos.writeInt(totalBuildings.get());
-    oos.writeInt(buildingsInFeds.get());
-  }
-
-  @SuppressWarnings("unchecked")
-  protected void readObject(ObjectInputStream ois) throws ClassNotFoundException, IOException {
-    ois.defaultReadObject();
-    gaiaBin = new SimpleIntegerProperty(ois.readInt());
-    bin1 = new SimpleIntegerProperty(ois.readInt());
-    bin2 = new SimpleIntegerProperty(ois.readInt());
-    bin3 = new SimpleIntegerProperty(ois.readInt());
-    ore = new SimpleIntegerProperty(ois.readInt());
-    credits = new SimpleIntegerProperty(ois.readInt());
-    research = new SimpleIntegerProperty(ois.readInt());
-    qic = new SimpleIntegerProperty(ois.readInt());
-    availableGaiaformers = new SimpleIntegerProperty(ois.readInt());
-    score = new SimpleIntegerProperty(ois.readInt());
-    String maybeBooster = ois.readUTF();
-    roundBooster = "NONE".equals(maybeBooster)
-        ? new SimpleObjectProperty<>()
-        : new SimpleObjectProperty<>(RoundBooster.valueOf(maybeBooster));
-
-    // Tech track
-    terraformingLevel = new SimpleIntegerProperty(ois.readInt());
-    navLevel = new SimpleIntegerProperty(ois.readInt());
-    aiLevel = new SimpleIntegerProperty(ois.readInt());
-    gaiaformingLevel = new SimpleIntegerProperty(ois.readInt());
-    econLevel = new SimpleIntegerProperty(ois.readInt());
-    knowledgeLevel = new SimpleIntegerProperty(ois.readInt());
-    terraCost = new SimpleIntegerProperty(ois.readInt());
-    navRange = new SimpleIntegerProperty(ois.readInt());
-    gaiaformerCost = new SimpleIntegerProperty(ois.readInt());
-    // These two are not written because they are ephemeral
-    tempNavRange = new SimpleIntegerProperty(0);
-    currentDigs = new SimpleIntegerProperty(0);
-
-    // Tech tile
-    bigBuildingPower = new SimpleIntegerProperty(ois.readInt());
-    builtOn = FXCollections.observableSet((Set<PlanetType>) ois.readObject());
-    gaiaPlanets = new SimpleIntegerProperty(ois.readInt());
-    techTiles = FXCollections.observableSet((Set<TechTile>) ois.readObject());
-    Map<Serializable, Boolean> readMap = (Map<Serializable, Boolean>) ois.readObject();
-    specialActions = FXCollections.observableMap(
-        readMap.entrySet()
-            .stream()
-            .collect(Collectors.toMap(e -> e.getKey(), e -> new SimpleBooleanProperty(e.getValue()))));
-    coveredTechTiles = FXCollections.observableSet((Set<TechTile>) ois.readObject());
-    advTechTiles = FXCollections.observableSet((Set<AdvancedTechTile>) ois.readObject());
-
-    // Federations
-    federations = FXCollections.observableSet((Set<Set<Coords>>) ois.readObject());
+    json.name(JsonUtil.FEDERATIONS).beginArray();
+    for (Set<Coords> federation : federations) {
+      JsonUtil.writeCoordsCollection(json, JsonUtil.FED, federation);
+    }
+    json.endArray();
+    json.name(JsonUtil.FED_TILES).beginArray();
+    for (FedToken fedToken : federationTiles) {
+      json.beginObject().name(fedToken.federationTile.name()).value(fedToken.flippable.get()).endObject();
+    }
+    json.endArray();
+    JsonUtil.writeCoordsCollection(json, JsonUtil.SATS, satellites);
 
     // Buildings
-    mines = FXCollections.observableSet((Set<Coords>) ois.readObject());
-    tradingPosts = FXCollections.observableSet((Set<Coords>) ois.readObject());
-    researchLabs = FXCollections.observableSet((Set<Coords>) ois.readObject());
-    pi = FXCollections.observableSet((Set<Coords>) ois.readObject());
-    ka = FXCollections.observableSet((Set<Coords>) ois.readObject());
-    qa = FXCollections.observableSet((Set<Coords>) ois.readObject());
-    gaiaformers = FXCollections.observableSet((Set<Coords>) ois.readObject());
-    federationTiles = FXCollections.observableSet((Set<FedToken>) ois.readObject());
-    lostPlanet = FXCollections.observableSet((Set<Coords>) ois.readObject());
+    JsonUtil.writeCoordsCollection(json, JsonUtil.MINES, mines);
+    JsonUtil.writeCoordsCollection(json, JsonUtil.TPS, tradingPosts);
+    JsonUtil.writeCoordsCollection(json, JsonUtil.RLS, researchLabs);
+    JsonUtil.writeCoordsCollection(json, JsonUtil.PI, pi);
+    JsonUtil.writeCoordsCollection(json, JsonUtil.KA, ka);
+    JsonUtil.writeCoordsCollection(json, JsonUtil.QA, qa);
+    JsonUtil.writeCoordsCollection(json, JsonUtil.GFS, gaiaformers);
+    JsonUtil.writeCoordsCollection(json, JsonUtil.LP, lostPlanet);
 
-    // Scoring related
-    sectors = FXCollections.observableSet((Set<Integer>) ois.readObject());
-    satellites = FXCollections.observableSet((Set<Coords>) ois.readObject());
-    totalBuildings = new SimpleIntegerProperty(ois.readInt());
-    buildingsInFeds = new SimpleIntegerProperty(ois.readInt());
+    // End scoring
+    JsonUtil.writeCollection(json, JsonUtil.SECTORS, sectors, String::valueOf);
+    json.name(JsonUtil.BUILDINGS).value(totalBuildings.get());
+    json.name(JsonUtil.BLDGS_IN_FEDS).value(buildingsInFeds.get());
+    json.name(JsonUtil.SCORE_LOG).beginObject();
+    for (Entry<String, Integer> e : scoreLog.entrySet()) {
+      json.name(e.getKey()).value(e.getValue());
+    }
+    json.endObject();
 
-    fedPower = 7;
+    writeExtraContent(json);
 
-    setupTechBonuses();
-    addAdditionalListeners();
+    json.endObject();
   }
 
-  public static class FedToken implements Serializable {
-    private static final long serialVersionUID = -8311628199705003018L;
+  protected void writeExtraContent(JsonWriter json) throws IOException {
+    // Does nothing by default
+  }
+
+  public static Player read(Player p, JsonReader json) throws IOException {
+    json.beginObject();
+    handleContent(json, p);
+    json.endObject();
+
+    return p;
+  }
+
+  protected static void handleContent(JsonReader json, Player p) throws IOException {
+    while (json.hasNext()) {
+      String name = json.nextName();
+      switch (name) {
+        case JsonUtil.RACE:
+          p.race = Race.valueOf(json.nextString());
+          break;
+        case JsonUtil.PLAYER_ENUM:
+          p.playerEnum = PlayerEnum.valueOf(json.nextString());
+          break;
+        case JsonUtil.GAIA_BIN:
+          p.gaiaBin.setValue(json.nextInt());
+          break;
+        case JsonUtil.BIN1:
+          p.bin1.setValue(json.nextInt());
+          break;
+        case JsonUtil.BIN2:
+          p.bin2.setValue(json.nextInt());
+          break;
+        case JsonUtil.BIN3:
+          p.bin3.setValue(json.nextInt());
+          break;
+        case JsonUtil.ORE:
+          p.ore.setValue(json.nextInt());
+          break;
+        case JsonUtil.CREDITS:
+          p.credits.setValue(json.nextInt());
+          break;
+        case JsonUtil.RESEARCH:
+          p.research.setValue(json.nextInt());
+          break;
+        case JsonUtil.QIC:
+          p.qic.setValue(json.nextInt());
+          break;
+        case JsonUtil.AVAILABLE_GAIAFORMERS:
+          p.availableGaiaformers.setValue(json.nextInt());
+          break;
+        case JsonUtil.CURRENT_INCOME:
+          p.currentIncome = Income.read(json);
+          break;
+        case JsonUtil.SCORE:
+          p.score.setValue(json.nextInt());
+          break;
+        case JsonUtil.ROUND_BOOSTER:
+          p.roundBooster.setValue(RoundBooster.valueOf(json.nextString()));
+          break;
+        case JsonUtil.TERRA_LEVEL:
+          p.terraformingLevel.setValue(json.nextInt());
+          break;
+        case JsonUtil.NAV_LEVEL:
+          p.navLevel.setValue(json.nextInt());
+          break;
+        case JsonUtil.AI_LEVEL:
+          p.aiLevel.setValue(json.nextInt());
+          break;
+        case JsonUtil.GAIA_LEVEL:
+          p.gaiaformingLevel.setValue(json.nextInt());
+          break;
+        case JsonUtil.ECON_LEVEL:
+          p.econLevel.setValue(json.nextInt());
+          break;
+        case JsonUtil.K_LEVEL:
+          p.knowledgeLevel.setValue(json.nextInt());
+          break;
+        case JsonUtil.TERRA_COST:
+          p.terraCost.setValue(json.nextInt());
+          break;
+        case JsonUtil.NAV_RANGE:
+          p.navRange.setValue(json.nextInt());
+          break;
+        case JsonUtil.GAIA_COST:
+          p.gaiaformerCost.setValue(json.nextInt());
+          break;
+        case JsonUtil.BB_POWER:
+          p.bigBuildingPower.setValue(json.nextInt());
+          break;
+        case JsonUtil.BUILT_ON:
+          JsonUtil.readStringArray(p.builtOn, json, PlanetType::valueOf);
+          break;
+        case JsonUtil.GAIA_PLANETS:
+          p.gaiaPlanets.setValue(json.nextInt());
+          break;
+        case JsonUtil.TECH_TILES:
+          JsonUtil.readStringArray(p.techTiles, json, TechTile::valueOf);
+          break;
+        case JsonUtil.SPECIAL_ACTIONS:
+          JsonUtil.readSpecialActions(p.specialActions, json);
+          break;
+        case JsonUtil.COVERED_TECH_TILES:
+          JsonUtil.readStringArray(p.techTiles, json, TechTile::valueOf);
+          break;
+        case JsonUtil.ADV_TECH_TILES:
+          JsonUtil.readStringArray(p.advTechTiles, json, AdvancedTechTile::valueOf);
+          break;
+        case JsonUtil.FEDERATIONS:
+          JsonUtil.readSetOfSets(p.federations, json);
+          break;
+        case JsonUtil.FED_TILES:
+          JsonUtil.readFedTiles(p.federationTiles, json);
+          break;
+        case JsonUtil.SATS:
+          JsonUtil.readCoordsArray(p.satellites, json);
+          break;
+        case JsonUtil.MINES:
+          JsonUtil.readCoordsArray(p.mines, json);
+          break;
+        case JsonUtil.TPS:
+          JsonUtil.readCoordsArray(p.tradingPosts, json);
+          break;
+        case JsonUtil.RLS:
+          JsonUtil.readCoordsArray(p.researchLabs, json);
+          break;
+        case JsonUtil.PI:
+          JsonUtil.readCoordsArray(p.pi, json);
+          break;
+        case JsonUtil.KA:
+          JsonUtil.readCoordsArray(p.ka, json);
+          break;
+        case JsonUtil.QA:
+          JsonUtil.readCoordsArray(p.qa, json);
+          break;
+        case JsonUtil.GFS:
+          JsonUtil.readCoordsArray(p.gaiaformers, json);
+          break;
+        case JsonUtil.LP:
+          JsonUtil.readCoordsArray(p.lostPlanet, json);
+          break;
+        case JsonUtil.SECTORS:
+          JsonUtil.readIntegerArray(p.sectors, json);
+          break;
+        case JsonUtil.BUILDINGS:
+          p.totalBuildings.setValue(json.nextInt());
+          break;
+        case JsonUtil.BLDGS_IN_FEDS:
+          p.buildingsInFeds.setValue(json.nextInt());
+          break;
+        case JsonUtil.SCORE_LOG:
+          JsonUtil.readScoreLog(p.scoreLog, json);
+          break;
+        default:
+          p.handleAdditionalContent(name, json);
+          break;
+      }
+    }
+
+    p.setupTechBonuses();
+    p.addAdditionalListeners();
+  }
+
+  protected void handleAdditionalContent(String name, JsonReader json) throws IOException {
+    // Override in subclasses to add new fields
+    throw new IllegalStateException("Unsupported key: " + name);
+  }
+
+  public static class FedToken {
     private final FederationTile federationTile;
-    private transient BooleanProperty flippable;
+    private BooleanProperty flippable;
 
     public FedToken(FederationTile federationTile, boolean flippable) {
       this.federationTile = federationTile;
@@ -1111,16 +1247,6 @@ public class Player implements Serializable {
 
     public BooleanProperty getFlippable() {
       return flippable;
-    }
-
-    private void writeObject(ObjectOutputStream oos) throws IOException {
-      oos.defaultWriteObject();
-      oos.writeBoolean(flippable.get());
-    }
-
-    private void readObject(ObjectInputStream ois) throws ClassNotFoundException, IOException {
-      ois.defaultReadObject();
-      flippable = new SimpleBooleanProperty(ois.readBoolean());
     }
   }
 }

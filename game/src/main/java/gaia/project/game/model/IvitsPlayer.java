@@ -1,5 +1,6 @@
 package gaia.project.game.model;
 
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -7,6 +8,8 @@ import java.util.stream.Collectors;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Sets;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
 
 import gaia.project.game.board.EmptyHex;
 import gaia.project.game.board.Hex;
@@ -16,13 +19,21 @@ import gaia.project.game.board.Satellite;
 import gaia.project.game.board.SpaceStation;
 import javafx.beans.property.SimpleBooleanProperty;
 
-public class IvitsPlayer extends Player {
-  private static final long serialVersionUID = -4915515584020163311L;
+public final class IvitsPlayer extends Player {
   public final Set<Coords> spaceStations = new HashSet<>();
 
-  public IvitsPlayer(PlayerEnum playerEnum) {
-    super(Race.IVITS, playerEnum);
+  public static IvitsPlayer createNew(PlayerEnum playerEnum) {
+    IvitsPlayer p = new IvitsPlayer();
+    p.fromRace(Race.IVITS, playerEnum);
+
+    return p;
   }
+
+  public static IvitsPlayer empty() {
+    return new IvitsPlayer();
+  }
+
+  private IvitsPlayer() {}
 
   @Override
   public void buildSetupMine(HexWithPlanet hex) {
@@ -105,5 +116,16 @@ public class IvitsPlayer extends Player {
   public int nextFederationPower() {
     // Can gain an additional federation tile if terraforming is maxed...
     return 7 * (getFederationTiles().size() + (getTerraformingLevel().get() == 5 ? 0 : 1));
+  }
+
+  @Override
+  protected void writeExtraContent(JsonWriter json) throws IOException {
+    JsonUtil.writeCoordsCollection(json, JsonUtil.SPACE_STATIONS, spaceStations);
+  }
+
+  @Override
+  protected void handleAdditionalContent(String name, JsonReader json) throws IOException {
+    Preconditions.checkArgument(JsonUtil.SPACE_STATIONS.contentEquals(name));
+    JsonUtil.readCoordsArray(spaceStations, json);
   }
 }

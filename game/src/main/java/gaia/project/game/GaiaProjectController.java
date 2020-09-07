@@ -1,11 +1,12 @@
 package gaia.project.game;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+
+import com.google.gson.Gson;
 
 import gaia.project.game.model.Game;
 import javafx.fxml.FXMLLoader;
@@ -51,9 +52,12 @@ public class GaiaProjectController {
     }
   }
 
+  private static final Gson GSON = new Gson();
+
   public void loadGame(File file) throws IOException, ClassNotFoundException {
-    try (FileInputStream fis = new FileInputStream(file); ObjectInputStream ois = new ObjectInputStream(fis)) {
-      Game game = (Game) ois.readObject();
+    try (FileReader reader = new FileReader(file)) {
+
+      Game game = Game.read(GSON.newJsonReader(reader));
       GameController gameController = new GameController(this, game, true);
       primaryStage.setScene(new Scene(new MenuPane(gameController)));
       gameController.activate();

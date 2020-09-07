@@ -2,12 +2,20 @@ package gaia.project.game.model;
 
 import gaia.project.game.TerranPIDialog;
 
-public class TerranPlayer extends Player {
-  private static final long serialVersionUID = 1588962295060407390L;
+public final class TerranPlayer extends Player {
 
-  public TerranPlayer(PlayerEnum playerEnum) {
-    super(Race.TERRANS, playerEnum);
+  public static TerranPlayer createNew(PlayerEnum playerEnum) {
+    TerranPlayer p = new TerranPlayer();
+    p.fromRace(Race.TERRANS, playerEnum);
+
+    return p;
   }
+
+  public static TerranPlayer empty() {
+    return new TerranPlayer();
+  }
+
+  private TerranPlayer() {}
 
   @Override
   public void gaiaPhase() {

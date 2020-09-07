@@ -4,13 +4,20 @@ import gaia.project.game.board.HexWithPlanet;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.scene.Node;
 
-public class AmbasPlayer extends Player {
-  private static final long serialVersionUID = -6186316864926193895L;
+public final class AmbasPlayer extends Player {
   private transient boolean ignorePiAndMineBonuses;
 
-  public AmbasPlayer(PlayerEnum playerEnum) {
-    super(Race.AMBAS, playerEnum);
+  public static AmbasPlayer createNew(PlayerEnum playerEnum) {
+    AmbasPlayer p = new AmbasPlayer();
+    p.fromRace(Race.AMBAS, playerEnum);
+    return p;
   }
+
+  public static AmbasPlayer empty() {
+    return new AmbasPlayer();
+  }
+
+  private AmbasPlayer() {}
 
   public void piAction(HexWithPlanet piDestination, HexWithPlanet pi) {
 

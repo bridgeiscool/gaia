@@ -1,11 +1,18 @@
 package gaia.project.game.model;
 
-public class NevlasPlayer extends Player {
-  private static final long serialVersionUID = -7064457047755128024L;
+public final class NevlasPlayer extends Player {
 
-  public NevlasPlayer(PlayerEnum playerEnum) {
-    super(Race.NEVLAS, playerEnum);
+  public static NevlasPlayer createNew(PlayerEnum playerEnum) {
+    NevlasPlayer p = new NevlasPlayer();
+    p.fromRace(Race.NEVLAS, playerEnum);
+    return p;
   }
+
+  public static NevlasPlayer empty() {
+    return new NevlasPlayer();
+  }
+
+  private NevlasPlayer() {}
 
   @Override
   public void convertResourcesToVps() {

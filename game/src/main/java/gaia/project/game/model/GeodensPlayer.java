@@ -3,12 +3,18 @@ package gaia.project.game.model;
 import gaia.project.game.PlanetType;
 import javafx.collections.SetChangeListener;
 
-public class GeodensPlayer extends Player {
-  private static final long serialVersionUID = -5023045450134206874L;
-
-  public GeodensPlayer(PlayerEnum playerEnum) {
-    super(Race.GEODENS, playerEnum);
+public final class GeodensPlayer extends Player {
+  public static GeodensPlayer createNew(PlayerEnum playerEnum) {
+    GeodensPlayer player = new GeodensPlayer();
+    player.fromRace(Race.GEODENS, playerEnum);
+    return player;
   }
+
+  public static GeodensPlayer empty() {
+    return new GeodensPlayer();
+  }
+
+  private GeodensPlayer() {}
 
   @Override
   protected void addAdditionalListeners() {

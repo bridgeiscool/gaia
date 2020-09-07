@@ -1,9 +1,8 @@
 package gaia.project.game;
 
 import java.io.File;
-import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,6 +20,8 @@ import java.util.stream.Collectors;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Iterables;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import gaia.project.game.board.Academy;
 import gaia.project.game.board.EmptyHex;
@@ -1016,10 +1017,11 @@ public class GameController extends BorderPane {
     new ScoreDialog(game).show();
   }
 
+  private static final Gson GSON = new GsonBuilder().create();
+
   private void saveState() {
-    try (FileOutputStream fos = new FileOutputStream(new File(getFilename()));
-        ObjectOutputStream oos = new ObjectOutputStream(fos)) {
-      oos.writeObject(game);
+    try (FileWriter out = new FileWriter(new File(getFilename()))) {
+      game.write(GSON.newJsonWriter(out));
     } catch (IOException e) {
       new Alert(AlertType.ERROR, "Could not save game state: " + e.getMessage(), ButtonType.OK).showAndWait();
     }

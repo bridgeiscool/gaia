@@ -1,11 +1,18 @@
 package gaia.project.game.model;
 
-public class XenosPlayer extends Player {
-  private static final long serialVersionUID = 3937559742818721321L;
+public final class XenosPlayer extends Player {
 
-  public XenosPlayer(PlayerEnum playerEnum) {
-    super(Race.XENOS, playerEnum);
+  public static XenosPlayer createNew(PlayerEnum playerEnum) {
+    XenosPlayer p = new XenosPlayer();
+    p.fromRace(Race.XENOS, playerEnum);
+    return p;
   }
+
+  public static XenosPlayer empty() {
+    return new XenosPlayer();
+  }
+
+  private XenosPlayer() {}
 
   @Override
   public int getFedPower() {

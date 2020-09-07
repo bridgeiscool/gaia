@@ -1,6 +1,5 @@
 package gaia.project.game;
 
-import java.io.Serializable;
 import java.util.function.Consumer;
 
 import javax.annotation.Nullable;
@@ -46,7 +45,7 @@ public class MiniAdvancedTechTile extends HBox {
     return techTile;
   }
 
-  public void highlight(Player activePlayer, Consumer<Serializable> callBack) {
+  public void highlight(Player activePlayer, Consumer<Enum<?>> callBack) {
     if (techTile.isAction()) {
       getStyleClass().clear();
       getStyleClass().add(HIGHLIGHTED);

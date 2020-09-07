@@ -1,11 +1,11 @@
 package gaia.project.game.model;
 
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.Optional;
 
 import com.google.common.base.Preconditions;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
 
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
@@ -13,21 +13,19 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
 
-public class TaklonsPlayer extends Player {
-  private static final long serialVersionUID = -7064457047755128024L;
+public final class TaklonsPlayer extends Player {
+  private Property<Bin> brainStone = new SimpleObjectProperty<>(Bin.I);
 
-  private Bin brainStoneValue;
-  private transient Property<Bin> brainStone;
+  public static TaklonsPlayer createNew(PlayerEnum playerEnum) {
+    TaklonsPlayer p = new TaklonsPlayer();
+    p.fromRace(Race.TAKLONS, playerEnum);
 
-  public TaklonsPlayer(PlayerEnum playerEnum) {
-    super(Race.TAKLONS, playerEnum);
-    brainStoneValue = Bin.I;
-    brainStone = new SimpleObjectProperty<>(brainStoneValue);
-    addBrainstoneListener();
+    return p;
   }
 
-  private void addBrainstoneListener() {
-    brainStone.addListener((o, oldValue, newValue) -> brainStoneValue = newValue);
+  // Uninitialized instance for reading from JSON
+  public static TaklonsPlayer empty() {
+    return new TaklonsPlayer();
   }
 
   public static enum Bin {
@@ -163,14 +161,13 @@ public class TaklonsPlayer extends Player {
   }
 
   @Override
-  protected void writeObject(ObjectOutputStream oos) throws IOException {
-    super.writeObject(oos);
+  public void writeExtraContent(JsonWriter json) throws IOException {
+    json.name(JsonUtil.BRAINSTONE).value(brainStone.getValue().name());
   }
 
   @Override
-  protected void readObject(ObjectInputStream ois) throws ClassNotFoundException, IOException {
-    super.readObject(ois);
-    brainStone = new SimpleObjectProperty<>(brainStoneValue);
-    addBrainstoneListener();
+  protected void handleAdditionalContent(String name, JsonReader json) throws IOException {
+    Preconditions.checkArgument(JsonUtil.BRAINSTONE.equals(name));
+    brainStone.setValue(Bin.valueOf(json.nextString()));
   }
 }

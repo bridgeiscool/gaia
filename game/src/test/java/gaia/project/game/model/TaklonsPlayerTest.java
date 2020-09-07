@@ -1,31 +1,34 @@
 package gaia.project.game.model;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.StringReader;
+import java.io.StringWriter;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
+
+import com.google.gson.Gson;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
 
 import gaia.project.game.model.TaklonsPlayer.Bin;
 
 public class TaklonsPlayerTest {
-  @Ignore
+  private static final Gson GSON = new Gson();
+
   @Test
   public void testSerialization() throws IOException, ClassNotFoundException {
-    TaklonsPlayer player = new TaklonsPlayer(PlayerEnum.PLAYER1);
+    TaklonsPlayer player = TaklonsPlayer.createNew(PlayerEnum.PLAYER1);
     player.getBrainStone().setValue(Bin.GAIA);
-    try (ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ObjectOutputStream oos = new ObjectOutputStream(baos)) {
-      oos.writeObject(player);
-      try (ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
-          ObjectInputStream ois = new ObjectInputStream(bais)) {
-        TaklonsPlayer reRead = (TaklonsPlayer) ois.readObject();
-        Assert.assertEquals(Bin.GAIA, reRead.getBrainStone().getValue());
-      }
-    }
+
+    StringWriter writer = new StringWriter();
+    JsonWriter json = GSON.newJsonWriter(writer);
+    player.write(json);
+
+    JsonReader reader = GSON.newJsonReader(new StringReader(writer.toString()));
+
+    TaklonsPlayer reRead = (TaklonsPlayer) Player.read(TaklonsPlayer.empty(), reader);
+
+    Assert.assertEquals(Bin.GAIA, reRead.getBrainStone().getValue());
   }
 }

@@ -15,6 +15,11 @@ public enum RoundScoringBonus {
           p.updateScore(2, "R" + game.getCurrentRound().getValue().display() + " " + getText());
         }
       }));
+      game.getPlayers().values().forEach(p -> p.getLostPlanet().addListener((SetChangeListener<Coords>) change -> {
+        if (game.getCurrentRound().getValue() == round && change.wasAdded()) {
+          p.updateScore(2, "R" + game.getCurrentRound().getValue().display() + " " + getText());
+        }
+      }));
     }
   },
   MINE_GP3("GP M -> 3") {

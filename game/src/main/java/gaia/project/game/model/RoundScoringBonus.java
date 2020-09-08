@@ -62,7 +62,9 @@ public enum RoundScoringBonus {
     public void addListeners(Game game, Round round) {
       game.getPlayers().values().forEach(p -> p.getCurrentDigs().addListener((o, oldValue, newValue) -> {
         if (game.getCurrentRound().getValue() == round && newValue.intValue() > oldValue.intValue()) {
-          p.updateScore(2, "R" + game.getCurrentRound().getValue().display() + " " + getText());
+          p.updateScore(
+              2 * p.getCurrentDigs().get(),
+              "R" + game.getCurrentRound().getValue().display() + " " + getText());
         }
       }));
     }

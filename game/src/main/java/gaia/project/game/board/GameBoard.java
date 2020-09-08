@@ -15,7 +15,7 @@ import java.util.stream.StreamSupport;
 
 import com.google.common.annotations.VisibleForTesting;
 
-import gaia.project.game.PlanetType;
+import gaia.project.game.controller.PlanetType;
 import gaia.project.game.model.Player;
 import javafx.collections.ObservableList;
 import javafx.scene.Group;

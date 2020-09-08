@@ -2,8 +2,8 @@ package gaia.project.game.model;
 
 import com.google.common.base.Preconditions;
 
-import gaia.project.game.PlanetType;
 import gaia.project.game.board.HexWithPlanet;
+import gaia.project.game.controller.PlanetType;
 import javafx.application.Platform;
 
 public final class GleensPlayer extends Player {

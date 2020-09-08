@@ -1,6 +1,6 @@
 package gaia.project.game.model;
 
-import gaia.project.game.TerranPIDialog;
+import gaia.project.game.controller.TerranPIDialog;
 
 public final class TerranPlayer extends Player {
 

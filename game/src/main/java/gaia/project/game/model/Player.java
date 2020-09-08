@@ -13,7 +13,6 @@ import com.google.common.collect.Sets;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
-import gaia.project.game.PlanetType;
 import gaia.project.game.board.Academy;
 import gaia.project.game.board.EmptyHex;
 import gaia.project.game.board.Gaiaformer;
@@ -24,6 +23,7 @@ import gaia.project.game.board.PlanetaryInstitute;
 import gaia.project.game.board.ResearchLab;
 import gaia.project.game.board.Satellite;
 import gaia.project.game.board.TradingPost;
+import gaia.project.game.controller.PlanetType;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.Property;

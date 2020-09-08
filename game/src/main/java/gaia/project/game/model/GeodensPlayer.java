@@ -1,6 +1,6 @@
 package gaia.project.game.model;
 
-import gaia.project.game.PlanetType;
+import gaia.project.game.controller.PlanetType;
 import javafx.collections.SetChangeListener;
 
 public final class GeodensPlayer extends Player {

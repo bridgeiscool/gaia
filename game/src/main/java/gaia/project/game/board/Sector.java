@@ -10,7 +10,7 @@ import java.util.List;
 
 import com.google.common.base.Preconditions;
 
-import gaia.project.game.PlanetType;
+import gaia.project.game.controller.PlanetType;
 import gaia.project.game.model.Coords;
 import javafx.collections.ObservableList;
 import javafx.scene.Group;

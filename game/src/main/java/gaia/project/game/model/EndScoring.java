@@ -7,7 +7,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.function.Function;
 
-import gaia.project.game.PlanetType;
+import gaia.project.game.controller.PlanetType;
 import javafx.collections.SetChangeListener;
 import javafx.scene.control.Label;
 import javafx.util.converter.NumberStringConverter;

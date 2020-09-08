@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.google.common.collect.ImmutableList;
 
-import gaia.project.game.PlanetType;
+import gaia.project.game.controller.PlanetType;
 import javafx.scene.paint.Color;
 
 public enum Race {

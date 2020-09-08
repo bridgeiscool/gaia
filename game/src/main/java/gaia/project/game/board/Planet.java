@@ -2,7 +2,7 @@ package gaia.project.game.board;
 
 import com.google.common.base.Preconditions;
 
-import gaia.project.game.PlanetType;
+import gaia.project.game.controller.PlanetType;
 import javafx.scene.shape.Circle;
 
 public class Planet extends Circle {

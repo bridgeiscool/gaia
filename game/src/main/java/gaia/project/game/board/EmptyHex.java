@@ -9,7 +9,7 @@ import java.util.function.Predicate;
 
 import javax.annotation.Nullable;
 
-import gaia.project.game.PlanetType;
+import gaia.project.game.controller.PlanetType;
 import gaia.project.game.model.Coords;
 import gaia.project.game.model.Player;
 import gaia.project.game.model.PlayerEnum;

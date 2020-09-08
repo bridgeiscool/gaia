@@ -2,7 +2,7 @@ package gaia.project.game.board;
 
 import com.google.common.collect.ImmutableList;
 
-import gaia.project.game.PlanetType;
+import gaia.project.game.controller.PlanetType;
 import javafx.scene.Parent;
 
 public final class Sector10 {

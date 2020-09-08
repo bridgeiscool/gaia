@@ -11,11 +11,11 @@ import com.google.common.collect.Sets;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
-import gaia.project.game.PlanetType;
 import gaia.project.game.board.Academy;
 import gaia.project.game.board.Hex;
 import gaia.project.game.board.HexWithPlanet;
 import gaia.project.game.board.PlanetaryInstitute;
+import gaia.project.game.controller.PlanetType;
 import javafx.beans.property.SimpleBooleanProperty;
 
 public final class BescodsPlayer extends Player {

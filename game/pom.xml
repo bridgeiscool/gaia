@@ -49,7 +49,7 @@
         <artifactId>javafx-maven-plugin</artifactId>
         <version>0.0.4</version>
         <configuration>
-          <mainClass>gaia.project.game.GaiaProjectApp</mainClass>
+          <mainClass>gaia.project.game.controller.GaiaProjectApp</mainClass>
         </configuration>
       </plugin>
     </plugins>

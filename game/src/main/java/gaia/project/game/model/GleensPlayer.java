@@ -42,7 +42,7 @@ public final class GleensPlayer extends Player {
     }
 
     if (planetType == PlanetType.GAIA) {
-      return getOre().get() > 1;
+      return getOre().get() > 1 && !(hex.hasGaiaformer() && hex.getBuilder().get() != getPlayerEnum());
     }
 
     return super.canDigTo(hex);

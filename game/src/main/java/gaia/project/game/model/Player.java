@@ -1173,7 +1173,7 @@ public class Player {
           JsonUtil.readSpecialActions(p.specialActions, json);
           break;
         case JsonUtil.COVERED_TECH_TILES:
-          JsonUtil.readStringArray(p.techTiles, json, TechTile::valueOf);
+          JsonUtil.readStringArray(p.coveredTechTiles, json, TechTile::valueOf);
           break;
         case JsonUtil.ADV_TECH_TILES:
           JsonUtil.readStringArray(p.advTechTiles, json, AdvancedTechTile::valueOf);

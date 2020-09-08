@@ -596,7 +596,7 @@ public class GameController extends BorderPane {
     playerBoards.get(activePlayer().getPlayerEnum()).highlightTechTiles(this::finishTechTileCover);
   }
 
-  void finishTechTileCover(Serializable selected) {
+  void finishTechTileCover(Enum<?> selected) {
     playerBoards.get(activePlayer().getPlayerEnum()).clearHighlighting();
     TechTile covered = (TechTile) selected;
     activePlayer().getTechTiles().remove(covered);

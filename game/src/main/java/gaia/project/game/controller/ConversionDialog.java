@@ -79,10 +79,10 @@ public class ConversionDialog extends Dialog<Void> {
 
     // Disable buttons when they can't be used...
     qicToNav.disableProperty().bind(Bindings.lessThan(activePlayer.getQic(), 1));
-    powerToQic.disableProperty().bind(Bindings.lessThan(activePlayer.getBin3(), actualPower(4)));
+    powerToQic.disableProperty().bind(Bindings.lessThan(activePlayer.getBin3(), actualPower(4, false)));
     qicToOre.disableProperty().bind(Bindings.lessThan(activePlayer.getQic(), 1));
-    powerToOre.disableProperty().bind(Bindings.lessThan(activePlayer.getBin3(), actualPower(3)));
-    powerToKnowledge.disableProperty().bind(Bindings.lessThan(activePlayer.getBin3(), actualPower(4)));
+    powerToOre.disableProperty().bind(Bindings.lessThan(activePlayer.getBin3(), actualPower(3, false)));
+    powerToKnowledge.disableProperty().bind(Bindings.lessThan(activePlayer.getBin3(), actualPower(4, false)));
     knowledgeToCredits.disableProperty().bind(Bindings.lessThan(activePlayer.getResearch(), 1));
     powerToCredits.disableProperty().bind(Bindings.lessThan(activePlayer.getBin3(), 1));
     oreToCredits.disableProperty().bind(Bindings.lessThan(activePlayer.getOre(), 1));
@@ -92,12 +92,12 @@ public class ConversionDialog extends Dialog<Void> {
     additionalContent();
   }
 
-  private int actualPower(int normalPower) {
+  private int actualPower(int normalPower, boolean spending) {
     if (nevlasPi()) {
       return normalPower / 2 + normalPower % 2;
     }
 
-    if (activePlayer instanceof TaklonsPlayer) {
+    if (activePlayer instanceof TaklonsPlayer && !spending) {
       TaklonsPlayer taklonsPlayer = (TaklonsPlayer) activePlayer;
       return taklonsPlayer.getBrainStone().getValue() == Bin.III ? normalPower - 3 : normalPower;
     }
@@ -121,7 +121,7 @@ public class ConversionDialog extends Dialog<Void> {
 
   @FXML
   private void powerToQic() {
-    activePlayer.spendPower(actualPower(4));
+    activePlayer.spendPower(actualPower(4, true));
     Util.plus(activePlayer.getQic(), 1);
   }
 
@@ -133,13 +133,13 @@ public class ConversionDialog extends Dialog<Void> {
 
   @FXML
   private void powerToOre() {
-    activePlayer.spendPower(actualPower(3));
+    activePlayer.spendPower(actualPower(3, true));
     Util.plus(activePlayer.getOre(), 1);
   }
 
   @FXML
   private void powerToKnowledge() {
-    activePlayer.spendPower(actualPower(4));
+    activePlayer.spendPower(actualPower(4, true));
     Util.plus(activePlayer.getResearch(), 1);
   }
 

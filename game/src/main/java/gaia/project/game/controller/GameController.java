@@ -800,8 +800,18 @@ public class GameController extends BorderPane {
   }
 
   void selectFederationTile() {
-    activePlayer().getFederations().add(new HashSet<>(currentFederation));
-    Util.plus(activePlayer().getBuildingsInFeds(), currentFederation.size());
+    if (activePlayer().getRace() == Race.IVITS) {
+      IvitsPlayer ivits = (IvitsPlayer) activePlayer();
+      ivits.getBuildingsInFeds()
+          .setValue(
+              Iterables.getOnlyElement(ivits.getFederations())
+                  .stream()
+                  .filter(c -> !ivits.getSpaceStations().contains(c))
+                  .count());
+    } else {
+      activePlayer().getFederations().add(new HashSet<>(currentFederation));
+      Util.plus(activePlayer().getBuildingsInFeds(), currentFederation.size());
+    }
     federationTokens.highlight(activePlayer(), this::finishFederationTileSelection);
   }
 

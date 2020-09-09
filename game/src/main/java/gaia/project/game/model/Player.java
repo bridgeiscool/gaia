@@ -24,6 +24,7 @@ import gaia.project.game.board.ResearchLab;
 import gaia.project.game.board.Satellite;
 import gaia.project.game.board.TradingPost;
 import gaia.project.game.controller.PlanetType;
+import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.Property;
@@ -276,7 +277,8 @@ public class Player {
         case 5:
           exhaustFederationTile();
           currentIncome.getResearchIncome().setValue(currentIncome.getResearchIncome().getValue() - 4);
-          Util.plus(research, 9);
+          // Have to do this so it doesn't erroneously overflow 15 cap
+          Platform.runLater(() -> Util.plus(research, 9));
           break;
       }
     });

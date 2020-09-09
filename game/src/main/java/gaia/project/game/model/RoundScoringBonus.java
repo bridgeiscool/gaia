@@ -157,7 +157,7 @@ public enum RoundScoringBonus {
       Round round) {
     bigBuilding.addListener((SetChangeListener<T>) change -> {
       if (currentRound.getValue() == round) {
-        player.updateScore(2, "R" + currentRound.getValue().display() + " " + display);
+        player.updateScore(5, "R" + currentRound.getValue().display() + " " + display);
       }
     });
   }

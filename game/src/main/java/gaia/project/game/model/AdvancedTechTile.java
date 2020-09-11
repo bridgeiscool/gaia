@@ -149,7 +149,7 @@ public enum AdvancedTechTile {
     }
 
     @Override
-    public void addVps(Player player) {
+    public void endOfRound(Player player) {
       player.updateScore(player.getFederationTiles().size() * 3, "ATT " + display());
     }
   },
@@ -165,7 +165,7 @@ public enum AdvancedTechTile {
     }
 
     @Override
-    public void addVps(Player player) {
+    public void endOfRound(Player player) {
       player.updateScore(player.getResearchLabs().size() * 3, "ATT " + display());
     }
   },
@@ -181,8 +181,8 @@ public enum AdvancedTechTile {
     }
 
     @Override
-    public void addVps(Player player) {
-      player.updateScore(player.getBuiltOn().size() * 1, "ATT " + display());
+    public void endOfRound(Player player) {
+      player.updateScore(player.getBuiltOn().size(), "ATT " + display());
     }
   },
   BUILD_MINE {
@@ -272,7 +272,7 @@ public enum AdvancedTechTile {
     // Does nothing by default - override for actions
   }
 
-  public void addVps(Player player) {
+  public void endOfRound(Player player) {
     // Does nothing by default - override for end of round scoring tiles
   }
 

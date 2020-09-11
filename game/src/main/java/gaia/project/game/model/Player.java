@@ -549,7 +549,7 @@ public class Player {
     }
 
     for (AdvancedTechTile tt : advTechTiles) {
-      tt.addVps(this);
+      tt.endOfRound(this);
     }
   }
 

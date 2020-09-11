@@ -182,7 +182,7 @@ public enum AdvancedTechTile {
 
     @Override
     public void addVps(Player player) {
-      player.updateScore(player.getBuiltOn().size() * 3, "ATT " + display());
+      player.updateScore(player.getBuiltOn().size() * 1, "ATT " + display());
     }
   },
   BUILD_MINE {

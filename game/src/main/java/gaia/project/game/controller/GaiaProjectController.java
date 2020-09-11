@@ -38,6 +38,7 @@ public class GaiaProjectController {
 
     GameController gameController = new GameController(this, game, false);
     primaryStage.setScene(new Scene(new MenuPane(gameController)));
+    primaryStage.setMaximized(true);
     gameController.activate();
   }
 
@@ -60,6 +61,7 @@ public class GaiaProjectController {
       Game game = Game.read(GSON.newJsonReader(reader));
       GameController gameController = new GameController(this, game, true);
       primaryStage.setScene(new Scene(new MenuPane(gameController)));
+      primaryStage.setMaximized(true);
       gameController.activate();
     }
   }

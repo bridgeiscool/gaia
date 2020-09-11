@@ -800,7 +800,7 @@ public class GameController extends BorderPane {
   }
 
   void selectFederationTile() {
-    if (activePlayer().getRace() == Race.IVITS) {
+    if (activePlayer().getRace() == Race.IVITS && !activePlayer().getFederations().isEmpty()) {
       IvitsPlayer ivits = (IvitsPlayer) activePlayer();
       ivits.getBuildingsInFeds()
           .setValue(

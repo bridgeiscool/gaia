@@ -7,26 +7,23 @@ import java.io.StringWriter;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
 public class GameTest {
-  private static final Gson GSON = new Gson();
-
   @Test
   public void testSerialization() throws IOException, ClassNotFoundException {
     Game game = Game.generateGame();
 
     StringWriter writer = new StringWriter();
-    JsonWriter newJsonWriter = GSON.newJsonWriter(writer);
+    JsonWriter newJsonWriter = JsonUtil.GSON.newJsonWriter(writer);
 
     game.write(newJsonWriter);
 
     String text = writer.toString();
     System.out.println(text);
 
-    JsonReader reader = GSON.newJsonReader(new StringReader(text));
+    JsonReader reader = JsonUtil.GSON.newJsonReader(new StringReader(text));
 
     Game reRead = Game.read(reader);
 

@@ -8,7 +8,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
@@ -67,20 +66,18 @@ public class PlayerTest {
     player.chargePower(0);
   }
 
-  private static final Gson GSON = new Gson();
-
   @Test
   public void testSerialization() throws IOException {
     Player player = Player.create(Race.AMBAS, PlayerEnum.PLAYER1);
     StringWriter writer = new StringWriter();
-    JsonWriter newJsonWriter = GSON.newJsonWriter(writer);
+    JsonWriter newJsonWriter = JsonUtil.GSON.newJsonWriter(writer);
 
     player.write(newJsonWriter);
 
     String text = writer.toString();
     System.out.println(text);
 
-    JsonReader reader = GSON.newJsonReader(new StringReader(writer.toString()));
+    JsonReader reader = JsonUtil.GSON.newJsonReader(new StringReader(writer.toString()));
 
     Player reRead = Player.read(Player.empty(), reader);
 
@@ -94,14 +91,14 @@ public class PlayerTest {
     player.getMines().add(new Coords(1.0, -1.0));
     player.getMines().add(new Coords(2.0, -2.0));
     StringWriter writer = new StringWriter();
-    JsonWriter newJsonWriter = GSON.newJsonWriter(writer);
+    JsonWriter newJsonWriter = JsonUtil.GSON.newJsonWriter(writer);
 
     player.write(newJsonWriter);
 
     String text = writer.toString();
     System.out.println(text);
 
-    JsonReader reader = GSON.newJsonReader(new StringReader(writer.toString()));
+    JsonReader reader = JsonUtil.GSON.newJsonReader(new StringReader(writer.toString()));
 
     Player reRead = Player.read(Player.empty(), reader);
 

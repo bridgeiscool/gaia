@@ -7,6 +7,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
@@ -15,6 +17,9 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 
 public class JsonUtil {
+  public static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+
+  // Constants
   public static final String COORDS = "coords";
 
   // Traits

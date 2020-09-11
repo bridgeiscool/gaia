@@ -20,8 +20,6 @@ import java.util.stream.Collectors;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Iterables;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import gaia.project.game.board.Academy;
 import gaia.project.game.board.EmptyHex;
@@ -42,6 +40,7 @@ import gaia.project.game.model.FederationTile;
 import gaia.project.game.model.FiraksPlayer;
 import gaia.project.game.model.Game;
 import gaia.project.game.model.IvitsPlayer;
+import gaia.project.game.model.JsonUtil;
 import gaia.project.game.model.Player;
 import gaia.project.game.model.PlayerBoardAction;
 import gaia.project.game.model.PlayerEnum;
@@ -1027,11 +1026,9 @@ public class GameController extends BorderPane {
     new ScoreDialog(game).show();
   }
 
-  private static final Gson GSON = new GsonBuilder().create();
-
   private void saveState() {
     try (FileWriter out = new FileWriter(new File(getFilename()))) {
-      game.write(GSON.newJsonWriter(out));
+      game.write(JsonUtil.GSON.newJsonWriter(out));
     } catch (IOException e) {
       new Alert(AlertType.ERROR, "Could not save game state: " + e.getMessage(), ButtonType.OK).showAndWait();
     }

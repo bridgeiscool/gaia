@@ -19,6 +19,7 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
 import gaia.project.game.board.GameBoard;
+import gaia.project.game.board.Rot;
 import gaia.project.game.board.SectorLocation;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.Property;
@@ -29,7 +30,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 public class Game {
-  private final List<SectorLocation> gameBoard = new ArrayList<>(10);
+  private final LinkedHashMap<SectorLocation, Rot> gameBoard = new LinkedHashMap<>(10);
   private final Set<Coords> gaiaformed = new HashSet<>();
 
   private final List<RoundBooster> roundBoosters = new ArrayList<>(6);
@@ -79,7 +80,7 @@ public class Game {
 
     Random random = new Random(seed);
 
-    List<SectorLocation> gameBoard = GameBoard.random(random).getSectorLocations();
+    Map<SectorLocation, Rot> gameBoard = GameBoard.random(random).getSectorLocations();
 
     List<TechTile> techTiles = new ArrayList<>(Arrays.asList(TechTile.values()));
     Collections.shuffle(techTiles, random);
@@ -105,7 +106,7 @@ public class Game {
     game.players.put(PlayerEnum.PLAYER2, races.get(1).newPlayer(PlayerEnum.PLAYER2));
     game.players.put(PlayerEnum.PLAYER3, races.get(2).newPlayer(PlayerEnum.PLAYER3));
 
-    game.gameBoard.addAll(gameBoard);
+    game.gameBoard.putAll(gameBoard);
     game.roundBoosters.addAll(allBoosters.subList(0, 6));
     game.techTiles.addAll(techTiles);
     advTechTiles.subList(0, 6).forEach(tt -> game.advancedTechTiles.put(tt, Boolean.FALSE));
@@ -186,7 +187,7 @@ public class Game {
     return activePlayer;
   }
 
-  public List<SectorLocation> getGameBoard() {
+  public LinkedHashMap<SectorLocation, Rot> getGameBoard() {
     return gameBoard;
   }
 
@@ -363,7 +364,11 @@ public class Game {
     JsonUtil.writeCollection(json, JsonUtil.PASSED_PLAYERS, passedPlayers, PlayerEnum::name);
     json.name(JsonUtil.ACTIVE_PLAYER).value(activePlayer.getValue().name());
 
-    JsonUtil.writeCollection(json, JsonUtil.GAME_BOARD, gameBoard, SectorLocation::name);
+    json.name(JsonUtil.GAME_BOARD).beginArray();
+    for (SectorLocation sl : gameBoard.keySet()) {
+      json.beginObject().name(sl.name()).value(gameBoard.get(sl).name()).endObject();
+    }
+    json.endArray();
     JsonUtil.writeCoordsCollection(json, JsonUtil.GAIAFORMED, gaiaformed);
     JsonUtil.writeCollection(json, JsonUtil.ROUND_BOOSTERS, roundBoosters, RoundBooster::name);
     JsonUtil.writeCollection(json, JsonUtil.TECH_TILES, techTiles, TechTile::name);
@@ -454,7 +459,7 @@ public class Game {
           game.activePlayer.setValue(PlayerEnum.valueOf(json.nextString()));
           break;
         case JsonUtil.GAME_BOARD:
-          JsonUtil.readStringArray(game.gameBoard, json, SectorLocation::valueOf);
+          readGameBoard(json, game.gameBoard);
           break;
         case JsonUtil.GAIAFORMED:
           JsonUtil.readCoordsArray(game.gaiaformed, json);
@@ -491,6 +496,16 @@ public class Game {
     json.endObject();
 
     return game;
+  }
+
+  private static void readGameBoard(JsonReader json, Map<SectorLocation, Rot> gameBoard) throws IOException {
+    json.beginArray();
+    while (json.hasNext()) {
+      json.beginObject();
+      gameBoard.put(SectorLocation.valueOf(json.nextName()), Rot.valueOf(json.nextString()));
+      json.endObject();
+    }
+    json.endArray();
   }
 
   private static void readAdvancedTech(JsonReader json, Map<AdvancedTechTile, Boolean> advTech) throws IOException {

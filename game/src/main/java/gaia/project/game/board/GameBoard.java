@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Random;
 import java.util.function.BiConsumer;
@@ -22,32 +23,35 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 
 public class GameBoard extends Group implements Iterable<Sector> {
-  private final List<SectorLocation> sectorLocations;
+  private final LinkedHashMap<SectorLocation, Rot> sectorLocations;
   private final List<Sector> sectors;
 
   public static GameBoard originalBoard() {
-    return new GameBoard(
-        Arrays.asList(
-            SectorLocation.LOC1,
-            SectorLocation.LOC4,
-            SectorLocation.LOC5,
-            SectorLocation.LOC8,
-            SectorLocation.LOC2,
-            SectorLocation.LOC6,
-            SectorLocation.LOC9,
-            SectorLocation.LOC7,
-            SectorLocation.LOC3,
-            SectorLocation.LOC0));
+    LinkedHashMap<SectorLocation, Rot> originalBoard = new LinkedHashMap<>();
+    originalBoard.put(SectorLocation.LOC1, Rot.POS_1);
+    originalBoard.put(SectorLocation.LOC4, Rot.POS_1);
+    originalBoard.put(SectorLocation.LOC5, Rot.POS_1);
+    originalBoard.put(SectorLocation.LOC8, Rot.POS_1);
+    originalBoard.put(SectorLocation.LOC2, Rot.POS_1);
+    originalBoard.put(SectorLocation.LOC6, Rot.POS_1);
+    originalBoard.put(SectorLocation.LOC9, Rot.POS_1);
+    originalBoard.put(SectorLocation.LOC7, Rot.POS_1);
+    originalBoard.put(SectorLocation.LOC3, Rot.POS_1);
+    originalBoard.put(SectorLocation.LOC0, Rot.POS_1);
+    return new GameBoard(originalBoard);
   }
 
   public static GameBoard random(Random random) {
     List<SectorLocation> unshuffled = Arrays.asList(SectorLocation.values());
 
+    LinkedHashMap<SectorLocation, Rot> asMap = new LinkedHashMap<>(10);
     GameBoard maybeValid;
     do {
+      asMap.clear();
       System.out.println("Shuffling...");
       Collections.shuffle(unshuffled, random);
-      maybeValid = new GameBoard(unshuffled);
+      unshuffled.forEach(sl -> asMap.put(sl, Rot.POS_1));
+      maybeValid = new GameBoard(asMap);
     } while (!maybeValid.isValid());
 
     return maybeValid;
@@ -88,32 +92,33 @@ public class GameBoard extends Group implements Iterable<Sector> {
     return true;
   }
 
-  public GameBoard(List<SectorLocation> sectorPlacements) {
+  public GameBoard(LinkedHashMap<SectorLocation, Rot> sectorPlacements) {
     this.sectorLocations = sectorPlacements;
     sectors = new ArrayList<>();
 
     // Position all sectors on the screen
-    initSectors(sectorPlacements);
+    initSectors();
 
     // Add the sectors
     ObservableList<Node> children = getChildren();
     children.addAll(sectors);
   }
 
-  private void initSectors(List<SectorLocation> sectorPlacements) {
-    sectors.add(Sector1.getInstance(this, sectorPlacements.get(0)));
-    sectors.add(Sector2.getInstance(this, sectorPlacements.get(1)));
-    sectors.add(Sector3.getInstance(this, sectorPlacements.get(2)));
-    sectors.add(Sector4.getInstance(this, sectorPlacements.get(3)));
-    sectors.add(Sector5.getInstance(this, sectorPlacements.get(4)));
-    sectors.add(Sector6.getInstance(this, sectorPlacements.get(5)));
-    sectors.add(Sector7.getInstance(this, sectorPlacements.get(6)));
-    sectors.add(Sector8.getInstance(this, sectorPlacements.get(7)));
-    sectors.add(Sector9.getInstance(this, sectorPlacements.get(8)));
-    sectors.add(Sector10.getInstance(this, sectorPlacements.get(9)));
+  private void initSectors() {
+    Iterator<SectorLocation> iterator = sectorLocations.keySet().iterator();
+    sectors.add(Sector1.getInstance(this, iterator.next()));
+    sectors.add(Sector2.getInstance(this, iterator.next()));
+    sectors.add(Sector3.getInstance(this, iterator.next()));
+    sectors.add(Sector4.getInstance(this, iterator.next()));
+    sectors.add(Sector5.getInstance(this, iterator.next()));
+    sectors.add(Sector6.getInstance(this, iterator.next()));
+    sectors.add(Sector7.getInstance(this, iterator.next()));
+    sectors.add(Sector8.getInstance(this, iterator.next()));
+    sectors.add(Sector9.getInstance(this, iterator.next()));
+    sectors.add(Sector10.getInstance(this, iterator.next()));
   }
 
-  public List<SectorLocation> getSectorLocations() {
+  public LinkedHashMap<SectorLocation, Rot> getSectorLocations() {
     return sectorLocations;
   }
 

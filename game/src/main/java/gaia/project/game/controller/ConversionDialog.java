@@ -4,13 +4,15 @@ import java.io.IOException;
 
 import gaia.project.game.model.BalTaksPlayer;
 import gaia.project.game.model.Player;
-import gaia.project.game.model.Race;
 import gaia.project.game.model.TaklonsPlayer;
 import gaia.project.game.model.TaklonsPlayer.Bin;
 import gaia.project.game.model.Util;
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar.ButtonData;
@@ -18,11 +20,13 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.util.converter.NumberStringConverter;
 
 public class ConversionDialog extends Dialog<Void> {
-  private static final ButtonType DONE = new ButtonType("Done", ButtonData.OK_DONE);
+  protected static final ButtonType DONE = new ButtonType("Done", ButtonData.OK_DONE);
   protected final Player activePlayer;
 
   public static ConversionDialog create(Player activePlayer) {
@@ -45,17 +49,17 @@ public class ConversionDialog extends Dialog<Void> {
   @FXML
   private Button qicToNav;
   @FXML
-  private Button powerToQic;
+  protected Button powerToQic;
   @FXML
   private Button qicToOre;
   @FXML
-  private Button powerToOre;
+  protected Button powerToOre;
   @FXML
-  private Button powerToKnowledge;
+  protected Button powerToKnowledge;
   @FXML
   private Button knowledgeToCredits;
   @FXML
-  private Button powerToCredits;
+  protected Button powerToCredits;
   @FXML
   private Button oreToCredits;
   @FXML
@@ -93,20 +97,12 @@ public class ConversionDialog extends Dialog<Void> {
   }
 
   private int actualPower(int normalPower, boolean spending) {
-    if (nevlasPi()) {
-      return normalPower / 2 + normalPower % 2;
-    }
-
     if (activePlayer instanceof TaklonsPlayer && !spending) {
       TaklonsPlayer taklonsPlayer = (TaklonsPlayer) activePlayer;
       return taklonsPlayer.getBrainStone().getValue() == Bin.III ? normalPower - 3 : normalPower;
     }
 
     return normalPower;
-  }
-
-  private boolean nevlasPi() {
-    return activePlayer.getRace() == Race.NEVLAS && !activePlayer.getPi().isEmpty();
   }
 
   protected void additionalContent() {
@@ -152,7 +148,7 @@ public class ConversionDialog extends Dialog<Void> {
   @FXML
   private void powerToCredits() {
     activePlayer.spendPower(1);
-    Util.plus(activePlayer.getCredits(), nevlasPi() ? 2 : 1);
+    Util.plus(activePlayer.getCredits(), 1);
   }
 
   @FXML
@@ -240,14 +236,15 @@ public class ConversionDialog extends Dialog<Void> {
   }
 
   private static class NevlasDialog extends ConversionDialog {
-
     NevlasDialog(Player activePlayer) {
       super(activePlayer);
     }
 
     @Override
     protected void additionalContent() {
-      // Gaiaformer -> QIC
+      IntegerProperty powerToConvert = new SimpleIntegerProperty(0);
+
+      // Power -> Gaia for K
       gridPane.add(new Label("p"), 0, 11);
       Button powerToGaiaForK = new Button(">");
       powerToGaiaForK.setOnAction(e -> {
@@ -259,6 +256,69 @@ public class ConversionDialog extends Dialog<Void> {
       powerToGaiaForK.disableProperty().bind(Bindings.lessThan(activePlayer.getBin3(), 1));
       gridPane.add(powerToGaiaForK, 1, 11);
       gridPane.add(new Label("k"), 2, 11);
+
+      // Add special content for conversions
+      if (!activePlayer.getPi().isEmpty()) {
+        // Disable normal conversion buttons
+        powerToQic.disableProperty().unbind();
+        powerToQic.setDisable(true);
+        powerToOre.disableProperty().unbind();
+        powerToOre.setDisable(true);
+        powerToKnowledge.disableProperty().unbind();
+        powerToKnowledge.setDisable(true);
+        powerToCredits.disableProperty().unbind();
+        powerToCredits.setDisable(true);
+
+        gridPane.add(new Label("Free Conersions"), 0, 12, 3, 1);
+        gridPane.add(new Label("To Spend:"), 0, 13);
+        Label toSpend = new Label();
+        toSpend.textProperty().bindBidirectional(powerToConvert, new NumberStringConverter());
+        gridPane.add(toSpend, 1, 13);
+        Button convertPower = new Button("+");
+        convertPower.setOnAction(e -> {
+          Util.plus(powerToConvert, 2);
+          activePlayer.spendPower(1);
+        });
+        gridPane.add(convertPower, 2, 13);
+
+        Button addQic = new Button("+q");
+        addQic.setOnAction(e -> {
+          Util.minus(powerToConvert, 4);
+          Util.plus(activePlayer.getQic(), 1);
+        });
+        addQic.disableProperty().bind(Bindings.lessThan(powerToConvert, 4));
+
+        Button addK = new Button("+k");
+        addK.setOnAction(e -> {
+          Util.minus(powerToConvert, 4);
+          Util.plus(activePlayer.getResearch(), 1);
+        });
+        addK.disableProperty().bind(Bindings.lessThan(powerToConvert, 4));
+
+        Button addOre = new Button("+o");
+        addOre.setOnAction(e -> {
+          Util.minus(powerToConvert, 3);
+          Util.plus(activePlayer.getOre(), 1);
+        });
+        addOre.disableProperty().bind(Bindings.lessThan(powerToConvert, 3));
+
+        Button addCredit = new Button("+c");
+        addCredit.setOnAction(e -> {
+          Util.minus(powerToConvert, 1);
+          Util.plus(activePlayer.getCredits(), 1);
+        });
+        addCredit.disableProperty().bind(Bindings.lessThan(powerToConvert, 1));
+
+        HBox top = new HBox(2, addQic, addK);
+        top.setAlignment(Pos.CENTER);
+        gridPane.add(top, 0, 14, 3, 1);
+        HBox bottom = new HBox(2, addOre, addCredit);
+        bottom.setAlignment(Pos.CENTER);
+        gridPane.add(bottom, 0, 15, 3, 1);
+
+        // Don't let the user go forward with unspent power
+        getDialogPane().lookupButton(DONE).disableProperty().bind(Bindings.notEqual(powerToConvert, 0));
+      }
     }
   }
 

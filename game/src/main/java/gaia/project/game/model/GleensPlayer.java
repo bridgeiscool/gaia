@@ -20,8 +20,7 @@ public final class GleensPlayer extends Player {
   private GleensPlayer() {}
 
   @Override
-  protected void addAdditionalListeners() {
-    super.addAdditionalListeners();
+  protected void raceSpecificListeners() {
     getGaiaPlanets().addListener((o, oldValue, newValue) -> updateScore(2, "Race ability"));
     getQic().addListener((o, oldValue, newValue) -> {
       if (getQa().isEmpty()) {

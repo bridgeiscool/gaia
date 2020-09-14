@@ -284,7 +284,8 @@ public class Player {
     });
   }
 
-  protected void addAdditionalListeners() {
+  private void addAdditionalListeners() {
+    // Re-add listeners from tech tiles and anything race-specific
     ore.addListener((o, oldValue, newValue) -> {
       if (newValue.intValue() > 15) {
         ore.setValue(15);
@@ -315,9 +316,14 @@ public class Player {
       }
     });
 
-    // Re-add listeners from tech tiles, override for race-specific abilities
     techTiles.stream().filter(TechTile::addsListener).forEach(tt -> tt.addTo(this));
     advTechTiles.stream().filter(AdvancedTechTile::addsListener).forEach(tt -> tt.updatePlayer(this));
+
+    raceSpecificListeners();
+  }
+
+  protected void raceSpecificListeners() {
+    // Override for race-specific abilities
   }
 
   public Race getRace() {
@@ -1231,8 +1237,8 @@ public class Player {
       }
     }
 
-    p.setupTechBonuses();
     p.addAdditionalListeners();
+    p.setupTechBonuses();
   }
 
   protected void handleAdditionalContent(String name, JsonReader json) throws IOException {

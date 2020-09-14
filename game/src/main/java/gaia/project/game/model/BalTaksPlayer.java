@@ -25,8 +25,7 @@ public final class BalTaksPlayer extends Player {
   private BalTaksPlayer() {}
 
   @Override
-  protected void addAdditionalListeners() {
-    super.addAdditionalListeners();
+  protected void raceSpecificListeners() {
     getPi().addListener((SetChangeListener<Coords>) change -> Util.plus(getNavLevel(), 1));
   }
 

@@ -17,8 +17,7 @@ public final class GeodensPlayer extends Player {
   private GeodensPlayer() {}
 
   @Override
-  protected void addAdditionalListeners() {
-    super.addAdditionalListeners();
+  protected void raceSpecificListeners() {
     getBuiltOn().addListener((SetChangeListener<PlanetType>) change -> {
       if (!getPi().isEmpty()) {
         Util.plus(getResearch(), 3);

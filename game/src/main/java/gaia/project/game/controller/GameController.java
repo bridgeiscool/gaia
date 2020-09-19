@@ -333,7 +333,8 @@ public class GameController extends BorderPane {
   // SETUP METHODS
   private void setupGame() {
     // Save at the beginning of the setup - will have to reset whole setup if anything goes wrong...
-    saveState();
+    // This has to run after the Gleens action that modifies their QIC/ORE values first in a separate runlater call
+    Platform.runLater(() -> saveState());
 
     SelectVPsDialog selectVPsDialog = new SelectVPsDialog(game);
     selectVPsDialog.showAndWait();

@@ -100,7 +100,8 @@ public class Game {
     // TODO: Update for 4 players
     do {
       Collections.shuffle(races, random);
-    } while (races.subList(0, 3).stream().map(Race::getHomePlanet).collect(Collectors.toSet()).size() < 3);
+    } while (races.subList(0, 3).stream().map(Race::getHomePlanet).collect(Collectors.toSet()).size() < 3
+        || !races.subList(0, 3).contains(Race.LANTIDS));
 
     game.players.put(PlayerEnum.PLAYER1, races.get(0).newPlayer(PlayerEnum.PLAYER1));
     game.players.put(PlayerEnum.PLAYER2, races.get(1).newPlayer(PlayerEnum.PLAYER2));

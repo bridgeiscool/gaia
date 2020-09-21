@@ -80,7 +80,7 @@ public class GameBoard extends Group implements Iterable<Sector> {
 
     for (HexWithPlanet hex : hexes) {
       if (hex.getPlanet().getPlanetType() != PlanetType.TRANSDIM) {
-        for (Hex adjacent : hex.getHexesWithinRange(hexes(), 1)) {
+        for (Hex adjacent : hex.getOtherHexesWithinRange(hexes(), 1)) {
           // Exclude adjacent planets that aren't purple
           if (hex.sharesPlanetType(adjacent)) {
             return false;

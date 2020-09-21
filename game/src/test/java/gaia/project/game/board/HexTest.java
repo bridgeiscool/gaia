@@ -19,13 +19,13 @@ public class HexTest {
     Hex adjacent = EmptyHex.normal(new Coords(3.0 * HEX_SIZE, ROOT_3 * HEX_SIZE), 2);
     Assert.assertEquals(
         adjacent,
-        Iterables.getOnlyElement(reference.getHexesWithinRange(Arrays.asList(reference, adjacent), 1)));
+        Iterables.getOnlyElement(reference.getOtherHexesWithinRange(Arrays.asList(reference, adjacent), 1)));
   }
 
   @Test
   public void twoAwayFails() {
     Hex reference = EmptyHex.normal(new Coords(0, 0), 1);
     Hex adjacent = EmptyHex.normal(new Coords(6.0 * HEX_SIZE, 2 * ROOT_3 * HEX_SIZE), 2);
-    Assert.assertTrue(reference.getHexesWithinRange(Arrays.asList(reference, adjacent), 1).isEmpty());
+    Assert.assertTrue(reference.getOtherHexesWithinRange(Arrays.asList(reference, adjacent), 1).isEmpty());
   }
 }

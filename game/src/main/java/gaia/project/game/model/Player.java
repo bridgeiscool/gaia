@@ -650,7 +650,7 @@ public class Player {
         && bin1.get() + bin2.get() + bin3.get() >= gaiaformerCost.get();
   }
 
-  private boolean gaiaformed(Hex hex) {
+  protected boolean gaiaformed(Hex hex) {
     return gaiaformers.stream().anyMatch(c -> hex.getCoords().equals(c));
   }
 
@@ -759,16 +759,16 @@ public class Player {
 
     // Update income
     if (mines.size() != 3) {
-      currentIncome.getOreIncome().setValue(currentIncome.getOreIncome().getValue() + 1);
+      Util.plus(currentIncome.getOreIncome(), 1);
     }
 
     // Update planet counts
     PlanetType planetType = hex.getPlanet().getPlanetType();
     builtOn.add(planetType);
     if (planetType == PlanetType.GAIA) {
-      gaiaPlanets.setValue(gaiaPlanets.getValue() + 1);
+      Util.plus(gaiaPlanets, 1);
     }
-    totalBuildings.setValue(totalBuildings.getValue() + 1);
+    Util.plus(totalBuildings, 1);
     sectors.add(hex.getSectorId());
 
     if (!setup) {

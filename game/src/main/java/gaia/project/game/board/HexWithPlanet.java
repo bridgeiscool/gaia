@@ -15,11 +15,13 @@ import gaia.project.game.model.Player;
 import gaia.project.game.model.PlayerEnum;
 import gaia.project.game.model.Race;
 import javafx.collections.ObservableList;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
+import javafx.scene.layout.VBox;
 
 public class HexWithPlanet extends Hex {
   private final Planet planet;
@@ -27,8 +29,11 @@ public class HexWithPlanet extends Hex {
   private Building building;
   @Nullable
   private PlayerEnum builder;
+  private VBox buildingBox = new VBox();
   @Nullable
   private Node buildingUI;
+  @Nullable
+  private Mine leechMine;
   private boolean hasGaiaformer;
 
   public HexWithPlanet(Coords coords, int sectorId, Planet planet) {
@@ -36,6 +41,8 @@ public class HexWithPlanet extends Hex {
     Objects.requireNonNull(planet);
     this.planet = planet;
     this.getChildren().add(planet);
+    buildingBox.setAlignment(Pos.CENTER);
+    this.getChildren().add(buildingBox);
   }
 
   @Override
@@ -68,6 +75,12 @@ public class HexWithPlanet extends Hex {
     return hasGaiaformer;
   }
 
+  @Override
+  @Nullable
+  public Mine getLeechMine() {
+    return leechMine;
+  }
+
   public static Stream<HexWithPlanet> fromHexes(Stream<Hex> hexes) {
     return hexes.filter(HexWithPlanet.class::isInstance).map(HexWithPlanet.class::cast);
   }
@@ -96,50 +109,55 @@ public class HexWithPlanet extends Hex {
   public void addMine(Mine mine) {
     // Remove a gaiaformer if it's there
     if (hasGaiaformer) {
-      getChildren().remove(buildingUI);
+      buildingBox.getChildren().remove(buildingUI);
       hasGaiaformer = false;
     } else {
       builder = mine.getPlayer();
     }
-    getChildren().add(mine);
+    buildingBox.getChildren().add(mine);
     building = Building.MINE;
     buildingUI = mine;
   }
 
   // For reloading game
   public void addTradingPost(TradingPost tradingPost) {
-    getChildren().add(tradingPost);
+    buildingBox.getChildren().add(tradingPost);
     building = Building.TRADING_POST;
     builder = tradingPost.getPlayer();
     buildingUI = tradingPost;
   }
 
   public void addResearchLab(ResearchLab researchLab) {
-    getChildren().add(researchLab);
+    buildingBox.getChildren().add(researchLab);
     building = Building.RESEARCH_LAB;
     builder = researchLab.getPlayer();
     buildingUI = researchLab;
   }
 
   public void addPi(PlanetaryInstitute pi) {
-    getChildren().add(pi);
+    buildingBox.getChildren().add(pi);
     building = Building.PLANETARY_INSTITUTE;
     builder = pi.getPlayer();
     buildingUI = pi;
   }
 
   public void addAcademy(Academy academy) {
-    getChildren().add(academy);
+    buildingBox.getChildren().add(academy);
     building = Building.ACADEMY;
     builder = academy.getPlayer();
     buildingUI = academy;
   }
 
   public void addGaiaformer(Gaiaformer gaiaformer) {
-    getChildren().add(gaiaformer);
+    buildingBox.getChildren().add(gaiaformer);
     hasGaiaformer = true;
     builder = gaiaformer.getPlayer();
     buildingUI = gaiaformer;
+  }
+
+  public void addLeechMine(Mine mine) {
+    buildingBox.getChildren().add(mine);
+    leechMine = mine;
   }
 
   public boolean canUpgrade(Player activePlayer, GameBoard gameBoard) {
@@ -201,8 +219,10 @@ public class HexWithPlanet extends Hex {
   }
 
   private boolean hasNeighbor(GameBoard gameBoard) {
-    return getHexesWithinRange(gameBoard.hexes(), 2).stream()
-        .anyMatch(h -> h.getBuilder().isPresent() && h.getBuilder().get() != builder);
+    return getAllHexesWithinRange(gameBoard.hexes(), 2).stream()
+        .anyMatch(
+            h -> (h.getBuilder().isPresent() && h.getBuilder().get() != builder)
+                || (h.getLeechMine() != null && h.getLeechMine().getPlayer() != builder));
   }
 
   public void upgradeBuilding(Player player, GameBoard gameBoard) {
@@ -334,8 +354,8 @@ public class HexWithPlanet extends Hex {
   }
 
   public void switchBuildingUI(Node newBuilding) {
-    getChildren().remove(buildingUI);
-    getChildren().add(newBuilding);
+    buildingBox.getChildren().remove(buildingUI);
+    buildingBox.getChildren().add(newBuilding);
     buildingUI = newBuilding;
   }
 

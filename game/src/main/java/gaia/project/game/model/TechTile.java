@@ -86,7 +86,11 @@ public enum TechTile {
 
     @Override
     public void addTo(Player player) {
-      listener = (o, oldValue, newValue) -> player.updateScore(3, "TT " + display());
+      listener = (o, oldValue, newValue) -> {
+        if (newValue.intValue() > oldValue.intValue()) {
+          player.updateScore(3, "TT " + display());
+        }
+      };
       player.getGaiaPlanets().addListener(listener);
     }
 

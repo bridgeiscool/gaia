@@ -18,6 +18,8 @@ import java.util.TreeMap;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import javax.annotation.Nullable;
+
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Iterables;
 
@@ -41,6 +43,7 @@ import gaia.project.game.model.FiraksPlayer;
 import gaia.project.game.model.Game;
 import gaia.project.game.model.IvitsPlayer;
 import gaia.project.game.model.JsonUtil;
+import gaia.project.game.model.LantidsPlayer;
 import gaia.project.game.model.Player;
 import gaia.project.game.model.PlayerBoardAction;
 import gaia.project.game.model.PlayerEnum;
@@ -185,6 +188,7 @@ public class GameController extends BorderPane {
       p.getMines().forEach(m -> {
         gameBoard.planetaryHexes()
             .filter(h -> h.getCoords().equals(m))
+            .filter(h -> p.getRace() != Race.LANTIDS || !((LantidsPlayer) p).getLeechMines().contains(h.getCoords()))
             .forEach(h -> h.addMine(new Mine(h, p.getRace().getColor(), p.getPlayerEnum())));
       });
     });
@@ -258,6 +262,13 @@ public class GameController extends BorderPane {
       gameBoard.emptyHexes()
           .filter(h -> ivits.getSpaceStations().contains(h.getCoords()))
           .forEach(h -> h.addSpaceStation(new SpaceStation(h, p.getPlayerEnum())));
+    });
+
+    game.getPlayers().values().stream().filter(p -> p.getRace() == Race.LANTIDS).forEach(p -> {
+      LantidsPlayer lantids = (LantidsPlayer) p;
+      gameBoard.planetaryHexes()
+          .filter(h -> lantids.getLeechMines().contains(h.getCoords()))
+          .forEach(h -> h.addLeechMine(new Mine(h, lantids.getRace().getColor(), p.getPlayerEnum())));
     });
   }
 
@@ -532,7 +543,12 @@ public class GameController extends BorderPane {
 
   void selectMineBuild() {
     gameBoard.highlightPlanetaryHexes(activePlayer(), possibleMineBuilds(), (hex, player) -> {
-      player.buildMine(hex);
+      if (hex.hasBuilding()) {
+        Preconditions.checkArgument(player.getRace() == Race.LANTIDS);
+        ((LantidsPlayer) player).buildLeechMine(hex);
+      } else {
+        player.buildMine(hex);
+      }
     }, this::finishMineBuild);
   }
 
@@ -540,7 +556,17 @@ public class GameController extends BorderPane {
     return hex -> (hex.hasGaiaformer()
         && hex.getPlanet().getPlanetType() == PlanetType.GAIA
         && hex.getBuilder().get() == activePlayer().getPlayerEnum())
-        || (!hex.hasBuilding() && isWithinRange(activePlayer(), hex) && activePlayer().canDigTo(hex));
+        || (!hex.hasBuilding() && isWithinRange(activePlayer(), hex) && activePlayer().canDigTo(hex))
+        || canBuildLeechMine(hex);
+  }
+
+  private boolean canBuildLeechMine(HexWithPlanet hex) {
+    // Has to be Lantids, has to be within range, has to be built on by an opponent, and can't already have a leech mine
+    return activePlayer().getRace() == Race.LANTIDS
+        && isWithinRange(activePlayer(), hex)
+        && hex.hasBuilding()
+        && hex.getBuilder().get() != game.getActivePlayer()
+        && hex.getLeechMine() == null;
   }
 
   private void finishMineBuild(HexWithPlanet hex) {
@@ -625,7 +651,7 @@ public class GameController extends BorderPane {
         .stream()
         .filter(p -> p != game.getActivePlayer())
         .collect(Collectors.toMap(p -> p, p -> 0));
-    Collection<Hex> withinRange = hex.getHexesWithinRange(gameBoard.hexes(), 2);
+    Collection<Hex> withinRange = hex.getAllHexesWithinRange(gameBoard.hexes(), 2);
 
     for (Hex maybeLeech : withinRange) {
       if (maybeLeech.hasBuilding() && powerMap.containsKey(maybeLeech.getBuilder().get())) {
@@ -634,6 +660,15 @@ public class GameController extends BorderPane {
         if (power > powerMap.get(builder)) {
           powerMap.put(builder, power);
         }
+      }
+
+      // Check leech from Lantids leech mines
+      @Nullable
+      Mine leechMine = maybeLeech.getLeechMine();
+      if (leechMine != null
+          && powerMap.containsKey(leechMine.getPlayer())
+          && powerMap.get(leechMine.getPlayer()) == 0) {
+        powerMap.put(leechMine.getPlayer(), 1);
       }
     }
 
@@ -660,7 +695,9 @@ public class GameController extends BorderPane {
       currentFederation.clear();
       gameBoard.highlightPlanetaryHexes(
           activePlayer(),
-          h -> h.getBuilder().orElse(null) == game.getActivePlayer() && !activePlayer().inFederation(h.getCoords()),
+          h -> (h.getBuilder().orElse(null) == game.getActivePlayer()
+              || (h.getLeechMine() != null && h.getLeechMine().getPlayer() == game.getActivePlayer()))
+              && !activePlayer().inFederation(h.getCoords()),
           (hex, player) -> hex.highlightCyan(),
           this::checkIfSatellitesNeeded);
     } else {
@@ -692,12 +729,14 @@ public class GameController extends BorderPane {
 
   // Recursively checks all adjacent hexes to see if they should be added too
   private void checkAdjacentHexes(Hex builtOn) {
-    builtOn.getHexesWithinRange(gameBoard.hexes(), 1)
+    builtOn.getOtherHexesWithinRange(gameBoard.hexes(), 1)
         .stream()
         // Space stations count as a building...
-        .filter(h -> h.hasBuilding() || h.hasSpaceStation())
+        .filter(h -> h.hasBuilding() || h.hasSpaceStation() || h.getLeechMine() != null)
         .filter(h -> !currentFederation.contains(h.getCoords()))
-        .filter(h -> h.getBuilder().get() == game.getActivePlayer())
+        .filter(
+            h -> h.getBuilder().get() == game.getActivePlayer()
+                || (h.getLeechMine() != null && h.getLeechMine().getPlayer() == game.getActivePlayer()))
         .forEach(h -> {
           h.highlightCyan();
           Util.plus(fedPower, activePlayer().getPower(h));

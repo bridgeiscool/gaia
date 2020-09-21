@@ -74,6 +74,12 @@ public class EmptyHex extends Hex {
     return spaceStation != null;
   }
 
+  @Nullable
+  @Override
+  public Mine getLeechMine() {
+    return null;
+  }
+
   public static Predicate<EmptyHex> possibleSatellite(Player player, Set<Coords> currentBuildings) {
     return h -> currentBuildings.stream().anyMatch(c -> h.isWithinRangeOf(c, 1))
         && !h.hasSatellite(player.getPlayerEnum());

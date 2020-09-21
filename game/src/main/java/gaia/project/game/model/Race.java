@@ -81,17 +81,33 @@ public enum Race {
       return TerranPlayer.empty();
     }
   },
-  // LANTIDS("Lantids", "blueRace", Color.BLUE, PlanetType.BLUE) {
-  // @Override
-  // public int getStartingCredits() {
-  // return 13;
-  // }
-  //
-  // @Override
-  // public int getStartingBin2() {
-  // return 2;
-  // }
-  // },
+  LANTIDS("Lantids", "blueRace", Color.BLUE, PlanetType.BLUE) {
+    @Override
+    public int getStartingCredits() {
+      return 13;
+    }
+
+    @Override
+    public int getStartingBin2() {
+      return 2;
+    }
+
+    @Override
+    public IncomeUpdater getPiIncome() {
+      return new PowerIncome(4);
+    }
+
+    @Override
+    public Player newPlayer(PlayerEnum playerEnum) {
+      return LantidsPlayer.createNew(playerEnum);
+    }
+
+    @Override
+    public Player emptyPlayer() {
+      return LantidsPlayer.empty();
+    }
+
+  },
   HADSCH_HALLAS("Hadsch Hallas", "redRace", Color.RED, PlanetType.RED) {
     @Override
     public int getStartingCreditIncome() {

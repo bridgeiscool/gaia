@@ -90,6 +90,7 @@ public class JsonUtil {
   public static final String GFS_IN_GAIA_BIN = "gfsInGaiaBin";
   public static final String GRAY_PLANETS = "graayPlanets";
   public static final String SPACE_STATIONS = "spaceStations";
+  public static final String LEECH_MINES = "leechMines";
 
   // Game Level
   public static final String CURRENT_ROUND = "currentRound";

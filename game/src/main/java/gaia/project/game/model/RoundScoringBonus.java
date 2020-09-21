@@ -26,7 +26,7 @@ public enum RoundScoringBonus {
     @Override
     public void addListeners(Game game, Round round) {
       game.getPlayers().values().forEach(p -> p.getGaiaPlanets().addListener((o, oldValue, newValue) -> {
-        if (game.getCurrentRound().getValue() == round) {
+        if (game.getCurrentRound().getValue() == round && newValue.intValue() > oldValue.intValue()) {
           p.updateScore(3, "R" + game.getCurrentRound().getValue().display() + " " + getText());
         }
       }));
@@ -36,7 +36,7 @@ public enum RoundScoringBonus {
     @Override
     public void addListeners(Game game, Round round) {
       game.getPlayers().values().forEach(p -> p.getGaiaPlanets().addListener((o, oldValue, newValue) -> {
-        if (game.getCurrentRound().getValue() == round) {
+        if (game.getCurrentRound().getValue() == round && newValue.intValue() > oldValue.intValue()) {
           p.updateScore(4, "R" + game.getCurrentRound().getValue().display() + " " + getText());
         }
       }));

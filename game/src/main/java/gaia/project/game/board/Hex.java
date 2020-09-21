@@ -67,6 +67,9 @@ public abstract class Hex extends StackPane {
   public abstract boolean hasSpaceStation();
 
   @Nullable
+  public abstract Mine getLeechMine();
+
+  @Nullable
   public abstract Planet getPlanet();
 
   public int getSectorId() {
@@ -81,10 +84,18 @@ public abstract class Hex extends StackPane {
     return polygon;
   }
 
-  public Collection<Hex> getHexesWithinRange(List<Hex> hexes, int i) {
+  public Collection<Hex> getAllHexesWithinRange(List<Hex> hexes, int i) {
+    return getHexesWithinRange(hexes, i, true);
+  }
+
+  public Collection<Hex> getOtherHexesWithinRange(List<Hex> hexes, int i) {
+    return getHexesWithinRange(hexes, i, false);
+  }
+
+  private Collection<Hex> getHexesWithinRange(List<Hex> hexes, int i, boolean includeThis) {
     return hexes.stream()
         .filter(h -> distanceTo(h.getCoords()) < TWO_ROOT_3 * HEX_SIZE * i + 1.0)
-        .filter(h -> !h.equals(this))
+        .filter(h -> includeThis || !h.equals(this))
         .collect(Collectors.toList());
   }
 

@@ -74,7 +74,9 @@ public class Game {
   // Game options
 
   // Default to true for old games
-  private boolean balTaksBuff = true;
+  private boolean balTaksBuff;
+  private SetupEnum setup;
+  private long seed;
 
   public static Game generateGame(GameOpts gameOpts) {
     Game game = new Game();
@@ -129,6 +131,8 @@ public class Game {
     game.activePlayer.setValue(PlayerEnum.PLAYER1);
 
     game.balTaksBuff = gameOpts.isBalTaksBuff();
+    game.setup = gameOpts.getSetup();
+    game.seed = gameOpts.getSeed();
 
     return game;
   }
@@ -267,6 +271,14 @@ public class Game {
     return balTaksBuff;
   }
 
+  public SetupEnum getSetup() {
+    return setup;
+  }
+
+  public long getSeed() {
+    return seed;
+  }
+
   public void newRound() {
     currentRound.setValue(currentRound.getValue().nextRound());
     turn = 0;
@@ -392,6 +404,8 @@ public class Game {
 
     json.name(JsonUtil.TURN).value(turn);
     json.name(JsonUtil.BALTAKS_BUFF).value(balTaksBuff);
+    json.name(JsonUtil.SETUP).value(setup.toString());
+    json.name(JsonUtil.SEED).value(seed);
 
     for (Player player : players.values()) {
       json.name(player.getRace().name());
@@ -499,6 +513,12 @@ public class Game {
           break;
         case JsonUtil.BALTAKS_BUFF:
           game.balTaksBuff = json.nextBoolean();
+          break;
+        case JsonUtil.SETUP:
+          game.setup = SetupEnum.valueOf(json.nextString());
+          break;
+        case JsonUtil.SEED:
+          game.seed = json.nextLong();
           break;
         default:
           // Other keys should be race names...

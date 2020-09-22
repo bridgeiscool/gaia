@@ -125,7 +125,11 @@ public class JsonUtil {
   public static final String TERRA_BONUS = "terraBonus";
 
   public static final String TURN = "turn";
+
+  // Game options
   public static final String BALTAKS_BUFF = "baltaksBuff";
+  public static final String SETUP = "setup";
+  public static final String SEED = "seed";
 
   public static <T> void writeCollection(
       JsonWriter json,

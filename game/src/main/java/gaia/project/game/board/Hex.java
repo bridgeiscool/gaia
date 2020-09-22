@@ -1,6 +1,5 @@
 package gaia.project.game.board;
 
-import static gaia.project.game.board.BoardUtils.HEX_SIZE;
 import static gaia.project.game.board.BoardUtils.ROOT_3;
 import static gaia.project.game.board.BoardUtils.TWO_ROOT_3;
 
@@ -29,26 +28,26 @@ public abstract class Hex extends StackPane {
     this.sectorId = sectorId;
     setLayoutX(coords.getCenterX());
     setLayoutY(coords.getCenterY());
-    this.setPrefSize(4.0 * HEX_SIZE, 2 * ROOT_3 * HEX_SIZE);
-    this.setMinSize(4.0 * HEX_SIZE, 2 * ROOT_3 * HEX_SIZE);
+    this.setPrefSize(4.0 * BoardUtils.hexSize(), 2 * ROOT_3 * BoardUtils.hexSize());
+    this.setMinSize(4.0 * BoardUtils.hexSize(), 2 * ROOT_3 * BoardUtils.hexSize());
     this.polygon = new HexPolygon(
         // TOP LEFT
-        coords.getCenterX() - HEX_SIZE,
-        coords.getCenterY() - HEX_SIZE * ROOT_3,
+        coords.getCenterX() - BoardUtils.hexSize(),
+        coords.getCenterY() - BoardUtils.hexSize() * ROOT_3,
         // TOP RIGHT
-        coords.getCenterX() + HEX_SIZE,
-        coords.getCenterY() - HEX_SIZE * ROOT_3,
+        coords.getCenterX() + BoardUtils.hexSize(),
+        coords.getCenterY() - BoardUtils.hexSize() * ROOT_3,
         // RIGHT
-        coords.getCenterX() + HEX_SIZE * 2,
+        coords.getCenterX() + BoardUtils.hexSize() * 2,
         coords.getCenterY(),
         // BOTTOM_RIGHT
-        coords.getCenterX() + HEX_SIZE,
-        coords.getCenterY() + HEX_SIZE * ROOT_3,
+        coords.getCenterX() + BoardUtils.hexSize(),
+        coords.getCenterY() + BoardUtils.hexSize() * ROOT_3,
         // BOTTOM_LEFT
-        coords.getCenterX() - HEX_SIZE,
-        coords.getCenterY() + HEX_SIZE * ROOT_3,
+        coords.getCenterX() - BoardUtils.hexSize(),
+        coords.getCenterY() + BoardUtils.hexSize() * ROOT_3,
         // LEFT
-        coords.getCenterX() - HEX_SIZE * 2,
+        coords.getCenterX() - BoardUtils.hexSize() * 2,
         coords.getCenterY());
     this.getChildren().add(polygon);
   }
@@ -94,7 +93,7 @@ public abstract class Hex extends StackPane {
 
   private Collection<Hex> getHexesWithinRange(List<Hex> hexes, int i, boolean includeThis) {
     return hexes.stream()
-        .filter(h -> distanceTo(h.getCoords()) < TWO_ROOT_3 * HEX_SIZE * i + 1.0)
+        .filter(h -> distanceTo(h.getCoords()) < TWO_ROOT_3 * BoardUtils.hexSize() * i + 1.0)
         .filter(h -> includeThis || !h.equals(this))
         .collect(Collectors.toList());
   }
@@ -104,13 +103,13 @@ public abstract class Hex extends StackPane {
   }
 
   public boolean isWithinRangeOf(Coords coords, int range) {
-    return distanceTo(coords) < TWO_ROOT_3 * HEX_SIZE * range + 1.0;
+    return distanceTo(coords) < TWO_ROOT_3 * BoardUtils.hexSize() * range + 1.0;
   }
 
   public static boolean isContiguous(Set<Coords> maybeContiguous) {
     for (Coords coords : maybeContiguous) {
       for (Coords maybeAdjacent : maybeContiguous) {
-        if (coords.distanceTo(maybeAdjacent) < TWO_ROOT_3 * HEX_SIZE + 1.0) {
+        if (coords.distanceTo(maybeAdjacent) < TWO_ROOT_3 * BoardUtils.hexSize() + 1.0) {
           return true;
         }
       }

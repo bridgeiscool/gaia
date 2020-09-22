@@ -1,6 +1,5 @@
 package gaia.project.game.board;
 
-import static gaia.project.game.board.BoardUtils.HEX_SIZE;
 import static gaia.project.game.board.BoardUtils.ROOT_3;
 import static gaia.project.game.board.BoardUtils.TWO_ROOT_3;
 
@@ -59,43 +58,67 @@ public class Sector extends Group implements Iterable<Hex> {
 
     // Inner Ring
     // Top hex
-    containedHexes.add(getHex(centerX, centerY - TWO_ROOT_3 * HEX_SIZE, planetTypes.get(4)));
+    containedHexes.add(getHex(centerX, centerY - TWO_ROOT_3 * BoardUtils.hexSize(), planetTypes.get(4)));
     // Top right
-    containedHexes.add(getHex(centerX + 3.0 * HEX_SIZE, centerY - ROOT_3 * HEX_SIZE, planetTypes.get(7)));
+    containedHexes
+        .add(getHex(centerX + 3.0 * BoardUtils.hexSize(), centerY - ROOT_3 * BoardUtils.hexSize(), planetTypes.get(7)));
     // Bottom right
-    containedHexes.add(getHex(centerX + 3.0 * HEX_SIZE, centerY + ROOT_3 * HEX_SIZE, planetTypes.get(12)));
+    containedHexes.add(
+        getHex(centerX + 3.0 * BoardUtils.hexSize(), centerY + ROOT_3 * BoardUtils.hexSize(), planetTypes.get(12)));
     // Bottom
-    containedHexes.add(getHex(centerX, centerY + TWO_ROOT_3 * HEX_SIZE, planetTypes.get(14)));
+    containedHexes.add(getHex(centerX, centerY + TWO_ROOT_3 * BoardUtils.hexSize(), planetTypes.get(14)));
     // Bottom left
-    containedHexes.add(getHex(centerX - 3.0 * HEX_SIZE, centerY + ROOT_3 * HEX_SIZE, planetTypes.get(11)));
+    containedHexes.add(
+        getHex(centerX - 3.0 * BoardUtils.hexSize(), centerY + ROOT_3 * BoardUtils.hexSize(), planetTypes.get(11)));
     // Top left
-    containedHexes.add(getHex(centerX - 3.0 * HEX_SIZE, centerY - ROOT_3 * HEX_SIZE, planetTypes.get(6)));
+    containedHexes
+        .add(getHex(centerX - 3.0 * BoardUtils.hexSize(), centerY - ROOT_3 * BoardUtils.hexSize(), planetTypes.get(6)));
 
     // Outer Ring
     // 12 o'clock
-    containedHexes.add(getHex(centerX, centerY - 2.0 * TWO_ROOT_3 * HEX_SIZE, planetTypes.get(0)));
+    containedHexes.add(getHex(centerX, centerY - 2.0 * TWO_ROOT_3 * BoardUtils.hexSize(), planetTypes.get(0)));
     // 1 o'clock
-    containedHexes.add(getHex(centerX + 3.0 * HEX_SIZE, centerY - 3.0 * ROOT_3 * HEX_SIZE, planetTypes.get(2)));
+    containedHexes.add(
+        getHex(
+            centerX + 3.0 * BoardUtils.hexSize(),
+            centerY - 3.0 * ROOT_3 * BoardUtils.hexSize(),
+            planetTypes.get(2)));
     // 2 o'clock
-    containedHexes.add(getHex(centerX + 6.0 * HEX_SIZE, centerY - TWO_ROOT_3 * HEX_SIZE, planetTypes.get(5)));
+    containedHexes.add(
+        getHex(centerX + 6.0 * BoardUtils.hexSize(), centerY - TWO_ROOT_3 * BoardUtils.hexSize(), planetTypes.get(5)));
     // 3 o'clock
-    containedHexes.add(getHex(centerX + 6.0 * HEX_SIZE, centerY, planetTypes.get(10)));
+    containedHexes.add(getHex(centerX + 6.0 * BoardUtils.hexSize(), centerY, planetTypes.get(10)));
     // 4 o'ckock
-    containedHexes.add(getHex(centerX + 6.0 * HEX_SIZE, centerY + TWO_ROOT_3 * HEX_SIZE, planetTypes.get(15)));
+    containedHexes.add(
+        getHex(centerX + 6.0 * BoardUtils.hexSize(), centerY + TWO_ROOT_3 * BoardUtils.hexSize(), planetTypes.get(15)));
     // 5 o'clock
-    containedHexes.add(getHex(centerX + 3.0 * HEX_SIZE, centerY + 3.0 * ROOT_3 * HEX_SIZE, planetTypes.get(17)));
+    containedHexes.add(
+        getHex(
+            centerX + 3.0 * BoardUtils.hexSize(),
+            centerY + 3.0 * ROOT_3 * BoardUtils.hexSize(),
+            planetTypes.get(17)));
     // 6 o'clock
-    containedHexes.add(getHex(centerX, centerY + 2.0 * TWO_ROOT_3 * HEX_SIZE, planetTypes.get(18)));
+    containedHexes.add(getHex(centerX, centerY + 2.0 * TWO_ROOT_3 * BoardUtils.hexSize(), planetTypes.get(18)));
     // 7 o'clock
-    containedHexes.add(getHex(centerX - 3.0 * HEX_SIZE, centerY + 3.0 * ROOT_3 * HEX_SIZE, planetTypes.get(16)));
+    containedHexes.add(
+        getHex(
+            centerX - 3.0 * BoardUtils.hexSize(),
+            centerY + 3.0 * ROOT_3 * BoardUtils.hexSize(),
+            planetTypes.get(16)));
     // 8 o'clock
-    containedHexes.add(getHex(centerX - 6.0 * HEX_SIZE, centerY + TWO_ROOT_3 * HEX_SIZE, planetTypes.get(13)));
+    containedHexes.add(
+        getHex(centerX - 6.0 * BoardUtils.hexSize(), centerY + TWO_ROOT_3 * BoardUtils.hexSize(), planetTypes.get(13)));
     // 9 o'clock
-    containedHexes.add(getHex(centerX - 6.0 * HEX_SIZE, centerY, planetTypes.get(8)));
+    containedHexes.add(getHex(centerX - 6.0 * BoardUtils.hexSize(), centerY, planetTypes.get(8)));
     // 10 o'clock
-    containedHexes.add(getHex(centerX - 6.0 * HEX_SIZE, centerY - TWO_ROOT_3 * HEX_SIZE, planetTypes.get(3)));
+    containedHexes.add(
+        getHex(centerX - 6.0 * BoardUtils.hexSize(), centerY - TWO_ROOT_3 * BoardUtils.hexSize(), planetTypes.get(3)));
     // 11 o'clock
-    containedHexes.add(getHex(centerX - 3.0 * HEX_SIZE, centerY - 3.0 * ROOT_3 * HEX_SIZE, planetTypes.get(1)));
+    containedHexes.add(
+        getHex(
+            centerX - 3.0 * BoardUtils.hexSize(),
+            centerY - 3.0 * ROOT_3 * BoardUtils.hexSize(),
+            planetTypes.get(1)));
   }
 
   private Hex getHex(double centerX, double centerY, PlanetType planetType) {

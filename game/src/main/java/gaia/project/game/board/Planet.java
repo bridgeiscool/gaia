@@ -9,7 +9,7 @@ public class Planet extends Circle {
   private PlanetType planetType;
 
   public Planet(double centerX, double centerY, PlanetType planetType) {
-    super(centerX, centerY, BoardUtils.PLANET_RADIUS);
+    super(centerX, centerY, BoardUtils.planetRadius());
     this.planetType = planetType;
     setFill(planetType.getRenderAs());
   }

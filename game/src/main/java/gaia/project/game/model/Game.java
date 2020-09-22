@@ -71,14 +71,15 @@ public class Game {
   private final ObservableList<PlayerEnum> passedPlayers = FXCollections.observableArrayList();
   private final Property<PlayerEnum> activePlayer = new SimpleObjectProperty<>();
 
-  public static Game generateGame() {
-    return generateGame(System.currentTimeMillis());
-  }
+  // Game options
 
-  public static Game generateGame(long seed) {
+  // Default to true for old games
+  private boolean balTaksBuff = true;
+
+  public static Game generateGame(GameOpts gameOpts) {
     Game game = new Game();
 
-    Random random = new Random(seed);
+    Random random = new Random(gameOpts.getSeed());
 
     Map<SectorLocation, Rot> gameBoard = GameBoard.random(random).getSectorLocations();
 
@@ -126,6 +127,8 @@ public class Game {
     game.currentRound.setValue(Round.SETUP);
     game.currentPlayerOrder.addAll(Arrays.asList(PlayerEnum.values()));
     game.activePlayer.setValue(PlayerEnum.PLAYER1);
+
+    game.balTaksBuff = gameOpts.isBalTaksBuff();
 
     return game;
   }
@@ -260,6 +263,10 @@ public class Game {
     return knowledgeFederations;
   }
 
+  public boolean isBalTaksBuff() {
+    return balTaksBuff;
+  }
+
   public void newRound() {
     currentRound.setValue(currentRound.getValue().nextRound());
     turn = 0;
@@ -384,6 +391,7 @@ public class Game {
     json.name(JsonUtil.TERRA_BONUS).value(terraBonus.name());
 
     json.name(JsonUtil.TURN).value(turn);
+    json.name(JsonUtil.BALTAKS_BUFF).value(balTaksBuff);
 
     for (Player player : players.values()) {
       json.name(player.getRace().name());
@@ -488,6 +496,9 @@ public class Game {
           break;
         case JsonUtil.TURN:
           game.turn = json.nextInt();
+          break;
+        case JsonUtil.BALTAKS_BUFF:
+          game.balTaksBuff = json.nextBoolean();
           break;
         default:
           // Other keys should be race names...

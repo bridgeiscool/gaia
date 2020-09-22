@@ -33,12 +33,17 @@ public class GaiaProjectController {
 
   // Game flow methods
   public void newGame() {
-    Game game = Game.generateGame();
+    GameOptionsDialog optionsDialog = new GameOptionsDialog();
 
-    GameController gameController = new GameController(this, game, false);
-    primaryStage.setScene(new Scene(new MenuPane(gameController)));
-    primaryStage.setMaximized(true);
-    gameController.activate();
+    optionsDialog.showAndWait().ifPresent(opts -> {
+      Game game = Game.generateGame(opts);
+
+      GameController gameController = new GameController(this, game, false);
+      primaryStage.setScene(new Scene(new MenuPane(gameController)));
+      primaryStage.setMaximized(true);
+      gameController.activate();
+    });
+
   }
 
   public void loadGame() {

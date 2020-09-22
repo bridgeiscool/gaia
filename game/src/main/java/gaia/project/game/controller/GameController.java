@@ -50,6 +50,7 @@ import gaia.project.game.model.PlayerEnum;
 import gaia.project.game.model.Race;
 import gaia.project.game.model.Round;
 import gaia.project.game.model.RoundBooster;
+import gaia.project.game.model.SetupEnum;
 import gaia.project.game.model.TechTile;
 import gaia.project.game.model.Util;
 import javafx.application.Platform;
@@ -347,13 +348,19 @@ public class GameController extends BorderPane {
     // This has to run after the Gleens action that modifies their QIC/ORE values first in a separate runlater call
     Platform.runLater(() -> saveState());
 
-    SelectVPsDialog selectVPsDialog = new SelectVPsDialog(game);
-    selectVPsDialog.showAndWait();
+    if (game.getSetup() == SetupEnum.AUCTION_RACES) {
 
-    // TODO: Update for 4 players
-    game.getPlayers().get(PlayerEnum.PLAYER1).updateScore(selectVPsDialog.getP1Score(), "Starting Score");
-    game.getPlayers().get(PlayerEnum.PLAYER2).updateScore(selectVPsDialog.getP2Score(), "Starting Score");
-    game.getPlayers().get(PlayerEnum.PLAYER3).updateScore(selectVPsDialog.getP3Score(), "Starting Score");
+      SelectVPsDialog selectVPsDialog = new SelectVPsDialog(game);
+      selectVPsDialog.showAndWait();
+
+      // TODO: Update for 4 players
+      game.getPlayers().get(PlayerEnum.PLAYER1).updateScore(selectVPsDialog.getP1Score(), "Starting Score");
+      game.getPlayers().get(PlayerEnum.PLAYER2).updateScore(selectVPsDialog.getP2Score(), "Starting Score");
+      game.getPlayers().get(PlayerEnum.PLAYER3).updateScore(selectVPsDialog.getP3Score(), "Starting Score");
+    } else {
+      // Random races
+      game.getPlayers().values().forEach(p -> p.updateScore(10, "Starting Score"));
+    }
 
     List<PlayerEnum> order = getPlacementOrder(game.getPlayers());
     for (PlayerEnum toPrompt : order) {

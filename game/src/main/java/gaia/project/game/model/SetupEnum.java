@@ -1,7 +1,7 @@
 package gaia.project.game.model;
 
 public enum SetupEnum {
-  RANDOM_RACES("Randomize Races"), DRAFT_RACES("Draft Races"), AUCTION_RACES("Auction Races");
+  RANDOM_RACES("Randomize Races"), AUCTION_RACES("Auction Races");
 
   private final String display;
 

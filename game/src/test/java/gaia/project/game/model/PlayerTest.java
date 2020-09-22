@@ -95,7 +95,6 @@ public class PlayerTest {
     player.write(newJsonWriter);
 
     String text = writer.toString();
-    System.out.println(text);
 
     JsonReader reader = JsonUtil.GSON.newJsonReader(new StringReader(writer.toString()));
 

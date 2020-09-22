@@ -3,7 +3,11 @@ package gaia.project.game.board;
 public final class BoardUtils {
   private BoardUtils() {}
 
-  // These sizings worked for Mike's Mac and will need to be scaled for other window sizes
+  private static double scaling = 1.0;
+
+  // These sizings were created for the following resolution and must be scaled accordingly
+  private static final int BASE_WIDTH = 1792;
+  private static final int BASE_HEIGHT = 1120;
 
   // Hex side length / 2
   private static final double HEX_SIZE = 18;
@@ -15,10 +19,22 @@ public final class BoardUtils {
   public static final double TWO_ROOT_3 = 2.0 * ROOT_3;
 
   public static double hexSize() {
-    return HEX_SIZE;
+    return scaling * HEX_SIZE;
   }
 
   public static double planetRadius() {
-    return PLANET_RADIUS;
+    return scaling * PLANET_RADIUS;
+  }
+
+  public static void setScaling(double screenWidth, double screenHeight) {
+    double widthRatio = screenWidth / BASE_WIDTH;
+    double heightRatio = screenHeight / BASE_HEIGHT;
+
+    // Pick the smaller one
+    scaling = widthRatio < heightRatio ? widthRatio : heightRatio;
+  }
+
+  public static double getScaling() {
+    return scaling;
   }
 }

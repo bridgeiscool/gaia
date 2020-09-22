@@ -23,8 +23,9 @@ public class GaiaProjectController {
 
   private GameController currentGame;
 
-  public GaiaProjectController(Stage primaryStage) {
+  public GaiaProjectController(Stage primaryStage, int screenWidth, int screenHeight) {
     this.primaryStage = primaryStage;
+
     StartScreenController startScreenController = new StartScreenController(this);
     Scene startScreenScene = new Scene(new MenuPane(startScreenController));
 

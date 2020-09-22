@@ -1,12 +1,13 @@
 package gaia.project.game.model;
 
-import static gaia.project.game.board.BoardUtils.HEX_SIZE;
 import static gaia.project.game.board.BoardUtils.TWO_ROOT_3;
 
 import java.io.Serializable;
 import java.util.Objects;
 
 import com.google.common.math.DoubleMath;
+
+import gaia.project.game.board.BoardUtils;
 
 public class Coords implements Serializable {
   private static final long serialVersionUID = 8966739407025893484L;
@@ -33,7 +34,7 @@ public class Coords implements Serializable {
   }
 
   public boolean isWithinRangeOf(Coords coords, int range) {
-    return distanceTo(coords) < TWO_ROOT_3 * HEX_SIZE * range + 1.0;
+    return distanceTo(coords) < TWO_ROOT_3 * BoardUtils.hexSize() * range + 1.0;
   }
 
   @Override

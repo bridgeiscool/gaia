@@ -1,5 +1,7 @@
 package gaia.project.game.controller;
 
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
 import java.lang.Thread.UncaughtExceptionHandler;
 
 import javafx.application.Application;
@@ -9,7 +11,11 @@ public class GaiaProjectApp extends Application {
 
   @Override
   public void start(Stage primaryStage) throws Exception {
-    new GaiaProjectController(primaryStage);
+    GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+    int width = gd.getDisplayMode().getWidth();
+    int height = gd.getDisplayMode().getHeight();
+
+    new GaiaProjectController(primaryStage, width, height);
 
     primaryStage.setTitle("Gaia Project");
     primaryStage.setResizable(false);

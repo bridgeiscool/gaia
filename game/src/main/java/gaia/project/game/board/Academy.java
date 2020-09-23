@@ -16,32 +16,32 @@ public class Academy extends Polygon {
         0.0,
         0.0,
         // TOP RIGHT
-        SIDE_LENGTH,
+        SIDE_LENGTH * BoardUtils.getScaling(),
         0.0,
         // RIGHT TOP
-        SIDE_LENGTH + SIDE_LENGTH / ROOT_2,
-        SIDE_LENGTH / ROOT_2,
+        SIDE_LENGTH * BoardUtils.getScaling() + SIDE_LENGTH * BoardUtils.getScaling() / ROOT_2,
+        SIDE_LENGTH * BoardUtils.getScaling() / ROOT_2,
         // EXTENDED RIGHT TOP
-        2.0 * SIDE_LENGTH + SIDE_LENGTH / ROOT_2,
-        SIDE_LENGTH / ROOT_2,
+        2.0 * SIDE_LENGTH * BoardUtils.getScaling() + SIDE_LENGTH * BoardUtils.getScaling() / ROOT_2,
+        SIDE_LENGTH * BoardUtils.getScaling() / ROOT_2,
         // EXTENDED RIGHT BOTTOM
-        2.0 * SIDE_LENGTH + SIDE_LENGTH / ROOT_2,
-        SIDE_LENGTH + SIDE_LENGTH / ROOT_2,
+        2.0 * SIDE_LENGTH * BoardUtils.getScaling() + SIDE_LENGTH * BoardUtils.getScaling() / ROOT_2,
+        SIDE_LENGTH * BoardUtils.getScaling() + SIDE_LENGTH * BoardUtils.getScaling() / ROOT_2,
         // RIGHT BOTTOM
-        SIDE_LENGTH + SIDE_LENGTH / ROOT_2,
-        SIDE_LENGTH + SIDE_LENGTH / ROOT_2,
+        SIDE_LENGTH * BoardUtils.getScaling() + SIDE_LENGTH * BoardUtils.getScaling() / ROOT_2,
+        SIDE_LENGTH * BoardUtils.getScaling() + SIDE_LENGTH / ROOT_2,
         // BOTTOM RIGHT
-        SIDE_LENGTH,
-        SIDE_LENGTH + 2.0 * SIDE_LENGTH / ROOT_2,
+        SIDE_LENGTH * BoardUtils.getScaling(),
+        SIDE_LENGTH * BoardUtils.getScaling() + 2.0 * SIDE_LENGTH * BoardUtils.getScaling() / ROOT_2,
         // BOTTOM LEFT
         0.0,
-        SIDE_LENGTH + 2.0 * SIDE_LENGTH / ROOT_2,
+        SIDE_LENGTH * BoardUtils.getScaling() + 2.0 * SIDE_LENGTH * BoardUtils.getScaling() / ROOT_2,
         // LEFT BOTTOM
-        -1.0 * SIDE_LENGTH / ROOT_2,
-        SIDE_LENGTH + SIDE_LENGTH / ROOT_2,
+        -1.0 * SIDE_LENGTH * BoardUtils.getScaling() / ROOT_2,
+        SIDE_LENGTH * BoardUtils.getScaling() + SIDE_LENGTH * BoardUtils.getScaling() / ROOT_2,
         // LEFT TOP
-        -1.0 * SIDE_LENGTH / ROOT_2,
-        SIDE_LENGTH / ROOT_2);
+        -1.0 * SIDE_LENGTH * BoardUtils.getScaling() / ROOT_2,
+        SIDE_LENGTH * BoardUtils.getScaling() / ROOT_2);
     this.hex = hex;
     this.player = player;
     setStroke(Color.BLACK);

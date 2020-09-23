@@ -4,6 +4,7 @@ import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.lang.Thread.UncaughtExceptionHandler;
 
+import gaia.project.game.board.BoardUtils;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -15,7 +16,8 @@ public class GaiaProjectApp extends Application {
     int width = gd.getDisplayMode().getWidth();
     int height = gd.getDisplayMode().getHeight();
 
-    new GaiaProjectController(primaryStage, width, height);
+    BoardUtils.setScaling(width, height);
+    new GaiaProjectController(primaryStage);
 
     primaryStage.setTitle("Gaia Project");
     primaryStage.setResizable(false);

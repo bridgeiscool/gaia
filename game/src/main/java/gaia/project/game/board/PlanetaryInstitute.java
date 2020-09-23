@@ -11,7 +11,7 @@ public class PlanetaryInstitute extends Rectangle {
   private final PlayerEnum player;
 
   public PlanetaryInstitute(Hex hex, Color color, PlayerEnum player) {
-    super(SIDE, SIDE, color);
+    super(SIDE * BoardUtils.getScaling(), SIDE * BoardUtils.getScaling(), color);
     this.hex = hex;
     this.player = player;
     setStroke(Color.BLACK);

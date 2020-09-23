@@ -11,7 +11,7 @@ public class Satellite extends Rectangle {
   private final PlayerEnum player;
 
   public Satellite(Hex hex, Color color, PlayerEnum player) {
-    super(SIDE, SIDE);
+    super(SIDE * BoardUtils.getScaling(), SIDE * BoardUtils.getScaling());
     this.hex = hex;
     this.player = player;
     setFill(color);

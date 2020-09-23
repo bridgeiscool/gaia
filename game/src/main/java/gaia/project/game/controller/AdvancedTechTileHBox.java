@@ -2,6 +2,7 @@ package gaia.project.game.controller;
 
 import java.util.Map.Entry;
 
+import gaia.project.game.board.BoardUtils;
 import gaia.project.game.model.AdvancedTechTile;
 import gaia.project.game.model.Player;
 import javafx.beans.property.BooleanProperty;
@@ -12,6 +13,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 
 public class AdvancedTechTileHBox extends HBox {
+  private static final double BASE_HEIGHT = 60;
+  private static final double BASE_WIDTH = 96;
+
   private static final String NORMAL = "advTechTile";
   private static final String HIGHLIGHTED = "advTechTileHighlighted";
   private final AdvancedTechTile techTile;
@@ -22,8 +26,7 @@ public class AdvancedTechTileHBox extends HBox {
     this.taken = new SimpleBooleanProperty(entry.getValue());
     if (!taken.get()) {
       if (techTile.isAction()) {
-        Action action = new Action(20.0, techTile.display(), "specialAction");
-        action.setTaken(false);
+        SpecialAction action = new SpecialAction(techTile, techTile.display(), this.taken);
         getChildren().add(action);
       } else {
         Label label = new Label(techTile.display());
@@ -31,8 +34,8 @@ public class AdvancedTechTileHBox extends HBox {
         getChildren().add(label);
       }
     }
-    setPrefHeight(60);
-    setPrefWidth(96);
+    setPrefHeight(BASE_HEIGHT * BoardUtils.getScaling());
+    setPrefWidth(BASE_WIDTH * BoardUtils.getScaling());
     setAlignment(Pos.CENTER);
     getStyleClass().add(NORMAL);
   }

@@ -2,6 +2,7 @@ package gaia.project.game.controller;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
@@ -11,6 +12,7 @@ import java.util.stream.Collectors;
 
 import com.google.common.base.Preconditions;
 
+import gaia.project.game.board.BoardUtils;
 import gaia.project.game.model.AdvancedTechTile;
 import gaia.project.game.model.BescodsPlayer;
 import gaia.project.game.model.FederationTile;
@@ -25,8 +27,11 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.HPos;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Circle;
 
@@ -37,6 +42,10 @@ public class TechTracks extends GridPane {
   public static final int GAIA = 3;
   public static final int ECON = 4;
   public static final int KNOWLEDGE = 5;
+
+  private static final double BASE_GAP = 5;
+  private static final double BASE_COL_WIDTH = 108;
+  private static final double BASE_ROW_HEIGHT = 50;
 
   // Terraforming
   @FXML
@@ -172,6 +181,16 @@ public class TechTracks extends GridPane {
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
+
+    // UI Scaling
+    setHgap(BASE_GAP * BoardUtils.getScaling());
+    ColumnConstraints cConstraint = new ColumnConstraints();
+    cConstraint.setHalignment(HPos.CENTER);
+    cConstraint.setPrefWidth(BASE_COL_WIDTH * BoardUtils.getScaling());
+    getColumnConstraints().addAll(Collections.nCopies(6, cConstraint));
+    RowConstraints rConstraint = new RowConstraints();
+    rConstraint.setPrefHeight(BASE_ROW_HEIGHT * BoardUtils.getScaling());
+    getRowConstraints().addAll(Collections.nCopies(8, rConstraint));
 
     this.lostPlanetCallback = lostPlanetCallback;
 

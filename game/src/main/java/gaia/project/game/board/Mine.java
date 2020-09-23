@@ -5,15 +5,15 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 public class Mine extends Rectangle {
-  public static final int LENGTH = 20;
-  public static final int WIDTH = 15;
+  public static final int BASE_LENGTH = 20;
+  public static final int BASE_WIDTH = 15;
   private static final int POWER = 1;
 
   private final Hex hex;
   private final PlayerEnum player;
 
   public Mine(Hex hex, Color color, PlayerEnum player) {
-    super(LENGTH, WIDTH);
+    super(BASE_LENGTH * BoardUtils.getScaling(), BASE_WIDTH * BoardUtils.getScaling());
     this.hex = hex;
     this.player = player;
     setFill(color);

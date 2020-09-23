@@ -16,13 +16,14 @@ public class SpaceStation extends StackPane {
     this.hex = hex;
     this.player = player;
 
-    Rectangle rectangle = new Rectangle(SIDE, SIDE, Color.SILVER);
+    Rectangle rectangle = new Rectangle(SIDE * BoardUtils.getScaling(), SIDE * BoardUtils.getScaling(), Color.SILVER);
     rectangle.setStroke(Color.BLACK);
     rectangle.setStrokeWidth(1.0);
 
     getChildren().add(rectangle);
 
-    Rectangle inner = new Rectangle(INNER_SIDE, INNER_SIDE, Color.RED);
+    Rectangle inner =
+        new Rectangle(INNER_SIDE * BoardUtils.getScaling(), INNER_SIDE * BoardUtils.getScaling(), Color.RED);
     inner.setStroke(Color.BLACK);
     inner.setStrokeWidth(1.0);
 

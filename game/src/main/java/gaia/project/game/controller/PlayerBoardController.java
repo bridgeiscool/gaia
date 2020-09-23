@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.util.Map.Entry;
 import java.util.function.Consumer;
 
+import gaia.project.game.board.BoardUtils;
 import gaia.project.game.model.AdvancedTechTile;
 import gaia.project.game.model.Coords;
 import gaia.project.game.model.Player;
@@ -18,6 +19,7 @@ import javafx.collections.MapChangeListener;
 import javafx.collections.SetChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
@@ -27,6 +29,14 @@ import javafx.scene.shape.Circle;
 import javafx.util.converter.NumberStringConverter;
 
 public class PlayerBoardController extends GridPane {
+  private static final double BRAINSTONE_BASE_SIZE = 8.0;
+  private static final double BASE_WIDTH = 600;
+  private static final double BASE_HEIGHT = 200;
+
+  private static final double BASE_COLUMN_WIDTH = 300;
+  private static final double BASE_ROW_HEIGHT = 25;
+  private static final double BASE_SPACING = 7;
+
   private final Player player;
 
   // Top Bar
@@ -94,10 +104,18 @@ public class PlayerBoardController extends GridPane {
   private Label availableGaiaformers;
 
   @FXML
+  private HBox topLine;
+  @FXML
+  private HBox secondLine;
+  @FXML
+  private HBox thirdLine;
+  @FXML
+  private GridPane bottomLine;
+  @FXML
   private FlowPane tokenArea;
 
   // Only used for Taklons
-  private Circle brainstone = new Circle(8.0, Color.PURPLE);
+  private Circle brainstone = new Circle(BRAINSTONE_BASE_SIZE * BoardUtils.getScaling(), Color.PURPLE);
 
   public PlayerBoardController(Player player) {
     FXMLLoader loader = new FXMLLoader(PlayerBoardController.class.getResource("PlayerBoard.fxml"));
@@ -110,8 +128,26 @@ public class PlayerBoardController extends GridPane {
     }
 
     this.player = player;
-    getStyleClass().add(player.getRace().getBoardStyle());
 
+    // Set sizing
+    getStyleClass().add(player.getRace().getBoardStyle());
+    setPrefWidth(BASE_WIDTH * BoardUtils.getScaling());
+    setPrefHeight(BASE_HEIGHT * BoardUtils.getScaling());
+    topLine.setSpacing(BASE_SPACING * BoardUtils.getScaling());
+    topLine.setPrefWidth(BASE_COLUMN_WIDTH * BoardUtils.getScaling());
+    topLine.setPrefHeight(BASE_ROW_HEIGHT * BoardUtils.getScaling());
+    secondLine.setSpacing(BASE_SPACING * BoardUtils.getScaling());
+    secondLine.setPrefWidth(BASE_COLUMN_WIDTH * BoardUtils.getScaling());
+    secondLine.setPrefHeight(BASE_ROW_HEIGHT * BoardUtils.getScaling());
+    // This uses different spacing since it's
+    thirdLine.setSpacing(45 * BoardUtils.getScaling());
+    thirdLine.setPrefWidth(BASE_COLUMN_WIDTH * BoardUtils.getScaling());
+    thirdLine.setPrefHeight(BASE_ROW_HEIGHT * BoardUtils.getScaling());
+    bottomLine.setHgap(10 * BoardUtils.getScaling());
+    bin3Box.setPadding(new Insets(0, 0, 0, 25 * BoardUtils.getScaling()));
+    gaiaBox.setPadding(new Insets(0, 25 * BoardUtils.getScaling(), 0, 0));
+
+    // Set up listeners
     raceName.setText(player.getRace().getRaceName());
     vps.textProperty().bindBidirectional(player.getScore(), new NumberStringConverter());
 

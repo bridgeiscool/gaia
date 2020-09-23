@@ -9,6 +9,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 
+import gaia.project.game.board.BoardUtils;
 import gaia.project.game.model.EndScoring;
 import gaia.project.game.model.Game;
 import gaia.project.game.model.Player;
@@ -17,13 +18,20 @@ import gaia.project.game.model.Race;
 import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 public class ScoringArea extends BorderPane {
+  private static final double BASE_GAP = 5;
+  private static final double BASE_SCORING_WIDTH = 180;
+  private static final double SCORING_TOP = 10;
+  private static final double SCORING_SIDE = 8;
+
   @FXML
   private Label round6;
   @FXML
@@ -70,6 +78,12 @@ public class ScoringArea extends BorderPane {
   @FXML
   private HBox nextp3;
 
+  // Containers
+  @FXML
+  private GridPane endScoringPane;
+  @FXML
+  private GridPane turnMarkerPane;
+
   private Map<PlayerEnum, TurnMarker> turnMarkers = new HashMap<>();
   private final List<HBox> thisTurn;
   private final List<HBox> nextTurn;
@@ -85,6 +99,27 @@ public class ScoringArea extends BorderPane {
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
+
+    // UI Sizing
+    endScoringPane.setHgap(BASE_GAP * BoardUtils.getScaling());
+    endScoringPane.setVgap(BASE_GAP * BoardUtils.getScaling());
+    endScoringPane.setPrefWidth(BASE_SCORING_WIDTH * BoardUtils.getScaling());
+    endScoringPane.setPadding(
+        new Insets(
+            SCORING_TOP * BoardUtils.getScaling(),
+            SCORING_SIDE * BoardUtils.getScaling(),
+            SCORING_TOP * BoardUtils.getScaling(),
+            SCORING_SIDE * BoardUtils.getScaling()));
+
+    turnMarkerPane.setHgap(BASE_GAP * BoardUtils.getScaling());
+    turnMarkerPane.setVgap(BASE_GAP * BoardUtils.getScaling());
+    turnMarkerPane.setPrefWidth(BASE_SCORING_WIDTH * BoardUtils.getScaling());
+    turnMarkerPane.setPadding(
+        new Insets(
+            SCORING_TOP * BoardUtils.getScaling(),
+            SCORING_SIDE * BoardUtils.getScaling(),
+            SCORING_TOP * BoardUtils.getScaling(),
+            SCORING_SIDE * BoardUtils.getScaling()));
 
     thisTurn = ImmutableList.of(p1, p2, p3);
     nextTurn = ImmutableList.of(nextp1, nextp2, nextp3);
@@ -229,10 +264,10 @@ public class ScoringArea extends BorderPane {
   }
 
   private static class TurnMarker extends Rectangle {
-    private static final int SIZE = 15;
+    private static final int BASE_SIZE = 15;
 
     TurnMarker(Race race) {
-      super(SIZE, SIZE, race.getColor());
+      super(BASE_SIZE * BoardUtils.getScaling(), BASE_SIZE * BoardUtils.getScaling(), race.getColor());
     }
 
     void highlight() {

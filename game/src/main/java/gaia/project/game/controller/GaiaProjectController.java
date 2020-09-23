@@ -23,7 +23,7 @@ public class GaiaProjectController {
 
   private GameController currentGame;
 
-  public GaiaProjectController(Stage primaryStage, int screenWidth, int screenHeight) {
+  public GaiaProjectController(Stage primaryStage) {
     this.primaryStage = primaryStage;
 
     StartScreenController startScreenController = new StartScreenController(this);

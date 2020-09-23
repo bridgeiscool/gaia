@@ -4,6 +4,7 @@ import java.util.function.Consumer;
 
 import javax.annotation.Nullable;
 
+import gaia.project.game.board.BoardUtils;
 import gaia.project.game.model.AdvancedTechTile;
 import gaia.project.game.model.Player;
 import javafx.geometry.Pos;
@@ -13,30 +14,28 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
 public class MiniAdvancedTechTile extends HBox {
+  private static final double BASE_HEIGHT = 36;
+  private static final double BASE_WIDTH = 54;
+
   private static final String NORMAL = "advTechTile";
   private static final String HIGHLIGHTED = "advTechTileHighlighted";
   private final AdvancedTechTile techTile;
   @Nullable
-  private Action action;
+  private SpecialAction action;
 
   public MiniAdvancedTechTile(Player player, AdvancedTechTile techTile) {
     this.techTile = techTile;
     if (techTile.isAction()) {
-      this.action = new Action(20.0, techTile.display(), "specialAction");
-      action.setTaken(
-          player.getSpecialActions().containsKey(techTile) ? player.getSpecialActions().get(techTile).get() : false);
+      this.action = new SpecialAction(techTile, techTile.display(), player.getSpecialActions().get(techTile));
       getChildren().add(action);
-
-      // Bind state UI to used status
-      player.getSpecialActions().get(techTile).addListener((o, oldValue, newValue) -> action.setTaken(newValue));
     } else {
       Label label = new Label(techTile.display());
       label.setTextFill(Color.WHITE);
       label.setFont(Font.font(10));
       getChildren().add(label);
     }
-    setPrefHeight(36);
-    setPrefWidth(54);
+    setPrefHeight(BASE_HEIGHT * BoardUtils.getScaling());
+    setPrefWidth(BASE_WIDTH * BoardUtils.getScaling());
     setAlignment(Pos.CENTER);
     getStyleClass().add(NORMAL);
   }

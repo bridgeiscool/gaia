@@ -8,7 +8,7 @@
 <?import javafx.scene.image.*?>
 <?import javafx.geometry.*?>
 
-<fx:root type="javafx.scene.layout.GridPane" xmlns:fx="http://javafx.com/fxml" prefWidth="600" prefHeight="200">
+<fx:root type="javafx.scene.layout.GridPane" xmlns:fx="http://javafx.com/fxml">
   <stylesheets>
     <URL value="@app.css" />
   </stylesheets>
@@ -23,11 +23,11 @@
 
   <VBox GridPane.rowIndex="0" GridPane.columnIndex="0">
     <children>
-      <HBox prefHeight="25" prefWidth="300" spacing="7">
+      <HBox fx:id="topLine">
         <Label fx:id="raceName" />
         <Label fx:id="vps" />
       </HBox>
-      <HBox prefHeight="25" prefWidth="300" spacing="7">
+      <HBox fx:id="secondLine">
         <Label fx:id="creditsLabel" />
         <Label fx:id="creditIncome" />
         <Label fx:id="oreLabel" />
@@ -37,7 +37,7 @@
         <Label fx:id="qicLabel" />
         <Label fx:id="qicIncome" />
       </HBox>
-      <HBox prefHeight="25" prefWidth="300" spacing="45" alignment="CENTER">
+      <HBox fx:id="thirdLine" alignment="CENTER">
         <BorderPane>
           <top>
             <HBox alignment="CENTER" fx:id="bin2Box">
@@ -46,9 +46,6 @@
           </top>
           <right>
             <HBox fx:id="bin3Box">
-              <padding>
-                <Insets left="25" />
-              </padding>
               <Label fx:id="bin3" />
               <Label fx:id="pIncome" />
             </HBox>
@@ -61,9 +58,6 @@
           </bottom>
           <left>
             <HBox fx:id="gaiaBox">
-              <padding>
-                <Insets right="25" />
-              </padding>
               <Label fx:id="gaiaBin" />
             </HBox>
           </left>
@@ -82,7 +76,7 @@
           </GridPane>
         </HBox>
       </HBox>
-      <GridPane hgap="10" vgap="1">
+      <GridPane fx:id="bottomLine" vgap="1">
         <columnConstraints>
           <ColumnConstraints halignment="CENTER"/>
           <ColumnConstraints halignment="CENTER"/>

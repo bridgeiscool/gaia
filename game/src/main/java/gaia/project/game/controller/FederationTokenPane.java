@@ -2,6 +2,7 @@ package gaia.project.game.controller;
 
 import java.util.function.Consumer;
 
+import gaia.project.game.board.BoardUtils;
 import gaia.project.game.model.FederationTile;
 import gaia.project.game.model.Player;
 import gaia.project.game.model.Player.FedToken;
@@ -34,7 +35,7 @@ public class FederationTokenPane extends StackPane {
   public FederationTokenPane(FederationTile federationTile, Size size, BooleanProperty flippable) {
     this.federationTile = federationTile;
     getStyleClass().add(size.styleClass);
-    this.shape = new Shape(size.scaling, flippable.get() ? "greenFedToken" : "grayFedToken");
+    this.shape = new Shape(size.scaling * BoardUtils.getScaling(), flippable.get() ? "greenFedToken" : "grayFedToken");
     flippable.addListener((o, oldValue, newValue) -> flip());
     ObservableList<Node> children = getChildren();
     children.add(shape);

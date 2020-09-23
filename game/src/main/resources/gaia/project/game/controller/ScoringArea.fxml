@@ -46,13 +46,13 @@
   </center>
   <right>
     <VBox alignment="CENTER">
-      <GridPane hgap="5" vgap="5" prefWidth="180" styleClass="endScoring">
+      <GridPane fx:id="endScoringPane" styleClass="endScoring">
         <padding>
           <Insets left="8" right="8" top="10" bottom="10" />
         </padding>
         <columnConstraints>
-          <ColumnConstraints halignment="CENTER" prefWidth="85" />
-          <ColumnConstraints halignment="CENTER" prefWidth="85" />
+          <ColumnConstraints halignment="CENTER" percentWidth="50" />
+          <ColumnConstraints halignment="CENTER" percentWidth="50" />
         </columnConstraints>
         
         <Label fx:id="endScoring1" GridPane.rowIndex="0" GridPane.columnIndex="0" />
@@ -67,13 +67,10 @@
         <Label fx:id="p3Scoring1" GridPane.rowIndex="3" GridPane.columnIndex="0" />
         <Label fx:id="p3Scoring2" GridPane.rowIndex="3" GridPane.columnIndex="1" />
       </GridPane>
-      <GridPane hgap="5" vgap="5" prefWidth="180" styleClass="endScoring">
-        <padding>
-          <Insets left="8" right="8" top="10" bottom="10" />
-        </padding>
+      <GridPane fx:id="turnMarkerPane" styleClass="endScoring">
         <columnConstraints>
-          <ColumnConstraints halignment="CENTER" prefWidth="85" />
-          <ColumnConstraints halignment="CENTER" prefWidth="85" />
+          <ColumnConstraints halignment="CENTER" percentWidth="50" />
+          <ColumnConstraints halignment="CENTER" percentWidth="50" />
         </columnConstraints>
         
         <Label text="This" GridPane.rowIndex="0" GridPane.columnIndex="0" />

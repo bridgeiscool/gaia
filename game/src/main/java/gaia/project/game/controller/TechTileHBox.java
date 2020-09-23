@@ -2,6 +2,7 @@ package gaia.project.game.controller;
 
 import java.util.Optional;
 
+import gaia.project.game.board.BoardUtils;
 import gaia.project.game.model.Player;
 import gaia.project.game.model.TechTile;
 import gaia.project.game.model.UpdatePlayer;
@@ -12,6 +13,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 
 public class TechTileHBox extends HBox {
+  private static final int BASE_WIDTH = 108;
+  private static final int BASE_HEIGHT = 72;
   private static final String NORMAL = "techTile";
   private static final String HIGHLIGHTED = "techTileHighlighted";
   private final TechTile techTile;
@@ -26,8 +29,8 @@ public class TechTileHBox extends HBox {
       label.setTextFill(Color.WHITE);
       getChildren().add(label);
     }
-    setPrefHeight(72);
-    setPrefWidth(108);
+    setPrefHeight(BASE_HEIGHT * BoardUtils.getScaling());
+    setPrefWidth(BASE_WIDTH * BoardUtils.getScaling());
     setAlignment(Pos.CENTER);
     getStyleClass().add("techTile");
   }

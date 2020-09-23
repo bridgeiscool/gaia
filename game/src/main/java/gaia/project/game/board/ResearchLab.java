@@ -5,13 +5,13 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
 public class ResearchLab extends Circle {
-  private static final int RADIUS = 10;
+  private static final int BASE_RADIUS = 10;
 
   private final Hex hex;
   private final PlayerEnum player;
 
   public ResearchLab(Hex hex, Color color, PlayerEnum player) {
-    super(RADIUS, color);
+    super(BASE_RADIUS * BoardUtils.getScaling(), color);
 
     this.hex = hex;
     this.player = player;

@@ -4,9 +4,11 @@ import java.util.Optional;
 
 import javax.annotation.Nullable;
 
+import gaia.project.game.board.BoardUtils;
 import gaia.project.game.model.Player;
 import gaia.project.game.model.PlayerEnum;
 import gaia.project.game.model.RoundBooster;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -19,14 +21,14 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
 
 public class RoundBoosterTile extends StackPane {
-  private static final double WIDTH = 60.0;
-  private static final double HEIGHT = 175.0;
+  private static final double BASE_WIDTH = 60.0;
+  private static final double BASE_HEIGHT = 175.0;
 
   private RoundBooster roundBooster;
   private Optional<PlayerEnum> currentPlayer = Optional.empty();
   private final BoosterRectangle rectangle;
   @Nullable
-  private Action action;
+  private SpecialAction action;
 
   public RoundBoosterTile(RoundBooster roundBooster) {
     this.roundBooster = roundBooster;
@@ -42,9 +44,8 @@ public class RoundBoosterTile extends StackPane {
     children.add(vbox);
   }
 
-  private Action getSpecialAction(RoundBooster roundBooster) {
-    this.action = new Action(20.0, roundBooster.getTopText(), "specialAction");
-    action.setTaken(false);
+  private SpecialAction getSpecialAction(RoundBooster roundBooster) {
+    this.action = new SpecialAction(roundBooster, roundBooster.getTopText(), new SimpleBooleanProperty(false));
     return action;
   }
 
@@ -107,7 +108,7 @@ public class RoundBoosterTile extends StackPane {
 
   private static class BoosterRectangle extends Rectangle {
     BoosterRectangle() {
-      super(WIDTH, HEIGHT, Color.ANTIQUEWHITE);
+      super(BASE_WIDTH * BoardUtils.getScaling(), BASE_HEIGHT * BoardUtils.getScaling(), Color.ANTIQUEWHITE);
       setNormalBorder();
     }
 

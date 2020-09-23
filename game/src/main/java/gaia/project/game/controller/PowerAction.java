@@ -2,6 +2,7 @@ package gaia.project.game.controller;
 
 import java.util.function.Consumer;
 
+import gaia.project.game.board.BoardUtils;
 import gaia.project.game.model.Player;
 import javafx.beans.NamedArg;
 import javafx.collections.ObservableList;
@@ -10,7 +11,8 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Polygon;
 
-public class Action extends StackPane {
+public class PowerAction extends StackPane {
+  private static final double BASE_SIDE_LENGTH = 25.0;
   private static final double ROOT_2 = Math.sqrt(2.0);
   private static final String TAKEN_ACTION = "takenAction";
   private static final String QIC_HIGHLIGHTED = "qicActionHighlighted";
@@ -20,12 +22,9 @@ public class Action extends StackPane {
   private final String originalStyle;
   private boolean taken;
 
-  public Action(
-      @NamedArg("sideLength") double sideLength,
-      @NamedArg("text") String text,
-      @NamedArg("octagonStyle") String octagonStyle) {
+  public PowerAction(@NamedArg("text") String text, @NamedArg("octagonStyle") String octagonStyle) {
     ObservableList<Node> children = getChildren();
-    this.octagon = new Octagon(sideLength);
+    this.octagon = new Octagon(BASE_SIDE_LENGTH * BoardUtils.getScaling());
     this.originalStyle = octagonStyle;
     children.add(octagon);
     Label label = new Label(text);

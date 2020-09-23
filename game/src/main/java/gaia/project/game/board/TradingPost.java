@@ -17,18 +17,18 @@ public class TradingPost extends Polygon {
         0.0,
         // LEFT TOP
         0.0,
-        -12.0,
+        -12.0 * BoardUtils.getScaling(),
         // POINT
-        5.0,
-        -20.0,
+        5.0 * BoardUtils.getScaling(),
+        -20.0 * BoardUtils.getScaling(),
         // TOP MIDDLE
-        10.0,
-        -12.0,
+        10.0 * BoardUtils.getScaling(),
+        -12.0 * BoardUtils.getScaling(),
         // RIGHT TOP
-        20.0,
-        -12.0,
+        20.0 * BoardUtils.getScaling(),
+        -12.0 * BoardUtils.getScaling(),
         // RIGHT BOTTOM
-        20.0,
+        20.0 * BoardUtils.getScaling(),
         0.0);
     this.hex = hex;
     this.player = player;

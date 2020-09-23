@@ -2,6 +2,7 @@ package gaia.project.game.controller;
 
 import java.io.IOException;
 
+import gaia.project.game.board.BoardUtils;
 import gaia.project.game.model.Game;
 import gaia.project.game.model.Player;
 import gaia.project.game.model.Race;
@@ -11,28 +12,31 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.GridPane;
 
 public class PowerActionsController extends GridPane {
+  private static final double BASE_HGAP = 5;
+  private static final double BASE_VGAP = 2;
+
   private final GameController gameController;
 
   @FXML
-  private Action k3;
+  private PowerAction k3;
   @FXML
-  private Action doubleTf;
+  private PowerAction doubleTf;
   @FXML
-  private Action ore;
+  private PowerAction ore;
   @FXML
-  private Action credits;
+  private PowerAction credits;
   @FXML
-  private Action k2;
+  private PowerAction k2;
   @FXML
-  private Action tf;
+  private PowerAction tf;
   @FXML
-  private Action pt;
+  private PowerAction pt;
   @FXML
-  private Action q4;
+  private PowerAction q4;
   @FXML
-  private Action q3;
+  private PowerAction q3;
   @FXML
-  private Action q2;
+  private PowerAction q2;
 
   public PowerActionsController(GameController gameController) {
     FXMLLoader loader = new FXMLLoader(PlayerBoardController.class.getResource("PowerActions.fxml"));
@@ -47,8 +51,11 @@ public class PowerActionsController extends GridPane {
     this.gameController = gameController;
     Game game = gameController.getGame();
 
-    // Initialize action styles
+    // UI
+    setHgap(BASE_HGAP * BoardUtils.getScaling());
+    setVgap(BASE_VGAP * BoardUtils.getScaling());
 
+    // Initialize action styles
     k3.setTaken(game.getK3ActionTaken().getValue());
     doubleTf.setTaken(game.getDoubleTfActionTaken().getValue());
     ore.setTaken(game.getOreActionTaken().getValue());

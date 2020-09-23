@@ -8,174 +8,166 @@
 <?import javafx.scene.image.*?>
 <?import javafx.geometry.*?>
 
-<fx:root type="javafx.scene.layout.GridPane" xmlns:fx="http://javafx.com/fxml" hgap="5">
+<fx:root type="javafx.scene.layout.GridPane" xmlns:fx="http://javafx.com/fxml">
   <stylesheets>
     <URL value="@app.css" />
   </stylesheets>
-  <columnConstraints>
-    <ColumnConstraints prefWidth="108" halignment="CENTER"/>
-    <ColumnConstraints prefWidth="108" halignment="CENTER"/>
-    <ColumnConstraints prefWidth="108" halignment="CENTER"/>
-    <ColumnConstraints prefWidth="108" halignment="CENTER"/>
-    <ColumnConstraints prefWidth="108" halignment="CENTER"/>
-    <ColumnConstraints prefWidth="108" halignment="CENTER"/>
-  </columnConstraints>
   
   <!-- Terraforming column  --> 
   <StackPane GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="terraTrack" fx:id="terra5StackPane">
-    <HBox fx:id="terra5" alignment="CENTER" prefHeight="50"/>
+    <HBox fx:id="terra5" alignment="CENTER"/>
   </StackPane>
   <HBox fx:id="terraAdvTech" GridPane.rowIndex="1" GridPane.columnIndex="0" alignment="CENTER" />
   <StackPane GridPane.rowIndex="2" GridPane.columnIndex="0" styleClass="terraTrack">
     <Label text="+2o" style="-fx-text-fill: white"/>    
-    <HBox fx:id="terra4" alignment="CENTER" prefHeight="50"/>
+    <HBox fx:id="terra4" alignment="CENTER"/>
   </StackPane>
   <StackPane GridPane.rowIndex="3" GridPane.columnIndex="0" styleClass="terraTrack">
     <Label text="dig=1o" style="-fx-text-fill: white"/>    
-    <HBox fx:id="terra3" alignment="CENTER" prefHeight="50"/>
+    <HBox fx:id="terra3" alignment="CENTER"/>
   </StackPane>
   <StackPane GridPane.rowIndex="5" GridPane.columnIndex="0" styleClass="terraTrack">  
     <Label text="dig=2o" style="-fx-text-fill: white"/>    
-    <HBox fx:id="terra2" alignment="CENTER" prefHeight="50"/>
+    <HBox fx:id="terra2" alignment="CENTER"/>
   </StackPane>
     <StackPane GridPane.rowIndex="6" GridPane.columnIndex="0" styleClass="terraTrack">
     <Label text="+2o" style="-fx-text-fill: white"/>    
-    <HBox fx:id="terra1" alignment="CENTER" prefHeight="50"/>
+    <HBox fx:id="terra1" alignment="CENTER"/>
   </StackPane>
   <StackPane GridPane.rowIndex="7" GridPane.columnIndex="0" styleClass="terraTrack">
     <Label text="dig=3o" style="-fx-text-fill: white"/>    
-    <HBox fx:id="terra0" alignment="CENTER" prefHeight="50"/>
+    <HBox fx:id="terra0" alignment="CENTER"/>
   </StackPane>
 
   <!-- Nav Column -->
   <StackPane GridPane.rowIndex="0" GridPane.columnIndex="1" styleClass="navTrack">
     <Label text="nav 4, LP" style="-fx-text-fill: white"/>    
-    <HBox fx:id="nav5" alignment="CENTER" prefHeight="50"/>
+    <HBox fx:id="nav5" alignment="CENTER"/>
   </StackPane>
   <HBox fx:id="navAdvTech" GridPane.rowIndex="1" GridPane.columnIndex="1" alignment="CENTER" />
   <StackPane GridPane.rowIndex="2" GridPane.columnIndex="1" styleClass="navTrack">
     <Label text="nav 3" style="-fx-text-fill: white"/>    
-    <HBox fx:id="nav4" alignment="CENTER" prefHeight="50"/>
+    <HBox fx:id="nav4" alignment="CENTER"/>
   </StackPane>
   <StackPane GridPane.rowIndex="3" GridPane.columnIndex="1" styleClass="navTrack">
     <Label text="+1q" style="-fx-text-fill: white"/>    
-    <HBox fx:id="nav3" alignment="CENTER" prefHeight="50"/>
+    <HBox fx:id="nav3" alignment="CENTER"/>
   </StackPane>
     <StackPane GridPane.rowIndex="5" GridPane.columnIndex="1" styleClass="navTrack">
     <Label text="nav 2" style="-fx-text-fill: white"/>    
-    <HBox fx:id="nav2" alignment="CENTER" prefHeight="50"/>
+    <HBox fx:id="nav2" alignment="CENTER"/>
   </StackPane>
     <StackPane GridPane.rowIndex="6" GridPane.columnIndex="1" styleClass="navTrack">
     <Label text="+1q" style="-fx-text-fill: white"/>    
-    <HBox fx:id="nav1" alignment="CENTER" prefHeight="50"/>
+    <HBox fx:id="nav1" alignment="CENTER"/>
   </StackPane>
   <StackPane GridPane.rowIndex="7" GridPane.columnIndex="1" styleClass="navTrack">
     <Label text="nav 1" style="-fx-text-fill: white"/> 
-    <HBox fx:id="nav0" alignment="CENTER" prefHeight="50"/>
+    <HBox fx:id="nav0" alignment="CENTER"/>
   </StackPane>
 
   <!-- AI Column -->
   <StackPane GridPane.rowIndex="0" GridPane.columnIndex="2" styleClass="aiTrack">
     <Label text="+4q" />    
-    <HBox fx:id="ai5" alignment="CENTER" prefHeight="50"/>
+    <HBox fx:id="ai5" alignment="CENTER"/>
   </StackPane>
   <HBox fx:id="aiAdvTech" GridPane.rowIndex="1" GridPane.columnIndex="2" alignment="CENTER" />
   <StackPane GridPane.rowIndex="2" GridPane.columnIndex="2" styleClass="aiTrack">
     <Label text="+2q" />    
-    <HBox fx:id="ai4" alignment="CENTER" prefHeight="50"/>
+    <HBox fx:id="ai4" alignment="CENTER"/>
   </StackPane>
   <StackPane GridPane.rowIndex="3" GridPane.columnIndex="2" styleClass="aiTrack">
     <Label text="+2q" />    
-    <HBox fx:id="ai3" alignment="CENTER" prefHeight="50"/>
+    <HBox fx:id="ai3" alignment="CENTER"/>
   </StackPane>
     <StackPane GridPane.rowIndex="5" GridPane.columnIndex="2" styleClass="aiTrack">
     <Label text="+1q" />    
-    <HBox fx:id="ai2" alignment="CENTER" prefHeight="50"/>
+    <HBox fx:id="ai2" alignment="CENTER"/>
   </StackPane>
     <StackPane GridPane.rowIndex="6" GridPane.columnIndex="2" styleClass="aiTrack">
     <Label text="+1q" />    
-    <HBox fx:id="ai1" alignment="CENTER" prefHeight="50"/>
+    <HBox fx:id="ai1" alignment="CENTER"/>
   </StackPane>
   <StackPane GridPane.rowIndex="7" GridPane.columnIndex="2" styleClass="aiTrack">
-    <HBox fx:id="ai0" alignment="CENTER" prefHeight="50"/>
+    <HBox fx:id="ai0" alignment="CENTER"/>
   </StackPane>
   
   <!-- Gaiaforming Column -->
   <StackPane GridPane.rowIndex="0" GridPane.columnIndex="3" styleClass="gaiaTrack">
     <Label text="+4VP, 1/GP" style="-fx-text-fill: white"/>    
-    <HBox fx:id="gaia5" alignment="CENTER" prefHeight="50"/>
+    <HBox fx:id="gaia5" alignment="CENTER"/>
   </StackPane>
   <HBox fx:id="gaiaAdvTech" GridPane.rowIndex="1" GridPane.columnIndex="3" alignment="CENTER" />
   <StackPane GridPane.rowIndex="2" GridPane.columnIndex="3" styleClass="gaiaTrack">
     <Label text="GF, GF=3" style="-fx-text-fill: white"/>    
-    <HBox fx:id="gaia4" alignment="CENTER" prefHeight="50"/>
+    <HBox fx:id="gaia4" alignment="CENTER"/>
   </StackPane>
   <StackPane GridPane.rowIndex="3" GridPane.columnIndex="3" styleClass="gaiaTrack">
     <Label text="GF, GF=4" style="-fx-text-fill: white"/>    
-    <HBox fx:id="gaia3" alignment="CENTER" prefHeight="50"/>
+    <HBox fx:id="gaia3" alignment="CENTER"/>
   </StackPane>
     <StackPane GridPane.rowIndex="5" GridPane.columnIndex="3" styleClass="gaiaTrack">
     <Label text="+3pt" style="-fx-text-fill: white"/>    
-    <HBox fx:id="gaia2" alignment="CENTER" prefHeight="50"/>
+    <HBox fx:id="gaia2" alignment="CENTER"/>
   </StackPane>
     <StackPane GridPane.rowIndex="6" GridPane.columnIndex="3" styleClass="gaiaTrack">
     <Label text="GF, GF=6" style="-fx-text-fill: white" />    
-    <HBox fx:id="gaia1" alignment="CENTER" prefHeight="50"/>
+    <HBox fx:id="gaia1" alignment="CENTER"/>
   </StackPane>
   <StackPane GridPane.rowIndex="7" GridPane.columnIndex="3" styleClass="gaiaTrack">
-    <HBox fx:id="gaia0" alignment="CENTER" prefHeight="50"/>
+    <HBox fx:id="gaia0" alignment="CENTER"/>
   </StackPane>
 
   <!-- Economy Column -->
   <StackPane GridPane.rowIndex="0" GridPane.columnIndex="4" styleClass="econTrack">
     <Label text="+3o6c6p" />    
-    <HBox fx:id="econ5" alignment="CENTER" prefHeight="50"/>
+    <HBox fx:id="econ5" alignment="CENTER"/>
   </StackPane>
   <HBox fx:id="econAdvTech" GridPane.rowIndex="1" GridPane.columnIndex="4" alignment="CENTER" />
   <StackPane GridPane.rowIndex="2" GridPane.columnIndex="4" styleClass="econTrack">
     <Label text="(+2o4c4p)" />    
-    <HBox fx:id="econ4" alignment="CENTER" prefHeight="50"/>
+    <HBox fx:id="econ4" alignment="CENTER"/>
   </StackPane>
   <StackPane GridPane.rowIndex="3" GridPane.columnIndex="4" styleClass="econTrack">
     <Label text="(+1o3c3p)" />    
-    <HBox fx:id="econ3" alignment="CENTER" prefHeight="50"/>
+    <HBox fx:id="econ3" alignment="CENTER"/>
   </StackPane>
     <StackPane GridPane.rowIndex="5" GridPane.columnIndex="4" styleClass="econTrack">
     <Label text="(+1o2c2p)" />    
-    <HBox fx:id="econ2" alignment="CENTER" prefHeight="50"/>
+    <HBox fx:id="econ2" alignment="CENTER"/>
   </StackPane>
     <StackPane GridPane.rowIndex="6" GridPane.columnIndex="4" styleClass="econTrack">
     <Label text="(+2c1p)" />    
-    <HBox fx:id="econ1" alignment="CENTER" prefHeight="50"/>
+    <HBox fx:id="econ1" alignment="CENTER"/>
   </StackPane>
   <StackPane GridPane.rowIndex="7" GridPane.columnIndex="4" styleClass="econTrack">
-    <HBox fx:id="econ0" alignment="CENTER" prefHeight="50"/>
+    <HBox fx:id="econ0" alignment="CENTER"/>
   </StackPane>
   
   <!-- Knowledge Column -->
   <StackPane GridPane.rowIndex="0" GridPane.columnIndex="5" styleClass="knowledgeTrack">
     <Label text="+9k" />    
-    <HBox fx:id="knowledge5" alignment="CENTER" prefHeight="50"/>
+    <HBox fx:id="knowledge5" alignment="CENTER"/>
   </StackPane>
   <HBox fx:id="knowledgeAdvTech" GridPane.rowIndex="1" GridPane.columnIndex="5" alignment="CENTER" />
   <StackPane GridPane.rowIndex="2" GridPane.columnIndex="5" styleClass="knowledgeTrack">
     <Label text="(+4k)" />    
-    <HBox fx:id="knowledge4" alignment="CENTER" prefHeight="50"/>
+    <HBox fx:id="knowledge4" alignment="CENTER"/>
   </StackPane>
   <StackPane GridPane.rowIndex="3" GridPane.columnIndex="5" styleClass="knowledgeTrack">
     <Label text="(+3k)" />    
-    <HBox fx:id="knowledge3" alignment="CENTER" prefHeight="50"/>
+    <HBox fx:id="knowledge3" alignment="CENTER"/>
   </StackPane>
     <StackPane GridPane.rowIndex="5" GridPane.columnIndex="5" styleClass="knowledgeTrack">
     <Label text="(+2k)" />    
-    <HBox fx:id="knowledge2" alignment="CENTER" prefHeight="50"/>
+    <HBox fx:id="knowledge2" alignment="CENTER"/>
   </StackPane>
     <StackPane GridPane.rowIndex="6" GridPane.columnIndex="5" styleClass="knowledgeTrack">
     <Label text="(+1k)" />    
-    <HBox fx:id="knowledge1" alignment="CENTER" prefHeight="50"/>
+    <HBox fx:id="knowledge1" alignment="CENTER"/>
   </StackPane>
   <StackPane GridPane.rowIndex="7" GridPane.columnIndex="5" styleClass="knowledgeTrack">
-    <HBox fx:id="knowledge0" alignment="CENTER" prefHeight="50"/>
+    <HBox fx:id="knowledge0" alignment="CENTER"/>
   </StackPane>
   
   

@@ -24,6 +24,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Iterables;
 
 import gaia.project.game.board.Academy;
+import gaia.project.game.board.BoardUtils;
 import gaia.project.game.board.EmptyHex;
 import gaia.project.game.board.Gaiaformer;
 import gaia.project.game.board.GameBoard;
@@ -59,6 +60,7 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
@@ -70,8 +72,13 @@ import javafx.scene.control.Separator;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 
 public class GameController extends BorderPane {
+  private static final double BASE_BUTTON_WIDTH = 100;
+  private static final double BASE_BUTTON_HEIGHT = 25;
+  private static final double BASE_BUTTON_FONT = 13;
+
   @FXML
   private BorderPane mainPane;
 
@@ -112,6 +119,20 @@ public class GameController extends BorderPane {
       throw new RuntimeException(e);
     }
 
+    // UI
+    showActions.setPrefHeight(BASE_BUTTON_HEIGHT * BoardUtils.getScaling());
+    showActions.setPrefWidth(BASE_BUTTON_WIDTH * BoardUtils.getScaling());
+    showActions.setFont(new Font(BASE_BUTTON_FONT * BoardUtils.getScaling()));
+    conversions.setPrefHeight(BASE_BUTTON_HEIGHT * BoardUtils.getScaling());
+    conversions.setPrefWidth(BASE_BUTTON_WIDTH * BoardUtils.getScaling());
+    conversions.setFont(new Font(BASE_BUTTON_FONT * BoardUtils.getScaling()));
+    confirmAction.setPrefHeight(BASE_BUTTON_HEIGHT * BoardUtils.getScaling());
+    confirmAction.setPrefWidth(BASE_BUTTON_WIDTH * BoardUtils.getScaling());
+    confirmAction.setFont(new Font(BASE_BUTTON_FONT * BoardUtils.getScaling()));
+    resetTurn.setPrefHeight(BASE_BUTTON_HEIGHT * BoardUtils.getScaling());
+    resetTurn.setPrefWidth(BASE_BUTTON_WIDTH * BoardUtils.getScaling());
+    resetTurn.setFont(new Font(BASE_BUTTON_FONT * BoardUtils.getScaling()));
+
     // Init game board
     this.parent = parent;
     this.game = game;
@@ -123,7 +144,10 @@ public class GameController extends BorderPane {
       }
     });
 
-    mainPane.centerProperty().set(gameBoard);
+    HBox gameBoardBox = new HBox(gameBoard);
+    gameBoardBox.setAlignment(Pos.CENTER);
+    gameBoardBox.setPadding(new Insets(2, 2, 2, 2));
+    mainPane.centerProperty().set(gameBoardBox);
 
     // Init player boards
     game.getPlayers().entrySet().forEach(e -> playerBoards.put(e.getKey(), new PlayerBoardController(e.getValue())));
@@ -151,6 +175,8 @@ public class GameController extends BorderPane {
     HBox miscContent = new HBox(10, new ScoringArea(game), boostersAndFeds);
 
     VBox vbox = new VBox(5, techTracks, powerActionsController, new Separator(), miscContent);
+    vbox.setAlignment(Pos.CENTER);
+    vbox.setPadding(new Insets(2, 2, 2, 2));
     mainPane.setRight(vbox);
 
     HBox playerBoardBox = new HBox(5);

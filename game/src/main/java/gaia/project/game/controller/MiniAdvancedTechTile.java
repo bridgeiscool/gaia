@@ -16,6 +16,7 @@ import javafx.scene.text.Font;
 public class MiniAdvancedTechTile extends HBox {
   private static final double BASE_HEIGHT = 36;
   private static final double BASE_WIDTH = 54;
+  private static final double BASE_FONT_SIZE = 12;
 
   private static final String NORMAL = "advTechTile";
   private static final String HIGHLIGHTED = "advTechTileHighlighted";
@@ -31,7 +32,7 @@ public class MiniAdvancedTechTile extends HBox {
     } else {
       Label label = new Label(techTile.display());
       label.setTextFill(Color.WHITE);
-      label.setFont(Font.font(10));
+      label.setFont(Font.font(BASE_FONT_SIZE * BoardUtils.getScaling()));
       getChildren().add(label);
     }
     setPrefHeight(BASE_HEIGHT * BoardUtils.getScaling());

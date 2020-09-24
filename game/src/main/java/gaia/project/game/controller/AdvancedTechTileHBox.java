@@ -8,13 +8,16 @@ import gaia.project.game.model.Player;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 
 public class AdvancedTechTileHBox extends HBox {
   private static final double BASE_HEIGHT = 60;
   private static final double BASE_WIDTH = 96;
+  private static final double BASE_FONT_SIZE = 18;
 
   private static final String NORMAL = "advTechTile";
   private static final String HIGHLIGHTED = "advTechTileHighlighted";
@@ -38,6 +41,10 @@ public class AdvancedTechTileHBox extends HBox {
     setPrefWidth(BASE_WIDTH * BoardUtils.getScaling());
     setAlignment(Pos.CENTER);
     getStyleClass().add(NORMAL);
+
+    for (Node node : lookupAll(".label")) {
+      ((Label) node).setFont(new Font(BASE_FONT_SIZE * BoardUtils.getScaling()));
+    }
   }
 
   public AdvancedTechTile getTechTile() {

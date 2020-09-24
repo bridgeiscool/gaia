@@ -1,5 +1,5 @@
 .graybackground {
-	-fx-background-color: #696969;
+	-fx-background-color: #606060;
 }
 
 .turnMarker {
@@ -54,7 +54,6 @@
 
 .yellowRace VBox Label {
 	-fx-text-fill: black;
-	-fx-font-size: 14.0pt;
 }
 
 .orangeRace {
@@ -65,7 +64,6 @@
 
 .orangeRace VBox Label {
 	-fx-text-fill: black;
-	-fx-font-size: 14.0pt;
 }
 
 .blueRace {
@@ -76,7 +74,6 @@
 
 .blueRace VBox Label {
 	-fx-text-fill: white;
-	-fx-font-size: 14.0pt;
 }
 
 .redRace {
@@ -87,7 +84,6 @@
 
 .redRace VBox Label {
 	-fx-text-fill: white;
-	-fx-font-size: 14.0pt;
 }
 
 .whiteRace {
@@ -98,7 +94,6 @@
 
 .whiteRace VBox Label {
 	-fx-text-fill: black;
-	-fx-font-size: 14.0pt;	
 }
 
 .grayRace {
@@ -109,7 +104,6 @@
 
 .grayRace VBox Label {
 	-fx-text-fill: black;
-	-fx-font-size: 14.0pt;		
 }
 
 .brownRace {
@@ -120,63 +114,54 @@
 
 .brownRace VBox Label {
 	-fx-text-fill: black;
-	-fx-font-size: 14.0pt;		
 }
 
 .terraTrack {
 	-fx-background-color: maroon;
 	-fx-border-width: 1;
 	-fx-border-color: white;
-	-fx-font-size: 14.0pt;
 }
 
 .navTrack {
 	-fx-background-color: dimgray;
 	-fx-border-width: 1;
 	-fx-border-color: white;
-	-fx-font-size: 14.0pt;
 }
 
 .aiTrack {
 	-fx-background-color: green;
 	-fx-border-width: 1;
 	-fx-border-color: white;
-	-fx-font-size: 14.0pt;
 }
 
 .gaiaTrack {
 	-fx-background-color: purple;
 	-fx-border-width: 1;
 	-fx-border-color: white;
-	-fx-font-size: 14.0pt;
 }
 
 .econTrack {
 	-fx-background-color: sandybrown;
 	-fx-border-width: 1;
 	-fx-border-color: white;
-	-fx-font-size: 14.0pt;
 }
 
 .knowledgeTrack {
 	-fx-background-color: cyan;
 	-fx-border-width: 1;
 	-fx-border-color: white;
-	-fx-font-size: 14.0pt;
 }
 
 .techTile {
 	-fx-background-color: black;
 	-fx-border-color: white;
 	-fx-border-width: 1;
-	-fx-font-size: 14.0pt;
 }
 
 .techTileHighlighted {
 	-fx-background-color: black;
 	-fx-border-color: lime;
 	-fx-border-width: 1;
-	-fx-font-size: 14.0pt;
 }
 
 .miniTechTile {
@@ -197,14 +182,12 @@
 	-fx-background-color: navy;
 	-fx-border-color: white;
 	-fx-border-width: 1;
-	-fx-font-size: 12.0pt;
 }
 
 .advTechTileHighlighted {
 	-fx-background-color: navy;
 	-fx-border-color: lime;
 	-fx-border-width: 1;
-	-fx-font-size: 12.0pt;
 }
 
 .powerAction {
@@ -212,10 +195,6 @@
 	-fx-stroke: black;
 	-fx-stroke-type: outside;
 	-fx-stroke-width: 1;
-}
-
-.powerAction Label {
-	-fx-font-size: 14.0pt;
 }
 
 .powerActionHighlighted {
@@ -258,7 +237,6 @@
 	-fx-stroke: black;
 	-fx-stroke-type: outside;
 	-fx-stroke-width: 1;
-	-fx-font-size: 14.0pt;
 }
 
 .roundBooster {
@@ -267,55 +245,34 @@
 
 .roundBooster Label {
 	-fx-text-fill: black;
-	-fx-font-size: 14.0pt;
-}
-
-.miniFedToken {
-	
-}
-
-.miniFedToken Label {
-	-fx-font-size: 11.0pt;
-}
-
-.fedToken {
-	
-}
-
-.fedToken Label {
-	-fx-font-size: 14.0pt;
 }
 
 .greenFedToken {
 	-fx-fill: darkgreen;
 	-fx-stroke: black;
 	-fx-stroke-type: outside;
-	-fx-stroke-width: 1;
-	-fx-font-size: 14.0pt;
+	-fx-stroke-width: 2;
 }
 
 .greenFedTokenHighlighted {
 	-fx-fill: darkgreen;
 	-fx-stroke: lime;
 	-fx-stroke-type: outside;
-	-fx-stroke-width: 1;
-	-fx-font-size: 14.0pt;
+	-fx-stroke-width: 2;
 }
 
 .grayFedToken {
 	-fx-fill: gray;
 	-fx-stroke: black;
 	-fx-stroke-type: outside;
-	-fx-stroke-width: 1;
-	-fx-font-size: 14.0pt;
+	-fx-stroke-width: 2;
 }
 
 .grayFedTokenHighlighted {
 	-fx-fill: gray;
 	-fx-stroke: lime;
 	-fx-stroke-type: outside;
-	-fx-stroke-width: 1;
-	-fx-font-size: 14.0pt;
+	-fx-stroke-width: 2;
 }
 
 .roundScoringBox {
@@ -323,21 +280,11 @@
 	-fx-border-color: black;
 	-fx-border-width: 1;
 	-fx-pref-width: 120;
-	-fx-font-size: 14.0pt;
 }
 
 .highlightedHbox {
 	-fx-border-color:white;
 	-fx-border-width: 2;
-	-fx-font-size: 14.0pt;
-}
-
-.endScoring {
-	
-}
-
-.endScoring Label {
-	-fx-font-size: 14.0pt;
 }
 
 .menu-bar {
@@ -374,17 +321,18 @@
 
 .centerHex {
 	-fx-text-fill: white;
-	-fx-font-size: 30.0pt;
 }
 
 .blackLabel {
 	-fx-text-fill: black;
-	-fx-font-size: 14.0pt;
+}
+
+.whiteLabel {
+	-fx-text-fill: white;
 }
 
 .actionLabel {
 	-fx-text-fill: white;
-	-fx-font-size: 14.0pt;
 }
 
 .label-underlined {
@@ -411,7 +359,7 @@
 	-fx-font-size: 14.0pt;
 }
 
-.vbox {
+.vbox-center {
 	-fx-alignment: center;
 	-fx-spacing: 10.0;
 }

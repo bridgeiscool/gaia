@@ -9,11 +9,15 @@ import gaia.project.game.model.Race;
 import gaia.project.game.model.Util;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
+import javafx.scene.text.Font;
 
 public class PowerActionsController extends GridPane {
   private static final double BASE_HGAP = 5;
   private static final double BASE_VGAP = 2;
+  private static final double BASE_FONT_SIZE = 18;
 
   private final GameController gameController;
 
@@ -54,6 +58,9 @@ public class PowerActionsController extends GridPane {
     // UI
     setHgap(BASE_HGAP * BoardUtils.getScaling());
     setVgap(BASE_VGAP * BoardUtils.getScaling());
+    for (Node node : lookupAll(".label")) {
+      ((Label) node).setFont(new Font(BASE_FONT_SIZE * BoardUtils.getScaling()));
+    }
 
     // Initialize action styles
     k3.setTaken(game.getK3ActionTaken().getValue());

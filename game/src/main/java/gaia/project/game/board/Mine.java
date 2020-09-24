@@ -5,8 +5,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 public class Mine extends Rectangle {
-  public static final int BASE_LENGTH = 20;
-  public static final int BASE_WIDTH = 15;
+  public static final int BASE_LENGTH = 18;
+  public static final int BASE_WIDTH = 14;
   private static final int POWER = 1;
 
   private final Hex hex;

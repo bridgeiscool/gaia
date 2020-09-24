@@ -49,7 +49,7 @@ public abstract class Hex extends StackPane {
         // LEFT
         coords.getCenterX() - BoardUtils.hexSize() * 2,
         coords.getCenterY());
-    this.getChildren().add(polygon);
+    getChildren().add(polygon);
   }
 
   public abstract boolean isEmpty();

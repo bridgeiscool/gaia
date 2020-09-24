@@ -15,7 +15,7 @@
 
   <top>
     <VBox alignment="CENTER">
-      <Label text="SCORING" style="-fx-text-fill: white; -fx-font-size:14pt;" />
+      <Label text="SCORING" style="-fx-text-fill: white" />
       <Separator />
     </VBox>
   </top>
@@ -55,8 +55,8 @@
           <ColumnConstraints halignment="CENTER" percentWidth="50" />
         </columnConstraints>
         
-        <Label fx:id="endScoring1" GridPane.rowIndex="0" GridPane.columnIndex="0" />
-        <Label fx:id="endScoring2" GridPane.rowIndex="0" GridPane.columnIndex="1" />
+        <Label fx:id="endScoring1" GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="whiteLabel" />
+        <Label fx:id="endScoring2" GridPane.rowIndex="0" GridPane.columnIndex="1" styleClass="whiteLabel"/>
         
         <Label fx:id="p1Scoring1" GridPane.rowIndex="1" GridPane.columnIndex="0" />
         <Label fx:id="p1Scoring2" GridPane.rowIndex="1" GridPane.columnIndex="1" />
@@ -73,8 +73,8 @@
           <ColumnConstraints halignment="CENTER" percentWidth="50" />
         </columnConstraints>
         
-        <Label text="This" GridPane.rowIndex="0" GridPane.columnIndex="0" />
-        <Label text="Next" GridPane.rowIndex="0" GridPane.columnIndex="1" />
+        <Label text="This turn" GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="whiteLabel" />
+        <Label text="Next turn" GridPane.rowIndex="0" GridPane.columnIndex="1" styleClass="whiteLabel" />
         
         <HBox fx:id="p1" alignment="CENTER" GridPane.rowIndex="1" GridPane.columnIndex="0" />
         <HBox fx:id="nextp1" alignment="CENTER" GridPane.rowIndex="1" GridPane.columnIndex="1" />

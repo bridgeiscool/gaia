@@ -10,9 +10,11 @@ import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Polygon;
+import javafx.scene.text.Font;
 
 public class SpecialAction extends StackPane {
-  private static final int BASE_SIDE_LENGTH = 20;
+  private static final double BASE_SIDE_LENGTH = 20;
+  private static final double BASE_FONT_SIZE = 18;
   private static final double ROOT_2 = Math.sqrt(2.0);
   private static final String NORMAL = "specialAction";
   private static final String HIGHLIGHTED = "specialActionHighlighted";
@@ -31,6 +33,7 @@ public class SpecialAction extends StackPane {
     children.add(octagon);
     Label label = new Label(display);
     label.getStyleClass().add("actionLabel");
+    label.setFont(new Font(BASE_FONT_SIZE * BoardUtils.getScaling()));
     children.add(label);
   }
 

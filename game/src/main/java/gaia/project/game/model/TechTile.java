@@ -81,7 +81,7 @@ public enum TechTile {
 
     @Override
     public String display() {
-      return "GP -> 3VP";
+      return "GP -> 3";
     }
 
     @Override
@@ -135,7 +135,7 @@ public enum TechTile {
   VP() {
     @Override
     public String display() {
-      return "+7VP";
+      return "+7";
     }
 
     @Override

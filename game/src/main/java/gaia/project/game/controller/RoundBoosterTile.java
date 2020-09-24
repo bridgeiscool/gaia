@@ -19,10 +19,13 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
+import javafx.scene.text.Font;
 
 public class RoundBoosterTile extends StackPane {
   private static final double BASE_WIDTH = 60.0;
   private static final double BASE_HEIGHT = 175.0;
+
+  private static final double BASE_FONT_SIZE = 18.0;
 
   private RoundBooster roundBooster;
   private Optional<PlayerEnum> currentPlayer = Optional.empty();
@@ -37,11 +40,15 @@ public class RoundBoosterTile extends StackPane {
     this.rectangle = new BoosterRectangle();
     children.add(rectangle);
     VBox vbox = new VBox(
-        60.0,
+        BASE_WIDTH * BoardUtils.getScaling(),
         roundBooster.isAction() ? getSpecialAction(roundBooster) : new Label(roundBooster.getTopText()),
         new Label(roundBooster.getBottomText()));
     vbox.setAlignment(Pos.CENTER);
     children.add(vbox);
+
+    for (Node node : lookupAll(".label")) {
+      ((Label) node).setFont(new Font(BASE_FONT_SIZE * BoardUtils.getScaling()));
+    }
   }
 
   private SpecialAction getSpecialAction(RoundBooster roundBooster) {

@@ -28,12 +28,15 @@ import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.HPos;
+import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Circle;
+import javafx.scene.text.Font;
 
 public class TechTracks extends GridPane {
   public static final int TERRA = 0;
@@ -46,6 +49,8 @@ public class TechTracks extends GridPane {
   private static final double BASE_GAP = 5;
   private static final double BASE_COL_WIDTH = 108;
   private static final double BASE_ROW_HEIGHT = 50;
+
+  private static final double BASE_FONT_SIZE = 18;
 
   // Terraforming
   @FXML
@@ -191,6 +196,9 @@ public class TechTracks extends GridPane {
     RowConstraints rConstraint = new RowConstraints();
     rConstraint.setPrefHeight(BASE_ROW_HEIGHT * BoardUtils.getScaling());
     getRowConstraints().addAll(Collections.nCopies(8, rConstraint));
+    for (Node node : lookupAll(".label")) {
+      ((Label) node).setFont(new Font(BASE_FONT_SIZE * BoardUtils.getScaling()));
+    }
 
     this.lostPlanetCallback = lostPlanetCallback;
 
@@ -220,7 +228,7 @@ public class TechTracks extends GridPane {
 
     // Add the randomly chosen fed tile to terra track
     if (!game.getPlayers().values().stream().anyMatch(p -> p.getTerraformingLevel().get() == 5)) {
-      terra5StackPane.getChildren().add(0, FederationTokenPane.regular(game.getTerraBonus()));
+      terra5StackPane.getChildren().add(0, FederationTokenPane.techTrack(game.getTerraBonus()));
     }
 
     // Initialize the tech tiles

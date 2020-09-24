@@ -45,7 +45,7 @@ public enum PlayerBoardAction implements UpdatePlayer {
 
     @Override
     public String display() {
-      return "M<->PI";
+      return "M<>PI";
     }
 
   },
@@ -58,7 +58,7 @@ public enum PlayerBoardAction implements UpdatePlayer {
 
     @Override
     public String display() {
-      return "+TECH";
+      return "TECH";
     }
   },
 

@@ -18,6 +18,9 @@
 
   <top>
     <HBox alignment="CENTER" spacing="10">
+      <padding>
+        <Insets top="2" bottom="2" />
+      </padding>
       <Button fx:id="showActions" text="Show Actions" onAction="#showActions" disable="true" />
       <Button fx:id="conversions" text="Conversions" onAction="#showConversions" disable="true" />
       <Button fx:id="confirmAction" text="Confirm" onAction="#confirmAction" disable="true" />

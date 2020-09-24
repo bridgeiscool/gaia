@@ -10,8 +10,8 @@ public final class BoardUtils {
   private static final int BASE_HEIGHT = 1120;
 
   // Hex side length / 2
-  private static final double HEX_SIZE = 18;
-  private static final double PLANET_RADIUS = 24;
+  private static final double HEX_SIZE = 17;
+  private static final double PLANET_RADIUS = 23;
 
   // Longer non-hypotenuse side
   public static final double ROOT_3 = Math.sqrt(3.0);

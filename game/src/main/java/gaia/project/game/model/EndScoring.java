@@ -13,7 +13,7 @@ import javafx.scene.control.Label;
 import javafx.util.converter.NumberStringConverter;
 
 public enum EndScoring {
-  PLANET_TYPES("Planets") {
+  PLANET_TYPES("Planet Types") {
     public void bindToPlayer(Player player, Label label) {
       label.setText(String.valueOf(player.getBuiltOn().size()));
       player.getBuiltOn()
@@ -26,7 +26,7 @@ public enum EndScoring {
       return p -> p.getBuiltOn().size();
     }
   },
-  BUILDINGS("Bldgs") {
+  BUILDINGS("Buildings") {
     @Override
     public void bindToPlayer(Player player, Label label) {
       label.textProperty().bindBidirectional(player.getTotalBuildings(), new NumberStringConverter());
@@ -37,7 +37,7 @@ public enum EndScoring {
       return p -> p.getTotalBuildings().getValue();
     }
   },
-  BUILDINGS_IN_FED("Fed Bldgs") {
+  BUILDINGS_IN_FED("Bldgs in Feds") {
     @Override
     public void bindToPlayer(Player player, Label label) {
       label.textProperty().bindBidirectional(player.getBuildingsInFeds(), new NumberStringConverter());
@@ -48,7 +48,7 @@ public enum EndScoring {
       return p -> p.getBuildingsInFeds().getValue();
     }
   },
-  GAIA_PLANETS("GPs") {
+  GAIA_PLANETS("Gaia Planets") {
     @Override
     public void bindToPlayer(Player player, Label label) {
       label.textProperty().bindBidirectional(player.getGaiaPlanets(), new NumberStringConverter());
@@ -59,7 +59,7 @@ public enum EndScoring {
       return p -> p.getGaiaPlanets().getValue();
     }
   },
-  SATELLITES("Sats") {
+  SATELLITES("Satellites") {
     @Override
     public void bindToPlayer(Player player, Label label) {
       label.setText(String.valueOf(player.getSatellites().size()));

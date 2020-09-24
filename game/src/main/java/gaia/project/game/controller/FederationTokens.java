@@ -3,17 +3,23 @@ package gaia.project.game.controller;
 import java.io.IOException;
 import java.util.function.Consumer;
 
+import gaia.project.game.board.BoardUtils;
 import gaia.project.game.model.FederationTile;
 import gaia.project.game.model.Game;
 import gaia.project.game.model.Player;
+import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.util.converter.NumberStringConverter;
 
 public class FederationTokens extends HBox {
+  public static final double BASE_FONT_SIZE = 16;
+
   private static final String ZERO = "0";
 
   @FXML
@@ -65,19 +71,48 @@ public class FederationTokens extends HBox {
     this.qic = FederationTokenPane.regular(FederationTile.QIC);
     this.vp = FederationTokenPane.regular(FederationTile.VP);
 
+    // UI setup
+    knowledgeCount.setFont(new Font(BASE_FONT_SIZE * BoardUtils.getScaling()));
+    coinsCount.setFont(new Font(BASE_FONT_SIZE * BoardUtils.getScaling()));
+    oreCount.setFont(new Font(BASE_FONT_SIZE * BoardUtils.getScaling()));
+    ptCount.setFont(new Font(BASE_FONT_SIZE * BoardUtils.getScaling()));
+    qicCount.setFont(new Font(BASE_FONT_SIZE * BoardUtils.getScaling()));
+    vpCount.setFont(new Font(BASE_FONT_SIZE * BoardUtils.getScaling()));
+
     // Add tokens to UI
     knowledgeBox.getChildren().add(research);
     knowledgeCount.textProperty().bindBidirectional(game.getKnowledgeFederations(), new NumberStringConverter());
+    knowledgeCount.textFillProperty()
+        .bind(
+            Bindings.createObjectBinding(
+                () -> intToColor(game.getKnowledgeFederations().get()),
+                game.getKnowledgeFederations()));
     coinsBox.getChildren().add(credits);
     coinsCount.textProperty().bindBidirectional(game.getCreditFederations(), new NumberStringConverter());
+    coinsCount.textFillProperty()
+        .bind(
+            Bindings
+                .createObjectBinding(() -> intToColor(game.getCreditFederations().get()), game.getCreditFederations()));
     oreBox.getChildren().add(ore);
     oreCount.textProperty().bindBidirectional(game.getOreFederations(), new NumberStringConverter());
+    oreCount.textFillProperty()
+        .bind(Bindings.createObjectBinding(() -> intToColor(game.getOreFederations().get()), game.getOreFederations()));
     ptBox.getChildren().add(pt);
     ptCount.textProperty().bindBidirectional(game.getPtFederations(), new NumberStringConverter());
+    ptCount.textFillProperty()
+        .bind(Bindings.createObjectBinding(() -> intToColor(game.getPtFederations().get()), game.getPtFederations()));
     qicBox.getChildren().add(qic);
     qicCount.textProperty().bindBidirectional(game.getQicFederations(), new NumberStringConverter());
+    qicCount.textFillProperty()
+        .bind(Bindings.createObjectBinding(() -> intToColor(game.getQicFederations().get()), game.getQicFederations()));
     vpBox.getChildren().add(vp);
     vpCount.textProperty().bindBidirectional(game.getVpFederations(), new NumberStringConverter());
+    vpCount.textFillProperty()
+        .bind(Bindings.createObjectBinding(() -> intToColor(game.getVpFederations().get()), game.getVpFederations()));
+  }
+
+  private Color intToColor(int numLeft) {
+    return numLeft == 0 ? Color.RED : Color.WHITE;
   }
 
   void highlight(Player activePlayer, Consumer<FederationTile> callback) {

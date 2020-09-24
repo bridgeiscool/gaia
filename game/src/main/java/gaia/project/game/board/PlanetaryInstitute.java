@@ -5,7 +5,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 public class PlanetaryInstitute extends Rectangle {
-  private static final int SIDE = 25;
+  private static final int SIDE = 23;
 
   private final Hex hex;
   private final PlayerEnum player;

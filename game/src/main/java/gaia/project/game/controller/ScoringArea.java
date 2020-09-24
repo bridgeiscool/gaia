@@ -15,22 +15,30 @@ import gaia.project.game.model.Game;
 import gaia.project.game.model.Player;
 import gaia.project.game.model.PlayerEnum;
 import gaia.project.game.model.Race;
+import gaia.project.game.model.Round;
 import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
 
 public class ScoringArea extends BorderPane {
   private static final double BASE_GAP = 5;
-  private static final double BASE_SCORING_WIDTH = 180;
+  private static final double BASE_SCORING_WIDTH = 240;
   private static final double SCORING_TOP = 10;
   private static final double SCORING_SIDE = 8;
+
+  private static final double BASE_FONT_SIZE = 18;
+
+  @FXML
+  private Label scoringLabel;
 
   @FXML
   private Label round6;
@@ -120,6 +128,9 @@ public class ScoringArea extends BorderPane {
             SCORING_SIDE * BoardUtils.getScaling(),
             SCORING_TOP * BoardUtils.getScaling(),
             SCORING_SIDE * BoardUtils.getScaling()));
+    for (Node node : lookupAll(".label")) {
+      ((Label) node).setFont(new Font(BASE_FONT_SIZE * BoardUtils.getScaling()));
+    }
 
     thisTurn = ImmutableList.of(p1, p2, p3);
     nextTurn = ImmutableList.of(nextp1, nextp2, nextp3);
@@ -133,31 +144,6 @@ public class ScoringArea extends BorderPane {
     round4.setText(game.getRoundScoringBonuses().get(3).getText());
     round5.setText(game.getRoundScoringBonuses().get(4).getText());
     round6.setText(game.getRoundScoringBonuses().get(5).getText());
-
-    // Initialize highlighted round, which may not be SETUP when reload happens
-    switch (game.getCurrentRound().getValue()) {
-      case SETUP:
-        setup.setTextFill(Color.WHITE);
-        break;
-      case ROUND1:
-        round1.setTextFill(Color.WHITE);
-        break;
-      case ROUND2:
-        round2.setTextFill(Color.WHITE);
-        break;
-      case ROUND3:
-        round3.setTextFill(Color.WHITE);
-        break;
-      case ROUND4:
-        round4.setTextFill(Color.WHITE);
-        break;
-      case ROUND5:
-        round5.setTextFill(Color.WHITE);
-        break;
-      case ROUND6:
-        round6.setTextFill(Color.WHITE);
-        break;
-    }
 
     this.endScoring1.setText(scoring1.getDisplayText());
     this.endScoring2.setText(scoring2.getDisplayText());
@@ -180,31 +166,39 @@ public class ScoringArea extends BorderPane {
     scoring2.bindToPlayer(player3, p3Scoring2);
     p3Scoring2.setTextFill(player3.getRace().getColor());
 
+    // Set up round highlighting
+    setup.setTextFill(game.getCurrentRound().getValue() == Round.SETUP ? Color.LIME : Color.WHITE);
+    round1.setTextFill(game.getCurrentRound().getValue() == Round.ROUND1 ? Color.LIME : Color.WHITE);
+    round2.setTextFill(game.getCurrentRound().getValue() == Round.ROUND2 ? Color.LIME : Color.WHITE);
+    round3.setTextFill(game.getCurrentRound().getValue() == Round.ROUND3 ? Color.LIME : Color.WHITE);
+    round4.setTextFill(game.getCurrentRound().getValue() == Round.ROUND4 ? Color.LIME : Color.WHITE);
+    round5.setTextFill(game.getCurrentRound().getValue() == Round.ROUND5 ? Color.LIME : Color.WHITE);
+    round6.setTextFill(game.getCurrentRound().getValue() == Round.ROUND6 ? Color.LIME : Color.WHITE);
     game.getCurrentRound().addListener((o, oldValue, newValue) -> {
       switch (newValue) {
         case ROUND1:
-          setup.setTextFill(Color.BLACK);
-          round1.setTextFill(Color.WHITE);
+          setup.setTextFill(Color.WHITE);
+          round1.setTextFill(Color.LIME);
           break;
         case ROUND2:
-          round1.setTextFill(Color.BLACK);
-          round2.setTextFill(Color.WHITE);
+          round1.setTextFill(Color.WHITE);
+          round2.setTextFill(Color.LIME);
           break;
         case ROUND3:
-          round2.setTextFill(Color.BLACK);
-          round3.setTextFill(Color.WHITE);
+          round2.setTextFill(Color.WHITE);
+          round3.setTextFill(Color.LIME);
           break;
         case ROUND4:
-          round3.setTextFill(Color.BLACK);
-          round4.setTextFill(Color.WHITE);
+          round3.setTextFill(Color.WHITE);
+          round4.setTextFill(Color.LIME);
           break;
         case ROUND5:
-          round4.setTextFill(Color.BLACK);
-          round5.setTextFill(Color.WHITE);
+          round4.setTextFill(Color.WHITE);
+          round5.setTextFill(Color.LIME);
           break;
         case ROUND6:
-          round5.setTextFill(Color.BLACK);
-          round6.setTextFill(Color.WHITE);
+          round5.setTextFill(Color.WHITE);
+          round6.setTextFill(Color.LIME);
           break;
         case SETUP:
           // Do nothing it starts on this...

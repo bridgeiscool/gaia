@@ -51,7 +51,7 @@ public enum AdvancedTechTile {
   Q_C_ACTION {
     @Override
     public String display() {
-      return "+q+5c";
+      return "+q5c";
     }
 
     @Override
@@ -188,7 +188,7 @@ public enum AdvancedTechTile {
   BUILD_MINE {
     @Override
     public String display() {
-      return "+M -> 3";
+      return "M -> 3";
     }
 
     @Override
@@ -209,7 +209,7 @@ public enum AdvancedTechTile {
   BUILD_TP {
     @Override
     public String display() {
-      return "+TP -> 3";
+      return "TP -> 3";
     }
 
     @Override
@@ -229,7 +229,7 @@ public enum AdvancedTechTile {
   TECH_STEP {
     @Override
     public String display() {
-      return "+TECH -> 2";
+      return "TECH -> 2";
     }
 
     @Override

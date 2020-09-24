@@ -10,7 +10,7 @@
 <?import javafx.scene.shape.*?>
 <?import javafx.geometry.*?>
 
-<VBox styleClass="vbox-padded" xmlns:fx="http://javafx.com/fxml">
+<VBox styleClass="vbox-center" xmlns:fx="http://javafx.com/fxml">
   <stylesheets>
     <URL value="@app.css" />
   </stylesheets>

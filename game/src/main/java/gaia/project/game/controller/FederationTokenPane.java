@@ -12,11 +12,14 @@ import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
+import javafx.scene.text.Font;
 
 public class FederationTokenPane extends StackPane {
   private static final double HEIGHT = 54;
   private static final double WIDTH = 52;
+  private static final double BASE_FONT_SIZE = 18;
   private final FederationTile federationTile;
 
   private final Shape shape;
@@ -28,18 +31,24 @@ public class FederationTokenPane extends StackPane {
         new SimpleBooleanProperty(federationTile.isFlippable()));
   }
 
+  public static FederationTokenPane techTrack(FederationTile federationTile) {
+    return new FederationTokenPane(federationTile, Size.TECH, new SimpleBooleanProperty(federationTile.isFlippable()));
+  }
+
   public static FederationTokenPane mini(FedToken token) {
     return new FederationTokenPane(token.getFederationTile(), Size.MINI, token.getFlippable());
   }
 
   public FederationTokenPane(FederationTile federationTile, Size size, BooleanProperty flippable) {
     this.federationTile = federationTile;
-    getStyleClass().add(size.styleClass);
     this.shape = new Shape(size.scaling * BoardUtils.getScaling(), flippable.get() ? "greenFedToken" : "grayFedToken");
     flippable.addListener((o, oldValue, newValue) -> flip());
     ObservableList<Node> children = getChildren();
     children.add(shape);
-    children.add(new Label(federationTile.getText()));
+    Label label = new Label(federationTile.getText());
+    label.setTextFill(Color.WHITE);
+    label.setFont(new Font(BASE_FONT_SIZE * BoardUtils.getScaling()));
+    children.add(label);
   }
 
   public FederationTile getFederationTile() {
@@ -76,14 +85,12 @@ public class FederationTokenPane extends StackPane {
   }
 
   private enum Size {
-    REGULAR(1.0, "fedToken"), MINI(0.7, "miniFedToken");
+    REGULAR(1.0), TECH(0.8), MINI(0.7);
 
     private final double scaling;
-    private final String styleClass;
 
-    Size(double scaling, String styleClass) {
+    Size(double scaling) {
       this.scaling = scaling;
-      this.styleClass = styleClass;
     }
 
   }

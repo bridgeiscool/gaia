@@ -11,7 +11,7 @@
 <?import javafx.geometry.*?>
 <?import javafx.collections.*?>
 
-<VBox styleClass="vbox-padded" xmlns:fx="http://javafx.com/fxml">
+<VBox styleClass="vbox-center" xmlns:fx="http://javafx.com/fxml">
   <stylesheets>
     <URL value="@ohellApp.css" />
   </stylesheets>

@@ -5,7 +5,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 
 public class Academy extends Polygon {
-  private static final int SIDE_LENGTH = 10;
+  private static final int SIDE_LENGTH = 9;
   private static final double ROOT_2 = Math.sqrt(2.0);
   private final Hex hex;
   private final PlayerEnum player;

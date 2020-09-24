@@ -17,8 +17,11 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 
 public class EmptyHex extends Hex {
+  private static final double BASE_FONT_SIZE = 37;
+
   private Set<PlayerEnum> satellites = new HashSet<>();
   private VBox satelliteBox;
   private boolean hasLostPlanet;
@@ -41,6 +44,7 @@ public class EmptyHex extends Hex {
   public void addCenterLabel(int sectorId) {
     Label label = new Label(String.format("%d", sectorId));
     label.getStyleClass().add("centerHex");
+    label.setFont(new Font(BASE_FONT_SIZE * BoardUtils.getScaling()));
     getChildren().add(1, label);
   }
 

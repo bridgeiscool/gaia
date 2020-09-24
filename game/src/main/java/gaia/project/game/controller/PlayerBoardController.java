@@ -20,12 +20,14 @@ import javafx.collections.SetChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.text.Font;
 import javafx.util.converter.NumberStringConverter;
 
 public class PlayerBoardController extends GridPane {
@@ -36,6 +38,8 @@ public class PlayerBoardController extends GridPane {
   private static final double BASE_COLUMN_WIDTH = 300;
   private static final double BASE_ROW_HEIGHT = 25;
   private static final double BASE_SPACING = 7;
+
+  private static final double BASE_FONT_SIZE = 20;
 
   private final Player player;
 
@@ -146,6 +150,10 @@ public class PlayerBoardController extends GridPane {
     bottomLine.setHgap(10 * BoardUtils.getScaling());
     bin3Box.setPadding(new Insets(0, 0, 0, 25 * BoardUtils.getScaling()));
     gaiaBox.setPadding(new Insets(0, 25 * BoardUtils.getScaling(), 0, 0));
+    // Font sizing
+    for (Node node : lookupAll(".label")) {
+      ((Label) node).setFont(new Font(BASE_FONT_SIZE * BoardUtils.getScaling()));
+    }
 
     // Set up listeners
     raceName.setText(player.getRace().getRaceName());
@@ -246,6 +254,7 @@ public class PlayerBoardController extends GridPane {
         getBox(newValue).getChildren().add(1, brainstone);
       });
     }
+
   }
 
   private HBox getBox(Bin bin) {

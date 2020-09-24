@@ -490,7 +490,7 @@ public class TechTracks extends GridPane {
     private final PlayerEnum player;
 
     TechMarker(Player player) {
-      super(10, player.getRace().getColor());
+      super(10 * BoardUtils.getScaling(), player.getRace().getColor());
       this.player = player.getPlayerEnum();
     }
   }

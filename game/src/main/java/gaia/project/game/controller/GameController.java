@@ -180,6 +180,8 @@ public class GameController extends BorderPane {
     mainPane.setRight(vbox);
 
     HBox playerBoardBox = new HBox(5);
+    playerBoardBox.setPadding(new Insets(2, 2, 2, 2));
+    playerBoardBox.setAlignment(Pos.BASELINE_CENTER);
     playerBoards.entrySet().forEach(e -> playerBoardBox.getChildren().add(e.getValue()));
     mainPane.setBottom(playerBoardBox);
 

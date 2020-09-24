@@ -25,8 +25,8 @@ public final class FiraksPlayer extends Player {
     hex.switchBuildingUI(tp);
 
     ignoreTpRoundBonus = true;
-    getResearchLabs().remove(hex.getCoords());
-    getTradingPosts().add(hex.getCoords());
+    getResearchLabs().remove(hex.getHexId());
+    getTradingPosts().add(hex.getHexId());
     ignoreTpRoundBonus = false;
 
     // Update income

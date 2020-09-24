@@ -12,6 +12,7 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
 import gaia.project.game.board.Academy;
+import gaia.project.game.board.GameBoard;
 import gaia.project.game.board.Hex;
 import gaia.project.game.board.HexWithPlanet;
 import gaia.project.game.board.PlanetaryInstitute;
@@ -19,7 +20,7 @@ import gaia.project.game.controller.PlanetType;
 import javafx.beans.property.SimpleBooleanProperty;
 
 public final class BescodsPlayer extends Player {
-  private final Set<Coords> grayPlanets = new HashSet<>();
+  private final Set<String> grayPlanets = new HashSet<>();
 
   public static BescodsPlayer createNew(PlayerEnum playerEnum) {
     BescodsPlayer p = new BescodsPlayer();
@@ -35,34 +36,34 @@ public final class BescodsPlayer extends Player {
   private BescodsPlayer() {}
 
   @Override
-  public void buildMine(HexWithPlanet hex) {
-    super.buildMine(hex);
+  public void buildMine(HexWithPlanet hex, GameBoard gameBoard) {
+    super.buildMine(hex, gameBoard);
     if (hex.getPlanet().getPlanetType() == PlanetType.GRAY) {
-      grayPlanets.add(hex.getCoords());
+      grayPlanets.add(hex.getHexId());
     }
   }
 
   @Override
-  public void buildSetupMine(HexWithPlanet hex) {
-    super.buildSetupMine(hex);
-    grayPlanets.add(hex.getCoords());
+  public void buildSetupMine(HexWithPlanet hex, GameBoard gameBoard) {
+    super.buildSetupMine(hex, gameBoard);
+    grayPlanets.add(hex.getHexId());
   }
 
   @Override
   public int getPower(Hex hex) {
-    if (getLostPlanet().contains(hex.getCoords())) {
+    if (getLostPlanet().contains(hex.getHexId())) {
       return 1;
     }
 
-    if (getMines().contains(hex.getCoords())) {
+    if (getMines().contains(hex.getHexId())) {
       return !getPi().isEmpty() && hex.getPlanet().getPlanetType() == PlanetType.GRAY ? 2 : 1;
     }
 
-    if (Sets.union(getTradingPosts(), getResearchLabs()).contains(hex.getCoords())) {
+    if (Sets.union(getTradingPosts(), getResearchLabs()).contains(hex.getHexId())) {
       return !getPi().isEmpty() && hex.getPlanet().getPlanetType() == PlanetType.GRAY ? 3 : 2;
     }
 
-    if (Sets.union(Sets.union(getPi(), getQa()), getKa()).contains(hex.getCoords())) {
+    if (Sets.union(Sets.union(getPi(), getQa()), getKa()).contains(hex.getHexId())) {
       return !getPi().isEmpty() && hex.getPlanet().getPlanetType() == PlanetType.GRAY
           ? getBigBuildingPower().get() + 1
           : getBigBuildingPower().get();
@@ -75,19 +76,19 @@ public final class BescodsPlayer extends Player {
   protected int getExcessBuildingPower() {
     int totalPower = 0;
 
-    for (Coords coords : Sets.union(getMines(), getLostPlanet())) {
+    for (String coords : Sets.union(getMines(), getLostPlanet())) {
       if (!inFederation(coords)) {
         totalPower += extraPower(coords) ? 2 : 1;
       }
     }
 
-    for (Coords coords : Sets.union(getTradingPosts(), getResearchLabs())) {
+    for (String coords : Sets.union(getTradingPosts(), getResearchLabs())) {
       if (!inFederation(coords)) {
         totalPower += extraPower(coords) ? 3 : 2;
       }
     }
 
-    for (Coords coords : Sets.union(Sets.union(getPi(), getQa()), getKa())) {
+    for (String coords : Sets.union(Sets.union(getPi(), getQa()), getKa())) {
       if (!inFederation(coords)) {
         totalPower += extraPower(coords) ? getBigBuildingPower().intValue() + 1 : getBigBuildingPower().intValue();
       }
@@ -100,8 +101,8 @@ public final class BescodsPlayer extends Player {
   public void buildPI(HexWithPlanet hex) {
     PlanetaryInstitute pi = new PlanetaryInstitute(hex, Race.BESCODS.getColor(), getPlayerEnum());
     hex.switchBuildingUI(pi);
-    getPi().add(hex.getCoords());
-    getResearchLabs().remove(hex.getCoords());
+    getPi().add(hex.getHexId());
+    getResearchLabs().remove(hex.getHexId());
 
     Util.minus(getOre(), 4);
     Util.minus(getCredits(), 6);
@@ -115,11 +116,11 @@ public final class BescodsPlayer extends Player {
     Academy academy = new Academy(hex, Race.BESCODS.getColor(), getPlayerEnum());
     hex.switchBuildingUI(academy);
     if (ka) {
-      getKa().add(hex.getCoords());
+      getKa().add(hex.getHexId());
     } else {
-      getQa().add(hex.getCoords());
+      getQa().add(hex.getHexId());
     }
-    getTradingPosts().remove(hex.getCoords());
+    getTradingPosts().remove(hex.getHexId());
 
     Util.minus(getOre(), 6);
     Util.minus(getCredits(), 6);
@@ -133,8 +134,8 @@ public final class BescodsPlayer extends Player {
     }
   }
 
-  private boolean extraPower(Coords coords) {
-    if (grayPlanets.contains(coords) && !getPi().isEmpty()) {
+  private boolean extraPower(String hexId) {
+    if (grayPlanets.contains(hexId) && !getPi().isEmpty()) {
       return true;
     }
 

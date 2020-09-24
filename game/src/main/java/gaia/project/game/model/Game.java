@@ -31,7 +31,7 @@ import javafx.collections.ObservableList;
 
 public class Game {
   private final LinkedHashMap<SectorLocation, Rot> gameBoard = new LinkedHashMap<>(10);
-  private final Set<Coords> gaiaformed = new HashSet<>();
+  private final Set<String> gaiaformed = new HashSet<>();
 
   private final List<RoundBooster> roundBoosters = new ArrayList<>(6);
   private final List<TechTile> techTiles = new ArrayList<>(6);
@@ -198,7 +198,7 @@ public class Game {
     return gameBoard;
   }
 
-  public Set<Coords> getGaiaformed() {
+  public Set<String> getGaiaformed() {
     return gaiaformed;
   }
 

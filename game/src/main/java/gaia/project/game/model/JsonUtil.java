@@ -145,16 +145,12 @@ public class JsonUtil {
     json.endArray();
   }
 
-  public static void writeCoordsCollection(JsonWriter json, String name, Collection<Coords> coords) throws IOException {
+  public static void writeCoordsCollection(JsonWriter json, String name, Collection<String> coords) throws IOException {
     json.name(name).beginArray();
-    for (Coords c : coords) {
-      writeCoords(json, c);
+    for (String c : coords) {
+      json.value(c);
     }
     json.endArray();
-  }
-
-  public static void writeCoords(JsonWriter json, Coords coords) throws IOException {
-    json.beginArray().value(coords.getCenterX()).value(coords.getCenterY()).endArray();
   }
 
   public static <T> void readStringArray(Collection<T> addTo, JsonReader json, Function<String, T> function)
@@ -166,12 +162,10 @@ public class JsonUtil {
     json.endArray();
   }
 
-  public static <T> void readCoordsArray(Collection<Coords> addTo, JsonReader json) throws IOException {
+  public static <T> void readCoordsArray(Collection<String> addTo, JsonReader json) throws IOException {
     json.beginArray();
     while (json.hasNext()) {
-      json.beginArray();
-      addTo.add(new Coords(json.nextDouble(), json.nextDouble()));
-      json.endArray();
+      addTo.add(json.nextString());
     }
     json.endArray();
   }
@@ -184,17 +178,15 @@ public class JsonUtil {
     json.endArray();
   }
 
-  public static void readSetOfSets(Set<Set<Coords>> sets, JsonReader json) throws IOException {
+  public static void readSetOfSets(Set<Set<String>> sets, JsonReader json) throws IOException {
     json.beginArray();
     while (json.hasNext()) {
-      Set<Coords> federation = new HashSet<>();
+      Set<String> federation = new HashSet<>();
       json.beginObject();
       json.nextName();
       json.beginArray();
       while (json.hasNext()) {
-        json.beginArray();
-        federation.add(new Coords(json.nextDouble(), json.nextDouble()));
-        json.endArray();
+        federation.add(json.nextString());
       }
       json.endArray();
       sets.add(federation);

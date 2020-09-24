@@ -22,10 +22,12 @@ public abstract class Hex extends StackPane {
   private final Coords coords;
   private final int sectorId;
   private final HexPolygon polygon;
+  private final String hexId;
 
-  protected Hex(Coords coords, int sectorId) {
+  protected Hex(Coords coords, int sectorId, String hexId) {
     this.coords = coords;
     this.sectorId = sectorId;
+    this.hexId = hexId;
     setLayoutX(coords.getCenterX());
     setLayoutY(coords.getCenterY());
     this.setPrefSize(4.0 * BoardUtils.hexSize(), 2 * ROOT_3 * BoardUtils.hexSize());
@@ -50,6 +52,10 @@ public abstract class Hex extends StackPane {
         coords.getCenterX() - BoardUtils.hexSize() * 2,
         coords.getCenterY());
     getChildren().add(polygon);
+  }
+
+  public String getHexId() {
+    return hexId;
   }
 
   public abstract boolean isEmpty();
@@ -106,6 +112,10 @@ public abstract class Hex extends StackPane {
     return distanceTo(coords) < TWO_ROOT_3 * BoardUtils.hexSize() * range + 1.0;
   }
 
+  public boolean isWithinRangeOf(Hex hex, int range) {
+    return isWithinRangeOf(hex.getCoords(), range);
+  }
+
   public static boolean isContiguous(Set<Coords> maybeContiguous) {
     for (Coords coords : maybeContiguous) {
       for (Coords maybeAdjacent : maybeContiguous) {
@@ -143,12 +153,12 @@ public abstract class Hex extends StackPane {
       return false;
     Hex hex = (Hex) obj;
     // field comparison
-    return coords.equals(hex.getCoords()) && sectorId == hex.sectorId;
+    return hex.hexId.equals(this.hexId);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(coords, sectorId);
+    return Objects.hash(hexId);
   }
 
   static class HexPolygon extends Polygon {

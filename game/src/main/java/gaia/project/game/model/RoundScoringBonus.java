@@ -10,12 +10,12 @@ public enum RoundScoringBonus {
   MINE("M -> 2") {
     @Override
     public void addListeners(Game game, Round round) {
-      game.getPlayers().values().forEach(p -> p.getMines().addListener((SetChangeListener<Coords>) change -> {
+      game.getPlayers().values().forEach(p -> p.getMines().addListener((SetChangeListener<String>) change -> {
         if (game.getCurrentRound().getValue() == round && change.wasAdded()) {
           p.updateScore(2, "R" + game.getCurrentRound().getValue().display() + " " + getText());
         }
       }));
-      game.getPlayers().values().forEach(p -> p.getLostPlanet().addListener((SetChangeListener<Coords>) change -> {
+      game.getPlayers().values().forEach(p -> p.getLostPlanet().addListener((SetChangeListener<String>) change -> {
         if (game.getCurrentRound().getValue() == round && change.wasAdded()) {
           p.updateScore(2, "R" + game.getCurrentRound().getValue().display() + " " + getText());
         }
@@ -45,7 +45,7 @@ public enum RoundScoringBonus {
   TP_3("TP -> 3") {
     @Override
     public void addListeners(Game game, Round round) {
-      game.getPlayers().values().forEach(p -> p.getTradingPosts().addListener((SetChangeListener<Coords>) change -> {
+      game.getPlayers().values().forEach(p -> p.getTradingPosts().addListener((SetChangeListener<String>) change -> {
         if (game.getCurrentRound().getValue() == round && change.wasAdded() && !p.ignoreTpRoundBonus()) {
           p.updateScore(3, "R" + game.getCurrentRound().getValue().display() + " " + getText());
         }
@@ -55,7 +55,7 @@ public enum RoundScoringBonus {
   TP_4("TP -> 4") {
     @Override
     public void addListeners(Game game, Round round) {
-      game.getPlayers().values().forEach(p -> p.getTradingPosts().addListener((SetChangeListener<Coords>) change -> {
+      game.getPlayers().values().forEach(p -> p.getTradingPosts().addListener((SetChangeListener<String>) change -> {
         if (game.getCurrentRound().getValue() == round && change.wasAdded()) {
           p.updateScore(4, "R" + game.getCurrentRound().getValue().display() + " " + getText());
         }

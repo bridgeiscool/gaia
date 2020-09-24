@@ -65,7 +65,7 @@ public enum EndScoring {
       label.setText(String.valueOf(player.getSatellites().size()));
       player.getSatellites()
           .addListener(
-              (SetChangeListener<Coords>) change -> label.setText(String.valueOf(player.getSatellites().size())));
+              (SetChangeListener<String>) change -> label.setText(String.valueOf(player.getSatellites().size())));
     }
 
     @Override

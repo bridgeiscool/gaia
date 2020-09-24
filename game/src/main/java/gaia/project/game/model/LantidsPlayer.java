@@ -7,6 +7,7 @@ import com.google.common.base.Preconditions;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
+import gaia.project.game.board.GameBoard;
 import gaia.project.game.board.HexWithPlanet;
 import gaia.project.game.board.Mine;
 import gaia.project.game.controller.PlanetType;
@@ -15,7 +16,7 @@ import javafx.collections.ObservableSet;
 import javafx.collections.SetChangeListener;
 
 public final class LantidsPlayer extends Player {
-  private final ObservableSet<Coords> leechMines = FXCollections.observableSet();
+  private final ObservableSet<String> leechMines = FXCollections.observableSet();
 
   public static LantidsPlayer createNew(PlayerEnum playerEnum) {
     LantidsPlayer p = new LantidsPlayer();
@@ -31,21 +32,21 @@ public final class LantidsPlayer extends Player {
 
   @Override
   protected void raceSpecificListeners() {
-    leechMines.addListener((SetChangeListener<Coords>) change -> {
+    leechMines.addListener((SetChangeListener<String>) change -> {
       if (!getPi().isEmpty()) {
         Util.plus(getResearch(), 2);
       }
     });
   }
 
-  public ObservableSet<Coords> getLeechMines() {
+  public ObservableSet<String> getLeechMines() {
     return leechMines;
   }
 
-  public void buildLeechMine(HexWithPlanet hex) {
+  public void buildLeechMine(HexWithPlanet hex, GameBoard gameBoard) {
     Mine mine = new Mine(hex, getRace().getColor(), getPlayerEnum());
-    getMines().add(hex.getCoords());
-    leechMines.add(hex.getCoords());
+    getMines().add(hex.getHexId());
+    leechMines.add(hex.getHexId());
     hex.addLeechMine(mine);
 
     // Update income
@@ -67,22 +68,22 @@ public final class LantidsPlayer extends Player {
     Util.minus(getOre(), 1);
     Util.minus(getCredits(), 2);
 
-    for (Set<Coords> federation : getFederations()) {
-      if (federation.stream().anyMatch(c -> hex.isWithinRangeOf(c, 1))) {
-        federation.add(hex.getCoords());
+    for (Set<String> federation : getFederations()) {
+      if (federation.stream().anyMatch(c -> hex.isWithinRangeOf(gameBoard.hexWithId(c), 1))) {
+        federation.add(hex.getHexId());
       }
     }
 
-    for (Coords sat : getSatellites()) {
-      if (hex.isWithinRangeOf(sat, 1)) {
+    for (String sat : getSatellites()) {
+      if (hex.isWithinRangeOf(gameBoard.hexWithId(sat), 1)) {
         // Just add to the first possible fed for now. Shouldn't matter
         // TODO: Check and add logic to check which fed later
-        getFederations().iterator().next().add(hex.getCoords());
+        getFederations().iterator().next().add(hex.getHexId());
       }
     }
 
     // We might have added something that causes more additions to an existing federation
-    recheckAllBuildingsInFederations();
+    recheckAllBuildingsInFederations(gameBoard);
   }
 
   @Override

@@ -26,7 +26,7 @@ public final class BalTaksPlayer extends Player {
 
   @Override
   protected void raceSpecificListeners() {
-    getPi().addListener((SetChangeListener<Coords>) change -> Util.plus(getNavLevel(), 1));
+    getPi().addListener((SetChangeListener<String>) change -> Util.plus(getNavLevel(), 1));
   }
 
   public int getGaiaformersInGaiaBin() {

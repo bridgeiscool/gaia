@@ -30,12 +30,12 @@ public class EmptyHex extends Hex {
   @Nullable
   private SpaceStation spaceStation;
 
-  public static EmptyHex normal(Coords coords, int sectorId) {
-    return new EmptyHex(coords, sectorId);
+  public static EmptyHex normal(Coords coords, int sectorId, String hexId) {
+    return new EmptyHex(coords, sectorId, hexId);
   }
 
-  private EmptyHex(Coords coords, int sectorId) {
-    super(coords, sectorId);
+  private EmptyHex(Coords coords, int sectorId, String hexId) {
+    super(coords, sectorId, hexId);
     satelliteBox = new VBox(2.0);
     satelliteBox.setAlignment(Pos.CENTER);
     getChildren().add(satelliteBox);
@@ -84,8 +84,11 @@ public class EmptyHex extends Hex {
     return null;
   }
 
-  public static Predicate<EmptyHex> possibleSatellite(Player player, Set<Coords> currentBuildings) {
-    return h -> currentBuildings.stream().anyMatch(c -> h.isWithinRangeOf(c, 1))
+  public static Predicate<EmptyHex> possibleSatellite(
+      Player player,
+      Set<String> currentBuildings,
+      GameBoard gameBoard) {
+    return h -> currentBuildings.stream().anyMatch(c -> h.isWithinRangeOf(gameBoard.hexWithId(c), 1))
         && !h.hasSatellite(player.getPlayerEnum());
   }
 

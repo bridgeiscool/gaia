@@ -36,8 +36,8 @@ public class HexWithPlanet extends Hex {
   private Mine leechMine;
   private boolean hasGaiaformer;
 
-  public HexWithPlanet(Coords coords, int sectorId, Planet planet) {
-    super(coords, sectorId);
+  public HexWithPlanet(Coords coords, int sectorId, Planet planet, String hexId) {
+    super(coords, sectorId, hexId);
     Objects.requireNonNull(planet);
     this.planet = planet;
     this.getChildren().add(planet);

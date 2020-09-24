@@ -16,6 +16,7 @@ import com.google.gson.stream.JsonWriter;
 import gaia.project.game.board.Academy;
 import gaia.project.game.board.EmptyHex;
 import gaia.project.game.board.Gaiaformer;
+import gaia.project.game.board.GameBoard;
 import gaia.project.game.board.Hex;
 import gaia.project.game.board.HexWithPlanet;
 import gaia.project.game.board.Mine;
@@ -83,21 +84,21 @@ public class Player {
   private ObservableSet<TechTile> coveredTechTiles = FXCollections.observableSet();
 
   // Federation related
-  private ObservableSet<Set<Coords>> federations = FXCollections.observableSet(new HashSet<>());
-  private ObservableSet<Coords> satellites = FXCollections.observableSet();
+  private ObservableSet<Set<String>> federations = FXCollections.observableSet(new HashSet<>());
+  private ObservableSet<String> satellites = FXCollections.observableSet();
   // Set of objects with the tile and whether not it still can be flipped...
   private ObservableSet<FedToken> federationTiles = FXCollections.observableSet();
   private int fedPower = 7;
 
   // Buildings, etc
-  private ObservableSet<Coords> mines = FXCollections.observableSet();
-  private ObservableSet<Coords> tradingPosts = FXCollections.observableSet();
-  private ObservableSet<Coords> researchLabs = FXCollections.observableSet();
-  private ObservableSet<Coords> pi = FXCollections.observableSet();
-  private ObservableSet<Coords> ka = FXCollections.observableSet();
-  private ObservableSet<Coords> qa = FXCollections.observableSet();
-  private ObservableSet<Coords> gaiaformers = FXCollections.observableSet();
-  private ObservableSet<Coords> lostPlanet = FXCollections.observableSet();
+  private ObservableSet<String> mines = FXCollections.observableSet();
+  private ObservableSet<String> tradingPosts = FXCollections.observableSet();
+  private ObservableSet<String> researchLabs = FXCollections.observableSet();
+  private ObservableSet<String> pi = FXCollections.observableSet();
+  private ObservableSet<String> ka = FXCollections.observableSet();
+  private ObservableSet<String> qa = FXCollections.observableSet();
+  private ObservableSet<String> gaiaformers = FXCollections.observableSet();
+  private ObservableSet<String> lostPlanet = FXCollections.observableSet();
 
   // End Scoring Related
   private ObservableSet<Integer> sectors = FXCollections.observableSet();
@@ -445,7 +446,7 @@ public class Player {
     return federationTiles;
   }
 
-  public ObservableSet<Set<Coords>> getFederations() {
+  public ObservableSet<Set<String>> getFederations() {
     return federations;
   }
 
@@ -461,31 +462,31 @@ public class Player {
     return builtOn;
   }
 
-  public ObservableSet<Coords> getMines() {
+  public ObservableSet<String> getMines() {
     return mines;
   }
 
-  public ObservableSet<Coords> getTradingPosts() {
+  public ObservableSet<String> getTradingPosts() {
     return tradingPosts;
   }
 
-  public ObservableSet<Coords> getResearchLabs() {
+  public ObservableSet<String> getResearchLabs() {
     return researchLabs;
   }
 
-  public ObservableSet<Coords> getPi() {
+  public ObservableSet<String> getPi() {
     return pi;
   }
 
-  public ObservableSet<Coords> getKa() {
+  public ObservableSet<String> getKa() {
     return ka;
   }
 
-  public ObservableSet<Coords> getQa() {
+  public ObservableSet<String> getQa() {
     return qa;
   }
 
-  public ObservableSet<Coords> getLostPlanet() {
+  public ObservableSet<String> getLostPlanet() {
     return lostPlanet;
   }
 
@@ -497,7 +498,7 @@ public class Player {
     return gaiaformerCost.get();
   }
 
-  public ObservableSet<Coords> getGaiaformers() {
+  public ObservableSet<String> getGaiaformers() {
     return gaiaformers;
   }
 
@@ -575,7 +576,7 @@ public class Player {
     return sectors;
   }
 
-  public ObservableSet<Coords> getSatellites() {
+  public ObservableSet<String> getSatellites() {
     return satellites;
   }
 
@@ -614,8 +615,8 @@ public class Player {
   }
 
   // Utility methods
-  public Set<Coords> allBuildingLocations() {
-    return ImmutableSet.<Coords> builder()
+  public Set<String> allBuildingLocations() {
+    return ImmutableSet.<String> builder()
         .addAll(mines)
         .addAll(tradingPosts)
         .addAll(researchLabs)
@@ -651,7 +652,7 @@ public class Player {
   }
 
   protected boolean gaiaformed(Hex hex) {
-    return gaiaformers.stream().anyMatch(c -> hex.getCoords().equals(c));
+    return gaiaformers.stream().anyMatch(c -> hex.getHexId().equals(c));
   }
 
   public void endTurn() {
@@ -666,15 +667,15 @@ public class Player {
   }
 
   public int getPower(Hex hex) {
-    if (Sets.union(mines, lostPlanet).contains(hex.getCoords())) {
+    if (Sets.union(mines, lostPlanet).contains(hex.getHexId())) {
       return 1;
     }
 
-    if (Sets.union(tradingPosts, researchLabs).contains(hex.getCoords())) {
+    if (Sets.union(tradingPosts, researchLabs).contains(hex.getHexId())) {
       return 2;
     }
 
-    if (Sets.union(Sets.union(pi, qa), ka).contains(hex.getCoords())) {
+    if (Sets.union(Sets.union(pi, qa), ka).contains(hex.getHexId())) {
       return bigBuildingPower.intValue();
     }
 
@@ -700,19 +701,19 @@ public class Player {
   protected int getExcessBuildingPower() {
     int totalPower = 0;
 
-    for (Coords coords : Sets.union(mines, lostPlanet)) {
+    for (String coords : Sets.union(mines, lostPlanet)) {
       if (!inFederation(coords)) {
         totalPower += 1;
       }
     }
 
-    for (Coords coords : Sets.union(tradingPosts, researchLabs)) {
+    for (String coords : Sets.union(tradingPosts, researchLabs)) {
       if (!inFederation(coords)) {
         totalPower += 2;
       }
     }
 
-    for (Coords coords : Sets.union(Sets.union(pi, qa), ka)) {
+    for (String coords : Sets.union(Sets.union(pi, qa), ka)) {
       if (!inFederation(coords)) {
         totalPower += bigBuildingPower.intValue();
       }
@@ -721,9 +722,9 @@ public class Player {
     return totalPower;
   }
 
-  public boolean inFederation(Coords coords) {
-    for (Set<Coords> federation : federations) {
-      for (Coords inFed : federation) {
+  public boolean inFederation(String coords) {
+    for (Set<String> federation : federations) {
+      for (String inFed : federation) {
         if (inFed.equals(coords)) {
           return true;
         }
@@ -744,17 +745,17 @@ public class Player {
   }
 
   // Action methods
-  public void buildMine(HexWithPlanet hex) {
-    buildMine(hex, false);
+  public void buildMine(HexWithPlanet hex, GameBoard gameBoard) {
+    buildMine(hex, false, gameBoard);
   }
 
-  public void buildSetupMine(HexWithPlanet hex) {
-    buildMine(hex, true);
+  public void buildSetupMine(HexWithPlanet hex, GameBoard gameBoard) {
+    buildMine(hex, true, gameBoard);
   }
 
-  private void buildMine(HexWithPlanet hex, boolean setup) {
+  private void buildMine(HexWithPlanet hex, boolean setup, GameBoard gameBoard) {
     Mine mine = new Mine(hex, race.getColor(), playerEnum);
-    mines.add(hex.getCoords());
+    mines.add(hex.getHexId());
     hex.addMine(mine);
 
     // Update income
@@ -775,7 +776,7 @@ public class Player {
       // Handle cost for transformation
       if (planetType == PlanetType.GAIA) {
         if (gaiaformed(hex)) {
-          gaiaformers.remove(hex.getCoords());
+          gaiaformers.remove(hex.getHexId());
         } else {
           race.gaiaTerraformCost().updatePlayer(this);
         }
@@ -791,35 +792,36 @@ public class Player {
       Util.minus(ore, 1);
       Util.minus(credits, 2);
 
-      for (Set<Coords> federation : federations) {
-        if (federation.stream().anyMatch(c -> hex.isWithinRangeOf(c, 1))) {
-          federation.add(hex.getCoords());
+      for (Set<String> federation : federations) {
+        if (federation.stream().anyMatch(c -> hex.isWithinRangeOf(gameBoard.hexWithId(c), 1))) {
+          federation.add(hex.getHexId());
         }
       }
 
-      for (Coords sat : satellites) {
-        if (hex.isWithinRangeOf(sat, 1)) {
+      for (String sat : satellites) {
+        if (hex.isWithinRangeOf(gameBoard.hexWithId(sat), 1)) {
           // Just add to the first possible fed for now. Shouldn't matter
           // TODO: Check and add logic to check which fed later
-          federations.iterator().next().add(hex.getCoords());
+          federations.iterator().next().add(hex.getHexId());
         }
       }
 
       // We might have added something that causes more additions to an existing federation
-      recheckAllBuildingsInFederations();
+      recheckAllBuildingsInFederations(gameBoard);
     }
   }
 
-  protected void recheckAllBuildingsInFederations() {
+  protected void recheckAllBuildingsInFederations(GameBoard gameBoard) {
     if (!federations.isEmpty()) {
-      Set<Coords> toAdd = new HashSet<>();
+      Set<String> toAdd = new HashSet<>();
       do {
         toAdd.clear();
-        for (Coords building : allBuildingLocations()) {
+        for (String building : allBuildingLocations()) {
+          Hex hex = gameBoard.hexWithId(building);
           if (!inFederation(building)) {
-            for (Set<Coords> federation : getFederations()) {
-              for (Coords coords : federation) {
-                if (building.isWithinRangeOf(coords, 1)) {
+            for (Set<String> federation : getFederations()) {
+              for (String hexId : federation) {
+                if (hex.isWithinRangeOf(gameBoard.hexWithId(hexId), 1)) {
                   toAdd.add(building);
                 }
               }
@@ -838,7 +840,7 @@ public class Player {
     Gaiaformer gaiaformer = new Gaiaformer(hex, race.getColor(), playerEnum);
     hex.addGaiaformer(gaiaformer);
 
-    gaiaformers.add(hex.getCoords());
+    gaiaformers.add(hex.getHexId());
 
     if (bin1.get() >= gaiaformerCost.get()) {
       Util.minus(bin1, gaiaformerCost.get());
@@ -872,8 +874,8 @@ public class Player {
   public void buildTradingPost(HexWithPlanet hex, boolean cheap) {
     TradingPost tp = new TradingPost(hex, race.getColor(), playerEnum);
     hex.switchBuildingUI(tp);
-    tradingPosts.add(hex.getCoords());
-    mines.remove(hex.getCoords());
+    tradingPosts.add(hex.getHexId());
+    mines.remove(hex.getHexId());
 
     Util.minus(ore, 2);
     Util.minus(credits, cheap ? 3 : 6);
@@ -888,8 +890,8 @@ public class Player {
   public void buildResearchLab(HexWithPlanet hex) {
     ResearchLab rl = new ResearchLab(hex, race.getColor(), playerEnum);
     hex.switchBuildingUI(rl);
-    researchLabs.add(hex.getCoords());
-    tradingPosts.remove(hex.getCoords());
+    researchLabs.add(hex.getHexId());
+    tradingPosts.remove(hex.getHexId());
 
     Util.minus(ore, 3);
     Util.minus(credits, 5);
@@ -902,8 +904,8 @@ public class Player {
   public void buildPI(HexWithPlanet hex) {
     PlanetaryInstitute pi = new PlanetaryInstitute(hex, race.getColor(), playerEnum);
     hex.switchBuildingUI(pi);
-    this.pi.add(hex.getCoords());
-    tradingPosts.remove(hex.getCoords());
+    this.pi.add(hex.getHexId());
+    tradingPosts.remove(hex.getHexId());
 
     Util.minus(ore, 4);
     Util.minus(credits, 6);
@@ -917,11 +919,11 @@ public class Player {
     Academy academy = new Academy(hex, race.getColor(), playerEnum);
     hex.switchBuildingUI(academy);
     if (ka) {
-      this.ka.add(hex.getCoords());
+      this.ka.add(hex.getHexId());
     } else {
-      this.qa.add(hex.getCoords());
+      this.qa.add(hex.getHexId());
     }
-    researchLabs.remove(hex.getCoords());
+    researchLabs.remove(hex.getHexId());
 
     Util.minus(ore, 6);
     Util.minus(credits, 6);
@@ -937,7 +939,7 @@ public class Player {
 
   public void addSatellite(EmptyHex emptyHex) {
     Preconditions.checkArgument(bin1.get() + bin2.get() + bin3.get() > 0);
-    satellites.add(emptyHex.getCoords());
+    satellites.add(emptyHex.getHexId());
     Satellite satellite = new Satellite(emptyHex, race.getColor(), playerEnum);
     emptyHex.addSatelliteUI(satellite);
 
@@ -981,7 +983,7 @@ public class Player {
   }
 
   public void addLostPlanet(EmptyHex hex) {
-    lostPlanet.add(hex.getCoords());
+    lostPlanet.add(hex.getHexId());
 
     // Update planet counts
     builtOn.add(PlanetType.LOST);
@@ -1039,7 +1041,7 @@ public class Player {
 
     // Federations
     json.name(JsonUtil.FEDERATIONS).beginArray();
-    for (Set<Coords> federation : federations) {
+    for (Set<String> federation : federations) {
       json.beginObject();
       JsonUtil.writeCoordsCollection(json, JsonUtil.FED, federation);
       json.endObject();

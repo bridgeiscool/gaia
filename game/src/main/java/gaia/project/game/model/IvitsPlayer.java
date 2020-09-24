@@ -12,6 +12,7 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
 import gaia.project.game.board.EmptyHex;
+import gaia.project.game.board.GameBoard;
 import gaia.project.game.board.Hex;
 import gaia.project.game.board.HexWithPlanet;
 import gaia.project.game.board.PlanetaryInstitute;
@@ -21,7 +22,7 @@ import gaia.project.game.controller.PlanetType;
 import javafx.beans.property.SimpleBooleanProperty;
 
 public final class IvitsPlayer extends Player {
-  public final Set<Coords> spaceStations = new HashSet<>();
+  public final Set<String> spaceStations = new HashSet<>();
 
   public static IvitsPlayer createNew(PlayerEnum playerEnum) {
     IvitsPlayer p = new IvitsPlayer();
@@ -37,10 +38,10 @@ public final class IvitsPlayer extends Player {
   private IvitsPlayer() {}
 
   @Override
-  public void buildSetupMine(HexWithPlanet hex) {
+  public void buildSetupMine(HexWithPlanet hex, GameBoard gameBoard) {
     PlanetaryInstitute pi = new PlanetaryInstitute(hex, getRace().getColor(), getPlayerEnum());
     hex.addPi(pi);
-    getPi().add(hex.getCoords());
+    getPi().add(hex.getHexId());
 
     // Update income
     getRace().getPiIncome().addTo(getCurrentIncome());
@@ -51,20 +52,20 @@ public final class IvitsPlayer extends Player {
     getBuiltOn().add(PlanetType.RED);
   }
 
-  public Set<Coords> getSpaceStations() {
+  public Set<String> getSpaceStations() {
     return spaceStations;
   }
 
-  public void buildSpaceStation(EmptyHex hex) {
+  public void buildSpaceStation(EmptyHex hex, GameBoard gameBoard) {
     SpaceStation ss = new SpaceStation(hex, getPlayerEnum());
-    spaceStations.add(hex.getCoords());
+    spaceStations.add(hex.getHexId());
     hex.addSpaceStation(ss);
 
-    recheckAllBuildingsInFederations();
+    recheckAllBuildingsInFederations(gameBoard);
   }
 
   @Override
-  public Set<Coords> allBuildingLocations() {
+  public Set<String> allBuildingLocations() {
     return Sets.union(super.allBuildingLocations(), spaceStations);
   }
 
@@ -76,7 +77,7 @@ public final class IvitsPlayer extends Player {
   @Override
   public void addSatellite(EmptyHex emptyHex) {
     Preconditions.checkArgument(getQic().get() > 0);
-    getSatellites().add(emptyHex.getCoords());
+    getSatellites().add(emptyHex.getHexId());
     Satellite satellite = new Satellite(emptyHex, getRace().getColor(), getPlayerEnum());
     emptyHex.addSatelliteUI(satellite);
 
@@ -93,19 +94,19 @@ public final class IvitsPlayer extends Player {
 
   @Override
   public int getPower(Hex hex) {
-    return getPower(hex.getCoords());
+    return getPower(hex.getHexId());
   }
 
-  private int getPower(Coords coords) {
-    if (Sets.union(Sets.union(getMines(), getLostPlanet()), spaceStations).contains(coords)) {
+  private int getPower(String hexId) {
+    if (Sets.union(Sets.union(getMines(), getLostPlanet()), spaceStations).contains(hexId)) {
       return 1;
     }
 
-    if (Sets.union(getTradingPosts(), getResearchLabs()).contains(coords)) {
+    if (Sets.union(getTradingPosts(), getResearchLabs()).contains(hexId)) {
       return 2;
     }
 
-    if (Sets.union(Sets.union(getPi(), getQa()), getKa()).contains(coords)) {
+    if (Sets.union(Sets.union(getPi(), getQa()), getKa()).contains(hexId)) {
       return getBigBuildingPower().intValue();
     }
 

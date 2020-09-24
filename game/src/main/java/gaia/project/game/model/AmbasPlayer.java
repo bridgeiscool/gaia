@@ -26,10 +26,10 @@ public final class AmbasPlayer extends Player {
     pi.switchBuildingUI(mine);
 
     ignorePiAndMineBonuses = true;
-    getPi().remove(pi.getCoords());
-    getMines().remove(piDestination.getCoords());
-    getPi().add(piDestination.getCoords());
-    getMines().add(pi.getCoords());
+    getPi().remove(pi.getHexId());
+    getMines().remove(piDestination.getHexId());
+    getPi().add(piDestination.getHexId());
+    getMines().add(pi.getHexId());
     ignorePiAndMineBonuses = false;
   }
 

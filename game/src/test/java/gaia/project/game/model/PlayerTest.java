@@ -74,8 +74,6 @@ public class PlayerTest {
 
     player.write(newJsonWriter);
 
-    String text = writer.toString();
-
     JsonReader reader = JsonUtil.GSON.newJsonReader(new StringReader(writer.toString()));
 
     Player reRead = Player.read(Player.empty(), reader);
@@ -87,21 +85,19 @@ public class PlayerTest {
   @Test
   public void testCoordsSerialization() throws IOException {
     Player player = Player.create(Race.AMBAS, PlayerEnum.PLAYER1);
-    player.getMines().add(new Coords(1.0, -1.0));
-    player.getMines().add(new Coords(2.0, -2.0));
+    player.getMines().add("9.5");
+    player.getMines().add("3.16");
     StringWriter writer = new StringWriter();
     JsonWriter newJsonWriter = JsonUtil.GSON.newJsonWriter(writer);
 
     player.write(newJsonWriter);
-
-    String text = writer.toString();
 
     JsonReader reader = JsonUtil.GSON.newJsonReader(new StringReader(writer.toString()));
 
     Player reRead = Player.read(Player.empty(), reader);
 
     // Juat testing one random thing for now.
-    Assert.assertTrue(reRead.getMines().contains(new Coords(1.0, -1.0)));
-    Assert.assertTrue(reRead.getMines().contains(new Coords(2.0, -2.0)));
+    Assert.assertTrue(reRead.getMines().contains("9.5"));
+    Assert.assertTrue(reRead.getMines().contains("3.16"));
   }
 }

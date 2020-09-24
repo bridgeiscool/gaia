@@ -74,6 +74,10 @@ public class GameBoard extends Group implements Iterable<Sector> {
     return hexes().stream().filter(h -> !h.isEmpty()).map(HexWithPlanet.class::cast);
   }
 
+  public Hex hexWithId(String hexId) {
+    return hexes().stream().filter(h -> h.getHexId().contentEquals(hexId)).findFirst().get();
+  }
+
   @VisibleForTesting
   boolean isValid() {
     List<HexWithPlanet> hexes = planetaryHexes().collect(Collectors.toList());

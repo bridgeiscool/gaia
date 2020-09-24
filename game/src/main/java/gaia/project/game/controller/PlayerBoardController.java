@@ -7,7 +7,6 @@ import java.util.function.Consumer;
 
 import gaia.project.game.board.BoardUtils;
 import gaia.project.game.model.AdvancedTechTile;
-import gaia.project.game.model.Coords;
 import gaia.project.game.model.Player;
 import gaia.project.game.model.Player.FedToken;
 import gaia.project.game.model.PlayerBoardAction;
@@ -179,28 +178,28 @@ public class PlayerBoardController extends GridPane {
 
     mines.setText(player.getMines().size() + " / 8");
     player.getMines()
-        .addListener((SetChangeListener<Coords>) change -> mines.setText(player.getMines().size() + " / 8"));
+        .addListener((SetChangeListener<String>) change -> mines.setText(player.getMines().size() + " / 8"));
     tradingPosts.setText(player.getTradingPosts().size() + " / 4");
     player.getTradingPosts()
         .addListener(
-            (SetChangeListener<Coords>) change -> tradingPosts.setText(player.getTradingPosts().size() + " / 4"));
+            (SetChangeListener<String>) change -> tradingPosts.setText(player.getTradingPosts().size() + " / 4"));
     researchLabs.setText(player.getResearchLabs().size() + " / 3");
     player.getResearchLabs()
         .addListener(
-            (SetChangeListener<Coords>) change -> researchLabs.setText(player.getResearchLabs().size() + " / 3"));
+            (SetChangeListener<String>) change -> researchLabs.setText(player.getResearchLabs().size() + " / 3"));
     planetaryInstitute.setText(player.getPi().size() + " / 1");
     player.getPi()
-        .addListener((SetChangeListener<Coords>) change -> planetaryInstitute.setText(player.getPi().size() + " / 1"));
+        .addListener((SetChangeListener<String>) change -> planetaryInstitute.setText(player.getPi().size() + " / 1"));
     knowledgeAcademy.setText(player.getKa().size() + " / 1");
     player.getKa()
-        .addListener((SetChangeListener<Coords>) change -> knowledgeAcademy.setText(player.getKa().size() + " / 1"));
+        .addListener((SetChangeListener<String>) change -> knowledgeAcademy.setText(player.getKa().size() + " / 1"));
     qicAcademy.setText(player.getQa().size() + " / 1");
     player.getQa()
-        .addListener((SetChangeListener<Coords>) change -> qicAcademy.setText(player.getQa().size() + " / 1"));
+        .addListener((SetChangeListener<String>) change -> qicAcademy.setText(player.getQa().size() + " / 1"));
 
     gaiaformers.setText(player.getGaiaformers().size() + " / ");
     player.getGaiaformers()
-        .addListener((SetChangeListener<Coords>) change -> gaiaformers.setText(player.getGaiaformers().size() + " /"));
+        .addListener((SetChangeListener<String>) change -> gaiaformers.setText(player.getGaiaformers().size() + " /"));
     availableGaiaformers.textProperty()
         .bindBidirectional(player.getAvailableGaiaformers(), new NumberStringConverter());
 

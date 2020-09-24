@@ -89,7 +89,7 @@ public enum RoundBooster {
     }
 
   },
-  GAIA_PLANETS("[]: GP", "(+4c)") {
+  GAIA_PLANETS("[]:1/GP", "(+4c)") {
     @Override
     public void addIncome(Income addTo) {
       Util.plus(addTo.getCreditIncome(), 4);
@@ -105,7 +105,7 @@ public enum RoundBooster {
       player.updateScore(player.getGaiaPlanets().getValue(), "RB " + getTopText());
     }
   },
-  MINES("[]:M", "(+1o)") {
+  MINES("[]:1/M", "(+1o)") {
 
     @Override
     public void addIncome(Income addTo) {
@@ -122,7 +122,7 @@ public enum RoundBooster {
       player.updateScore(player.getMines().size(), "RB " + getTopText());
     }
   },
-  TPS("[]:TP", "(+1o)") {
+  TPS("[]:2/TP", "(+1o)") {
     @Override
     public void addIncome(Income addTo) {
       Util.plus(addTo.getOreIncome(), 1);
@@ -138,7 +138,7 @@ public enum RoundBooster {
       player.updateScore(2 * player.getTradingPosts().size(), "RB " + getTopText());
     }
   },
-  RLS("[]:RL", "(+1k)") {
+  RLS("[]:3/RL", "(+1k)") {
 
     @Override
     public void addIncome(Income addTo) {
@@ -155,7 +155,7 @@ public enum RoundBooster {
       player.updateScore(3 * player.getResearchLabs().size(), "RB " + getTopText());
     }
   },
-  BIGS("[]:BB", "(+4p)") {
+  BIGS("[]:4/BB", "(+4p)") {
     @Override
     public void addIncome(Income addTo) {
       Util.plus(addTo.getChargeIncome(), 4);

@@ -60,7 +60,6 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
@@ -91,6 +90,12 @@ public class GameController extends BorderPane {
   private Button confirmAction;
   @FXML
   private Button resetTurn;
+  @FXML
+  private HBox playerBoardBox;
+  @FXML
+  private HBox gameBoardBox;
+  @FXML
+  private VBox rightBox;
 
   private final GaiaProjectController parent;
 
@@ -144,10 +149,7 @@ public class GameController extends BorderPane {
       }
     });
 
-    HBox gameBoardBox = new HBox(gameBoard);
-    gameBoardBox.setAlignment(Pos.CENTER);
-    gameBoardBox.setPadding(new Insets(2, 2, 2, 2));
-    mainPane.centerProperty().set(gameBoardBox);
+    gameBoardBox.getChildren().add(gameBoard);
 
     // Init player boards
     game.getPlayers().entrySet().forEach(e -> playerBoards.put(e.getKey(), new PlayerBoardController(e.getValue())));
@@ -172,18 +174,14 @@ public class GameController extends BorderPane {
     VBox boostersAndFeds = new VBox(5, federationTokens, roundBoosterBox);
     boostersAndFeds.setAlignment(Pos.CENTER);
 
-    HBox miscContent = new HBox(10, new ScoringArea(game), boostersAndFeds);
+    rightBox.getChildren()
+        .addAll(
+            techTracks,
+            powerActionsController,
+            new Separator(),
+            new HBox(10, new ScoringArea(game), boostersAndFeds));
 
-    VBox vbox = new VBox(5, techTracks, powerActionsController, new Separator(), miscContent);
-    vbox.setAlignment(Pos.CENTER);
-    vbox.setPadding(new Insets(2, 2, 2, 2));
-    mainPane.setRight(vbox);
-
-    HBox playerBoardBox = new HBox(5);
-    playerBoardBox.setPadding(new Insets(2, 2, 2, 2));
-    playerBoardBox.setAlignment(Pos.BASELINE_CENTER);
     playerBoards.entrySet().forEach(e -> playerBoardBox.getChildren().add(e.getValue()));
-    mainPane.setBottom(playerBoardBox);
 
     if (load) {
       resetGameBoard(game);

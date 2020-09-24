@@ -27,4 +27,28 @@
       <Button fx:id="resetTurn" text="Reset Turn" onAction="#resetTurn" />
     </HBox>
   </top>
+  
+  <center>
+    <HBox fx:id="gameBoardBox" alignment="CENTER">
+      <padding>
+        <Insets top="2" bottom="2" left="2" right="2" />
+      </padding>
+    </HBox>
+  </center>
+  
+  <right>
+    <VBox fx:id="rightBox" alignment="CENTER" spacing="5">
+      <padding>
+        <Insets top="2" bottom="2" left="2" right="2" />
+      </padding>
+    </VBox>
+  </right>
+  
+  <bottom>
+    <HBox fx:id="playerBoardBox" alignment="BASELINE_CENTER" spacing="2">
+      <padding>
+        <Insets top="2" bottom="2" left="2" right="2" />
+      </padding>
+    </HBox>
+  </bottom>
 </fx:root>

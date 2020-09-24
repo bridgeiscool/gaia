@@ -15,8 +15,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
 public class AdvancedTechTileHBox extends HBox {
-  private static final double BASE_HEIGHT = 60;
-  private static final double BASE_WIDTH = 96;
+  private static final double BASE_HEIGHT = 72;
+  private static final double BASE_WIDTH = 90;
   private static final double BASE_FONT_SIZE = 18;
 
   private static final String NORMAL = "advTechTile";

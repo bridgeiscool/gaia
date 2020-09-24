@@ -16,6 +16,7 @@ public class GaiaProjectApp extends Application {
     int width = gd.getDisplayMode().getWidth();
     int height = gd.getDisplayMode().getHeight();
 
+    // Uncomment to test resizing...
     // BoardUtils.setScaling(1440, 900);
     BoardUtils.setScaling(width, height);
     new GaiaProjectController(primaryStage);

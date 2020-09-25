@@ -83,7 +83,9 @@ public class Game {
 
     Random random = new Random(gameOpts.getSeed());
 
-    Map<SectorLocation, Rot> gameBoard = GameBoard.random(random).getSectorLocations();
+    Map<SectorLocation, Rot> gameBoard = gameOpts.isRandomBoard()
+        ? GameBoard.random(random).getSectorLocations()
+        : GameBoard.originalBoard().getSectorLocations();
 
     List<TechTile> techTiles = new ArrayList<>(Arrays.asList(TechTile.values()));
     Collections.shuffle(techTiles, random);

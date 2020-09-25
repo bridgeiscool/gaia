@@ -69,7 +69,7 @@
                   <mainClass>gaia.project.game.GaiaProjectAppLauncher</mainClass>
                 </transformer>
               </transformers>
-              <outputFile>${project.build.directory}/GaiaProject.jar</outputFile>
+              <outputFile>${project.build.directory}/GaiaProjectv${project.version}.jar</outputFile>
             </configuration>
           </execution>
         </executions>

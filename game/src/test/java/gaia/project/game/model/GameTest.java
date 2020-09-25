@@ -13,7 +13,7 @@ import com.google.gson.stream.JsonWriter;
 public class GameTest {
   @Test
   public void testSerialization() throws IOException, ClassNotFoundException {
-    Game game = Game.generateGame(new GameOpts(true, 3, SetupEnum.AUCTION_RACES));
+    Game game = Game.generateGame(new GameOpts(true, 3, SetupEnum.AUCTION_RACES, false));
 
     StringWriter writer = new StringWriter();
     JsonWriter newJsonWriter = JsonUtil.GSON.newJsonWriter(writer);

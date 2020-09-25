@@ -27,6 +27,8 @@ public class GameOptionsDialog extends Dialog<GameOpts> {
   @FXML
   private ComboBox<String> setup;
   @FXML
+  private CheckBox originalBoard;
+  @FXML
   private CheckBox baltaksBuff;
   @FXML
   private TextField seed;
@@ -61,6 +63,7 @@ public class GameOptionsDialog extends Dialog<GameOpts> {
             baltaksBuff.isSelected(),
             numPlayers.getValue(),
             SetupEnum.fromDisplay(setup.getValue()),
+            !originalBoard.isSelected(),
             (seed.getText().isEmpty() || seed.getText() == null) ? null : Long.valueOf(seed.getText()));
       }
 

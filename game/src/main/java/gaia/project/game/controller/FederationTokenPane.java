@@ -21,6 +21,7 @@ public class FederationTokenPane extends StackPane {
   private static final double WIDTH = 52;
   private static final double BASE_FONT_SIZE = 18;
   private final FederationTile federationTile;
+  private final BooleanProperty flippable;
 
   private final Shape shape;
 
@@ -42,6 +43,7 @@ public class FederationTokenPane extends StackPane {
   public FederationTokenPane(FederationTile federationTile, Size size, BooleanProperty flippable) {
     this.federationTile = federationTile;
     this.shape = new Shape(size.scaling * BoardUtils.getScaling(), flippable.get() ? "greenFedToken" : "grayFedToken");
+    this.flippable = flippable;
     flippable.addListener((o, oldValue, newValue) -> flip());
     ObservableList<Node> children = getChildren();
     children.add(shape);
@@ -62,7 +64,7 @@ public class FederationTokenPane extends StackPane {
 
   public void highlight(Player activePlayer, Consumer<FederationTile> callback) {
     shape.getStyleClass().clear();
-    shape.getStyleClass().add(federationTile.isFlippable() ? "greenFedTokenHighlighted" : "grayFedTokenHighlighted");
+    shape.getStyleClass().add(flippable.get() ? "greenFedTokenHighlighted" : "grayFedTokenHighlighted");
     this.setOnMouseClicked(me -> {
       activePlayer.addFederationTile(federationTile);
       callback.accept(federationTile);
@@ -71,7 +73,7 @@ public class FederationTokenPane extends StackPane {
 
   public void highlightForCopy(Player activePlayer, CallBack callback) {
     shape.getStyleClass().clear();
-    shape.getStyleClass().add(federationTile.isFlippable() ? "greenFedTokenHighlighted" : "grayFedTokenHighlighted");
+    shape.getStyleClass().add(flippable.get() ? "greenFedTokenHighlighted" : "grayFedTokenHighlighted");
     this.setOnMouseClicked(me -> {
       federationTile.updatePlayer(activePlayer);
       callback.call();
@@ -80,7 +82,7 @@ public class FederationTokenPane extends StackPane {
 
   public void clearHighlighting() {
     shape.getStyleClass().clear();
-    shape.getStyleClass().add(federationTile.isFlippable() ? "greenFedToken" : "grayFedToken");
+    shape.getStyleClass().add(flippable.get() ? "greenFedToken" : "grayFedToken");
     setOnMouseClicked(null);
   }
 

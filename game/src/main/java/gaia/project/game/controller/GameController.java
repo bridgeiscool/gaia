@@ -727,7 +727,7 @@ public class GameController extends BorderPane {
       currentFederation.clear();
       gameBoard.highlightPlanetaryHexes(
           activePlayer(),
-          h -> (h.getBuilder().orElse(null) == game.getActivePlayer()
+          h -> ((h.getBuilder().orElse(null) == game.getActivePlayer() && h.hasBuilding())
               || (h.getLeechMine() != null && h.getLeechMine().getPlayer() == game.getActivePlayer()))
               && !activePlayer().inFederation(h.getHexId()),
           (hex, player) -> hex.highlightCyan(),

@@ -1,4 +1,4 @@
-package gaia.project.game.controller;
+package gaia.project.game;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;

@@ -1,10 +1,11 @@
-package gaia.project.game.controller;
+package gaia.project.game;
 
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.lang.Thread.UncaughtExceptionHandler;
 
 import gaia.project.game.board.BoardUtils;
+import gaia.project.game.controller.GaiaProjectController;
 import javafx.application.Application;
 import javafx.stage.Stage;
 

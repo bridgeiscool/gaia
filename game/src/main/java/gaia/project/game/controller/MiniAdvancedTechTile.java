@@ -15,7 +15,7 @@ import javafx.scene.text.Font;
 
 public class MiniAdvancedTechTile extends HBox {
   private static final double BASE_HEIGHT = 36;
-  private static final double BASE_WIDTH = 54;
+  private static final double BASE_WIDTH = 56;
   private static final double BASE_FONT_SIZE = 12;
 
   private static final String NORMAL = "advTechTile";

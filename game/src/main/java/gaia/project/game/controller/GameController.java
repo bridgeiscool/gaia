@@ -566,7 +566,6 @@ public class GameController extends BorderPane {
     if (itarGaiaPhase) {
       finishGaiaPhase();
       itarGaiaPhase = false;
-      finishGaiaPhase();
       promptPlayerAction();
     } else {
       finishAction();
@@ -670,7 +669,6 @@ public class GameController extends BorderPane {
     if (itarGaiaPhase) {
       finishGaiaPhase();
       itarGaiaPhase = false;
-      finishGaiaPhase();
       promptPlayerAction();
     } else {
       finishAction();

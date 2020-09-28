@@ -140,6 +140,11 @@ public final class TaklonsPlayer extends Player {
     return getBin3().get() + (brainStone.getValue() == Bin.III ? 3 : 0);
   }
 
+  @Override
+  public boolean canSacPower() {
+    return getBin2().get() > 1 || (getBin2().get() == 1 && brainStone.getValue() == Bin.II);
+  }
+
   public Property<Bin> getBrainStone() {
     return brainStone;
   }

@@ -2,6 +2,8 @@ package gaia.project.game.controller;
 
 import java.io.IOException;
 
+import com.google.common.base.Preconditions;
+
 import gaia.project.game.model.BalTaksPlayer;
 import gaia.project.game.model.Player;
 import gaia.project.game.model.TaklonsPlayer;
@@ -91,7 +93,9 @@ public class ConversionDialog extends Dialog<Void> {
     powerToCredits.disableProperty().bind(Bindings.lessThan(activePlayer.getBin3(), 1));
     oreToCredits.disableProperty().bind(Bindings.lessThan(activePlayer.getOre(), 1));
     oreToPower.disableProperty().bind(Bindings.lessThan(activePlayer.getOre(), 1));
-    sacPower.disableProperty().bind(Bindings.lessThan(activePlayer.getBin2(), 2));
+
+    // Sac power button is weird since of Taklons
+    sacPower.setDisable(!activePlayer.canSacPower());
 
     additionalContent();
   }
@@ -165,9 +169,9 @@ public class ConversionDialog extends Dialog<Void> {
 
   @FXML
   private void sacPower() {
-    if (activePlayer.getBin2().get() > 1) {
-      activePlayer.sacPower(1);
-    }
+    Preconditions.checkArgument(activePlayer.canSacPower());
+    activePlayer.sacPower(1);
+    sacPower.setDisable(!activePlayer.canSacPower());
   }
 
   private static class HadschHallasDialog extends ConversionDialog {

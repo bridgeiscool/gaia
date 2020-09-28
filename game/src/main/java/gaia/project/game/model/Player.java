@@ -722,6 +722,10 @@ public class Player {
     return totalPower;
   }
 
+  public boolean canSacPower() {
+    return bin2.get() > 1;
+  }
+
   public boolean inFederation(String coords) {
     for (Set<String> federation : federations) {
       for (String inFed : federation) {

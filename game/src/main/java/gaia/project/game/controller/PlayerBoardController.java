@@ -5,6 +5,8 @@ import java.io.Serializable;
 import java.util.Map.Entry;
 import java.util.function.Consumer;
 
+import javax.annotation.Nullable;
+
 import gaia.project.game.board.BoardUtils;
 import gaia.project.game.model.AdvancedTechTile;
 import gaia.project.game.model.Player;
@@ -250,12 +252,16 @@ public class PlayerBoardController extends GridPane {
       getBox(taklons.getBrainStone().getValue()).getChildren().add(1, brainstone);
       taklons.getBrainStone().addListener((o, oldValue, newValue) -> {
         getBox(oldValue).getChildren().remove(brainstone);
-        getBox(newValue).getChildren().add(1, brainstone);
+        HBox newBox = getBox(newValue);
+        if (newBox != null) {
+          newBox.getChildren().add(1, brainstone);
+        }
       });
     }
 
   }
 
+  @Nullable
   private HBox getBox(Bin bin) {
     switch (bin) {
       case I:
@@ -266,6 +272,9 @@ public class PlayerBoardController extends GridPane {
         return bin3Box;
       case GAIA:
         return gaiaBox;
+      case REMOVED:
+        // Returning null should remove the brainstone from the UI...
+        return null;
     }
 
     throw new IllegalStateException("No such bin!");

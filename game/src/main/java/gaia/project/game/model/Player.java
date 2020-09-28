@@ -942,7 +942,7 @@ public class Player {
   }
 
   public void addSatellite(EmptyHex emptyHex) {
-    Preconditions.checkArgument(bin1.get() + bin2.get() + bin3.get() > 0);
+    Preconditions.checkArgument(canBuildSatellite());
     satellites.add(emptyHex.getHexId());
     Satellite satellite = new Satellite(emptyHex, race.getColor(), playerEnum);
     emptyHex.addSatelliteUI(satellite);

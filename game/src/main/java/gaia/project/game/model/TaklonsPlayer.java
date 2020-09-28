@@ -7,6 +7,8 @@ import com.google.common.base.Preconditions;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
+import gaia.project.game.board.EmptyHex;
+import gaia.project.game.board.Satellite;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.control.Alert;
@@ -29,7 +31,7 @@ public final class TaklonsPlayer extends Player {
   }
 
   public static enum Bin {
-    I, II, III, GAIA;
+    I, II, III, GAIA, REMOVED;
   }
 
   @Override
@@ -147,6 +149,30 @@ public final class TaklonsPlayer extends Player {
 
   public Property<Bin> getBrainStone() {
     return brainStone;
+  }
+
+  @Override
+  public boolean canBuildSatellite() {
+    return super.canBuildSatellite() || (brainStone.getValue() != Bin.REMOVED && brainStone.getValue() != Bin.GAIA);
+  }
+
+  @Override
+  public void addSatellite(EmptyHex emptyHex) {
+    Preconditions.checkArgument(canBuildSatellite());
+    getSatellites().add(emptyHex.getHexId());
+    Satellite satellite = new Satellite(emptyHex, getRace().getColor(), getPlayerEnum());
+    emptyHex.addSatelliteUI(satellite);
+
+    if (getBin1().get() > 0) {
+      Util.minus(getBin1(), 1);
+    } else if (getBin2().get() > 0) {
+      Util.minus(getBin2(), 1);
+    } else if (getBin3().get() > 0) {
+      Util.minus(getBin3(), 1);
+    } else {
+      // Brainstone being removed...
+      brainStone.setValue(Bin.REMOVED);
+    }
   }
 
   @Override

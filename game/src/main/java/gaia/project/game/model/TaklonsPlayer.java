@@ -8,6 +8,8 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
 import gaia.project.game.board.EmptyHex;
+import gaia.project.game.board.Gaiaformer;
+import gaia.project.game.board.HexWithPlanet;
 import gaia.project.game.board.Satellite;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
@@ -172,6 +174,57 @@ public final class TaklonsPlayer extends Player {
     } else {
       // Brainstone being removed...
       brainStone.setValue(Bin.REMOVED);
+    }
+  }
+
+  @Override
+  public boolean canGaiaform() {
+    return getAvailableGaiaformers().get() > getGaiaformers().size()
+        && getBin1().get()
+            + getBin2().get()
+            + getBin3().get()
+            + (brainStone.getValue() != Bin.GAIA && brainStone.getValue() != Bin.REMOVED
+                ? 1
+                : 0) >= getGaiaformerCost();
+  }
+
+  @Override
+  public void addGaiaformer(HexWithPlanet hex) {
+    Preconditions.checkArgument(canGaiaform());
+    Gaiaformer gaiaformer = new Gaiaformer(hex, getRace().getColor(), getPlayerEnum());
+    hex.addGaiaformer(gaiaformer);
+
+    getGaiaformers().add(hex.getHexId());
+
+    if (getBin1().get() >= getGaiaformerCost()) {
+      Util.minus(getBin1(), getGaiaformerCost());
+    } else {
+      int remainingPower = getGaiaformerCost() - getBin1().get();
+      getBin1().setValue(0);
+      if (getBin2().get() >= remainingPower) {
+        Util.minus(getBin2(), remainingPower);
+      } else {
+        remainingPower = remainingPower - getBin2().get();
+        getBin2().setValue(0);
+        if (getBin3().get() >= remainingPower) {
+          Util.minus(getBin3(), remainingPower);
+        } else {
+          // need to spend brainstone
+          getBin3().setValue(0);
+          brainStone.setValue(Bin.GAIA);
+        }
+
+      }
+    }
+
+    Util.plus(getGaiaBin(), brainStone.getValue() == Bin.GAIA ? getGaiaformerCost() - 1 : getGaiaformerCost());
+  }
+
+  @Override
+  public void gaiaPhase() {
+    super.gaiaPhase();
+    if (brainStone.getValue() == Bin.GAIA) {
+      brainStone.setValue(Bin.I);
     }
   }
 

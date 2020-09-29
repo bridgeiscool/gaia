@@ -840,7 +840,7 @@ public class Player {
   }
 
   public void addGaiaformer(HexWithPlanet hex) {
-    Preconditions.checkArgument(bin1.get() + bin2.get() + bin3.get() >= gaiaformerCost.get());
+    Preconditions.checkArgument(canGaiaform());
     Gaiaformer gaiaformer = new Gaiaformer(hex, race.getColor(), playerEnum);
     hex.addGaiaformer(gaiaformer);
 

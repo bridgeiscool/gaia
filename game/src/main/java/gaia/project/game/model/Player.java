@@ -796,17 +796,25 @@ public class Player {
       Util.minus(ore, 1);
       Util.minus(credits, 2);
 
+      // Check for adding to existing federations
       for (Set<String> federation : federations) {
         if (federation.stream().anyMatch(c -> hex.isWithinRangeOf(gameBoard.hexWithId(c), 1))) {
           federation.add(hex.getHexId());
+          Util.plus(buildingsInFeds, 1);
+          break;
         }
       }
 
-      for (String sat : satellites) {
-        if (hex.isWithinRangeOf(gameBoard.hexWithId(sat), 1)) {
-          // Just add to the first possible fed for now. Shouldn't matter
-          // TODO: Check and add logic to check which fed later
-          federations.iterator().next().add(hex.getHexId());
+      // ONly do this one if we didn't already add it...
+      if (!federations.stream().anyMatch(fed -> fed.contains(hex.getHexId()))) {
+        for (String sat : satellites) {
+          if (hex.isWithinRangeOf(gameBoard.hexWithId(sat), 1)) {
+            // Just add to the first possible fed for now. Shouldn't matter
+            // TODO: Check and add logic to check which fed later
+            federations.iterator().next().add(hex.getHexId());
+            Util.plus(buildingsInFeds, 1);
+            break;
+          }
         }
       }
 
@@ -835,6 +843,7 @@ public class Player {
 
         // TODO: Add to first federation - is this ok?!?
         getFederations().iterator().next().addAll(toAdd);
+        Util.plus(buildingsInFeds, toAdd.size());
       } while (!toAdd.isEmpty());
     }
   }

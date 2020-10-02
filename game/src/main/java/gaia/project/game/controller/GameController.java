@@ -25,6 +25,7 @@ import com.google.common.collect.Iterables;
 
 import gaia.project.game.board.Academy;
 import gaia.project.game.board.BoardUtils;
+import gaia.project.game.board.Building;
 import gaia.project.game.board.EmptyHex;
 import gaia.project.game.board.Gaiaformer;
 import gaia.project.game.board.GameBoard;
@@ -1008,9 +1009,14 @@ public class GameController extends BorderPane {
       gameBoard.highlightPlanetaryHexes(
           activePlayer(),
           h -> activePlayer().getResearchLabs().contains(h.getHexId()),
-          (hex, player) -> ((FiraksPlayer) player).piAction(hex),
+          (hex, player) -> {
+            ((FiraksPlayer) player).piAction(hex);
+            hex.setBuilding(Building.TRADING_POST);
+          },
           this::finishFiraksPiAction);
-    } else if (action == PlayerBoardAction.MOVE_PI) {
+    } else if (action == PlayerBoardAction.MOVE_PI)
+
+    {
       Preconditions.checkArgument(activePlayer() instanceof AmbasPlayer);
       // Ambas special action
       gameBoard.highlightPlanetaryHexes(

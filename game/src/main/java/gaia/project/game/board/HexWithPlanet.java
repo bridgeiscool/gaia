@@ -62,6 +62,11 @@ public class HexWithPlanet extends Hex {
     return building != null;
   }
 
+  // Setter to allow Firaks PI action to reset the building type
+  public void setBuilding(Building building) {
+    this.building = building;
+  }
+
   public boolean checkTechTile() {
     return building != null && (building == Building.ACADEMY || building == Building.RESEARCH_LAB);
   }

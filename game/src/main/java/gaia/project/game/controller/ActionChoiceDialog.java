@@ -47,7 +47,7 @@ public class ActionChoiceDialog extends Dialog<Actions> {
       throw new RuntimeException(e);
     }
 
-    setResultConverter(button -> selectedAction);
+    setResultConverter(button -> button == SUBMIT ? selectedAction : null);
     getDialogPane().getButtonTypes().add(SUBMIT);
 
     final Button submitButton = (Button) getDialogPane().lookupButton(SUBMIT);

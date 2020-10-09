@@ -499,7 +499,7 @@ public class GameController extends BorderPane {
 
     // Handle ITARs ability
     Optional<Player> maybeItars = game.getPlayers().values().stream().filter(p -> p.getRace() == Race.ITARS).findAny();
-    if (maybeItars.isPresent() && maybeItars.get().getGaiaBin().get() > 3) {
+    if (maybeItars.isPresent() && maybeItars.get().getGaiaBin().get() > 3 && !maybeItars.get().getPi().isEmpty()) {
       Player itars = maybeItars.get();
 
       Optional<ButtonType> dialog =

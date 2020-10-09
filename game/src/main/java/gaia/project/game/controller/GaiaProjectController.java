@@ -51,16 +51,17 @@ public class GaiaProjectController {
     FileChooser fileChooser = new FileChooser();
     fileChooser.setTitle("Choose a game to load");
     File loadFile = fileChooser.showOpenDialog(primaryStage);
-    try {
-      loadGame(loadFile);
-    } catch (IOException | ClassNotFoundException e) {
-      new Alert(AlertType.ERROR, "Could not load previous turn: " + e.getMessage(), ButtonType.OK).showAndWait();
+    if (loadFile != null) {
+      try {
+        loadGame(loadFile);
+      } catch (IOException | ClassNotFoundException e) {
+        new Alert(AlertType.ERROR, "Could not load previous turn: " + e.getMessage(), ButtonType.OK).showAndWait();
+      }
     }
   }
 
   public void loadGame(File file) throws IOException, ClassNotFoundException {
     try (FileReader reader = new FileReader(file)) {
-
       Game game = Game.read(JsonUtil.GSON.newJsonReader(reader));
       GameController gameController = new GameController(this, game, true);
       primaryStage.setScene(new Scene(new MenuPane(gameController)));

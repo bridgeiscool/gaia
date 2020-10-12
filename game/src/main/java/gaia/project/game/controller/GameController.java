@@ -707,7 +707,7 @@ public class GameController extends BorderPane {
       Player player = game.getPlayers().get(entry.getKey());
       int powerToGain = player.getPowerGain(entry.getValue());
       if (powerToGain == 1) {
-        player.chargePower(1);
+        player.leechPower(1);
       } else if (powerToGain > 1) {
         new Alert(
             AlertType.CONFIRMATION,

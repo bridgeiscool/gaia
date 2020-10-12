@@ -343,7 +343,7 @@ public class Player {
 
   public void leechPower(int power) {
     chargePower(power);
-    updateScore(-1 * (power - 1), "Leech");
+    updateScore(1 - power, "Leech");
   }
 
   public int canCharge() {

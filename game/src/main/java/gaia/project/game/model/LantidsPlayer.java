@@ -71,14 +71,21 @@ public final class LantidsPlayer extends Player {
     for (Set<String> federation : getFederations()) {
       if (federation.stream().anyMatch(c -> hex.isWithinRangeOf(gameBoard.hexWithId(c), 1))) {
         federation.add(hex.getHexId());
+        Util.plus(getBuildingsInFeds(), 1);
+        break;
       }
     }
 
-    for (String sat : getSatellites()) {
-      if (hex.isWithinRangeOf(gameBoard.hexWithId(sat), 1)) {
-        // Just add to the first possible fed for now. Shouldn't matter
-        // TODO: Check and add logic to check which fed later
-        getFederations().iterator().next().add(hex.getHexId());
+    // Only do this check if we didn't already add it...
+    if (!getFederations().stream().anyMatch(fed -> fed.contains(hex.getHexId()))) {
+      for (String sat : getSatellites()) {
+        if (hex.isWithinRangeOf(gameBoard.hexWithId(sat), 1)) {
+          // Just add to the first possible fed for now. Shouldn't matter
+          // TODO: Check and add logic to check which fed later
+          getFederations().iterator().next().add(hex.getHexId());
+          Util.plus(getBuildingsInFeds(), 1);
+          break;
+        }
       }
     }
 

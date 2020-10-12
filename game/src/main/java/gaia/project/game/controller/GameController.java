@@ -976,7 +976,7 @@ public class GameController extends BorderPane {
             && isWithinRange(activePlayer, hex)),
         (hex, player) -> {
           hex.addLostPlanet(player);
-          player.addLostPlanet(hex);
+          player.addLostPlanet(hex, gameBoard);
         },
         this::finishLostPlanet);
   }

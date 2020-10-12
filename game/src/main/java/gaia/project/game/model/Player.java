@@ -805,7 +805,7 @@ public class Player {
         }
       }
 
-      // ONly do this one if we didn't already add it...
+      // Only do this one if we didn't already add it...
       if (!federations.stream().anyMatch(fed -> fed.contains(hex.getHexId()))) {
         for (String sat : satellites) {
           if (hex.isWithinRangeOf(gameBoard.hexWithId(sat), 1)) {
@@ -995,13 +995,15 @@ public class Player {
     updateScore(points, "Tech Scoring");
   }
 
-  public void addLostPlanet(EmptyHex hex) {
+  public void addLostPlanet(EmptyHex hex, GameBoard gameBoard) {
     lostPlanet.add(hex.getHexId());
 
     // Update planet counts
     builtOn.add(PlanetType.LOST);
     Util.plus(totalBuildings, 1);
     sectors.add(hex.getSectorId());
+
+    recheckAllBuildingsInFederations(gameBoard);
   }
 
   // Serialization

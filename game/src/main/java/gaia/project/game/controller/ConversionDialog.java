@@ -233,7 +233,11 @@ public class ConversionDialog extends Dialog<Void> {
         baltaks.setGaiaformersInGaiaBin(baltaks.getGaiaformersInGaiaBin() + 1);
       });
 
-      gfToQic.disableProperty().bind(Bindings.lessThan(activePlayer.getAvailableGaiaformers(), 1));
+      gfToQic.disableProperty()
+          .bind(
+              Bindings.or(
+                  Bindings.lessThan(activePlayer.getAvailableGaiaformers(), 1),
+                  Bindings.equal(activePlayer.getAvailableGaiaformers(), activePlayer.getGaiaformers().size())));
       gridPane.add(gfToQic, 1, 11);
       gridPane.add(new Label("q"), 2, 11);
     }

@@ -107,9 +107,9 @@ public class Game {
       Collections.shuffle(races, random);
     } while (races.subList(0, 3).stream().map(Race::getHomePlanet).collect(Collectors.toSet()).size() < 3);
 
-    game.players.put(PlayerEnum.PLAYER1, races.get(0).newPlayer(PlayerEnum.PLAYER1));
-    game.players.put(PlayerEnum.PLAYER2, races.get(1).newPlayer(PlayerEnum.PLAYER2));
-    game.players.put(PlayerEnum.PLAYER3, races.get(2).newPlayer(PlayerEnum.PLAYER3));
+    game.players.put(PlayerEnum.PLAYER1, Race.TAKLONS.newPlayer(PlayerEnum.PLAYER1));
+    game.players.put(PlayerEnum.PLAYER2, Race.LANTIDS.newPlayer(PlayerEnum.PLAYER2));
+    game.players.put(PlayerEnum.PLAYER3, Race.BALTAKS.newPlayer(PlayerEnum.PLAYER3));
 
     game.gameBoard.putAll(gameBoard);
     game.roundBoosters.addAll(allBoosters.subList(0, 6));

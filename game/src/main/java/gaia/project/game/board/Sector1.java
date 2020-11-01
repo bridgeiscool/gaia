@@ -1,5 +1,7 @@
 package gaia.project.game.board;
 
+import java.util.Map.Entry;
+
 import com.google.common.collect.ImmutableList;
 
 import gaia.project.game.controller.PlanetType;
@@ -30,7 +32,7 @@ public final class Sector1 {
           PlanetType.RED)
       .build();
 
-  public static Sector getInstance(Parent parent, SectorLocation location) {
-    return new Sector(parent, location, PLANETS, 1);
+  public static Sector getInstance(Parent parent, Entry<SectorLocation, Rot> entry) {
+    return new Sector(parent, entry.getKey(), PLANETS, 1, entry.getValue());
   }
 }

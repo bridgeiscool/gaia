@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Random;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -50,7 +51,7 @@ public class GameBoard extends Group implements Iterable<Sector> {
       asMap.clear();
       System.out.println("Shuffling...");
       Collections.shuffle(unshuffled, random);
-      unshuffled.forEach(sl -> asMap.put(sl, Rot.POS_1));
+      unshuffled.forEach(sl -> asMap.put(sl, Rot.values()[random.nextInt(6)]));
       maybeValid = new GameBoard(asMap);
     } while (!maybeValid.isValid());
 
@@ -109,7 +110,7 @@ public class GameBoard extends Group implements Iterable<Sector> {
   }
 
   private void initSectors() {
-    Iterator<SectorLocation> iterator = sectorLocations.keySet().iterator();
+    Iterator<Entry<SectorLocation, Rot>> iterator = sectorLocations.entrySet().iterator();
     sectors.add(Sector1.getInstance(this, iterator.next()));
     sectors.add(Sector2.getInstance(this, iterator.next()));
     sectors.add(Sector3.getInstance(this, iterator.next()));

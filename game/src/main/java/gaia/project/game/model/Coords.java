@@ -37,6 +37,10 @@ public class Coords implements Serializable {
     return distanceTo(coords) < TWO_ROOT_3 * BoardUtils.hexSize() * range + 1.0;
   }
 
+  public Coords plus(Coords vector) {
+    return new Coords(centerX + vector.centerX, centerY + vector.centerY);
+  }
+
   @Override
   public boolean equals(Object obj) {
     // self check

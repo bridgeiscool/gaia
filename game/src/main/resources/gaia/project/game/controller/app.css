@@ -355,10 +355,6 @@
 	-fx-vgap: 10.0;
 }
 
-.table-results Label {
-	-fx-font-size: 14.0pt;
-}
-
 .vbox-center {
 	-fx-alignment: center;
 	-fx-spacing: 10.0;

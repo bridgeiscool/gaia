@@ -137,7 +137,9 @@ public enum EndScoring {
     }
   }
 
+  public static final String PREFIX = "EG ";
+
   private static void addToScore(Player player, int toAdd, String message) {
-    player.updateScore(toAdd, message);
+    player.updateScore(toAdd, PREFIX + message);
   }
 }

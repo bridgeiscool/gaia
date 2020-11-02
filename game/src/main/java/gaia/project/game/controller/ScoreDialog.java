@@ -2,10 +2,17 @@ package gaia.project.game.controller;
 
 import java.io.IOException;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
+import gaia.project.game.model.EndScoring;
+import gaia.project.game.model.FederationTile;
 import gaia.project.game.model.Game;
 import gaia.project.game.model.Player;
 import javafx.fxml.FXML;
@@ -19,7 +26,6 @@ import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 
 public class ScoreDialog extends Dialog<Void> {
   private final String DIALOG_TITLE = "Scoring Results";
@@ -50,44 +56,118 @@ public class ScoreDialog extends Dialog<Void> {
     for (Player player : game.getPlayers().values()) {
       HBox topBox = new HBox(0);
       topBox.setAlignment(Pos.CENTER);
-      topBox.getChildren().add(new Label(player.getRace().getRaceName()));
+      topBox.getChildren().add(new BoldLabel(player.getRace().getRaceName()));
       top.add(topBox, colIdx, 0, 2, 1);
       int rowIdx = 1;
 
-      Set<Entry<String, Integer>> sortedEntries = new TreeSet<>(new HighestVPFirst());
-      sortedEntries.addAll(player.getScoreLog().entrySet());
+      addScores(colIdx, player, rowIdx);
 
-      for (Entry<String, Integer> scoreEntry : sortedEntries) {
-        if (scoreEntry.getValue() != 0) {
-          top.add(new Label(scoreEntry.getKey()), colIdx, rowIdx);
-          top.add(new Label(format(scoreEntry.getValue())), colIdx + 1, rowIdx);
-          ++rowIdx;
-        }
-      }
-
-      bottom.add(new Label(format(player.getScore().get())), colIdx + 1, 0);
+      bottom.add(new BoldLabel(player.getScore().get()), colIdx + 1, 0);
 
       colIdx = colIdx + 2;
     }
+  }
+
+  private void addScores(int colIdx, Player player, int startingRowIdx) {
+    int rowIdx = startingRowIdx;
+    Map<String, Integer> scores = new HashMap<>(player.getScoreLog());
+
+    // Starting score, leech, resources
+    rowIdx = addSingleLine(GameController.STARTING_SCORE, scores, colIdx, rowIdx);
+    rowIdx = addSingleLine(Player.LEECH, scores, colIdx, rowIdx);
+    rowIdx = addSingleLine(Player.RESOURCES, scores, colIdx, rowIdx);
+
+    // End game scoring
+    rowIdx = addScoreGrouping("End Game Scoring", EndScoring.PREFIX + "(.+)", scores, colIdx, rowIdx, true);
+
+    // Tech
+    rowIdx = addSingleLine(Player.TECH_SCORING, scores, colIdx, rowIdx);
+
+    // Federations
+    rowIdx = addSingleLine(FederationTile.PREFIX, scores, colIdx, rowIdx);
+
+    // Round Scoring
+    rowIdx = addScoreGrouping("Round Scoring", "R[1-6] (.+)", scores, colIdx, rowIdx, false);
+
+    // Round Boosters
+    rowIdx = addScoreGrouping("Round Boosters", "RB " + "(.+)", scores, colIdx, rowIdx, true);
+
+    // Tech Tiles
+    rowIdx = addScoreGrouping("Tech Tiles", "(?:TT|ATT) " + "(.+)", scores, colIdx, rowIdx, true);
+
+    Set<Entry<String, Integer>> sortedEntries = new TreeSet<>(new HighestVPFirst());
+    sortedEntries.addAll(scores.entrySet());
+
+    for (Entry<String, Integer> scoreEntry : sortedEntries) {
+      if (scoreEntry.getValue() != 0) {
+        top.add(new BoldLabel(scoreEntry.getKey()), colIdx, rowIdx);
+        top.add(new BoldLabel(format(scoreEntry.getValue())), colIdx + 1, rowIdx);
+        ++rowIdx;
+      }
+    }
+  }
+
+  private int addScoreGrouping(
+      String title,
+      String filterRegex,
+      Map<String, Integer> scores,
+      int colIdx,
+      int startingRowIdx,
+      boolean replaceRegex) {
+    int rowIdx = startingRowIdx;
+    TreeSet<String> keys = new TreeSet<>();
+    scores.keySet().stream().filter(s -> s.matches(filterRegex)).forEach(keys::add);
+    int total = scores.entrySet()
+        .stream()
+        .filter(e -> keys.contains(e.getKey()))
+        .map(Entry::getValue)
+        .collect(Collectors.summingInt(i -> i));
+    top.add(new BoldLabel(title), colIdx, rowIdx);
+    top.add(new BoldLabel(total), colIdx + 1, rowIdx);
+    ++rowIdx;
+
+    for (String key : keys) {
+      Matcher matcher = Pattern.compile(filterRegex).matcher(key);
+      matcher.find();
+      top.add(new RegLabel("\t" + (replaceRegex ? matcher.group(1) : key)), colIdx, rowIdx);
+      top.add(new RegLabel(scores.get(key)), colIdx + 1, rowIdx);
+      ++rowIdx;
+      scores.remove(key);
+    }
+
+    return rowIdx;
+  }
+
+  private int addSingleLine(String title, Map<String, Integer> scores, int colIdx, int rowIdx) {
+    top.add(new BoldLabel(title), colIdx, rowIdx);
+    top.add(new BoldLabel(scores.remove(title)), colIdx + 1, rowIdx);
+
+    return rowIdx + 1;
   }
 
   private static String format(int score) {
     return String.format("%d", score);
   }
 
-  static class UnderlinedLabel extends VBox {
-    UnderlinedLabel(String label) {
-      getChildren().add(new Label(label));
-      getStyleClass().add("bottom-line");
+  static class RegLabel extends Label {
+    public RegLabel(String text) {
+      super(text);
+      setStyle("-fx-font-size: 12pt;");
+    }
+
+    public RegLabel(int value) {
+      this(format(value));
     }
   }
 
-  static class MaybeBoldLabel extends Label {
-    public MaybeBoldLabel(int value) {
-      super(format(value));
-      if (value > 120) {
-        setStyle("-fx-font-weight: bold; -fx-font-size: 16pt;");
-      }
+  static class BoldLabel extends Label {
+    public BoldLabel(String text) {
+      super(text);
+      setStyle("-fx-font-weight: bold; -fx-font-size: 14pt;");
+    }
+
+    public BoldLabel(int value) {
+      this(format(value));
     }
   }
 

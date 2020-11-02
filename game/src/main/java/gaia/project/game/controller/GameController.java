@@ -74,6 +74,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 
 public class GameController extends BorderPane {
+  public static final String STARTING_SCORE = "Starting Score";
   private static final double BASE_BUTTON_WIDTH = 100;
   private static final double BASE_BUTTON_HEIGHT = 25;
   private static final double BASE_BUTTON_FONT = 13;
@@ -380,12 +381,12 @@ public class GameController extends BorderPane {
       selectVPsDialog.showAndWait();
 
       // TODO: Update for 4 players
-      game.getPlayers().get(PlayerEnum.PLAYER1).updateScore(selectVPsDialog.getP1Score(), "Starting Score");
-      game.getPlayers().get(PlayerEnum.PLAYER2).updateScore(selectVPsDialog.getP2Score(), "Starting Score");
-      game.getPlayers().get(PlayerEnum.PLAYER3).updateScore(selectVPsDialog.getP3Score(), "Starting Score");
+      game.getPlayers().get(PlayerEnum.PLAYER1).updateScore(selectVPsDialog.getP1Score(), STARTING_SCORE);
+      game.getPlayers().get(PlayerEnum.PLAYER2).updateScore(selectVPsDialog.getP2Score(), STARTING_SCORE);
+      game.getPlayers().get(PlayerEnum.PLAYER3).updateScore(selectVPsDialog.getP3Score(), STARTING_SCORE);
     } else {
       // Random races
-      game.getPlayers().values().forEach(p -> p.updateScore(10, "Starting Score"));
+      game.getPlayers().values().forEach(p -> p.updateScore(10, STARTING_SCORE));
     }
 
     List<PlayerEnum> order = getPlacementOrder(game.getPlayers());

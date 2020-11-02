@@ -38,6 +38,9 @@ import javafx.collections.ObservableSet;
 
 // Backing bean to store player's information
 public class Player {
+  public static final String RESOURCES = "Resources";
+  public static final String LEECH = "Leech";
+  public static final String TECH_SCORING = "Tech Scoring";
   private Race race;
   private PlayerEnum playerEnum;
   private IntegerProperty gaiaBin = new SimpleIntegerProperty();
@@ -343,7 +346,7 @@ public class Player {
 
   public void leechPower(int power) {
     chargePower(power);
-    updateScore(1 - power, "Leech");
+    updateScore(1 - power, LEECH);
   }
 
   public int canCharge() {
@@ -979,7 +982,7 @@ public class Player {
 
     updateScore(
         (credits.intValue() + ore.intValue() + research.intValue() + qic.intValue() + bin3.intValue()) / 3,
-        "Resources");
+        RESOURCES);
   }
 
   public void techScoring() {
@@ -992,7 +995,7 @@ public class Player {
     points += econLevel.get() > 2 ? 4 * (econLevel.get() - 2) : 0;
     points += knowledgeLevel.get() > 2 ? 4 * (knowledgeLevel.get() - 2) : 0;
 
-    updateScore(points, "Tech Scoring");
+    updateScore(points, TECH_SCORING);
   }
 
   public void addLostPlanet(EmptyHex hex, GameBoard gameBoard) {

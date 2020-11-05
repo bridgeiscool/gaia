@@ -153,7 +153,9 @@ public class GameController extends BorderPane {
     gameBoardBox.getChildren().add(gameBoard);
 
     // Init player boards
-    game.getPlayers().entrySet().forEach(e -> playerBoards.put(e.getKey(), new PlayerBoardController(e.getValue())));
+    game.getPlayers()
+        .entrySet()
+        .forEach(e -> playerBoards.put(e.getKey(), new PlayerBoardController(e.getValue(), game)));
 
     // Init round bonuses
     for (int i = 0; i < 6; ++i) {

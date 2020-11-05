@@ -9,6 +9,7 @@ import javax.annotation.Nullable;
 
 import gaia.project.game.board.BoardUtils;
 import gaia.project.game.model.AdvancedTechTile;
+import gaia.project.game.model.Game;
 import gaia.project.game.model.Player;
 import gaia.project.game.model.Player.FedToken;
 import gaia.project.game.model.PlayerBoardAction;
@@ -122,7 +123,7 @@ public class PlayerBoardController extends GridPane {
   // Only used for Taklons
   private Circle brainstone = new Circle(BRAINSTONE_BASE_SIZE * BoardUtils.getScaling(), Color.PURPLE);
 
-  public PlayerBoardController(Player player) {
+  public PlayerBoardController(Player player, Game game) {
     FXMLLoader loader = new FXMLLoader(PlayerBoardController.class.getResource("PlayerBoard.fxml"));
     loader.setController(this);
     loader.setRoot(this);
@@ -162,21 +163,31 @@ public class PlayerBoardController extends GridPane {
 
     creditsLabel.textProperty().bindBidirectional(player.getCredits(), StringConverters.numberWithPostfix("c"));
     creditIncome.textProperty()
-        .bindBidirectional(player.getCurrentIncome().getCreditIncome(), StringConverters.income());
+        .bindBidirectional(
+            player.getCurrentIncome().getCreditIncome(),
+            StringConverters.income(game.getCurrentRound()));
     oreLabel.textProperty().bindBidirectional(player.getOre(), StringConverters.numberWithPostfix("o"));
-    oreIncome.textProperty().bindBidirectional(player.getCurrentIncome().getOreIncome(), StringConverters.income());
+    oreIncome.textProperty()
+        .bindBidirectional(player.getCurrentIncome().getOreIncome(), StringConverters.income(game.getCurrentRound()));
     knowledgeLabel.textProperty().bindBidirectional(player.getResearch(), StringConverters.numberWithPostfix("k"));
     knowledgeIncome.textProperty()
-        .bindBidirectional(player.getCurrentIncome().getResearchIncome(), StringConverters.income());
+        .bindBidirectional(
+            player.getCurrentIncome().getResearchIncome(),
+            StringConverters.income(game.getCurrentRound()));
     qicLabel.textProperty().bindBidirectional(player.getQic(), StringConverters.numberWithPostfix("q"));
-    qicIncome.textProperty().bindBidirectional(player.getCurrentIncome().getQicIncome(), StringConverters.income());
+    qicIncome.textProperty()
+        .bindBidirectional(player.getCurrentIncome().getQicIncome(), StringConverters.income(game.getCurrentRound()));
 
     gaiaBin.textProperty().bindBidirectional(player.getGaiaBin(), StringConverters.numberWithPrefix("G: "));
     bin1.textProperty().bindBidirectional(player.getBin1(), StringConverters.numberWithPrefix("I: "));
     bin2.textProperty().bindBidirectional(player.getBin2(), StringConverters.numberWithPrefix("II: "));
-    ptIncome.textProperty().bindBidirectional(player.getCurrentIncome().getPowerIncome(), StringConverters.income());
+    ptIncome.textProperty()
+        .bindBidirectional(player.getCurrentIncome().getPowerIncome(), StringConverters.income(game.getCurrentRound()));
     bin3.textProperty().bindBidirectional(player.getBin3(), StringConverters.numberWithPrefix("III: "));
-    pIncome.textProperty().bindBidirectional(player.getCurrentIncome().getChargeIncome(), StringConverters.income());
+    pIncome.textProperty()
+        .bindBidirectional(
+            player.getCurrentIncome().getChargeIncome(),
+            StringConverters.income(game.getCurrentRound()));
 
     mines.setText(player.getMines().size() + " / 8");
     player.getMines()

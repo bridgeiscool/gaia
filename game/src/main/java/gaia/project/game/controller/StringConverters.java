@@ -1,5 +1,7 @@
 package gaia.project.game.controller;
 
+import gaia.project.game.model.Round;
+import javafx.beans.property.Property;
 import javafx.util.StringConverter;
 
 public final class StringConverters {
@@ -33,11 +35,11 @@ public final class StringConverters {
     };
   }
 
-  public static StringConverter<Number> income() {
+  public static StringConverter<Number> income(Property<Round> round) {
     return new StringConverter<Number>() {
       @Override
       public String toString(Number number) {
-        return "(+" + number + ")";
+        return round.getValue() == Round.ROUND6 ? "" : "(+" + number + ")";
       }
 
       @Override

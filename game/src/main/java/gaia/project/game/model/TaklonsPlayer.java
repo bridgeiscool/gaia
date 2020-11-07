@@ -229,22 +229,6 @@ public final class TaklonsPlayer extends Player {
   }
 
   @Override
-  public void convertResourcesToVps() {
-
-    // Do one sac power to get the brain stone, then use the normal method
-    if (brainStone.getValue() == Bin.II && getBin2().get() > 0) {
-      sacPower(1);
-    }
-
-    super.convertResourcesToVps();
-
-    // Then add in one more for the brainstone if it's in bin 3...
-    if (brainStone.getValue() == Bin.III) {
-      updateScore(1, "Resources");
-    }
-  }
-
-  @Override
   public void writeExtraContent(JsonWriter json) throws IOException {
     json.name(JsonUtil.BRAINSTONE).value(brainStone.getValue().name());
   }

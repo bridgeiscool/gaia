@@ -976,13 +976,7 @@ public class Player {
 
   // END GAME
   public void convertResourcesToVps() {
-    if (bin2.intValue() > 1) {
-      sacPower(bin2.intValue() / 2);
-    }
-
-    updateScore(
-        (credits.intValue() + ore.intValue() + research.intValue() + qic.intValue() + bin3.intValue()) / 3,
-        RESOURCES);
+    updateScore((credits.intValue() + ore.intValue() + research.intValue() + qic.intValue()) / 3, RESOURCES);
   }
 
   public void techScoring() {

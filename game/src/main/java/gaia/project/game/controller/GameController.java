@@ -711,7 +711,8 @@ public class GameController extends BorderPane {
       int powerToGain = player.getPowerGain(entry.getValue());
       if (powerToGain == 1) {
         player.leechPower(1);
-      } else if (powerToGain > 1) {
+      } else if (powerToGain > 1
+          && (game.getCurrentRound().getValue() != Round.ROUND6 || !game.getPassedPlayers().contains(entry.getKey()))) {
         new Alert(
             AlertType.CONFIRMATION,
             player.getRace().getRaceName() + " may gain " + powerToGain + " for " + (powerToGain - 1),

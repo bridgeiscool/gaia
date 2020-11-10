@@ -686,7 +686,7 @@ public class Player {
   }
 
   public int getPowerGain(Integer maybeLeech) {
-    return Math.min(maybeLeech, canCharge());
+    return Math.min(Math.min(maybeLeech, canCharge()), getScore().get() + 1);
   }
 
   public int spendablePower() {

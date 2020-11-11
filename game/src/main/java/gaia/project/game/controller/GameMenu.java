@@ -6,9 +6,13 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
 
 public class GameMenu extends MenuBar {
   private final GaiaProjectController mainController;
+
+  @FXML
+  private MenuItem saveAs;
 
   public GameMenu(GaiaProjectController parent) {
     this.mainController = parent;
@@ -42,5 +46,9 @@ public class GameMenu extends MenuBar {
   @FXML
   private void exitGame() {
     Platform.exit();
+  }
+
+  public void setSaveasDisable(boolean disable) {
+    saveAs.setDisable(disable);
   }
 }

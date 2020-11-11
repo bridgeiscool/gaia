@@ -1,10 +1,9 @@
 package gaia.project.game.controller;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
 
 import gaia.project.game.model.Game;
 import gaia.project.game.model.JsonUtil;
@@ -23,11 +22,14 @@ public class GaiaProjectController {
 
   private GameController currentGame;
 
+  private MenuPane menuPane;
+
   public GaiaProjectController(Stage primaryStage) {
     this.primaryStage = primaryStage;
 
     StartScreenController startScreenController = new StartScreenController(this);
-    Scene startScreenScene = new Scene(new MenuPane(startScreenController));
+    this.menuPane = new MenuPane(startScreenController);
+    Scene startScreenScene = new Scene(menuPane);
 
     primaryStage.setScene(startScreenScene);
   }
@@ -39,10 +41,12 @@ public class GaiaProjectController {
     optionsDialog.showAndWait().ifPresent(opts -> {
       Game game = Game.generateGame(opts);
 
-      GameController gameController = new GameController(this, game, false);
-      primaryStage.setScene(new Scene(new MenuPane(gameController)));
+      currentGame = new GameController(this, game, false);
+      menuPane = new MenuPane(currentGame);
+      menuPane.setSaveasDisable(false);
+      primaryStage.setScene(new Scene(menuPane));
       primaryStage.setMaximized(true);
-      gameController.activate();
+      currentGame.activate();
     });
 
   }
@@ -54,30 +58,32 @@ public class GaiaProjectController {
     if (loadFile != null) {
       try {
         loadGame(loadFile);
-      } catch (IOException | ClassNotFoundException e) {
+      } catch (IOException e) {
         new Alert(AlertType.ERROR, "Could not load previous turn: " + e.getMessage(), ButtonType.OK).showAndWait();
       }
     }
   }
 
-  public void loadGame(File file) throws IOException, ClassNotFoundException {
+  public void loadGame(File file) throws IOException {
     try (FileReader reader = new FileReader(file)) {
       Game game = Game.read(JsonUtil.GSON.newJsonReader(reader));
-      GameController gameController = new GameController(this, game, true);
-      primaryStage.setScene(new Scene(new MenuPane(gameController)));
+      currentGame = new GameController(this, game, true);
+      menuPane = new MenuPane(currentGame);
+      menuPane.setSaveasDisable(false);
+      primaryStage.setScene(new Scene(menuPane));
       primaryStage.setMaximized(true);
-      gameController.activate();
+      currentGame.activate();
     }
   }
 
   public void saveGame() {
-    if (currentGame != null) {
-      FileChooser fileChooser = new FileChooser();
-      fileChooser.setTitle("Choose save file");
-      File saveFile = fileChooser.showSaveDialog(primaryStage);
-      try (FileOutputStream fos = new FileOutputStream(saveFile);
-          ObjectOutputStream oos = new ObjectOutputStream(fos)) {
-        oos.writeObject(currentGame.getGame());
+    FileChooser fileChooser = new FileChooser();
+    fileChooser.setTitle("Choose save file");
+    fileChooser.setInitialFileName(currentGame.getFilename());
+    File saveFile = fileChooser.showSaveDialog(primaryStage);
+    if (saveFile != null) {
+      try (FileWriter writer = new FileWriter(saveFile)) {
+        currentGame.getGame().write(JsonUtil.GSON.newJsonWriter(writer));
       } catch (IOException e) {
         new Alert(AlertType.ERROR, "Could not save game: " + e.getMessage(), ButtonType.OK).showAndWait();
       }
@@ -85,6 +91,8 @@ public class GaiaProjectController {
   }
 
   private class MenuPane extends BorderPane {
+
+    private GameMenu gameMenu;
 
     MenuPane(Pane center) {
       FXMLLoader loader = new FXMLLoader(getClass().getResource("GaiaProjectApp.fxml"));
@@ -96,8 +104,14 @@ public class GaiaProjectController {
         throw new RuntimeException(e);
       }
 
-      setTop(new GameMenu(GaiaProjectController.this));
+      gameMenu = new GameMenu(GaiaProjectController.this);
+
+      setTop(gameMenu);
       setCenter(center);
+    }
+
+    private void setSaveasDisable(boolean disable) {
+      gameMenu.setSaveasDisable(disable);
     }
   }
 

@@ -13,7 +13,7 @@
       <items>
         <MenuItem text="New Game" onAction="#newGame" />
         <MenuItem text="Load Game" onAction="#loadGame" />
-        <MenuItem text="Save Game" onAction="#saveGame" />
+        <MenuItem fx:id="saveAs" text="Save As" onAction="#saveGame" disable="true" />
         <MenuItem text="Exit" onAction="#exitGame" />
       </items>
     </Menu>

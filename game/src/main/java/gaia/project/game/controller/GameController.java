@@ -362,12 +362,12 @@ public class GameController extends BorderPane {
   private void resetTurn() {
     try {
       parent.loadGame(new File(getFilename()));
-    } catch (IOException | ClassNotFoundException e) {
+    } catch (IOException e) {
       new Alert(AlertType.ERROR, "Could not load previous turn: " + e.getMessage(), ButtonType.OK).showAndWait();
     }
   }
 
-  private String getFilename() {
+  public String getFilename() {
     return "r" + game.getCurrentRound().getValue().display() + "t" + game.getTurn() + ".gp";
   }
 

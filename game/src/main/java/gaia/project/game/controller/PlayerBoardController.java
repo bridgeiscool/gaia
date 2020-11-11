@@ -13,6 +13,7 @@ import gaia.project.game.model.Game;
 import gaia.project.game.model.Player;
 import gaia.project.game.model.Player.FedToken;
 import gaia.project.game.model.PlayerBoardAction;
+import gaia.project.game.model.Round;
 import gaia.project.game.model.TaklonsPlayer;
 import gaia.project.game.model.TaklonsPlayer.Bin;
 import gaia.project.game.model.TechTile;
@@ -215,6 +216,26 @@ public class PlayerBoardController extends GridPane {
         .addListener((SetChangeListener<String>) change -> gaiaformers.setText(player.getGaiaformers().size() + " /"));
     availableGaiaformers.textProperty()
         .bindBidirectional(player.getAvailableGaiaformers(), new NumberStringConverter());
+
+    // Remove income information in last round
+    game.getCurrentRound().addListener((obs, oldValue, newValue) -> {
+      if (newValue == Round.ROUND6) {
+        // Have to unbind before setting because this is bi-directional.
+        // TODO: Look into fixing that!
+        creditIncome.textProperty().unbindBidirectional(player.getCurrentIncome().getCreditIncome());
+        creditIncome.textProperty().set("");
+        oreIncome.textProperty().unbindBidirectional(player.getCurrentIncome().getOreIncome());
+        oreIncome.textProperty().set("");
+        knowledgeIncome.textProperty().unbindBidirectional(player.getCurrentIncome().getResearchIncome());
+        knowledgeIncome.textProperty().set("");
+        qicIncome.textProperty().unbindBidirectional(player.getCurrentIncome().getQicIncome());
+        qicIncome.textProperty().set("");
+        ptIncome.textProperty().unbindBidirectional(player.getCurrentIncome().getPowerIncome());
+        ptIncome.textProperty().set("");
+        pIncome.textProperty().unbindBidirectional(player.getCurrentIncome().getChargeIncome());
+        pIncome.textProperty().set("");
+      }
+    });
 
     // Tech Tiles
     player.getTechTiles().forEach(tt -> tokenArea.getChildren().add(new MiniTechTile(player, tt)));

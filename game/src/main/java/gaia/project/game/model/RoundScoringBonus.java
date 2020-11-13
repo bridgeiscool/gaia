@@ -56,7 +56,7 @@ public enum RoundScoringBonus {
     @Override
     public void addListeners(Game game, Round round) {
       game.getPlayers().values().forEach(p -> p.getTradingPosts().addListener((SetChangeListener<String>) change -> {
-        if (game.getCurrentRound().getValue() == round && change.wasAdded()) {
+        if (game.getCurrentRound().getValue() == round && change.wasAdded() && !p.ignoreTpRoundBonus()) {
           p.updateScore(4, "R" + game.getCurrentRound().getValue().display() + " " + getText());
         }
       }));

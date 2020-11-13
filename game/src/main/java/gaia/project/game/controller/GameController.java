@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -84,6 +85,8 @@ public class GameController extends BorderPane {
 
   // Top
   @FXML
+  private Button previousTurn;
+  @FXML
   private Button showActions;
   @FXML
   private Button conversions;
@@ -91,6 +94,8 @@ public class GameController extends BorderPane {
   private Button confirmAction;
   @FXML
   private Button resetTurn;
+  @FXML
+  private Button nextTurn;
   @FXML
   private HBox playerBoardBox;
   @FXML
@@ -356,19 +361,76 @@ public class GameController extends BorderPane {
       game.nextActivePlayer();
       promptPlayerAction();
     }
+    checkEnablePreviousAndNext();
   }
 
   @FXML
   private void resetTurn() {
     try {
-      parent.loadGame(new File(getFilename()));
+      parent.loadGame(new File(parent.getCurrentDirectory(), getFilename()));
     } catch (IOException e) {
       new Alert(AlertType.ERROR, "Could not load previous turn: " + e.getMessage(), ButtonType.OK).showAndWait();
     }
   }
 
+  @FXML
+  private void previousTurn() throws IOException {
+    parent.loadGame(new File(parent.getCurrentDirectory(), getPreviousFilename()));
+  }
+
+  @FXML
+  private void nextTurn() throws IOException {
+    parent.loadGame(new File(parent.getCurrentDirectory(), getNextFilename()));
+  }
+
   public String getFilename() {
     return "r" + game.getCurrentRound().getValue().display() + "t" + game.getTurn() + ".gp";
+  }
+
+  public String getPreviousFilename() {
+    if (game.getTurn() == 0) {
+      if (game.getCurrentRound().getValue() == Round.ROUND1) {
+        return "rSetupt0.gp";
+      } else {
+        List<String> files = Arrays.stream(parent.getCurrentDirectory().listFiles())
+            .filter(
+                f -> f.getName().startsWith("r" + (Integer.valueOf(game.getCurrentRound().getValue().display()) - 1)))
+            .map(f -> f.getName())
+            .collect(Collectors.toCollection(ArrayList::new));
+        Collections.sort(files, BY_FILENAME);
+        return files.get(files.size() - 1);
+      }
+    } else {
+      return "r" + game.getCurrentRound().getValue().display() + "t" + (game.getTurn() - 1) + ".gp";
+    }
+  }
+
+  private static final Comparator<String> BY_FILENAME = (s1, s2) -> {
+    return Integer.valueOf(s1.substring(s1.indexOf('t') + 1, s1.indexOf('.')))
+        .compareTo(Integer.valueOf(s2.substring(s2.indexOf('t') + 1, s2.indexOf('.'))));
+  };
+
+  public String getNextFilename() {
+    String maybeNext = game.getCurrentRound().getValue() == Round.SETUP
+        ? "r1t0.gp"
+        : "r" + game.getCurrentRound().getValue().display() + "t" + (game.getTurn() + 1) + ".gp";
+    if (Arrays.stream(parent.getCurrentDirectory().listFiles()).anyMatch(f -> f.getName().equals(maybeNext))) {
+      return maybeNext;
+    }
+
+    return "r" + (Integer.valueOf(game.getCurrentRound().getValue().display()) + 1) + "t0.gp";
+  }
+
+  public void checkEnablePreviousAndNext() {
+    previousTurn.setDisable(game.getCurrentRound().getValue() == Round.SETUP);
+
+    String nextTurnFile = "r" + game.getCurrentRound().getValue().display() + "t" + (game.getTurn() + 1) + ".gp";
+    String nextRound = game.getCurrentRound().getValue() == Round.SETUP
+        ? "r1t0.gp"
+        : "r" + (Integer.valueOf(game.getCurrentRound().getValue().display()) + 1) + "t0.gp";
+    nextTurn.setDisable(
+        !Arrays.stream(parent.getCurrentDirectory().listFiles())
+            .anyMatch(f -> f.getName().contentEquals(nextTurnFile) || f.getName().equals(nextRound)));
   }
 
   // SETUP METHODS
@@ -1102,7 +1164,7 @@ public class GameController extends BorderPane {
   }
 
   private void saveState() {
-    try (FileWriter out = new FileWriter(new File(getFilename()))) {
+    try (FileWriter out = new FileWriter(new File(parent.getCurrentDirectory(), getFilename()))) {
       game.write(JsonUtil.GSON.newJsonWriter(out));
     } catch (IOException e) {
       new Alert(AlertType.ERROR, "Could not save game state: " + e.getMessage(), ButtonType.OK).showAndWait();

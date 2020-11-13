@@ -21,10 +21,12 @@
       <padding>
         <Insets top="2" bottom="2" />
       </padding>
+      <Button fx:id="previousTurn" text="&lt;" onAction="#previousTurn" disable="true" />
       <Button fx:id="showActions" text="Show Actions" onAction="#showActions" disable="true" />
       <Button fx:id="conversions" text="Conversions" onAction="#showConversions" disable="true" />
       <Button fx:id="confirmAction" text="Confirm" onAction="#confirmAction" disable="true" />
       <Button fx:id="resetTurn" text="Reset Turn" onAction="#resetTurn" />
+      <Button fx:id="nextTurn" text="&gt;" onAction="#nextTurn" disable="true" />
     </HBox>
   </top>
   

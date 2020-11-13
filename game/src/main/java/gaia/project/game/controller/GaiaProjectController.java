@@ -21,8 +21,8 @@ public class GaiaProjectController {
   private final Stage primaryStage;
 
   private GameController currentGame;
-
   private MenuPane menuPane;
+  private File currentDirectory;
 
   public GaiaProjectController(Stage primaryStage) {
     this.primaryStage = primaryStage;
@@ -34,6 +34,14 @@ public class GaiaProjectController {
     primaryStage.setScene(startScreenScene);
   }
 
+  public File getCurrentDirectory() {
+    return currentDirectory;
+  }
+
+  public void setCurrentDirectory(File currentDirectory) {
+    this.currentDirectory = currentDirectory;
+  }
+
   // Game flow methods
   public void newGame() {
     GameOptionsDialog optionsDialog = new GameOptionsDialog();
@@ -42,13 +50,13 @@ public class GaiaProjectController {
       Game game = Game.generateGame(opts);
 
       currentGame = new GameController(this, game, false);
+      currentDirectory = new File(".");
       menuPane = new MenuPane(currentGame);
       menuPane.setSaveasDisable(false);
       primaryStage.setScene(new Scene(menuPane));
       primaryStage.setMaximized(true);
       currentGame.activate();
     });
-
   }
 
   public void loadGame() {
@@ -68,6 +76,8 @@ public class GaiaProjectController {
     try (FileReader reader = new FileReader(file)) {
       Game game = Game.read(JsonUtil.GSON.newJsonReader(reader));
       currentGame = new GameController(this, game, true);
+      currentDirectory = file.getParentFile();
+      currentGame.checkEnablePreviousAndNext();
       menuPane = new MenuPane(currentGame);
       menuPane.setSaveasDisable(false);
       primaryStage.setScene(new Scene(menuPane));

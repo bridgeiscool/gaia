@@ -607,11 +607,6 @@ public class Player {
     return coveredTechTiles;
   }
 
-  // Override for Firaks downgrade to TP
-  public boolean ignoreTpRoundBonus() {
-    return false;
-  }
-
   // Override for Ambas PI switch ability
   public boolean ignorePiAndMineBonuses() {
     return false;

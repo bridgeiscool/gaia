@@ -5,8 +5,6 @@ import gaia.project.game.board.TradingPost;
 import javafx.beans.property.SimpleBooleanProperty;
 
 public final class FiraksPlayer extends Player {
-  private transient boolean ignoreTpRoundBonus;
-
   public static FiraksPlayer createNew(PlayerEnum playerEnum) {
     FiraksPlayer player = new FiraksPlayer();
     player.fromRace(Race.FIRAKS, playerEnum);
@@ -24,10 +22,8 @@ public final class FiraksPlayer extends Player {
     TradingPost tp = new TradingPost(hex, Race.FIRAKS.getColor(), getPlayerEnum());
     hex.switchBuildingUI(tp);
 
-    ignoreTpRoundBonus = true;
     getResearchLabs().remove(hex.getHexId());
     getTradingPosts().add(hex.getHexId());
-    ignoreTpRoundBonus = false;
 
     // Update income
     Race.FIRAKS.getTpIncome().get(getTradingPosts().size() - 1).addTo(getCurrentIncome());
@@ -38,10 +34,5 @@ public final class FiraksPlayer extends Player {
   public void buildPI(HexWithPlanet hex) {
     super.buildPI(hex);
     getSpecialActions().put(PlayerBoardAction.RL_TO_TP, new SimpleBooleanProperty(false));
-  }
-
-  @Override
-  public boolean ignoreTpRoundBonus() {
-    return ignoreTpRoundBonus;
   }
 }

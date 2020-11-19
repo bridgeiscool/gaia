@@ -1080,9 +1080,7 @@ public class GameController extends BorderPane {
             hex.setBuilding(Building.TRADING_POST);
           },
           this::finishFiraksPiAction);
-    } else if (action == PlayerBoardAction.MOVE_PI)
-
-    {
+    } else if (action == PlayerBoardAction.MOVE_PI) {
       Preconditions.checkArgument(activePlayer() instanceof AmbasPlayer);
       // Ambas special action
       gameBoard.highlightPlanetaryHexes(
@@ -1123,6 +1121,7 @@ public class GameController extends BorderPane {
 
   private void finishFiraksPiAction(Hex hex) {
     gameBoard.clearHighlighting();
+    checkForLeech(hex);
     activateTechTracks(true);
   }
 

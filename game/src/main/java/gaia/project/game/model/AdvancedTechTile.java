@@ -215,7 +215,7 @@ public enum AdvancedTechTile {
     @Override
     public void updatePlayer(Player player) {
       player.getTradingPosts().addListener((SetChangeListener<String>) change -> {
-        if (change.wasAdded() && !player.ignoreTpRoundBonus()) {
+        if (change.wasAdded()) {
           player.updateScore(3, "ATT " + display());
         }
       });

@@ -14,7 +14,6 @@ import gaia.project.game.model.Coords;
 import gaia.project.game.model.Player;
 import gaia.project.game.model.PlayerEnum;
 import gaia.project.game.model.Race;
-import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
@@ -95,9 +94,7 @@ public class HexWithPlanet extends Hex {
       Player activePlayer,
       BiConsumer<HexWithPlanet, Player> toExecute,
       Consumer<HexWithPlanet> callBack) {
-    ObservableList<String> styleClass = getPolygon().getStyleClass();
-    styleClass.clear();
-    styleClass.add("highlightedHex");
+    highlight("highlightedHex");
     this.setOnMouseClicked(me -> {
       toExecute.accept(this, activePlayer);
       callBack.accept(this);
@@ -105,9 +102,7 @@ public class HexWithPlanet extends Hex {
   }
 
   public void clearHighlighting() {
-    ObservableList<String> styleClass = getPolygon().getStyleClass();
-    styleClass.clear();
-    styleClass.add("hexStyle");
+    super.clearHighlighting();
     setOnMouseClicked(null);
   }
 

@@ -13,7 +13,6 @@ import gaia.project.game.controller.PlanetType;
 import gaia.project.game.model.Coords;
 import gaia.project.game.model.Player;
 import gaia.project.game.model.PlayerEnum;
-import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
@@ -94,21 +93,12 @@ public class EmptyHex extends Hex {
 
   public void highlight(Player activePlayer, BiConsumer<EmptyHex, Player> toExecute, Consumer<EmptyHex> callBack) {
     if (!hasLostPlanet) {
-      ObservableList<String> styleClass = getPolygon().getStyleClass();
-      styleClass.clear();
-      styleClass.add("highlightedHex");
+      highlight("highlightedHex");
       this.setOnMouseClicked(me -> {
         toExecute.accept(this, activePlayer);
         callBack.accept(this);
       });
     }
-  }
-
-  public void clearHighlighting() {
-    ObservableList<String> styleClass = getPolygon().getStyleClass();
-    styleClass.clear();
-    styleClass.add("hexStyle");
-    setOnMouseClicked(null);
   }
 
   public void addSatellite(Player activePlayer) {

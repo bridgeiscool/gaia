@@ -842,6 +842,7 @@ public class Player {
         // TODO: Add to first federation - is this ok?!?
         getFederations().iterator().next().addAll(toAdd);
         Util.plus(buildingsInFeds, toAdd.size());
+        gameBoard.hexes().stream().filter(h -> toAdd.contains(h.getHexId())).forEach(Hex::setPartOfFed);
       } while (!toAdd.isEmpty());
     }
   }

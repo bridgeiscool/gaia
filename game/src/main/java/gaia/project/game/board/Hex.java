@@ -54,6 +54,10 @@ public abstract class Hex extends StackPane {
     getChildren().add(polygon);
   }
 
+  public void setPartOfFed() {
+    polygon.setPartOfFed();
+  }
+
   public String getHexId() {
     return hexId;
   }
@@ -85,8 +89,15 @@ public abstract class Hex extends StackPane {
     return coords;
   }
 
-  public Polygon getPolygon() {
-    return polygon;
+  public void highlight(String style) {
+    ObservableList<String> styleClass = polygon.getStyleClass();
+    styleClass.clear();
+    styleClass.add(style);
+  }
+
+  public void clearHighlighting() {
+    polygon.resetStyle();
+    setOnMouseClicked(null);
   }
 
   public Collection<Hex> getAllHexesWithinRange(List<Hex> hexes, int i) {
@@ -134,12 +145,6 @@ public abstract class Hex extends StackPane {
         && getPlanet().getPlanetType() == other.getPlanet().getPlanetType();
   }
 
-  public void highlightCyan() {
-    ObservableList<String> styleClass = getPolygon().getStyleClass();
-    styleClass.clear();
-    styleClass.add("highlightedCyanHex");
-  }
-
   @Override
   public boolean equals(Object obj) {
     // self check
@@ -162,9 +167,22 @@ public abstract class Hex extends StackPane {
   }
 
   static class HexPolygon extends Polygon {
+    boolean partOfFed;
+
     HexPolygon(double... points) {
       super(points);
-      this.getStyleClass().add("hexStyle");
+      this.getStyleClass().add("hex-style");
+    }
+
+    void setPartOfFed() {
+      partOfFed = true;
+      this.getStyleClass().clear();
+      this.getStyleClass().add("hex-style-fed");
+    }
+
+    void resetStyle() {
+      this.getStyleClass().clear();
+      this.getStyleClass().add(partOfFed ? "hex-style-fed" : "hex-style");
     }
   }
 }

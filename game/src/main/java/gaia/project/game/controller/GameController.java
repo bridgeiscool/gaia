@@ -305,6 +305,15 @@ public class GameController extends BorderPane {
           .filter(h -> lantids.getLeechMines().contains(h.getHexId()))
           .forEach(h -> h.addLeechMine(new Mine(h, lantids.getRace().getColor(), p.getPlayerEnum())));
     });
+
+    game.getPlayers().values().stream().forEach(p -> {
+      Set<String> fedHexes = p.getFederations().stream().flatMap(set -> set.stream()).collect(Collectors.toSet());
+      gameBoard.hexes().forEach(h -> {
+        if (fedHexes.contains(h.getHexId())) {
+          h.setPartOfFed();
+        }
+      });
+    });
   }
 
   Game getGame() {
@@ -795,7 +804,7 @@ public class GameController extends BorderPane {
           h -> ((h.getBuilder().orElse(null) == game.getActivePlayer() && h.hasBuilding())
               || (h.getLeechMine() != null && h.getLeechMine().getPlayer() == game.getActivePlayer()))
               && !activePlayer().inFederation(h.getHexId()),
-          (hex, player) -> hex.highlightCyan(),
+          (hex, player) -> hex.highlight("highlightedCyanHex"),
           this::checkIfSatellitesNeeded);
     } else {
       // IVITS after their first federation...
@@ -835,7 +844,7 @@ public class GameController extends BorderPane {
             h -> h.getBuilder().get() == game.getActivePlayer()
                 || (h.getLeechMine() != null && h.getLeechMine().getPlayer() == game.getActivePlayer()))
         .forEach(h -> {
-          h.highlightCyan();
+          h.highlight("highlightedCyanHex");
           Util.plus(fedPower, activePlayer().getPower(h));
           currentFederation.add(h.getHexId());
           checkAdjacentHexes(h);
@@ -861,7 +870,7 @@ public class GameController extends BorderPane {
     currentFederation.addAll(Iterables.getOnlyElement(ivits.getFederations()));
     gameBoard.hexes().forEach(h -> {
       if (currentFederation.contains(h.getHexId())) {
-        h.highlightCyan();
+        h.highlight("highlightedCyanHex");
       }
     });
     if (ivits.canBuildSatellite()) {
@@ -944,6 +953,8 @@ public class GameController extends BorderPane {
       activePlayer().getFederations().add(new HashSet<>(currentFederation));
       Util.plus(activePlayer().getBuildingsInFeds(), currentFederation.size());
     }
+
+    gameBoard.hexes().stream().filter(h -> currentFederation.contains(h.getHexId())).forEach(h -> h.setPartOfFed());
     federationTokens.highlight(activePlayer(), this::finishFederationTileSelection);
   }
 

@@ -4,7 +4,7 @@
   <parent>
     <groupId>gaia-project</groupId>
     <artifactId>gaia-project</artifactId>
-    <version>0.1</version>
+    <version>0.2</version>
   </parent>
 
   <artifactId>gaia-project-game</artifactId>

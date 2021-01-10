@@ -89,7 +89,12 @@ public enum Race {
 
     @Override
     public int getStartingBin2() {
-      return 2;
+      return 0;
+    }
+
+    @Override
+    public int getStartingBin1() {
+      return 4;
     }
 
     @Override
